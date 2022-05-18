@@ -6,28 +6,17 @@ namespace AdLerBackend.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
 
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
-        }
+        private static readonly HttpClient client = new HttpClient();
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task<string> GetAsync()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            var test = await client.GetAsync("https://moodle.cluuub.xyz/login/token.php?username=student&password=wve2rxz7wfm3BPH-ykh&service=moodle_mobile_app");
+
+            UserTokenResponse ret = test.Content.ReadFromJsonAsync<UserTokenResponse>().Result;
+
+            return ret.token;
         }
     }
 }

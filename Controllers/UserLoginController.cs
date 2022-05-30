@@ -4,7 +4,7 @@ namespace AdLerBackend.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class UserLoginController : ControllerBase
     {
 
         private static readonly HttpClient client = new HttpClient();

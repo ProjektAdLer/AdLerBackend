@@ -12,9 +12,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "test",
                       policy =>
                       {
-                          policy.WithOrigins("http://example.com",
-                                              "http://www.contoso.com",
-                                              "http://localhost:3000");
+                          //policy.WithOrigins("http://example.com",
+                          //                    "http://www.contoso.com",
+                          //                    "http://localhost:3000");
+                          policy.AllowAnyOrigin();
                       });
 });
 
@@ -30,6 +31,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors("test");
 
 app.MapControllers();
 

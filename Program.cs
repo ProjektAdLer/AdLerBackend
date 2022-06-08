@@ -1,3 +1,5 @@
+using Microsoft.Net.Http.Headers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,6 +18,7 @@ builder.Services.AddCors(options =>
                           //                    "http://www.contoso.com",
                           //                    "http://localhost:3000");
                           policy.AllowAnyOrigin();
+                          policy.WithHeaders(HeaderNames.AccessControlAllowHeaders, "*");
                       });
 });
 

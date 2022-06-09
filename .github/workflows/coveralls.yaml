@@ -7,10 +7,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     env:
       dotNetVersion: net6.0
       dotNetConfiguration: Release
+      runtimeTarget: win-x86
     steps:
       # checkout the repo
       - uses: actions/checkout@v2
@@ -33,9 +34,9 @@ jobs:
             ${{ runner.os }}-nuget
 
       - name: Run automated unit and integration tests
-        run: dotnet test AdLerBackendTest/AdLerBackendTest.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutput=TestResults/coverlet.info /p:CoverletOutputFormat=lcov /p:Include="[AdLerBackend]*"
+        run: dotnet test AdLerBackendTest/AdLerBackendTest.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutput=TestResults/coverlet.info /p:CoverletOutputFormat=lcov --% /p:Include=\"[AuthoringTool]*\"
       - name: Publish coverage report to coveralls.io
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: AuthoringToolTest/TestResults/coverlet.info
+          path-to-lcov: AdLerBackendTest/TestResults/coverlet.info

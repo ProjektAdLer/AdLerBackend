@@ -7,7 +7,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["AdLerBackend.csproj", "."]
+COPY ["AdlerBackend/AdLerBackend.csproj", "."]
 RUN dotnet restore "./AdLerBackend.csproj"
 COPY . .
 WORKDIR "/src/."

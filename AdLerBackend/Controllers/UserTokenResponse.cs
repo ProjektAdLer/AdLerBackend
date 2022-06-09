@@ -4,6 +4,7 @@
     {
         public string token { get; set; }
         public string privatetoken { get; set; }
+        public string userid { get; set; }
     }
 
 

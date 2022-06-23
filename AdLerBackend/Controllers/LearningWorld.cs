@@ -41,7 +41,11 @@ namespace AdLerBackend.Controllers
 
             CourseContents[] courseContents = courseContentResponse.Content.ReadFromJsonAsync<CourseContents[]>().Result;
 
-            CourseContents filtered =  courseContents.Where(c => c.modules[0].name == "DSL_Document").ToArray()[0];
+            CourseContents filtered =  courseContents.Where(c =>
+            {
+                if (c.modules.Count == 0) return false;
+                return c.modules[0].name == "DSL_Document";
+            }).ToArray()[0];
             
             // Download File
             var response = await client.GetAsync("https://moodle.cluuub.xyz/webservice/pluginfile.php/"+ filtered.modules[0].contextid +"/mod_resource/content/0/DSL_Document?token=b344c9c7b004e838410f22802fe5c0a1");

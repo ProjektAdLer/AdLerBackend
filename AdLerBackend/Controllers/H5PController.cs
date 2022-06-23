@@ -10,17 +10,18 @@ namespace AdLerBackend.Controllers
     [Route("[controller]")]
     public class H5PController : ControllerBase
     {
-        private static readonly HttpClient client = new HttpClient();
+        private static readonly HttpClient Client = new HttpClient();
         [HttpPost]
-        public async Task<string> SendH5p(H5PInputDTO data)
+        public async Task<string> SendH5P(H5PInputDto data)
         {
-            string jsonString = "{\"actor\":{\"name\":\"name\",\"mbox\":\"mailto:foofoo@barbar.com\",\"objectType\":\"Agent\"},\"verb\":{\"id\":\"http://adlnet.gov/expapi/verbs/answered\",\"display\":{\"en-US\":\"answered\"}},\"object\":{\"id\":\"https://moodle.cluuub.xyz/xapi/activity/278\",\"objectType\":\"Activity\",\"definition\":{\"extensions\":{\"http://h5p.org/x-api/h5p-local-content-id\":\"vctsxms49\"},\"name\":{\"en-US\":\"MetrikenTeil1\"}}},\"context\":{\"contextActivities\":{\"category\":[{\"id\":\"http://h5p.org/libraries/H5P.InteractiveVideo-1.22\",\"objectType\":\"Activity\"}]}},\"result\":{\"score\":{\"min\":0,\"max\":13,\"raw\":1,\"scaled\":0.0769},\"completion\":true,\"duration\":\"PT175.63S\"}}";
-            Root json = JsonConvert.DeserializeObject<Root>(jsonString);
+            const string jsonString = "{\"actor\":{\"name\":\"name\",\"mbox\":\"mailto:foofoo@barbar.com\",\"objectType\":\"Agent\"},\"verb\":{\"id\":\"http://adlnet.gov/expapi/verbs/answered\",\"display\":{\"en-US\":\"answered\"}},\"object\":{\"id\":\"https://moodle.cluuub.xyz/xapi/activity/278\",\"objectType\":\"Activity\",\"definition\":{\"extensions\":{\"http://h5p.org/x-api/h5p-local-content-id\":\"vctsxms49\"},\"name\":{\"en-US\":\"MetrikenTeil1\"}}},\"context\":{\"contextActivities\":{\"category\":[{\"id\":\"http://h5p.org/libraries/H5P.InteractiveVideo-1.22\",\"objectType\":\"Activity\"}]}},\"result\":{\"score\":{\"min\":0,\"max\":13,\"raw\":1,\"scaled\":0.0769},\"completion\":true,\"duration\":\"PT175.63S\"}}";
+            var json = JsonConvert.DeserializeObject<Root>(jsonString);
+            if (json == null) throw new Exception("Couldn't convert json to Root object");
             json.actor.name = data.username;
             json.actor.mbox = data.email;
 
             json.@object.id = data.objectId;
-            json.@object.definition.name.EnUS = data.objectName;
+            json.@object.definition.name.enUs = data.objectName;
 
             json.result.score.max = data.maxScore;
             json.result.score.raw = data.rawScore;
@@ -28,7 +29,7 @@ namespace AdLerBackend.Controllers
             json.result.completion = data.completion;
             json.result.duration = data.duration;
 
-            string retVal = "[" + JsonConvert.SerializeObject(json, Formatting.None) + "]";
+            var retVal = "[" + JsonConvert.SerializeObject(json, Formatting.None) + "]";
             var value = new Dictionary<string, string>
              {
                     { "component", "mod_h5pactivity" },
@@ -37,7 +38,7 @@ namespace AdLerBackend.Controllers
 
             var content = new FormUrlEncodedContent(value);
 
-            var test = await client.PostAsync($"https://moodle.cluuub.xyz/webservice/rest/server.php?wstoken={data.wstoken}&wsfunction=core_xapi_statement_post&moodlewsrestformat=json",
+            var test = await Client.PostAsync($"https://moodle.cluuub.xyz/webservice/rest/server.php?wstoken={data.wstoken}&wsfunction=core_xapi_statement_post&moodlewsrestformat=json",
                             content);
 
 
@@ -50,12 +51,12 @@ namespace AdLerBackend.Controllers
 
 public class Response
 {
-    public List<bool> MyArray { get; set; }
+    public List<bool> myArray { get; set; }
 }
 
 
 
-public class H5PInputDTO
+public class H5PInputDto
 {
     [Required]
     public string wstoken { get; set; }
@@ -123,19 +124,19 @@ public class Definition
 public class Display
 {
     [JsonProperty("en-US")]
-    public string EnUS { get; set; }
+    public string enUs { get; set; }
 }
 
 public class Extensions
 {
     [JsonProperty("http://h5p.org/x-api/h5p-local-content-id")]
-    public string HttpH5pOrgXApiH5pLocalContentId { get; set; }
+    public string httpH5POrgXApiH5PLocalContentId { get; set; }
 }
 
 public class Name
 {
     [JsonProperty("en-US")]
-    public string EnUS { get; set; }
+    public string enUs { get; set; }
 }
 
 public class Object

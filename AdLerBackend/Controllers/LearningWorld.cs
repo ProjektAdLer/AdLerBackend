@@ -6,10 +6,19 @@ namespace AdLerBackend.Controllers
     [Route("[controller]")]
     public class LearningWorld : ControllerBase
     {
-        private static readonly HttpClient client = new HttpClient();
-        [HttpPost]
-        public async Task<DSLFile> GetWorldFile(GetLEarningWorldDTO data)
+        private ILogger<LearningWorld> Logger { get; }
+
+        public LearningWorld(ILogger<LearningWorld> logger)
         {
+            Logger = logger;
+        }
+        private static readonly HttpClient Client = new();
+        [HttpPost]
+        public async Task<DslFile> GetWorldFile(GetLearningWorldDto data)
+        {
+            Logger.LogTrace("GetWorldFile - wsToken: {} courseName: {}", data.wsToken, data.courseName);
+            const string moodleDomain = "https://moodle.cluuub.xyz";
+            const string webservicePath = moodleDomain + "/webservice";
             // Get Course by Name
             var getCourseParams = new Dictionary<string, string>
              {
@@ -18,39 +27,45 @@ namespace AdLerBackend.Controllers
                     { "wsfunction", "core_course_search_courses" },
                     { "criterianame", "search" },
                     { "criteriavalue", data.courseName }
-
             };
 
-            var coursesResponse = await client.PostAsync($"https://moodle.cluuub.xyz/webservice/rest/server.php",
+            var coursesResponse = await Client.PostAsync($"{webservicePath}/rest/server.php",
                             new FormUrlEncodedContent(getCourseParams));
+            Logger.LogTrace("coursesResponse: Status {}", coursesResponse.StatusCode);
 
-            SearchCoursesResponseDTO searchedCourses = coursesResponse.Content.ReadFromJsonAsync<SearchCoursesResponseDTO>().Result;
-
+            var searchedCourses = coursesResponse.Content.ReadFromJsonAsync<SearchCoursesResponseDto>().Result;
+            if (searchedCourses == null) 
+                throw new Exception("Couldn't parse moodle course response into SearchResponse object.");
             // Get File in Course
 
-            var getCourseConentParams = new Dictionary<string, string>
+            var getCourseContentParams = new Dictionary<string, string>
             {
                     { "wstoken", data.wsToken },
                     { "moodlewsrestformat", "json" },
                     { "wsfunction", "core_course_get_contents" },
-                    { "courseid", searchedCourses.courses[0].id.ToString() }
+                    { "courseid", searchedCourses.courses.FirstOrDefault()?.id.ToString() ??
+                                  throw new Exception("Couldn't get course id from moodle response.") }
             };
 
-            var courseContentResponse = await client.PostAsync($"https://moodle.cluuub.xyz/webservice/rest/server.php",
-                            new FormUrlEncodedContent(getCourseConentParams));
+            var courseContentResponse = await Client.PostAsync($"{webservicePath}/rest/server.php",
+                            new FormUrlEncodedContent(getCourseContentParams));
 
-            CourseContents[] courseContents = courseContentResponse.Content.ReadFromJsonAsync<CourseContents[]>().Result;
+            var courseContents = await courseContentResponse.Content.ReadFromJsonAsync<CourseContents[]>();
 
-            CourseContents filtered =  courseContents.Where(c =>
-            {
-                if (c.modules.Count == 0) return false;
-                return c.modules[0].name == "DSL_Document";
-            }).ToArray()[0];
+            var filtered =  courseContents?.First(c => c.modules.FirstOrDefault()?.name == "DSL_Document");
+
+            var contextId = filtered?.modules.FirstOrDefault()?.contextid;
+            if (contextId == null)
+                throw new Exception("Couldn't get a context id for the DSL file from the course contents response.");
             
             // Download File
-            var response = await client.GetAsync("https://moodle.cluuub.xyz/webservice/pluginfile.php/"+ filtered.modules[0].contextid +"/mod_resource/content/0/DSL_Document?token=" + data.wsToken);
+            var response =
+                await Client.GetAsync(
+                    $"{webservicePath}/pluginfile.php/{contextId}/mod_resource/content/0/DSL_Document?token={data.wsToken}");
 
-            DSLFile dSLFile = response.Content.ReadFromJsonAsync<DSLFile>().Result;
+            var dslFile = response.Content.ReadFromJsonAsync<DslFile>().Result;
+            if (dslFile == null)
+                throw new Exception("Couldn't parse response for requested DSL file into object.");
 
             // Fill in DSL with H5P Data
 
@@ -59,43 +74,44 @@ namespace AdLerBackend.Controllers
                     { "wstoken", data.wsToken },
                     { "moodlewsrestformat", "json" },
                     { "wsfunction", "mod_h5pactivity_get_h5pactivities_by_courses" },
-                    { "courseids[0]", searchedCourses.courses[0].id.ToString() }
+                    { "courseids[0]", searchedCourses.courses.FirstOrDefault()?.id.ToString() ??
+                                      throw new Exception("Couldn't get id of first course in course response.")}
             };
 
-            var h5pResponse = await client.PostAsync($"https://moodle.cluuub.xyz/webservice/rest/server.php",
+            var h5PResponse = await Client.PostAsync($"{webservicePath}/rest/server.php",
                             new FormUrlEncodedContent(getH5PParams));
 
-            H5PResponseDTO h5pResponseData = h5pResponse.Content.ReadFromJsonAsync<H5PResponseDTO>().Result;
+            var h5PResponseData = await h5PResponse.Content.ReadFromJsonAsync<H5PResponseDto>();
+            if (h5PResponseData == null)
+            {
+                throw new Exception("Couldn't parse h5p response data into DTO object.");
+            }
 
-            dSLFile.learningWorld.learningElements.ForEach(e =>
+            foreach (var e in dslFile.learningWorld.learningElements)
             {
                 if (e.elementType != "h5p")
-                {
-                    return;
-                }
+                    continue;
                 
-                int id = h5pResponseData.h5pactivities.First(h =>
+                var id = h5PResponseData.h5Pactivities.First(h => h.name == e.identifier.value).context;
+                var fileName = h5PResponseData.h5Pactivities.First(h => h.name == e.identifier.value).package.FirstOrDefault()?.filename;
+                if (fileName == null)
+                    throw new Exception($"Couldn't get filename for h5p element of id {id} in h5p response data");
+
+                var ctxIdMetaData = new MetaData
                 {
-                    return h.name == e.identifier.value;
-                }).context;
-                string fileName = h5pResponseData.h5pactivities.First(h => h.name == e.identifier.value).package[0].filename;
-
-                e.metaData ??= new List<MetaData>();
-
-                e.metaData.Add(
-                    new MetaData
-                    {
-                        key = "h5pContextId",
-                        value = id.ToString()
-                    });
-
-                e.metaData.Add(
-                new MetaData
+                    key = "h5pContextId",
+                    value = id.ToString()
+                };
+                var fileNameMetaData = new MetaData
                 {
                     key = "h5pFileName",
                     value = fileName
-                });
-            });
+                };
+                
+                e.metaData ??= new List<MetaData>();
+                e.metaData.Add(ctxIdMetaData);
+                e.metaData.Add(fileNameMetaData);
+            }
 
 
             //dSLFile.learningWorld.learningElements[0].metaData ??= new List<MetaData>();
@@ -109,12 +125,12 @@ namespace AdLerBackend.Controllers
 
 
 
-            return dSLFile;
+            return dslFile;
         }
     }
 }
 
-public class GetLEarningWorldDTO
+public class GetLearningWorldDto
 {
     public string wsToken { get; set; }
     public string courseName { get; set; }
@@ -140,7 +156,7 @@ public class Course
     public List<string> enrollmentmethods { get; set; }
 }
 
-public class SearchCoursesResponseDTO
+public class SearchCoursesResponseDto
 {
     public int total { get; set; }
     public List<Course> courses { get; set; }
@@ -225,7 +241,7 @@ public class CourseContents
     public List<Module> modules { get; set; }
 }
 
-public class CourseContentsResponseDTO
+public class CourseContentsResponseDto
 {
     public List<CourseContents> courses { get; set; }
 }
@@ -269,7 +285,7 @@ public class LearningWorld
     public List<LearningElement> learningElements { get; set; }
 }
 
-public class DSLFile
+public class DslFile
 {
     public LearningWorld learningWorld { get; set; }
 }
@@ -285,7 +301,7 @@ public class Deployedfile
     public string mimetype { get; set; }
 }
 
-public class H5pactivity
+public class H5Pactivity
 {
     public int id { get; set; }
     public int course { get; set; }
@@ -316,9 +332,9 @@ public class Package
     public bool isexternalfile { get; set; }
 }
 
-public class H5PResponseDTO
+public class H5PResponseDto
 {
-    public List<H5pactivity> h5pactivities { get; set; }
+    public List<H5Pactivity> h5Pactivities { get; set; }
     public List<object> warnings { get; set; }
 }
 

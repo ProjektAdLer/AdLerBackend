@@ -7,23 +7,21 @@ namespace AdLerBackend.Controllers
     public class UserLoginController : ControllerBase
     {
 
-        private static readonly HttpClient client = new HttpClient();
+        private static readonly HttpClient Client = new();
 
         [HttpPost(Name = "UserLogin")]
-        public async Task<string> UserLogin(UserLoginDTO data)
+        public async Task<string> UserLogin(UserLoginDto data)
         {
-            var test = await client.GetAsync($"https://moodle.cluuub.xyz/login/token.php?username={data.userName}&password={data.password}&service=moodle_mobile_app");
+            var test = await Client.GetAsync(
+                $"https://moodle.cluuub.xyz/login/token.php?username={data.userName}&password={data.password}&service=moodle_mobile_app");
 
-            UserTokenResponse ret = test.Content.ReadFromJsonAsync<UserTokenResponse>().Result;
+            var ret = await test.Content.ReadFromJsonAsync<UserTokenResponse>();
 
-
-            if (ret.token == null) return "Falsche Daten!";
-
-            return ret.token;
+            return ret?.token == null ? throw new ArgumentException("Invalid username or password.") : ret.token;
         }
     }
 
-    public class UserLoginDTO
+    public class UserLoginDto
     {
         public string? userName { get; set; }
         public string? password { get; set; }

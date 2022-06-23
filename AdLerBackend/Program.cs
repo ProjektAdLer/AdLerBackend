@@ -21,6 +21,7 @@ builder.Services.AddCors(options =>
                           policy.WithHeaders(HeaderNames.AccessControlAllowHeaders, "*");
                       });
 });
+builder.Services.AddLogging();
 
 var app = builder.Build();
 

@@ -73,7 +73,7 @@ namespace AdLerBackend.Controllers
                 int id = h5pResponseData.h5pactivities.First(h =>
                 {
                     return h.name == e.identifier.value;
-                }).id;
+                }).context;
                 string fileName = h5pResponseData.h5pactivities.First(h => h.name == e.identifier.value).package[0].filename;
 
                 e.metaData ??= new List<MetaData>();

@@ -1,6 +1,9 @@
 using Microsoft.Net.Http.Headers;
 using System.IO.Compression;
 
+// This is needed, because wwwroot directory must be present in the beginning to serve files from it
+Directory.CreateDirectory("wwwroot");
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

@@ -1,0 +1,42 @@
+name: Coveralls Code Coverage
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      dotNetVersion: net6.0
+      dotNetConfiguration: Release
+      runtimeTarget: win-x86
+    steps:
+      # checkout the repo
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+
+      # install dependencies, build, and test
+      - name: Setup Dotnet for use with actions
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.x'
+
+      - name: Cache Nuget Packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.nuget/packages
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+
+      - name: Run automated unit and integration tests
+        run: dotnet test AdLerBackendTest/AdLerBackendTest.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutput=TestResults/coverlet.info /p:CoverletOutputFormat=lcov --% /p:Include=\"[AdLerBackend]*\"
+      - name: Publish coverage report to coveralls.io
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: AdLerBackendTest/TestResults/coverlet.info

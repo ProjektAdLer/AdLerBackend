@@ -36,7 +36,7 @@ public class CoursesControllerTest
         var controller = new CoursesController(mediatorMock);
 
         // Act
-        await controller.GetCoursesForUser("token");
+        await controller.GetCoursesForUser("token", false);
 
         // Assert
         await mediatorMock.Received(1).Send(

@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdLerBackend.API", "AdLerBa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdLerBackend", "AdLerBackend", "{22C837B3-61F8-448C-AC9F-9C6D4E210658}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdlerBackendTests", "AdlerBackendTests", "{FDCE3CEF-1C02-4C20-A048-A7E9BBAEF49E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdLerBackendTests", "AdLerBackendTests", "{FDCE3CEF-1C02-4C20-A048-A7E9BBAEF49E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdLerBackend.Domain", "AdLerBackend.Domain\AdLerBackend.Domain.csproj", "{194A7CA0-353D-4C69-B805-0E17A75BC5E2}"
 EndProject

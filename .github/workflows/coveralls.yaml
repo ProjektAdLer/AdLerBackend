@@ -12,8 +12,8 @@ jobs:
       dotNetVersion: net6.0
       dotNetConfiguration: Release
       runtimeTarget: win-x86
-      includeMask: \"[AdLerBackend]*\"
-      excludeMask: \"*[UnitTests]\"
+      includeMask: \"[AdLerBackend*]*\"
+      excludeMask: \"*[*UnitTests*]\"
     steps:
       # checkout the repo
       - uses: actions/checkout@v2

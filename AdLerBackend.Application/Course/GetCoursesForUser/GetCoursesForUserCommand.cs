@@ -5,4 +5,5 @@ namespace AdLerBackend.Application.Course.GetCoursesForUser;
 
 public record GetCoursesForUserCommand : CommandWithToken<GetCourseOverviewResponse>
 {
+    public bool limitToEnrollend { get; init; } = true;
 }

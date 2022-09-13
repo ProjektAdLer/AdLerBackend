@@ -39,7 +39,7 @@ public class LmsBackupProcessor : ILmsBackupProcessor
         return h5PHashes.Select(h5PFile => new H5PDto
         {
             H5PFile = h5PFile.H5PFile,
-            H5PFileName = h5PFile.H5PFileName
+            H5PFileName = h5PFile.H5PFileName!.Split('.')[0]
         }).ToList();
     }
 

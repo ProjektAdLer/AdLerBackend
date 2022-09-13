@@ -52,14 +52,18 @@ public class StorageServiceTest
         var retunValue = storageService.StoreH5PFilesForCourse(CourseDtoFake);
 
         // Assert
-        Assert.IsTrue(_fileSystem.Directory.Exists("wwwroot/courses/1/LearningWorldIdentifier/h5p/H5PName/Folder"));
+        var path = _fileSystem.Path.Combine("wwwroot","courses","1","LearningWorldIdentifier","h5p","H5PName","Folder");
+        var fileInFolder =
+            _fileSystem.Path.Combine("wwwroot","courses","1","LearningWorldIdentifier","h5p","H5PName","Folder","FileInFolder");
+        var textFile = _fileSystem.Path.Combine("wwwroot","courses","1","LearningWorldIdentifier","h5p","H5PName","fileAtRoot.txt");
+        Assert.IsTrue(_fileSystem.Directory.Exists(path));
         Assert.IsTrue(
-            _fileSystem.File.Exists("wwwroot/courses/1/LearningWorldIdentifier/h5p/H5PName/Folder/FileInFolder"));
-        Assert.IsTrue(_fileSystem.File.Exists("wwwroot/courses/1/LearningWorldIdentifier/h5p/H5PName/fileAtRoot.txt"));
+            _fileSystem.File.Exists(fileInFolder));
+        Assert.IsTrue(_fileSystem.File.Exists(textFile));
 
 
         Assert.That(retunValue!, Has.Count.EqualTo(1));
-        Assert.That(retunValue![0], Is.EqualTo("wwwroot\\courses\\1\\LearningWorldIdentifier\\h5p\\H5PName"));
+        Assert.That(retunValue![0], Is.EqualTo(_fileSystem.Path.Combine("wwwroot","courses","1","LearningWorldIdentifier","h5p","H5PName")));
     }
 
     [Test]
@@ -71,6 +75,7 @@ public class StorageServiceTest
         {
             AuthorId = 1,
             CourseInforamtion = AutoFaker.Generate<DslFileDto>(),
+            //DSL_Document.json contains data that is required for the test and should be loaded from disk
             DslFile = new FileStream("../../../Storage/TestFiles/DSL_Document.json", FileMode.Open)
         };
 
@@ -80,12 +85,12 @@ public class StorageServiceTest
         var dslLocation = storageService.StoreDslFileForCourse(dto);
 
         // Assert
-        Assert.IsTrue(
-            _fileSystem.File.Exists("wwwroot/courses/1/LearningWorldIdentifier/LearningWorldIdentifier.json"));
+        var file = _fileSystem.Path.Combine("wwwroot", "courses", "1", "LearningWorldIdentifier",
+            "LearningWorldIdentifier.json");
+        Assert.IsTrue(_fileSystem.File.Exists(file));
 
 
-        Assert.That(dslLocation,
-            Is.EqualTo("wwwroot\\courses\\1\\LearningWorldIdentifier\\LearningWorldIdentifier.json"));
+        Assert.That(dslLocation, Is.EqualTo(file));
     }
 
     [Test]
@@ -132,10 +137,12 @@ public class StorageServiceTest
         var h5pBaseLocation = storageService.StoreH5PBase(h5pStream);
 
         // Assert
-        Assert.IsTrue(_fileSystem.Directory.Exists("wwwroot/common/h5pBase"));
-        Assert.IsTrue(_fileSystem.File.Exists("wwwroot/common/h5pBase/fileAtRoot.txt"));
+        var path = _fileSystem.Path.Combine("wwwroot", "common", "h5pBase");
+        var file = _fileSystem.Path.Combine(path, "fileAtRoot.txt");
+        Assert.IsTrue(_fileSystem.Directory.Exists(path));
+        Assert.IsTrue(_fileSystem.File.Exists(file));
 
-        Assert.That(h5pBaseLocation, Is.EqualTo("wwwroot\\common\\h5pBase"));
+        Assert.That(h5pBaseLocation, Is.EqualTo(path));
     }
 
     [Test]
@@ -147,10 +154,12 @@ public class StorageServiceTest
             AuthorId = 1,
             CourseName = "CourseName"
         };
+        var folder = Path.Combine("wwwroot", "courses", "1", "CourseName");
+        var file = Path.Combine(folder, "CourseName.json");
 
         _fileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
         {
-            {@"wwwroot\courses\1\CourseName\CourseName.json", new MockFileData("Testing is meh.")}
+            {file, new MockFileData("Testing is meh.")}
         });
         var storageService = new StorageService(_fileSystem);
 
@@ -158,6 +167,6 @@ public class StorageServiceTest
         storageService.DeleteCourse(dto);
 
         // Assert
-        Assert.IsFalse(_fileSystem.Directory.Exists("wwwroot/courses/1/CourseName"));
+        Assert.IsFalse(_fileSystem.Directory.Exists(folder));
     }
 }

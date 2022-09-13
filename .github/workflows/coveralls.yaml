@@ -43,8 +43,8 @@ jobs:
       - name: Run Application automated unit and integration test
         run: dotnet test AdlerBackend.Application.UnitTests/AdlerBackend.Application.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:MergeWith=../TestResults/coverage.json --% /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}
 
-      #- name: Run Domain automated unit and integration test
-      #  run: dotnet test AdlerBackend.Domain.UnitTests/AdlerBackend.Domain.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:MergeWith=../TestResults/coverage.json --% /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}
+      - name: Run Domain automated unit and integration test
+        run: dotnet test AdlerBackend.Domain.UnitTests/AdlerBackend.Domain.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:MergeWith=../TestResults/coverage.json --% /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}
 
       #this has to be the last test since it merges into the already merged reports and after that creates the file format we need to post to coveralls
       - name: Run Infrastructure automated unit and integration test

@@ -37,10 +37,5 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget
 
-      - name: Debug
-        run: ls /home/runner/work/AdLerBackend/AdLerBackend
-      - name: Debug
-        run: ls /home/runner/work/AdLerBackend/AdLerBackend/AdLerBackend.Application.UnitTests/
-
       - name: Run automated unit and integration tests
         run: dotnet test 

@@ -3,6 +3,7 @@ using System.IO.Abstractions.TestingHelpers;
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Exceptions;
+using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Infrastructure.Storage;
 using AutoBogus;
 
@@ -35,7 +36,7 @@ public class StorageServiceTest
         var CourseDtoFake = new CourseStoreH5PDto
         {
             AuthorId = 1,
-            CourseInforamtion = AutoFaker.Generate<DslFileDto>(),
+            CourseInforamtion = AutoFaker.Generate<LearningWorldDtoResponse>(),
             H5PFiles = new List<H5PDto>
             {
                 new()
@@ -74,7 +75,7 @@ public class StorageServiceTest
         var dto = new StoreCourseDslDto
         {
             AuthorId = 1,
-            CourseInforamtion = AutoFaker.Generate<DslFileDto>(),
+            CourseInforamtion = AutoFaker.Generate<LearningWorldDtoResponse>(),
             //DSL_Document.json contains data that is required for the test and should be loaded from disk
             DslFile = new FileStream("../../../Storage/TestFiles/DSL_Document.json", FileMode.Open)
         };

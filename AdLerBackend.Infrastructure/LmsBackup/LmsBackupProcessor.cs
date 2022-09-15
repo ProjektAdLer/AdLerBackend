@@ -5,6 +5,7 @@ using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Exceptions.LMSBAckupProcessor;
 using AdLerBackend.Application.Common.Interfaces;
+using AdLerBackend.Application.Common.Responses.Course;
 using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 
@@ -43,11 +44,11 @@ public class LmsBackupProcessor : ILmsBackupProcessor
         }).ToList();
     }
 
-    public DslFileDto GetLevelDescriptionFromBackup(Stream dslStream)
+    public LearningWorldDtoResponse GetLevelDescriptionFromBackup(Stream dslStream)
     {
         dslStream.Position = 0;
 
-        var retVal = JsonSerializer.Deserialize<DslFileDto>(dslStream, new JsonSerializerOptions
+        var retVal = JsonSerializer.Deserialize<LearningWorldDtoResponse>(dslStream, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         }) ?? throw new LmsBackupProcessorException("Could not deserialize DSL file");

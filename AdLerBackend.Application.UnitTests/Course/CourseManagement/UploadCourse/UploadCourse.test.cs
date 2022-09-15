@@ -3,6 +3,7 @@ using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses;
+using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.Course.CourseManagement.UploadCourse;
 using AdLerBackend.Application.Moodle.GetUserData;
 using AdLerBackend.Domain.Entities;
@@ -42,7 +43,7 @@ public class UploadCourseTest
             IsAdmin = true
         });
 
-        var fakedDsl = AutoFaker.Generate<DslFileDto>();
+        var fakedDsl = AutoFaker.Generate<LearningWorldDtoResponse>();
         fakedDsl.LearningWorld.LearningElements[0] = new LearningElement
         {
             Id = 13337,
@@ -120,7 +121,7 @@ public class UploadCourseTest
             IsAdmin = true
         });
 
-        var fakedDsl = AutoFaker.Generate<DslFileDto>();
+        var fakedDsl = AutoFaker.Generate<LearningWorldDtoResponse>();
         fakedDsl.LearningWorld.LearningElements[0] = new LearningElement
         {
             Id = 13337,
@@ -156,7 +157,7 @@ public class UploadCourseTest
             IsAdmin = true
         });
 
-        var fakedDsl = AutoFaker.Generate<DslFileDto>();
+        var fakedDsl = AutoFaker.Generate<LearningWorldDtoResponse>();
 
         _lmsBackupProcessor.GetLevelDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedDsl);
 

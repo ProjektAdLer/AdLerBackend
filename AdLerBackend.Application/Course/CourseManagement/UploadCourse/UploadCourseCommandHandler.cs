@@ -3,6 +3,7 @@ using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses;
+using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.Moodle.GetUserData;
 using AdLerBackend.Domain.Entities;
 using MediatR;
@@ -60,7 +61,7 @@ public class UploadCourseCommandHandler : IRequestHandler<UploadCourseCommand, b
         return true;
     }
 
-    private List<string> StoreH5PFiles(DslFileDto courseInformation, MoodleUserDataResponse userData, Stream backupFile)
+    private List<string> StoreH5PFiles(LearningWorldDtoResponse courseInformation, MoodleUserDataResponse userData, Stream backupFile)
     {
         var storedH5PFilePaths = new List<string>();
         if (courseInformation.LearningWorld.LearningElements.Any(x => x.ElementType == "h5p"))

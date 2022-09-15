@@ -26,7 +26,11 @@ if (!builder.Environment.IsDevelopment())
                         builder.Configuration["httpsCertificatePassword"]);
                 });
         else
-            options.ListenAnyIP(int.Parse(builder.Configuration["httpPort"]));
+        {
+            // if builder.Configuration["httpPort"] is not set, use default port 80
+            options.ListenAnyIP(int.Parse(builder.Configuration["httpPort"] ?? "80"));
+
+        }
     });
 
 

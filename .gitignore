@@ -6,3 +6,4 @@ riderModule.iml
 AdLerBackend.sln.DotSettings.user
 /AdLerBackend.API/wwwroot/
 /AdLerBackend.API/config/
+.idea/

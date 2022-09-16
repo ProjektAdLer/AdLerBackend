@@ -4,6 +4,7 @@ using AdLerBackend.Application;
 using AdLerBackend.Infrastructure;
 using Microsoft.Net.Http.Headers;
 
+//TODO: Add Connection string for DB to config file
 
 // This is needed, because wwwroot directory must be present in the beginning to serve files from it
 Directory.CreateDirectory("wwwroot");

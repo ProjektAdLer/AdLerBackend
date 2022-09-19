@@ -13,7 +13,7 @@ jobs:
       dotNetConfiguration: Release
       runtimeTarget: win-x86
       includeMask: \"[AdLerBackend*]*\"
-      excludeMask: \"*[*UnitTests*], [AdLerBackend.Infrastructure]AdLerBackend.Infrastructure.Migrations\"
+      excludeMask: \"*[*UnitTests*]\"
     steps:
       # checkout the repo
       - uses: actions/checkout@v2
@@ -48,7 +48,7 @@ jobs:
 
       #this has to be the last test since it merges into the already merged reports and after that creates the file format we need to post to coveralls
       - name: Run Infrastructure automated unit and integration test
-        run: dotnet test AdlerBackend.Infrastructure.UnitTests/AdlerBackend.Infrastructure.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:MergeWith=../TestResults/coverage.json /p:CoverletOutput=../TestResults/coverlet.info /p:CoverletOutputFormat=lcov --% /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}
+        run: dotnet test AdlerBackend.Infrastructure.UnitTests/AdlerBackend.Infrastructure.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:MergeWith=../TestResults/coverage.json /p:CoverletOutput=../TestResults/coverlet.info /p:CoverletOutputFormat=lcov --% /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }} /p:ExcludeFromCoverage="**/*/Migrations"
 
 
       - name: Publish coverage report to coveralls.io

@@ -13,7 +13,7 @@ jobs:
       dotNetConfiguration: Release
       runtimeTarget: win-x86
       includeMask: \"[AdLerBackend*]*\"
-      excludeMask: \"*[*UnitTests*]\"
+      excludeMask: \"*[*UnitTests*], [AdLerBackend.Infrastructure]AdLerBackend.Infrastructure.Migrations\"
     steps:
       # checkout the repo
       - uses: actions/checkout@v2

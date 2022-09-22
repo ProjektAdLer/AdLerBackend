@@ -1,9 +1,11 @@
-﻿using AdLerBackend.Infrastructure.Repositories.BaseContext;
+﻿using System.Diagnostics.CodeAnalysis;
+using AdLerBackend.Infrastructure.Repositories.BaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace AdLerBackend.Infrastructure.Repositories;
 
+[ExcludeFromCodeCoverage]
 public sealed class ProductionContext : BaseAdLerBackendDbContext
 {
     private readonly IConfiguration _configuration;

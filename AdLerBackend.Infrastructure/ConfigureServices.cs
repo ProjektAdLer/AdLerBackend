@@ -1,4 +1,5 @@
-﻿using System.IO.Abstractions;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO.Abstractions;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Infrastructure.LmsBackup;
 using AdLerBackend.Infrastructure.Moodle;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AdLerBackend.Infrastructure;
 
+[ExcludeFromCodeCoverage]
 public static class ConfigureServices
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,

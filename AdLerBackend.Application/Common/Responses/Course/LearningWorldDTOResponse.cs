@@ -1,4 +1,6 @@
-﻿public class LearningWorldDtoResponse
+﻿namespace AdLerBackend.Application.Common.Responses.Course;
+
+public class LearningWorldDtoResponse
 {
     public LearningWorld LearningWorld { get; set; }
 }    

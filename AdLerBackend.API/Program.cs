@@ -2,7 +2,6 @@ using System.Reflection;
 using AdLerBackend.API.Filters;
 using AdLerBackend.Application;
 using AdLerBackend.Infrastructure;
-using Microsoft.Net.Http.Headers;
 
 
 // This is needed, because wwwroot directory must be present in the beginning to serve files from it
@@ -48,6 +47,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration, builder.Environment.IsDevelopment());
+
 
 builder.Services.AddCors(options =>
 {

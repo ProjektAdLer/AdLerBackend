@@ -65,6 +65,21 @@ public class MoodleWebApi : IMoodle
         return userData.IsAdmin;
     }
 
+    public async Task<bool> ProcessXAPIStatementAsync(string token, string statement)
+    {
+        var returnValue =  await MoodleCallAsync<IList<bool>>(new Dictionary<string, string>
+        {
+            {"wstoken", token},
+            {"moodlewsrestformat", "json"},
+            {"wsfunction", "core_xapi_statement_post"},
+            {"component", "mod_h5pactivity"},
+            {"requestjson", "[" + statement + "]"},
+        });
+
+
+        return returnValue[0];
+    }
+
 
     public virtual async Task<MoodleUserDataResponse> GetMoodleUserDataAsync(string token)
     {

@@ -14,7 +14,7 @@ public class H5PElementsController : BaseApiController
 
     [HttpPatch("{h5pId}")]
     public async Task<ActionResult<ScoreLearningElementResponse>> ScoreH5PElement([FromHeader] string token,
-        [FromRoute] int h5pId,  [FromBody] ScoreH5PElementParams scoreH5PElementParams)
+        [FromRoute] int h5pId, [FromBody] ScoreH5PElementParams scoreH5PElementParams)
     {
         return await Mediator.Send(new ScoreH5PElementCommand
         {

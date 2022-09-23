@@ -74,7 +74,7 @@ public class GetCourseDetailTest
         _fileAccess.GetFileStream(Arg.Any<string>()).Returns(stream);
 
         var mockedDsl = AutoFaker.Generate<LearningWorldDtoResponse>();
-        mockedDsl.LearningWorld.LearningElements = new List<LearningElement>
+        mockedDsl.LearningWorld.LearningElements = new List<Application.Common.Responses.Course.LearningElement>
         {
             new()
             {
@@ -225,7 +225,7 @@ public class GetCourseDetailTest
         _fileAccess.GetFileStream(Arg.Any<string>()).Returns(stream);
 
         var mockedDsl = AutoFaker.Generate<LearningWorldDtoResponse>();
-        mockedDsl.LearningWorld.LearningElements = new List<LearningElement>
+        mockedDsl.LearningWorld.LearningElements = new List<Application.Common.Responses.Course.LearningElement>
         {
             new()
             {

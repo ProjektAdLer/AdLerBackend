@@ -1,16 +1,11 @@
+using System.Text.Json.Serialization;
+
 namespace AdLerBackend.Application.Common.DTOs;
-
-
-
-
-public class Account
-{
-    public string name { get; set; }
-}
 
 public class Actor
 {
-    public Account account { get; set; }
+    public string name { get; set; }
+    public string mbox { get; set; }
     public string objectType { get; set; }
 }
 
@@ -38,19 +33,19 @@ public class Definition
 
 public class Display
 {
-    
+    [JsonPropertyName("en-US")]
     public string EnUS { get; set; }
 }
 
 public class Extensions
 {
-    
+    [JsonPropertyName("http://h5p.org/x-api/h5p-local-content-id")]
     public string HttpH5pOrgXApiH5pLocalContentId { get; set; }
 }
 
 public class Name
 {
-    
+    [JsonPropertyName("en-US")]
     public string EnUS { get; set; }
 }
 

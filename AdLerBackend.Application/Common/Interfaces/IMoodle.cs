@@ -43,5 +43,18 @@ public interface IMoodle
     /// <returns></returns>
     Task<MoodleCourseListResponse> GetCoursesForUserAsync(string token);
 
+    /// <summary>
+    ///     Determines whether the given User is an admin in the Moodle System
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
     Task<bool> IsMoodleAdminAsync(string token);
+    
+    /// <summary>
+    ///     Processes an XAPI Statement
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="statement"></param>
+    /// <returns>Returns True, if the Statement hase been processed successfully </returns>
+    Task<bool> ProcessXAPIStatementAsync(string token, string statement);
 }

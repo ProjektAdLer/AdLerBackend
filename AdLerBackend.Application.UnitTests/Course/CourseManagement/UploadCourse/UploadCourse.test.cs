@@ -44,7 +44,7 @@ public class UploadCourseTest
         });
 
         var fakedDsl = AutoFaker.Generate<LearningWorldDtoResponse>();
-        fakedDsl.LearningWorld.LearningElements[0] = new LearningElement
+        fakedDsl.LearningWorld.LearningElements[0] = new Application.Common.Responses.Course.LearningElement
         {
             Id = 13337,
             ElementType = "h5p"
@@ -122,7 +122,7 @@ public class UploadCourseTest
         });
 
         var fakedDsl = AutoFaker.Generate<LearningWorldDtoResponse>();
-        fakedDsl.LearningWorld.LearningElements[0] = new LearningElement
+        fakedDsl.LearningWorld.LearningElements[0] = new Application.Common.Responses.Course.LearningElement
         {
             Id = 13337,
             ElementType = "h5p"

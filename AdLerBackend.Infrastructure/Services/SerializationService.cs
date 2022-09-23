@@ -16,4 +16,13 @@ public class SerializationService : ISerialization
         }) ?? throw new LmsBackupProcessorException("Could not deserialize DSL file");
         return Task.FromResult(retVal);
     }
+
+    public TClass GetObjectFromJsonString<TClass>(string jsonString)
+    {
+        var retVal = JsonSerializer.Deserialize<TClass>(jsonString, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        }) ?? throw new Exception("Could not deserialize String");
+        return retVal;
+    }
 }

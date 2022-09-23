@@ -4,6 +4,7 @@ using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses;
 using AdLerBackend.Application.Common.Responses.Course;
+using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Course.CourseManagement.UploadCourse;
 using AdLerBackend.Application.Moodle.GetUserData;
 using AdLerBackend.Domain.Entities;

@@ -8,7 +8,5 @@ public record ScoreH5PElementCommand : CommandWithToken<ScoreLearningElementResp
 {
     public int H5PId { get; init; }
     public string serializedXAPIEvent { get; init; }
-    public string UserEmail { get; init; }
-    public string UserName { get; init; }
     public string H5PName { get; init; }
 }

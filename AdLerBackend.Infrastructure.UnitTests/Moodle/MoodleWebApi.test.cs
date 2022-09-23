@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
-using AdLerBackend.Application.Common.Responses;
+using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Infrastructure.Moodle;
 using NSubstitute;
 using NSubstitute.Extensions;
@@ -149,13 +149,23 @@ public class MoodleWebApiTest
     {
         // Arrange
         _mockHttp.When("*")
+            .WithFormData("wsfunction", "core_webservice_get_site_info")
             .Respond(
-                "application/json", JsonSerializer.Serialize(new UserDataResponse
+                "application/json", JsonSerializer.Serialize(new
                 {
                     Userid = 1,
                     Userissiteadmin = true,
                     Username = "testUser"
                 }));
+
+
+        var list = new[] {new {email = "test"}}.ToList();
+
+
+        _mockHttp.When("*")
+            .WithFormData("wsfunction", "core_user_get_users_by_field")
+            .Respond(
+                "application/json", JsonSerializer.Serialize(list));
 
         // Act
         var result = await _systemUnderTest.GetMoodleUserDataAsync("moodleToken");

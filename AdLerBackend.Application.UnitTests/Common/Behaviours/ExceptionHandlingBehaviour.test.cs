@@ -2,6 +2,7 @@
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using AdLerBackend.Application.Common.Responses;
+using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Moodle.GetMoodleToken;
 using AdLerBackend.Application.Moodle.GetUserData;
 using MediatR;

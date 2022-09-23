@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.Responses;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 
 namespace AdLerBackend.Infrastructure.Moodle;
@@ -67,15 +66,14 @@ public class MoodleWebApi : IMoodle
 
     public async Task<bool> ProcessXAPIStatementAsync(string token, string statement)
     {
-        var returnValue =  await MoodleCallAsync<IList<bool>>(new Dictionary<string, string>
+        var returnValue = await MoodleCallAsync<IList<bool>>(new Dictionary<string, string>
         {
             {"wstoken", token},
             {"moodlewsrestformat", "json"},
             {"wsfunction", "core_xapi_statement_post"},
             {"component", "mod_h5pactivity"},
-            {"requestjson", "[" + statement + "]"},
+            {"requestjson", "[" + statement + "]"}
         });
-
 
         return returnValue[0];
     }
@@ -83,18 +81,29 @@ public class MoodleWebApi : IMoodle
 
     public virtual async Task<MoodleUserDataResponse> GetMoodleUserDataAsync(string token)
     {
-        var resp = await MoodleCallAsync<UserDataResponse>(new Dictionary<string, string>
+        var generalInformationResponse = await MoodleCallAsync<GeneralUserDataResponse>(new Dictionary<string, string>
         {
             {"wstoken", token},
             {"wsfunction", "core_webservice_get_site_info"},
             {"moodlewsrestformat", "json"}
         });
 
+        var detailedUserInformaionResponse = await MoodleCallAsync<DetailedUserDataResponse[]>(
+            new Dictionary<string, string>
+            {
+                {"wstoken", token},
+                {"wsfunction", "core_user_get_users_by_field"},
+                {"moodlewsrestformat", "json"},
+                {"field", "id"},
+                {"values[0]", generalInformationResponse.Userid.ToString()}
+            });
+
         return new MoodleUserDataResponse
         {
-            MoodleUserName = resp.Username,
-            IsAdmin = resp.Userissiteadmin,
-            UserId = resp.Userid
+            MoodleUserName = generalInformationResponse.Username,
+            IsAdmin = generalInformationResponse.Userissiteadmin,
+            UserId = generalInformationResponse.Userid,
+            UserEmail = detailedUserInformaionResponse[0].Email
         };
     }
 
@@ -194,32 +203,38 @@ public class MoodleWebApi : IMoodle
             throw new LmsException("Die Moodle Web Api ist nicht erreichbar: URL: " + url, e);
         }
     }
-}
 
-public class UserTokenResponse
-{
-    public string Token { get; set; }
-}
-
-public class UserDataResponse
-{
-    public string Username { get; set; }
-    public bool Userissiteadmin { get; set; }
-    public int Userid { get; set; }
-}
-
-public class MoodleWsErrorResponse
-{
-    public string Errorcode { get; set; }
-}
-
-public class PostToMoodleOptions
-{
-    public enum Endpoints
+    private class UserTokenResponse
     {
-        Webservice,
-        Login
+        public string Token { get; set; }
     }
 
-    public Endpoints Endpoint { get; set; } = Endpoints.Webservice;
+    private class GeneralUserDataResponse
+    {
+        public string Username { get; set; }
+        public bool Userissiteadmin { get; set; }
+        public int Userid { get; set; }
+    }
+
+    private class DetailedUserDataResponse
+    {
+        public string Email { get; set; }
+    }
+
+
+    private class MoodleWsErrorResponse
+    {
+        public string Errorcode { get; set; }
+    }
+
+    private class PostToMoodleOptions
+    {
+        public enum Endpoints
+        {
+            Webservice,
+            Login
+        }
+
+        public Endpoints Endpoint { get; set; } = Endpoints.Webservice;
+    }
 }

@@ -67,9 +67,32 @@ public class GetCourseDetailTest
             }
         };
 
-        _moodle.SearchCoursesAsync(Arg.Any<string>(), Arg.Any<string>()).Returns(moodleCourseResponse);
+        var test = new CourseContent
+        {
+            Id = 1,
+            Name = "someName",
+            Modules = new List<Modules>
+            {
+                new()
+                {
+                    contextid = 123,
+                    Id = 1,
+                    Name = "path1",
+                    ModName = "h5pactivity"
+                },
+                new()
+                {
+                    contextid = 123,
+                    Id = 2,
+                    Name = "path2",
+                    ModName = "h5pactivity"
+                }
+            }
+        };
 
-        // TODO: Is this the right way to mock the stream?
+        _moodle.SearchCoursesAsync(Arg.Any<string>(), Arg.Any<string>()).Returns(moodleCourseResponse);
+        _moodle.GetCourseContentAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new[] {test});
+
         var stream = new MemoryStream();
         _fileAccess.GetFileStream(Arg.Any<string>()).Returns(stream);
 

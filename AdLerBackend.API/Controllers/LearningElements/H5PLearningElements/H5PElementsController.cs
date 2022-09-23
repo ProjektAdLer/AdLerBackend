@@ -1,4 +1,3 @@
-using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.Responses.LearningElements;
 using AdLerBackend.Application.LearningElement.H5P.ScoreH5PElement;
 using MediatR;
@@ -15,16 +14,16 @@ public class H5PElementsController : BaseApiController
 
     [HttpPatch("{h5pId}")]
     public async Task<ActionResult<ScoreLearningElementResponse>> ScoreH5PElement([FromHeader] string token,
-        [FromRoute] int h5pId, [FromBody] RawH5PEvent h5pEvent, string userEmail, string userName, string h5pName)
+        [FromRoute] int h5pId,  [FromBody] ScoreH5PElementParams scoreH5PElementParams)
     {
         return await Mediator.Send(new ScoreH5PElementCommand
         {
             WebServiceToken = token,
             H5PId = h5pId,
-            H5PEvent = h5pEvent,
-            UserEmail = userEmail,
-            UserName = userName,
-            H5PName = h5pName
+            serializedXAPIEvent = scoreH5PElementParams.serializedXAPIEvent,
+            UserEmail = scoreH5PElementParams.userEmail,
+            UserName = scoreH5PElementParams.userName,
+            H5PName = scoreH5PElementParams.h5pName
         });
     }
 }

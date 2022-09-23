@@ -51,14 +51,10 @@ builder.Services.AddInfrastructureServices(builder.Configuration, builder.Enviro
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("test",
+    options.AddPolicy("AllowEverything",
         policy =>
         {
-            // policy.WithOrigins("http://example.com",
-            //                     "http://www.contoso.com",
-            //                     "http://localhost:3000");
-            policy.AllowAnyOrigin();
-            policy.WithHeaders(HeaderNames.AccessControlAllowHeaders, "*");
+            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
         });
 });
 
@@ -72,7 +68,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("test");
+app.UseCors("AllowEverything");
 
 // Disabled for now, because it is not needed
 //app.UseHttpsRedirection();

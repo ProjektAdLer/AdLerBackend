@@ -20,8 +20,7 @@ public class H5PElementsController : BaseApiController
         {
             WebServiceToken = token,
             H5PId = h5pId,
-            serializedXAPIEvent = scoreH5PElementParams.serializedXAPIEvent,
-            H5PName = scoreH5PElementParams.h5pName
+            serializedXAPIEvent = scoreH5PElementParams.serializedXAPIEvent
         });
     }
 }

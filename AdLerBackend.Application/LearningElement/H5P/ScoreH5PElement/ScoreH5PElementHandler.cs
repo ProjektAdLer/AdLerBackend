@@ -30,7 +30,6 @@ public class ScoreH5PElementHandler : IRequestHandler<ScoreH5PElementCommand, Sc
         xapiEvent.actor.mbox = userData.UserEmail;
 
         xapiEvent.@object.id = "https://testmoodle.cluuub.xyz/xapi/activity/" + request.H5PId;
-        xapiEvent.@object.definition.name.EnUS = request.H5PName;
 
         // serialize the XAPI Event again
         var inText = JsonSerializer.Serialize(xapiEvent);

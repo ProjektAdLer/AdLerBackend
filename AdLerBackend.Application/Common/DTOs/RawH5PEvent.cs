@@ -33,8 +33,7 @@ public class Definition
 
 public class Display
 {
-    [JsonPropertyName("en-US")]
-    public string EnUS { get; set; }
+    [JsonPropertyName("en-US")] public string EnUS { get; set; }
 }
 
 public class Extensions
@@ -45,8 +44,7 @@ public class Extensions
 
 public class Name
 {
-    [JsonPropertyName("en-US")]
-    public string EnUS { get; set; }
+    [JsonPropertyName("en-US")] public string EnUS { get; set; }
 }
 
 public class Object
@@ -61,6 +59,7 @@ public class Result
     public Score score { get; set; }
     public bool completion { get; set; }
     public string duration { get; set; }
+    public bool success { get; set; }
 }
 
 public class RawH5PEvent

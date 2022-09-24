@@ -43,7 +43,6 @@ public class GetCourseDetailHandler : IRequestHandler<GetCourseDetailCommand, Le
         // Get Course Content
         var courseContent = await _moodleService.GetCourseContentAsync(request.WebServiceToken, searchedCourses.Courses[0].Id);
         
-
         // Get Course DSL 
         await using var fileStream = _fileAccess.GetFileStream(course.DslLocation);
 

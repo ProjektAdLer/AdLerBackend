@@ -2,6 +2,7 @@
 using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
+using AdLerBackend.Application.Common.InternalUseCases.CheckUserPrivileges;
 using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Course.CourseManagement.UploadCourse;
@@ -10,6 +11,7 @@ using AdLerBackend.Domain.Entities;
 using AutoBogus;
 using MediatR;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 
 #pragma warning disable CS8618
 
@@ -67,6 +69,8 @@ public class UploadCourseTest
             new UploadCourseCommandHandler(_lmsBackupProcessor, _mediator, _fileAccess, _courseRepository,
                 _serialization);
 
+        _mediator.Send(Arg.Any<CheckUserPrivilegesCommand>()).Returns(Unit.Task);
+
         _mediator.Send(Arg.Any<GetMoodleUserDataCommand>()).Returns(new MoodleUserDataResponse
         {
             IsAdmin = true
@@ -121,6 +125,8 @@ public class UploadCourseTest
         var systemUnderTest =
             new UploadCourseCommandHandler(_lmsBackupProcessor, _mediator, _fileAccess, _courseRepository,
                 _serialization);
+
+        _mediator.Send(Arg.Any<CheckUserPrivilegesCommand>()).Throws(new ForbiddenAccessException(""));
 
         _mediator.Send(Arg.Any<GetMoodleUserDataCommand>()).Returns(new MoodleUserDataResponse
         {

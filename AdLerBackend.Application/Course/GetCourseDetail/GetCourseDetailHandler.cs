@@ -50,7 +50,7 @@ public class GetCourseDetailHandler : IRequestHandler<GetCourseDetailCommand, Le
         var dslFile = await _serialization.GetObjectFromJsonStreamAsync<LearningWorldDtoResponse>(fileStream);
 
         
-        // TODO: This can be moved to the creation of the course to optimize performance
+
         // Hydrate H5P Files in dsl file with the actual H5P File paths
         foreach (var h5PLocationEntity in course.H5PFilesInCourse)
         {

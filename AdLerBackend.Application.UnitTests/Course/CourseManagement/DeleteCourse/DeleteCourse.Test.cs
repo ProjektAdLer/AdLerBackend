@@ -1,9 +1,12 @@
 ﻿using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
+using AdLerBackend.Application.Common.InternalUseCases.CheckUserPrivileges;
 using AdLerBackend.Application.Course.CourseManagement.DeleteCourse;
 using AdLerBackend.Domain.Entities;
+using MediatR;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 
 #pragma warning disable CS8618
 
@@ -13,23 +16,24 @@ public class DeleteCourseTest
 {
     private ICourseRepository _courseRepository;
     private IFileAccess _fileAccess;
-    private IMoodle _moodle;
+    private IMediator _mediator;
+
 
     [SetUp]
     public void Setup()
     {
-        _moodle = Substitute.For<IMoodle>();
         _courseRepository = Substitute.For<ICourseRepository>();
         _fileAccess = Substitute.For<IFileAccess>();
+        _mediator = Substitute.For<IMediator>();
     }
 
     [Test]
     public async Task Handle_Valid_ShouldCallDeletionOfCourse()
     {
         // Arrange
-        var systemUnderTest = new DeleteCourseHandler(_moodle, _courseRepository, _fileAccess);
+        var systemUnderTest = new DeleteCourseHandler(_courseRepository, _fileAccess, _mediator);
 
-        _moodle.IsMoodleAdminAsync(Arg.Any<string>()).Returns(true);
+        _mediator.Send(Arg.Any<CheckUserPrivilegesCommand>()).Returns(Unit.Task);
 
         var courseMock = new CourseEntity
         {
@@ -60,8 +64,8 @@ public class DeleteCourseTest
     public Task Handle_UserNotAdmin_ShouldThorwException()
     {
         // Arrange
-        var systemUnderTest = new DeleteCourseHandler(_moodle, _courseRepository, _fileAccess);
-        _moodle.IsMoodleAdminAsync(Arg.Any<string>()).Returns(false);
+        var systemUnderTest = new DeleteCourseHandler(_courseRepository, _fileAccess, _mediator);
+        _mediator.Send(Arg.Any<CheckUserPrivilegesCommand>()).Throws(new ForbiddenAccessException(""));
 
         // Act
         // Assert

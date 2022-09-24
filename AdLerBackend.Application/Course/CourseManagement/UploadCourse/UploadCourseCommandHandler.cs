@@ -1,6 +1,7 @@
 ﻿using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
+using AdLerBackend.Application.Common.InternalUseCases.CheckUserPrivileges;
 using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Moodle.GetUserData;
@@ -29,16 +30,24 @@ public class UploadCourseCommandHandler : IRequestHandler<UploadCourseCommand, b
 
     public async Task<bool> Handle(UploadCourseCommand request, CancellationToken cancellationToken)
     {
-        var userInformation = await GetUserInformation(request);
-        if (!userInformation.IsAdmin) throw new ForbiddenAccessException("You are not an admin");
+        // check if user is Admin
+        await _mediator.Send(new CheckUserPrivilegesCommand
+        {
+            WebServiceToken = request.WebServiceToken
+        }, cancellationToken);
+
+        var userInformation = await _mediator.Send(new GetMoodleUserDataCommand
+        {
+            WebServiceToken = request.WebServiceToken
+        }, cancellationToken);
 
         var courseInformation = _lmsBackupProcessor.GetLevelDescriptionFromBackup(request.DslFileStream);
 
 
-        var existsCourseForUser = await _courseRepository.ExistsCourseForAuthor(userInformation.UserId,
+        var existsCourseForAuthor = await _courseRepository.ExistsCourseForAuthor(userInformation.UserId,
             courseInformation.LearningWorld.Identifier.Value);
 
-        if (existsCourseForUser) throw new CourseCreationException("Course already exists in Database");
+        if (existsCourseForAuthor) throw new CourseCreationException("Course already exists in Database");
 
         var dslLocation = _fileAccess.StoreDslFileForCourse(new StoreCourseDslDto
         {
@@ -47,7 +56,7 @@ public class UploadCourseCommandHandler : IRequestHandler<UploadCourseCommand, b
             CourseInforamtion = courseInformation
         });
 
-        // Create Directory for H5P Paths with Element Id from DSL
+
         var storedH5PFilePaths = StoreH5PFiles(courseInformation, userInformation, request.BackupFileStream);
         var h5PFilesInCourse = GetH5PLocationEntities(storedH5PFilePaths!);
 
@@ -95,15 +104,6 @@ public class UploadCourseCommandHandler : IRequestHandler<UploadCourseCommand, b
         return storedH5PFilePaths!;
     }
 
-    private async Task<MoodleUserDataResponse> GetUserInformation(UploadCourseCommand request)
-    {
-        var userData = await _mediator.Send(new GetMoodleUserDataCommand
-        {
-            WebServiceToken = request.WebServiceToken
-        });
-
-        return userData;
-    }
 
     private List<H5PLocationEntity> GetH5PLocationEntities(List<string> storedH5PFilePaths)
     {

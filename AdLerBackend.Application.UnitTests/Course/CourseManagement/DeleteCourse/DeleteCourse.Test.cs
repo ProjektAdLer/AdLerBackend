@@ -32,9 +32,7 @@ public class DeleteCourseTest
     {
         // Arrange
         var systemUnderTest = new DeleteCourseHandler(_courseRepository, _fileAccess, _mediator);
-
-        _mediator.Send(Arg.Any<CheckUserPrivilegesCommand>()).Returns(Unit.Task);
-
+        
         var courseMock = new CourseEntity
         {
             Id = 1

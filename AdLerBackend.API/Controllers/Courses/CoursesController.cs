@@ -63,12 +63,11 @@ public class CoursesController : BaseApiController
     /// <param name="token">The Users WebService Token</param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<ActionResult<GetCourseOverviewResponse>> GetCoursesForUser([FromHeader] string token, bool limitToEnrolled)
+    public async Task<ActionResult<GetCourseOverviewResponse>> GetCoursesForUser([FromHeader] string token)
     {
         return await Mediator.Send(new GetCoursesForUserCommand
         {
-            WebServiceToken = token,
-            limitToEnrollend = limitToEnrolled
+            WebServiceToken = token
         });
     }
 

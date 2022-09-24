@@ -4,6 +4,7 @@ using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.Common.Responses.LearningElements;
+using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using MediatR;
 
 namespace AdLerBackend.Application.LearningElement.H5P.ScoreH5PElement;
@@ -16,7 +17,7 @@ public class ScoreH5PElementHandler : IRequestHandler<ScoreElementCommand, Score
     private readonly ISerialization _serialization;
 
     public ScoreH5PElementHandler(ISerialization serialization, IMoodle moodle, ICourseRepository courseRepository,
-        IFileAccess fileAccess)
+        IFileAccess fileAccess, IMediator mediator)
     {
         _serialization = serialization;
         _moodle = moodle;
@@ -39,7 +40,7 @@ public class ScoreH5PElementHandler : IRequestHandler<ScoreElementCommand, Score
         await using var fileStream = _fileAccess.GetFileStream(course.DslLocation);
 
         // Parse DSL File
-        var dslFile = await _serialization.GetObjectFromJsonStreamAsync<LearningWorldDtoResponse>(fileStream);
+        var dslObject = await _serialization.GetObjectFromJsonStreamAsync<LearningWorldDtoResponse>(fileStream);
 
         // Get Course from Moodle
         var searchedCourses = await _moodle.SearchCoursesAsync(request.WebServiceToken, course.Name);
@@ -48,30 +49,17 @@ public class ScoreH5PElementHandler : IRequestHandler<ScoreElementCommand, Score
         var courseContent = await _moodle.GetCourseContentAsync(request.WebServiceToken, searchedCourses.Courses[0].Id);
 
         // Get Actual Context Id of H5P
-        var searchedFileName = dslFile.LearningWorld.LearningElements.Find(x => x.Id == request.ElementId)?
+        var searchedFileName = dslObject.LearningWorld.LearningElements.Find(x => x.Id == request.ElementId)?
             .Identifier
             .Value;
 
         if (searchedFileName == null)
             throw new NotFoundException("Element with the Id " + request.ElementId + " not found");
 
-        int? contextId = null;
 
-        foreach (var content in courseContent)
-        {
-            foreach (var contentModule in content.Modules)
-            {
-                if (contextId != null) break;
-                if (contentModule.Name == searchedFileName)
-                    contextId = contentModule.contextid;
-            }
-
-            if (contextId != null) break;
-        }
-
-        if (contextId is null)
-            throw new NotFoundException("H5P File with the name " + searchedFileName +
-                                        " not found on Moodle");
+        var contextId = GetModuleFromCourse(courseContent, x => x.Name == searchedFileName)?.contextid ??
+                        throw new NotFoundException(
+                            "Element with the Id " + request.ElementId + " not found");
 
         // Deserialize the XAPI Event
         var xapiEvent =
@@ -92,5 +80,10 @@ public class ScoreH5PElementHandler : IRequestHandler<ScoreElementCommand, Score
         {
             isSuceess = isSuccess
         };
+    }
+
+    private static Modules? GetModuleFromCourse(CourseContent[] courseContent, Func<Modules, bool> del)
+    {
+        return courseContent.SelectMany(content => content.Modules).FirstOrDefault(del);
     }
 }

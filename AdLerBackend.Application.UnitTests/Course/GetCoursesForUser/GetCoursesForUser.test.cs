@@ -33,7 +33,7 @@ public class GetCoursesForUserTest
             WebServiceToken = "testToken"
         };
 
-        _moodle.SearchCoursesAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<bool>()).Returns(new MoodleCourseListResponse
+        _moodle.GetCoursesForUserAsync(Arg.Any<string>()).Returns(new MoodleCourseListResponse
         {
             Total = 1,
             Courses = new List<MoodleCourse>
@@ -74,7 +74,7 @@ public class GetCoursesForUserTest
             WebServiceToken = "testToken"
         };
 
-        _moodle.SearchCoursesAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<bool>()).Returns(new MoodleCourseListResponse
+        _moodle.GetCoursesForUserAsync(Arg.Any<string>()).Returns(new MoodleCourseListResponse
         {
             Total = 0,
             Courses = new List<MoodleCourse>()

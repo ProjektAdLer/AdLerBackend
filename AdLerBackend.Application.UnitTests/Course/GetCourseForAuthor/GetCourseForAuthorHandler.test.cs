@@ -1,6 +1,6 @@
 ﻿using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.Responses;
+using AdLerBackend.Application.Common.InternalUseCases.CheckUserPrivileges;
 using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Course.GetCoursesForAuthor;
@@ -8,6 +8,7 @@ using AdLerBackend.Application.Moodle.GetUserData;
 using AdLerBackend.Domain.Entities;
 using MediatR;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 
 #pragma warning disable CS8618
 
@@ -26,7 +27,7 @@ public class GetCourseForAuthorHandlerTest
     }
 
     [Test]
-    public Task Handle_GiveUnauthorotisedUser_ShouldThrow()
+    public async Task Handle_GiveUnauthorotisedUser_ShouldThrow()
     {
         // Arrange
         var request = new GetCoursesForAuthorCommand
@@ -35,14 +36,7 @@ public class GetCourseForAuthorHandlerTest
             AuthorId = 1
         };
 
-        // Mock Mediatr Response for GetMoodleUserDataCommand
-        var moodleUserData = new MoodleUserDataResponse
-        {
-            IsAdmin = false,
-            UserId = 1,
-            MoodleUserName = "userName"
-        };
-        _mediator.Send(Arg.Any<GetMoodleUserDataCommand>()).Returns(moodleUserData);
+        _mediator.Send(Arg.Any<CheckUserPrivilegesCommand>()).Throws(new ForbiddenAccessException(""));
 
         var systemUnderTest = new GetCoursesForAuthorHandler(_courseRepository, _mediator);
 
@@ -52,9 +46,7 @@ public class GetCourseForAuthorHandlerTest
             Assert.ThrowsAsync<ForbiddenAccessException>(async () =>
                 await systemUnderTest.Handle(request, CancellationToken.None));
 
-        // Assert
-        Assert.That(exception?.Message, Is.EqualTo("You are not an admin"));
-        return Task.CompletedTask;
+
     }
 
     [Test]

@@ -18,9 +18,7 @@ public class GetCoursesForUserHandler : IRequestHandler<GetCoursesForUserCommand
     public async Task<GetCourseOverviewResponse> Handle(GetCoursesForUserCommand request,
         CancellationToken cancellationToken)
     {
-        var coursesFromApi = await _moodle.SearchCoursesAsync(request.WebServiceToken, "", request.limitToEnrollend);
-        //var coursesFromApi = await _moodle.GetCoursesForUserAsync(request.WebServiceToken);
-
+        var coursesFromApi = await _moodle.GetCoursesForUserAsync(request.WebServiceToken);
 
         var courseStringList = coursesFromApi.Courses.Select(c => c.Fullname).ToList();
 

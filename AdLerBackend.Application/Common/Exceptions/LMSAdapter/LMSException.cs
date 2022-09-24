@@ -11,5 +11,9 @@ public class LmsException : Exception
     {
     }
 
+    public LmsException(string errorMessage) : base(errorMessage)
+    {
+    }
+
     public string LmsErrorCode { get; set; } = "";
 }

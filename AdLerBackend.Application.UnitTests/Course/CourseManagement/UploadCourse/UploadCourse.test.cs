@@ -2,7 +2,6 @@
 using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.Responses;
 using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Course.CourseManagement.UploadCourse;
@@ -22,6 +21,7 @@ public class UploadCourseTest
     private IFileAccess _fileAccess;
     private ILmsBackupProcessor _lmsBackupProcessor;
     private IMediator _mediator;
+    private ISerialization _serialization;
 
     [SetUp]
     public void Setup()
@@ -30,6 +30,33 @@ public class UploadCourseTest
         _mediator = Substitute.For<IMediator>();
         _fileAccess = Substitute.For<IFileAccess>();
         _courseRepository = Substitute.For<ICourseRepository>();
+        _serialization = Substitute.For<ISerialization>();
+
+        var mockedDsl = AutoFaker.Generate<LearningWorldDtoResponse>();
+        mockedDsl.LearningWorld.LearningElements = new List<Application.Common.Responses.Course.LearningElement>
+        {
+            new()
+            {
+                Id = 1,
+                ElementType = "h5p",
+                Identifier = new Identifier
+                {
+                    Value = "path1"
+                }
+            },
+            new()
+            {
+                Id = 2,
+                ElementType = "h5p",
+                Identifier = new Identifier
+                {
+                    Value = "path2"
+                }
+            }
+        };
+
+        _serialization.GetObjectFromJsonStreamAsync<LearningWorldDtoResponse>(Arg.Any<Stream>())
+            .Returns(mockedDsl);
     }
 
     [Test]
@@ -37,7 +64,8 @@ public class UploadCourseTest
     {
         // Arrange
         var systemUnderTest =
-            new UploadCourseCommandHandler(_lmsBackupProcessor, _mediator, _fileAccess, _courseRepository);
+            new UploadCourseCommandHandler(_lmsBackupProcessor, _mediator, _fileAccess, _courseRepository,
+                _serialization);
 
         _mediator.Send(Arg.Any<GetMoodleUserDataCommand>()).Returns(new MoodleUserDataResponse
         {
@@ -91,7 +119,8 @@ public class UploadCourseTest
     {
         // Arrange
         var systemUnderTest =
-            new UploadCourseCommandHandler(_lmsBackupProcessor, _mediator, _fileAccess, _courseRepository);
+            new UploadCourseCommandHandler(_lmsBackupProcessor, _mediator, _fileAccess, _courseRepository,
+                _serialization);
 
         _mediator.Send(Arg.Any<GetMoodleUserDataCommand>()).Returns(new MoodleUserDataResponse
         {
@@ -115,7 +144,8 @@ public class UploadCourseTest
     {
         // Arrange
         var systemUnderTest =
-            new UploadCourseCommandHandler(_lmsBackupProcessor, _mediator, _fileAccess, _courseRepository);
+            new UploadCourseCommandHandler(_lmsBackupProcessor, _mediator, _fileAccess, _courseRepository,
+                _serialization);
 
         _mediator.Send(Arg.Any<GetMoodleUserDataCommand>()).Returns(new MoodleUserDataResponse
         {
@@ -151,7 +181,8 @@ public class UploadCourseTest
     {
         // Arrange
         var systemUnderTest =
-            new UploadCourseCommandHandler(_lmsBackupProcessor, _mediator, _fileAccess, _courseRepository);
+            new UploadCourseCommandHandler(_lmsBackupProcessor, _mediator, _fileAccess, _courseRepository,
+                _serialization);
 
         _mediator.Send(Arg.Any<GetMoodleUserDataCommand>()).Returns(new MoodleUserDataResponse
         {

@@ -1,6 +1,6 @@
 ﻿using AdLerBackend.Application.Common.DTOs.Storage;
-using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
+using AdLerBackend.Application.Common.InternalUseCases.CheckUserPrivileges;
 using MediatR;
 
 namespace AdLerBackend.Application.Course.CourseManagement.DeleteCourse;
@@ -9,20 +9,23 @@ public class DeleteCourseHandler : IRequestHandler<DeleteCourseCommand, bool>
 {
     private readonly ICourseRepository _courseRepository;
     private readonly IFileAccess _fileAccess;
-    private readonly IMoodle _moodle;
+    private readonly IMediator _mediator;
 
-    public DeleteCourseHandler(IMoodle moodle, ICourseRepository courseRepository, IFileAccess fileAccess)
+    public DeleteCourseHandler(ICourseRepository courseRepository, IFileAccess fileAccess,
+        IMediator mediator)
     {
-        _moodle = moodle;
         _courseRepository = courseRepository;
         _fileAccess = fileAccess;
+        _mediator = mediator;
     }
 
     public async Task<bool> Handle(DeleteCourseCommand request, CancellationToken cancellationToken)
     {
         // check if user is Admin
-        if (!await _moodle.IsMoodleAdminAsync(request.WebServiceToken))
-            throw new ForbiddenAccessException("User is not Admin");
+        await _mediator.Send(new CheckUserPrivilegesCommand
+        {
+            WebServiceToken = request.WebServiceToken
+        }, cancellationToken);
 
         // get course from db
         var course = await _courseRepository.GetAsync(request.CourseId);

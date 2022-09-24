@@ -191,4 +191,34 @@ public class MoodleWebApiTest
         Assert.That(exception!.LmsErrorCode, Is.EqualTo("invalidtoken"));
         return Task.CompletedTask;
     }
+
+    [Test]
+    public async Task ProcessXApi_Valid_ReturnsTrue()
+    {
+        // Arrange
+        _mockHttp.When("*")
+            .Respond(
+                "application/json", "[true]");
+
+        // Act
+        var result = await _systemUnderTest.ProcessXAPIStatementAsync("moodleToken", "testXApi");
+
+        // Assert
+        Assert.That(result, Is.EqualTo(true));
+    }
+
+    [Test]
+    public async Task ProcessXApi_InvalidButParsing_ReturnsFalse()
+    {
+        // Arrange
+        _mockHttp.When("*")
+            .Respond(
+                "application/json", "[false]");
+
+        // Act
+        var result = await _systemUnderTest.ProcessXAPIStatementAsync("moodleToken", "testXApi");
+
+        // Assert
+        Assert.That(result, Is.EqualTo(false));
+    }
 }

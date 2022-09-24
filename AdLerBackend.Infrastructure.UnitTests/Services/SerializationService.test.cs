@@ -45,6 +45,20 @@ public class SerializationServiceTest
         // Assert
         Assert.ThrowsAsync<JsonException>(async () => await service.GetObjectFromJsonStreamAsync<Root>(stream));
     }
+
+    [Test]
+    public async Task Deserialize_Valid_CanSerializeFromString()
+    {
+        // Arrange
+        var service = new SerializationService();
+
+        // Act
+        var result =  service.GetObjectFromJsonString<Root>(
+            "{\"browsers\":{\"firefox\":{\"name\":\"Firefox\",\"pref_url\":\"about:config\",\"releases\":{\"1\":{\"release_date\":\"2004-11-09\",\"status\":\"retired\",\"engine\":\"Gecko\",\"engine_version\":\"1.7\"}}}}}");
+
+        // Assert
+        Assert.NotNull(result);
+    }
 }
 
 public class BrokenClass

@@ -12,17 +12,15 @@ public class
     public Task Handle(TRequest request, TException exception, RequestExceptionHandlerState<TResponse> state,
         CancellationToken cancellationToken)
     {
-        if (exception is LmsException ex)
-            switch (ex.LmsErrorCode)
-            {
-                case "invalidtoken":
-                    throw new InvalidTokenException();
-                case "invalidlogin":
-                    throw new InvalidMoodleLoginException();
-                default:
-                    throw new LmsException("Irgendwas ist mit dem LMS schief gelaufen");
-            }
-
-        throw exception;
+        var ex = (LmsException) exception;
+        switch (ex.LmsErrorCode)
+        {
+            case "invalidtoken":
+                throw new InvalidTokenException();
+            case "invalidlogin":
+                throw new InvalidMoodleLoginException();
+            default:
+                throw new LmsException("Irgendwas ist mit dem LMS schief gelaufen");
+        }
     }
 }

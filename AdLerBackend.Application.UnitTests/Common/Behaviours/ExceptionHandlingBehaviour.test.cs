@@ -62,4 +62,18 @@ public class ExceptionHandlingBehaviourTest
                 new RequestExceptionHandlerState<MoodleUserTokenResponse>(), CancellationToken.None));
         return Task.CompletedTask;
     }
+    
+    // [Test]
+    // public Task ExceptionBehaviour_NotLmsException_ForwardException()
+    // {
+    //     // Arrange
+    //     var systemUnderTest =
+    //         new ExceptionHandlingBehaviour<IRequest<MoodleUserTokenResponse>, MoodleUserTokenResponse, LmsException>();
+    //
+    //     // Act
+    //     Assert.ThrowsAsync<LmsException>(() =>
+    //         systemUnderTest.Handle(new GetMoodleTokenCommand(), new Exception("test"),
+    //             new RequestExceptionHandlerState<MoodleUserTokenResponse>(), CancellationToken.None));
+    //     return Task.CompletedTask;
+    // }
 }

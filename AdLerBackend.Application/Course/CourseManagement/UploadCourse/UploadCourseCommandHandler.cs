@@ -1,8 +1,6 @@
-﻿using AdLerBackend.Application.Common.DTOs;
-using AdLerBackend.Application.Common.DTOs.Storage;
+﻿using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.Responses;
 using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Moodle.GetUserData;
@@ -17,14 +15,16 @@ public class UploadCourseCommandHandler : IRequestHandler<UploadCourseCommand, b
     private readonly IFileAccess _fileAccess;
     private readonly ILmsBackupProcessor _lmsBackupProcessor;
     private readonly IMediator _mediator;
+    private readonly ISerialization _serialization;
 
     public UploadCourseCommandHandler(ILmsBackupProcessor lmsBackupProcessor, IMediator mediator,
-        IFileAccess fileAccess, ICourseRepository courseRepository)
+        IFileAccess fileAccess, ICourseRepository courseRepository, ISerialization serialization)
     {
         _lmsBackupProcessor = lmsBackupProcessor;
         _mediator = mediator;
         _fileAccess = fileAccess;
         _courseRepository = courseRepository;
+        _serialization = serialization;
     }
 
     public async Task<bool> Handle(UploadCourseCommand request, CancellationToken cancellationToken)
@@ -47,13 +47,28 @@ public class UploadCourseCommandHandler : IRequestHandler<UploadCourseCommand, b
             CourseInforamtion = courseInformation
         });
 
+        // Create Directory for H5P Paths with Element Id from DSL
         var storedH5PFilePaths = StoreH5PFiles(courseInformation, userInformation, request.BackupFileStream);
+        var h5PFilesInCourse = GetH5PLocationEntities(storedH5PFilePaths!);
+
+        // Get Course DSL 
+        await using var fileStream = _fileAccess.GetFileStream(dslLocation);
+
+        // Parse DSL File
+        var dslFile = await _serialization.GetObjectFromJsonStreamAsync<LearningWorldDtoResponse>(fileStream);
+
+        foreach (var h5PLocationEntity in h5PFilesInCourse)
+        {
+            var fileName = Path.GetFileName(h5PLocationEntity.Path);
+            h5PLocationEntity.ElementId = dslFile.LearningWorld.LearningElements.First(x =>
+                x.Identifier.Value == fileName).Id;
+        }
 
         var courseEntity = new CourseEntity
         {
             Name = courseInformation.LearningWorld.Identifier.Value,
             AuthorId = userInformation.UserId,
-            H5PFilesInCourse = GetH5PLocationEntities(storedH5PFilePaths!),
+            H5PFilesInCourse = h5PFilesInCourse,
             DslLocation = dslLocation
         };
 
@@ -62,7 +77,8 @@ public class UploadCourseCommandHandler : IRequestHandler<UploadCourseCommand, b
         return true;
     }
 
-    private List<string> StoreH5PFiles(LearningWorldDtoResponse courseInformation, MoodleUserDataResponse userData, Stream backupFile)
+    private List<string> StoreH5PFiles(LearningWorldDtoResponse courseInformation, MoodleUserDataResponse userData,
+        Stream backupFile)
     {
         var storedH5PFilePaths = new List<string>();
         if (courseInformation.LearningWorld.LearningElements.Any(x => x.ElementType == "h5p"))

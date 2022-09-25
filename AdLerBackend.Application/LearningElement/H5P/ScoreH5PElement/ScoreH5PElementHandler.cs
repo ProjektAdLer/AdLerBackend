@@ -2,27 +2,24 @@ using System.Text.Json;
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.Responses.Course;
+using AdLerBackend.Application.Common.InternalUseCases.GetLearningElementLmsInformation;
 using AdLerBackend.Application.Common.Responses.LearningElements;
-using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using MediatR;
 
 namespace AdLerBackend.Application.LearningElement.H5P.ScoreH5PElement;
 
 public class ScoreH5PElementHandler : IRequestHandler<ScoreElementCommand, ScoreLearningElementResponse>
 {
-    private readonly ICourseRepository _courseRepository;
-    private readonly IFileAccess _fileAccess;
+    private readonly IMediator _mediator;
     private readonly IMoodle _moodle;
     private readonly ISerialization _serialization;
 
-    public ScoreH5PElementHandler(ISerialization serialization, IMoodle moodle, ICourseRepository courseRepository,
-        IFileAccess fileAccess, IMediator mediator)
+    public ScoreH5PElementHandler(ISerialization serialization, IMoodle moodle,
+        IMediator mediator)
     {
         _serialization = serialization;
         _moodle = moodle;
-        _courseRepository = courseRepository;
-        _fileAccess = fileAccess;
+        _mediator = mediator;
     }
 
     public async Task<ScoreLearningElementResponse> Handle(ScoreElementCommand request,
@@ -31,35 +28,17 @@ public class ScoreH5PElementHandler : IRequestHandler<ScoreElementCommand, Score
         // Get User Data
         var userData = await _moodle.GetMoodleUserDataAsync(request.WebServiceToken);
 
-        // Get Course from Database
-        var course = await _courseRepository.GetAsync(request.CourseId);
-        if (course == null)
-            throw new NotFoundException("Course with the Id " + request.CourseId + " not found");
+        var mod = await _mediator.Send(new GetLearningElementLmsInformationCommand
+        {
+            WebServiceToken = request.WebServiceToken,
+            CourseId = request.CourseId,
+            ElementId = request.ElementId
+        }, cancellationToken);
 
-        // Get Course DSL 
-        await using var fileStream = _fileAccess.GetFileStream(course.DslLocation);
-
-        // Parse DSL File
-        var dslObject = await _serialization.GetObjectFromJsonStreamAsync<LearningWorldDtoResponse>(fileStream);
-
-        // Get Course from Moodle
-        var searchedCourses = await _moodle.SearchCoursesAsync(request.WebServiceToken, course.Name);
-
-        // Get Course Content from Moodle
-        var courseContent = await _moodle.GetCourseContentAsync(request.WebServiceToken, searchedCourses.Courses[0].Id);
-
-        // Get Actual Context Id of H5P
-        var searchedFileName = dslObject.LearningWorld.LearningElements.Find(x => x.Id == request.ElementId)?
-            .Identifier
-            .Value;
-
-        if (searchedFileName == null)
+        if (mod.LearningElementData == null)
             throw new NotFoundException("Element with the Id " + request.ElementId + " not found");
 
-
-        var contextId = GetModuleFromCourse(courseContent, x => x.Name == searchedFileName)?.contextid ??
-                        throw new NotFoundException(
-                            "Element with the Id " + request.ElementId + " not found");
+        var contextId = mod.LearningElementData.contextid;
 
         // Deserialize the XAPI Event
         var xapiEvent =
@@ -80,10 +59,5 @@ public class ScoreH5PElementHandler : IRequestHandler<ScoreElementCommand, Score
         {
             isSuceess = isSuccess
         };
-    }
-
-    private static Modules? GetModuleFromCourse(CourseContent[] courseContent, Func<Modules, bool> del)
-    {
-        return courseContent.SelectMany(content => content.Modules).FirstOrDefault(del);
     }
 }

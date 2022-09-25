@@ -5,6 +5,7 @@ using AdLerBackend.Application.Course.CourseManagement.UploadH5pBase;
 using AdLerBackend.Application.Course.GetCourseDetail;
 using AdLerBackend.Application.Course.GetCoursesForAuthor;
 using AdLerBackend.Application.Course.GetCoursesForUser;
+using AdLerBackend.Application.Course.GetLearningElementStatus;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
@@ -104,5 +105,20 @@ public class CoursesControllerTest
         // Assert
         await mediatorMock.Received(1).Send(
             Arg.Is<GetCourseDetailCommand>(x => x.WebServiceToken == "token"));
+    }
+
+    [Test]
+    public async Task GetLearningElementStatus_ShouldForwardCallToMediator()
+    {
+        // Arrange
+        var mediatorMock = Substitute.For<IMediator>();
+        var controller = new CoursesController(mediatorMock);
+
+        // Act
+        await controller.GetLearningElementStatus("token", 1337);
+
+        // Assert
+        await mediatorMock.Received(1).Send(
+            Arg.Is<GetLearningElementStatusCommand>(x => x.WebServiceToken == "token"));
     }
 }

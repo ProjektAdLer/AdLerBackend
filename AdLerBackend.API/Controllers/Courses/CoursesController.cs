@@ -5,6 +5,7 @@ using AdLerBackend.Application.Course.CourseManagement.UploadH5pBase;
 using AdLerBackend.Application.Course.GetCourseDetail;
 using AdLerBackend.Application.Course.GetCoursesForAuthor;
 using AdLerBackend.Application.Course.GetCoursesForUser;
+using AdLerBackend.Application.Course.GetLearningElementStatus;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -115,6 +116,23 @@ public class CoursesController : BaseApiController
     public async Task<bool> DeleteCourse([FromHeader] string token, [FromRoute] int courseId)
     {
         return await Mediator.Send(new DeleteCourseCommand
+        {
+            CourseId = courseId,
+            WebServiceToken = token
+        });
+    }
+
+    /// <summary>
+    ///     Gets the Status of all Learning Elements in a Course
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="courseId"></param>
+    /// <returns></returns>
+    [HttpGet("{courseId}/status")]
+    public async Task<ActionResult<LearningElementStatusResponse>> GetLearningElementStatus([FromHeader] string token,
+        [FromRoute] int courseId)
+    {
+        return await Mediator.Send(new GetLearningElementStatusCommand
         {
             CourseId = courseId,
             WebServiceToken = token

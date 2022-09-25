@@ -61,4 +61,30 @@ public class AllResponsesTest
         // Assert
         clone.Should().BeEquivalentTo(course);
     }
+
+    [Test]
+    public async Task LearningElementScoreResponseGetterAndSetter()
+    {
+        // Arrange
+        var course = AutoFaker.Generate<LearningElementScoreResponse>();
+
+        // Recursively clone the object
+        var clone = course.DeepClone();
+
+        // Assert
+        clone.Should().BeEquivalentTo(course);
+    }
+
+    [Test]
+    public async Task LearningElementStatusResponseGetterAndSetter()
+    {
+        // Arrange
+        var course = AutoFaker.Generate<LearningElementStatusResponse>();
+
+        // Recursively clone the object
+        var clone = course.DeepClone();
+
+        // Assert
+        clone.Should().BeEquivalentTo(course);
+    }
 }

@@ -44,7 +44,7 @@ public class GetLearningElementLmsInformationHandler : IRequestHandler<GetLearni
         // Get Course Content from Moodle
         var courseContent = await _moodle.GetCourseContentAsync(request.WebServiceToken, searchedCourses.Courses[0].Id);
 
-        // Get Actual Context Id of H5P
+
         var searchedFileName = dslObject.LearningWorld.LearningElements.Find(x => x.Id == request.ElementId)?
             .Identifier
             .Value;

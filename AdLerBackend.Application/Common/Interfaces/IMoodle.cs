@@ -1,5 +1,4 @@
-﻿using AdLerBackend.Application.Common.Responses;
-using AdLerBackend.Application.Common.Responses.LMSAdapter;
+﻿using AdLerBackend.Application.Common.Responses.LMSAdapter;
 
 namespace AdLerBackend.Application.Common.Interfaces;
 
@@ -49,7 +48,7 @@ public interface IMoodle
     /// <param name="token"></param>
     /// <returns></returns>
     Task<bool> IsMoodleAdminAsync(string token);
-    
+
     /// <summary>
     ///     Processes an XAPI Statement
     /// </summary>
@@ -57,4 +56,6 @@ public interface IMoodle
     /// <param name="statement"></param>
     /// <returns>Returns True, if the Statement hase been processed successfully </returns>
     Task<bool> ProcessXAPIStatementAsync(string token, string statement);
+
+    Task<H5PAttempts> GetH5PAttemptsAsync(string token, int h5pActivityId);
 }

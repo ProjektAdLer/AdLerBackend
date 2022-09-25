@@ -7,7 +7,7 @@ using MediatR;
 namespace AdLerBackend.Application.Common.InternalUseCases.GetLearningElementLmsInformation;
 
 public class GetLearningElementLmsInformationHandler : IRequestHandler<GetLearningElementLmsInformationCommand,
-    GetLearningElementLmsInformationResmponse>
+    GetLearningElementLmsInformationResponse>
 {
     private readonly ICourseRepository _courseRepository;
     private readonly IFileAccess _fileAccess;
@@ -24,7 +24,7 @@ public class GetLearningElementLmsInformationHandler : IRequestHandler<GetLearni
     }
 
 
-    public async Task<GetLearningElementLmsInformationResmponse> Handle(GetLearningElementLmsInformationCommand request,
+    public async Task<GetLearningElementLmsInformationResponse> Handle(GetLearningElementLmsInformationCommand request,
         CancellationToken cancellationToken)
     {
         // Get Course from Database
@@ -57,7 +57,7 @@ public class GetLearningElementLmsInformationHandler : IRequestHandler<GetLearni
                      throw new NotFoundException(
                          "Element with the Id " + request.ElementId + " not found");
 
-        return new GetLearningElementLmsInformationResmponse
+        return new GetLearningElementLmsInformationResponse
         {
             LearningElementData = module
         };

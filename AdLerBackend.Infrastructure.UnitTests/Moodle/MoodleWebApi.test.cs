@@ -2,6 +2,8 @@
 using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Infrastructure.Moodle;
+using AutoBogus;
+using FluentAssertions;
 using NSubstitute;
 using NSubstitute.Extensions;
 using RichardSzalay.MockHttp;
@@ -220,5 +222,19 @@ public class MoodleWebApiTest
 
         // Assert
         Assert.That(result, Is.EqualTo(false));
+    }
+
+    [Test]
+    public async Task GetH5PAttemptsAsync_Valid_GetsAttempts()
+    {
+        // Arrange
+        var obj = AutoFaker.Generate<H5PAttempts>();
+        _mockHttp.When("*").Respond("application/json", JsonSerializer.Serialize(obj));
+
+        // Act
+        var result = await _systemUnderTest.GetH5PAttemptsAsync("moodleToken", 1);
+
+        // Assert with FluentAssertions
+        result.Should().BeEquivalentTo(obj);
     }
 }

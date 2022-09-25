@@ -78,6 +78,17 @@ public class MoodleWebApi : IMoodle
         return returnValue[0];
     }
 
+    public async Task<H5PAttempts> GetH5PAttemptsAsync(string token, int h5PActivityId)
+    {
+        return await MoodleCallAsync<H5PAttempts>(new Dictionary<string, string>
+        {
+            {"wstoken", token},
+            {"moodlewsrestformat", "json"},
+            {"wsfunction", "mod_h5pactivity_get_attempts"},
+            {"h5pactivityid", h5PActivityId.ToString()}
+        });
+    }
+
 
     public virtual async Task<MoodleUserDataResponse> GetMoodleUserDataAsync(string token)
     {

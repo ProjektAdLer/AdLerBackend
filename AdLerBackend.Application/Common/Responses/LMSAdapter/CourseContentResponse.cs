@@ -13,4 +13,5 @@ public class Modules
     public string Name { get; set; }
     public int contextid { get; set; }
     public string ModName { get; set; }
+    public int Instance { get; set; }
 }

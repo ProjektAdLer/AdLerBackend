@@ -1,5 +1,6 @@
 using AdLerBackend.API.Controllers.LearningElements;
 using AdLerBackend.Application.Common.DTOs;
+using AdLerBackend.Application.LearningElement.GetLearningElementScore;
 using AdLerBackend.Application.LearningElement.H5P.ScoreH5PElement;
 using MediatR;
 using NSubstitute;
@@ -23,5 +24,19 @@ public class LearningElementsControllerTest
 
         // Assert
         await mediatorMock.Received(1).Send(Arg.Any<ScoreElementCommand>());
+    }
+
+    [Test]
+    public async Task GetElementScore_ForwardsCall()
+    {
+        // Arrange
+        var mediatorMock = Substitute.For<IMediator>();
+        var controller = new LearningElementsController(mediatorMock);
+
+        // Act
+        await controller.GetElementScore("token", 1, 2);
+
+        // Assert
+        await mediatorMock.Received(1).Send(Arg.Any<GetLearningElementScoreCommand>());
     }
 }

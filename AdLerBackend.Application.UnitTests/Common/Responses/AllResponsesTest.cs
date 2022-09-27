@@ -1,6 +1,7 @@
 using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.Common.Responses.LearningElements;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
+using AdLerBackend.Application.Common.Responses.Player;
 using AutoBogus;
 using FluentAssertions;
 using Force.DeepCloner;
@@ -80,6 +81,19 @@ public class AllResponsesTest
     {
         // Arrange
         var course = AutoFaker.Generate<LearningElementStatusResponse>();
+
+        // Recursively clone the object
+        var clone = course.DeepClone();
+
+        // Assert
+        clone.Should().BeEquivalentTo(course);
+    }
+    
+    [Test]
+    public async Task PlayerDataResponseGetterAndSetter()
+    {
+        // Arrange
+        var course = AutoFaker.Generate<PlayerDataResponse>();
 
         // Recursively clone the object
         var clone = course.DeepClone();

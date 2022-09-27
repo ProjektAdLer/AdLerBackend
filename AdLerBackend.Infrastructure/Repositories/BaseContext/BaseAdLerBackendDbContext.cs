@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using AdLerBackend.Domain.Entities;
+using AdLerBackend.Domain.Entities.PlayerData;
 using Microsoft.EntityFrameworkCore;
 
 namespace AdLerBackend.Infrastructure.Repositories.BaseContext;
@@ -14,6 +15,7 @@ public class BaseAdLerBackendDbContext : DbContext
 
     public DbSet<CourseEntity> Courses { get; set; } = null!;
     private DbSet<H5PLocationEntity> H5PLocations { get; set; } = null!;
+    private DbSet<PlayerData> PlayerData { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -26,5 +28,11 @@ public class BaseAdLerBackendDbContext : DbContext
 
         modelBuilder.Entity<H5PLocationEntity>()
             .HasKey("Id");
+        
+        
+        // turn on identity insert for the PlayerData table
+        modelBuilder.Entity<PlayerData>().Property(p => p.Id).ValueGeneratedNever();
+        
+        
     }
 }

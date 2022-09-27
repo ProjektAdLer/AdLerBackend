@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json.Serialization;
 using AdLerBackend.API.Filters;
 using AdLerBackend.Application;
 using AdLerBackend.Infrastructure;
@@ -35,7 +36,12 @@ if (!builder.Environment.IsDevelopment())
 
 builder.Services.AddControllers(
     options => { options.Filters.Add(new ApiExceptionFilterAttribute()); }
-);
+).AddJsonOptions(opts =>
+{
+    // This converts enum integers to its corresponding string value
+    var enumConverter = new JsonStringEnumConverter();
+    opts.JsonSerializerOptions.Converters.Add(enumConverter);
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -47,7 +53,6 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration, builder.Environment.IsDevelopment());
-
 
 builder.Services.AddCors(options =>
 {

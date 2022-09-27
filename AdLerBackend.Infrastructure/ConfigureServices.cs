@@ -7,6 +7,7 @@ using AdLerBackend.Infrastructure.Repositories;
 using AdLerBackend.Infrastructure.Repositories.BaseContext;
 using AdLerBackend.Infrastructure.Repositories.Common;
 using AdLerBackend.Infrastructure.Repositories.Courses;
+using AdLerBackend.Infrastructure.Repositories.Player;
 using AdLerBackend.Infrastructure.Services;
 using AdLerBackend.Infrastructure.Storage;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,7 @@ public static class ConfigureServices
         services.AddScoped<IFileAccess, StorageService>();
         services.AddSingleton<ISerialization, SerializationService>();
         services.AddScoped<ICourseRepository, CourseRepository>();
+        services.AddScoped<IPlayerRepository, PlayerRepository>();
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddTransient<IFileSystem, FileSystem>();
         services.AddSingleton(httpClient);

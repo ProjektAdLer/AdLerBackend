@@ -1,6 +1,5 @@
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.Player;
-using AdLerBackend.Domain.Entities.PlayerData;
 using MediatR;
 
 namespace AdLerBackend.Application.Player.GetPlayerData;
@@ -22,26 +21,13 @@ public class GetPlayerDataHandler : IRequestHandler<GetPlayerDataCommand, Player
         var playerMoodleData = await _moodle.GetMoodleUserDataAsync(request.WebServiceToken);
 
         // Get Player Data from Database
-        var playerData = await _playerDataRepository.GetAsync(playerMoodleData.UserId);
-
-        // If Player Data is not in Database, create new Player Data and save it to Database
-        if (playerData == null)
-        {
-            var newPlayerData = new PlayerData
-            {
-                Id = playerMoodleData.UserId
-            };
-
-            await _playerDataRepository.AddAsync(newPlayerData);
-
-            playerData = await _playerDataRepository.GetAsync(playerMoodleData.UserId);
-        }
+        var playerData = await _playerDataRepository.EnsureGetAsync(playerMoodleData.UserId);
 
 
         return new PlayerDataResponse
         {
-            Gender = playerData!.PlayerGender,
-            WorldColor = playerData.PlayerWorldColor
+            PlayerGender = playerData!.PlayerGender,
+            PlayerWorldColor = playerData.PlayerWorldColor
         };
     }
 }

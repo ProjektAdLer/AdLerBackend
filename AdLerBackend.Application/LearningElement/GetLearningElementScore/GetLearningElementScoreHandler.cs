@@ -1,5 +1,5 @@
-using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.InternalUseCases.GetLearningElementLmsInformation;
+using AdLerBackend.Application.Common.LearningElementStrategies.H5PLearningElementStrategy;
 using AdLerBackend.Application.Common.Responses.LearningElements;
 using MediatR;
 
@@ -12,12 +12,10 @@ public class
     GetLearningElementScoreHandler : IRequestHandler<GetLearningElementScoreCommand, LearningElementScoreResponse>
 {
     private readonly IMediator _mediator;
-    private readonly IMoodle _moodle;
 
-    public GetLearningElementScoreHandler(IMediator mediator, IMoodle moodle)
+    public GetLearningElementScoreHandler(IMediator mediator)
     {
         _mediator = mediator;
-        _moodle = moodle;
     }
 
     public async Task<LearningElementScoreResponse> Handle(GetLearningElementScoreCommand request,
@@ -35,18 +33,12 @@ public class
             throw new Exception(
                 "Learning Element is not a H5P Activity, for now (25.09.22) only H5P Activities are supported");
 
-        var instanceId = learningElementModule.LearningElementData.Instance;
 
-        var allUserAttempts = await _moodle.GetH5PAttemptsAsync(request.WebServiceToken, instanceId);
-
-
-        var success = allUserAttempts?.usersattempts[0]?.scored?.attempts[0]?.success ?? 0;
-
-
-        return await Task.FromResult(new LearningElementScoreResponse
+        return await _mediator.Send(new H5PLearningElementStrategyCommand
         {
-            successss = success == 1,
-            ElementId = request.learningElementId
+            ElementId = request.learningElementId,
+            LearningElementMoule = learningElementModule.LearningElementData,
+            WebServiceToken = request.WebServiceToken
         });
     }
 }

@@ -1,6 +1,7 @@
-using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.InternalUseCases.GetAllLearningElementsFromLms;
+using AdLerBackend.Application.Common.LearningElementStrategies.H5PLearningElementStrategy;
 using AdLerBackend.Application.Common.Responses.Course;
+using AdLerBackend.Application.Common.Responses.LearningElements;
 using MediatR;
 
 namespace AdLerBackend.Application.Course.GetLearningElementStatus;
@@ -9,12 +10,10 @@ public class
     GetLearningElementStatusHandler : IRequestHandler<GetLearningElementStatusCommand, LearningElementStatusResponse>
 {
     private readonly IMediator _mediator;
-    private readonly IMoodle _moodle;
 
-    public GetLearningElementStatusHandler(IMediator mediator, IMoodle moodle)
+    public GetLearningElementStatusHandler(IMediator mediator)
     {
         _mediator = mediator;
-        _moodle = moodle;
     }
 
     public async Task<LearningElementStatusResponse> Handle(GetLearningElementStatusCommand request,
@@ -23,28 +22,28 @@ public class
         var resp = new LearningElementStatusResponse
         {
             courseId = request.CourseId,
-            LearningElements = new List<LearningElementStatus>()
+            LearningElements = new List<LearningElementScoreResponse>()
         };
 
-        var allMOdulesInCourse = await _mediator.Send(new GetAllLearningElementsFromLmsCommand
+        var allModulesInCourse = await _mediator.Send(new GetAllLearningElementsFromLmsCommand
         {
             CourseId = request.CourseId,
             WebServiceToken = request.WebServiceToken
         });
 
         // Filter all non-H5P elements fron  the list
-        var allH5PElements = allMOdulesInCourse.ModulesWithID.Where(x => x.Module?.ModName == "h5pactivity").ToList();
+        var allH5PElements = allModulesInCourse.ModulesWithID.Where(x => x.Module?.ModName == "h5pactivity").ToList();
 
         foreach (var moduleWithId in allH5PElements)
         {
-            var test = await _moodle.GetH5PAttemptsAsync(request.WebServiceToken, moduleWithId.Module!.Instance);
-            var sucess = test?.usersattempts[0]?.scored?.attempts[0]?.success ?? 0;
-
-            resp.LearningElements.Add(new LearningElementStatus
+            var response = await _mediator.Send(new H5PLearningElementStrategyCommand
             {
                 ElementId = moduleWithId.Id,
-                IsSuccess = sucess == 1
-            });
+                LearningElementMoule = moduleWithId.Module,
+                WebServiceToken = request.WebServiceToken
+            }, cancellationToken);
+
+            resp.LearningElements.Add(response);
         }
 
         return resp;

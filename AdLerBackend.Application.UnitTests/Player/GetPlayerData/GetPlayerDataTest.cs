@@ -34,7 +34,7 @@ public class GetPlayerDataTest
             MoodleUserName = "userName"
         });
 
-        _playerRepository.GetAsync(Arg.Any<int>()).Returns(null, new PlayerData
+        _playerRepository.EnsureGetAsync(Arg.Any<int>()).Returns(new PlayerData
         {
             Id = 1,
             PlayerGender = PlayerAvatarGender.Female,

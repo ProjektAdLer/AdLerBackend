@@ -4,6 +4,6 @@ namespace AdLerBackend.Application.Common.Responses.Player;
 
 public class PlayerDataResponse
 {
-    public PlayerAvatarGender Gender { get; set; }
-    public PlayerWorldColor WorldColor { get; set; }
+    public PlayerAvatarGender PlayerGender { get; set; }
+    public PlayerWorldColor PlayerWorldColor { get; set; }
 }

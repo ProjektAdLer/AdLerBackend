@@ -1,8 +1,8 @@
 using System.Reflection;
-using System.Text.Json.Serialization;
 using AdLerBackend.API.Filters;
 using AdLerBackend.Application;
 using AdLerBackend.Infrastructure;
+using Newtonsoft.Json.Converters;
 
 
 // This is needed, because wwwroot directory must be present in the beginning to serve files from it
@@ -26,21 +26,17 @@ if (!builder.Environment.IsDevelopment())
                         builder.Configuration["httpsCertificatePassword"]);
                 });
         else
-        {
             // if builder.Configuration["httpPort"] is not set, use default port 80
             options.ListenAnyIP(int.Parse(builder.Configuration["httpPort"] ?? "80"));
-
-        }
     });
 
 
 builder.Services.AddControllers(
     options => { options.Filters.Add(new ApiExceptionFilterAttribute()); }
-).AddJsonOptions(opts =>
+).AddNewtonsoftJson(opts =>
 {
     // This converts enum integers to its corresponding string value
-    var enumConverter = new JsonStringEnumConverter();
-    opts.JsonSerializerOptions.Converters.Add(enumConverter);
+    opts.SerializerSettings.Converters.Add(new StringEnumConverter());
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -49,7 +45,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-});
+}).AddSwaggerGenNewtonsoftSupport();
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration, builder.Environment.IsDevelopment());
@@ -57,10 +53,7 @@ builder.Services.AddInfrastructureServices(builder.Configuration, builder.Enviro
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowEverything",
-        policy =>
-        {
-            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-        });
+        policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
 });
 
 var app = builder.Build();

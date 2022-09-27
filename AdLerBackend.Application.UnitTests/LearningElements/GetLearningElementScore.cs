@@ -1,8 +1,10 @@
-using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.InternalUseCases.GetLearningElementLmsInformation;
+using AdLerBackend.Application.Common.LearningElementStrategies.H5PLearningElementStrategy;
 using AdLerBackend.Application.Common.Responses.Course;
+using AdLerBackend.Application.Common.Responses.LearningElements;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.LearningElement.GetLearningElementScore;
+using FluentAssertions;
 using MediatR;
 using NSubstitute;
 
@@ -11,12 +13,10 @@ namespace AdLerBackend.Application.UnitTests.LearningElements;
 public class GetLearningElementScore
 {
     private IMediator _mediator;
-    private IMoodle _moodle;
 
     [SetUp]
     public void Setup()
     {
-        _moodle = Substitute.For<IMoodle>();
         _mediator = Substitute.For<IMediator>();
     }
 
@@ -24,7 +24,7 @@ public class GetLearningElementScore
     public async Task GetLearningElementScore_Valid_GetsScoreFromApi()
     {
         // Arrange
-        var systemUnderTest = new GetLearningElementScoreHandler(_mediator, _moodle);
+        var systemUnderTest = new GetLearningElementScoreHandler(_mediator);
 
         _mediator.Send(Arg.Any<GetLearningElementLmsInformationCommand>())
             .Returns(new GetLearningElementLmsInformationResponse
@@ -39,25 +39,12 @@ public class GetLearningElementScore
                 }
             });
 
-        _moodle.GetH5PAttemptsAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new H5PAttempts
+        _mediator.Send(Arg.Any<H5PLearningElementStrategyCommand>()).Returns(new LearningElementScoreResponse
         {
-            usersattempts = new List<Usersattempt>
-            {
-                new()
-                {
-                    scored = new Scored
-                    {
-                        attempts = new List<Attempt>
-                        {
-                            new()
-                            {
-                                success = 1
-                            }
-                        }
-                    }
-                }
-            }
+            successss = true,
+            ElementId = 1
         });
+
 
         // Act
         var result = await systemUnderTest.Handle(new GetLearningElementScoreCommand
@@ -68,14 +55,14 @@ public class GetLearningElementScore
         }, CancellationToken.None);
 
         // Assert
-        await _moodle.Received(1).GetH5PAttemptsAsync("token", 1);
+        result.successss.Should().Be(true);
     }
 
     [Test]
     public async Task GetLearningElementScore_NotH5P_Throws()
     {
         // Arrange
-        var systemUnderTest = new GetLearningElementScoreHandler(_mediator, _moodle);
+        var systemUnderTest = new GetLearningElementScoreHandler(_mediator);
 
         _mediator.Send(Arg.Any<GetLearningElementLmsInformationCommand>())
             .Returns(new GetLearningElementLmsInformationResponse
@@ -90,25 +77,6 @@ public class GetLearningElementScore
                 }
             });
 
-        _moodle.GetH5PAttemptsAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new H5PAttempts
-        {
-            usersattempts = new List<Usersattempt>
-            {
-                new()
-                {
-                    scored = new Scored
-                    {
-                        attempts = new List<Attempt>
-                        {
-                            new()
-                            {
-                                success = 1
-                            }
-                        }
-                    }
-                }
-            }
-        });
 
         // Act
         // Assert

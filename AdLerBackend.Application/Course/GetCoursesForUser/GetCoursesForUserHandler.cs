@@ -25,9 +25,9 @@ public class GetCoursesForUserHandler : IRequestHandler<GetCoursesForUserCommand
         var coursesFromDb =
             await _courseRepository.GetAllCoursesByStrings(courseStringList);
 
-        if (coursesFromDb.Count != coursesFromApi.Total)
-            throw new Exception(
-                "The number of courses returned by the Moodle API does not match the number of courses returned by the database. Please Contact an Administrator");
+        // if (coursesFromDb.Count != coursesFromApi.Total)
+        //     throw new Exception(
+        //         "The number of courses returned by the Moodle API does not match the number of courses returned by the database. Please Contact an Administrator");
 
 
         return new GetCourseOverviewResponse

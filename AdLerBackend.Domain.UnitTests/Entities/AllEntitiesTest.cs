@@ -7,16 +7,22 @@ namespace AdLerBackend.Domain.UnitTests.Entities;
 
 public class CourseEntityTest
 {
-    [Test]
-    public async Task CourseEntityGetterAndSetter()
+    [TestCaseSource(nameof(GetTestCases))]
+    public void CourseEntityGetterAndSetter<T>(T _)
     {
         // Arrange
-        var course = AutoFaker.Generate<CourseEntity>();
+        var testClass = AutoFaker.Generate<T>();
 
         // Recursively clone the object
-        var clone = course.DeepClone();
+        var clone = testClass.DeepClone();
 
         // Assert
-        clone.Should().BeEquivalentTo(course);
+        clone.Should().BeEquivalentTo(testClass);
+    }
+
+
+    private static IEnumerable<TestCaseData> GetTestCases()
+    {
+        yield return new TestCaseData(new CourseEntity());
     }
 }

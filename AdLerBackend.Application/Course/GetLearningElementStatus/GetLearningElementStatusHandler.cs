@@ -1,4 +1,6 @@
+using AdLerBackend.Application.Common;
 using AdLerBackend.Application.Common.InternalUseCases.GetAllLearningElementsFromLms;
+using AdLerBackend.Application.Common.LearningElementStrategies.GenericLearningElementStrategy;
 using AdLerBackend.Application.Common.LearningElementStrategies.H5PLearningElementStrategy;
 using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.Common.Responses.LearningElements;
@@ -10,6 +12,7 @@ public class
     GetLearningElementStatusHandler : IRequestHandler<GetLearningElementStatusCommand, LearningElementStatusResponse>
 {
     private readonly IMediator _mediator;
+
 
     public GetLearningElementStatusHandler(IMediator mediator)
     {
@@ -36,16 +39,35 @@ public class
 
         foreach (var moduleWithId in allH5PElements)
         {
-            var response = await _mediator.Send(new H5PLearningElementStrategyCommand
-            {
-                ElementId = moduleWithId.Id,
-                LearningElementMoule = moduleWithId.Module,
-                WebServiceToken = request.WebServiceToken
-            }, cancellationToken);
+            var response = await _mediator.Send(GetStrategy(moduleWithId.Module!.ModName,
+                new GenericLearningElementStrategyCommand
+                {
+                    ElementId = moduleWithId.Id,
+                    LearningElementMoule = moduleWithId.Module,
+                    WebServiceToken = request.WebServiceToken
+                }), cancellationToken);
 
             resp.LearningElements.Add(response);
         }
 
         return resp;
+    }
+
+
+    public static CommandWithToken<LearningElementScoreResponse> GetStrategy(string learningElementType,
+        GenericLearningElementStrategyCommand commandWithParams)
+    {
+        switch (learningElementType)
+        {
+            case "h5pactivity":
+                return new H5PLearningElementStrategyCommand
+                {
+                    ElementId = commandWithParams.ElementId,
+                    LearningElementMoule = commandWithParams.LearningElementMoule,
+                    WebServiceToken = commandWithParams.WebServiceToken
+                };
+            default:
+                return commandWithParams;
+        }
     }
 }

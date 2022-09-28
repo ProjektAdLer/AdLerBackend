@@ -10,95 +10,28 @@ namespace AdLerBackend.Application.UnitTests.Common.Responses;
 
 public class AllResponsesTest
 {
-    [Test]
-    public async Task CourseContentGetterAndSetter()
+    [TestCaseSource(nameof(GetTestCases))]
+    public void PlayerDataResponseGetterAndSetter<T>(T _)
     {
         // Arrange
-        var course = AutoFaker.Generate<CourseContent>();
+        var testClass = AutoFaker.Generate<T>();
 
         // Recursively clone the object
-        var clone = course.DeepClone();
+        var clone = testClass.DeepClone();
 
         // Assert
-        clone.Should().BeEquivalentTo(course);
+        clone.Should().BeEquivalentTo(testClass);
     }
 
-    [Test]
-    public async Task ScoreLearningElementResponseGetterAndSetter()
+    private static IEnumerable<TestCaseData> GetTestCases()
     {
-        // Arrange
-        var course = AutoFaker.Generate<ScoreLearningElementResponse>();
-
-        // Recursively clone the object
-        var clone = course.DeepClone();
-
-        // Assert
-        clone.Should().BeEquivalentTo(course);
-    }
-
-
-    [Test]
-    public async Task LearningWorldGetterAndSetter()
-    {
-        // Arrange
-        var course = AutoFaker.Generate<LearningWorld>();
-
-        // Recursively clone the object
-        var clone = course.DeepClone();
-
-        // Assert
-        clone.Should().BeEquivalentTo(course);
-    }
-
-    [Test]
-    public async Task CourseResponseGetterAndSetter()
-    {
-        // Arrange
-        var course = AutoFaker.Generate<CourseResponse>();
-
-        // Recursively clone the object
-        var clone = course.DeepClone();
-
-        // Assert
-        clone.Should().BeEquivalentTo(course);
-    }
-
-    [Test]
-    public async Task LearningElementScoreResponseGetterAndSetter()
-    {
-        // Arrange
-        var course = AutoFaker.Generate<LearningElementScoreResponse>();
-
-        // Recursively clone the object
-        var clone = course.DeepClone();
-
-        // Assert
-        clone.Should().BeEquivalentTo(course);
-    }
-
-    [Test]
-    public async Task LearningElementStatusResponseGetterAndSetter()
-    {
-        // Arrange
-        var course = AutoFaker.Generate<LearningElementStatusResponse>();
-
-        // Recursively clone the object
-        var clone = course.DeepClone();
-
-        // Assert
-        clone.Should().BeEquivalentTo(course);
-    }
-    
-    [Test]
-    public async Task PlayerDataResponseGetterAndSetter()
-    {
-        // Arrange
-        var course = AutoFaker.Generate<PlayerDataResponse>();
-
-        // Recursively clone the object
-        var clone = course.DeepClone();
-
-        // Assert
-        clone.Should().BeEquivalentTo(course);
+        yield return new TestCaseData(new PlayerDataResponse());
+        yield return new TestCaseData(new LearningElementStatusResponse());
+        yield return new TestCaseData(new LearningElementScoreResponse());
+        yield return new TestCaseData(new CourseResponse());
+        yield return new TestCaseData(new LearningWorld());
+        yield return new TestCaseData(new PlayerDataResponse());
+        yield return new TestCaseData(new ScoreLearningElementResponse());
+        yield return new TestCaseData(new CourseContent());
     }
 }

@@ -1,6 +1,7 @@
 using AdLerBackend.Application.Common.InternalUseCases.GetLearningElementLmsInformation;
-using AdLerBackend.Application.Common.LearningElementStrategies.H5PLearningElementStrategy;
+using AdLerBackend.Application.Common.LearningElementStrategies.GenericLearningElementStrategy;
 using AdLerBackend.Application.Common.Responses.LearningElements;
+using AdLerBackend.Application.Course.GetLearningElementStatus;
 using MediatR;
 
 namespace AdLerBackend.Application.LearningElement.GetLearningElementScore;
@@ -29,16 +30,15 @@ public class
             WebServiceToken = request.WebServiceToken
         }, cancellationToken);
 
-        if (learningElementModule.LearningElementData.ModName != "h5pactivity")
-            throw new Exception(
-                "Learning Element is not a H5P Activity, for now (25.09.22) only H5P Activities are supported");
 
-
-        return await _mediator.Send(new H5PLearningElementStrategyCommand
-        {
-            ElementId = request.learningElementId,
-            LearningElementMoule = learningElementModule.LearningElementData,
-            WebServiceToken = request.WebServiceToken
-        });
+        return await _mediator.Send(
+            GetLearningElementStatusHandler.GetStrategy(learningElementModule.LearningElementData.ModName,
+                new GenericLearningElementStrategyCommand
+                {
+                    ElementId = request.learningElementId,
+                    LearningElementMoule = learningElementModule.LearningElementData,
+                    WebServiceToken = request.WebServiceToken
+                })
+            , cancellationToken);
     }
 }

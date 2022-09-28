@@ -1,4 +1,3 @@
-using AdLerBackend.Domain.Entities.PlayerData;
 using AdLerBackend.Infrastructure.Repositories.Player;
 using AdLerBackend.Infrastructure.UnitTests.Repositories.Courses;
 
@@ -36,10 +35,6 @@ public class PlayerRepositoryTest : TestWithSqlite
     {
         // Arrange
         var systemUnderTest = new PlayerRepository(DbContext);
-        await systemUnderTest.AddAsync(new PlayerData
-        {
-            Id = 1
-        });
 
         // Act
         var result = await systemUnderTest.EnsureGetAsync(1);

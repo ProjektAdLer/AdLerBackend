@@ -1,6 +1,6 @@
 namespace AdLerBackend.Application.Common.Responses.LearningElements;
 
-public class GetH5PFilePathResponse
+public class GetLearningElementSourceResponse
 {
     public string FilePath { get; set; }
 }

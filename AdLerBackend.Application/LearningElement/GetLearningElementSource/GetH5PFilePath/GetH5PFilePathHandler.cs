@@ -3,9 +3,9 @@ using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LearningElements;
 using MediatR;
 
-namespace AdLerBackend.Application.LearningElement.H5P.GetH5PFilePath;
+namespace AdLerBackend.Application.LearningElement.GetLearningElementSource.GetH5PFilePath;
 
-public class GetH5PFilePathHandler : IRequestHandler<GetH5PFilePathCommand, GetH5PFilePathResponse>
+public class GetH5PFilePathHandler : IRequestHandler<GetH5PFilePathCommand, GetLearningElementSourceResponse>
 {
     private readonly ICourseRepository _courseRepository;
 
@@ -14,7 +14,8 @@ public class GetH5PFilePathHandler : IRequestHandler<GetH5PFilePathCommand, GetH
         _courseRepository = courseRepository;
     }
 
-    public async Task<GetH5PFilePathResponse> Handle(GetH5PFilePathCommand request, CancellationToken cancellationToken)
+    public async Task<GetLearningElementSourceResponse> Handle(GetH5PFilePathCommand request,
+        CancellationToken cancellationToken)
     {
         // No Auth is needed here, because the file is public
         var course = await _courseRepository.GetAsync(request.CourseId);
@@ -25,7 +26,7 @@ public class GetH5PFilePathHandler : IRequestHandler<GetH5PFilePathCommand, GetH
 
         if (h5PPath == null) throw new NotFoundException("H5P File not Found");
 
-        return new GetH5PFilePathResponse
+        return new GetLearningElementSourceResponse
         {
             FilePath = h5PPath
         };

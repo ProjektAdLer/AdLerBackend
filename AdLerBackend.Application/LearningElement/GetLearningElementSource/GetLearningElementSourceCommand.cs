@@ -1,9 +1,9 @@
 using AdLerBackend.Application.Common;
 using AdLerBackend.Application.Common.Responses.LearningElements;
 
-namespace AdLerBackend.Application.LearningElement.H5P.GetH5PFilePath;
+namespace AdLerBackend.Application.LearningElement.GetLearningElementSource;
 
-public record GetH5PFilePathCommand : CommandWithToken<GetH5PFilePathResponse>
+public record GetLearningElementSourceCommand : CommandWithToken<GetLearningElementSourceResponse>
 {
     public int ElementId { get; init; }
     public int CourseId { get; init; }

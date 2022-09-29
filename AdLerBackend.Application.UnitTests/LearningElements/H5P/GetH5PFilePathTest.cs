@@ -1,6 +1,6 @@
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.LearningElement.H5P.GetH5PFilePath;
+using AdLerBackend.Application.LearningElement.GetLearningElementSource.GetH5PFilePath;
 using AdLerBackend.Domain.Entities;
 using AutoBogus;
 using NSubstitute;
@@ -62,12 +62,13 @@ public class GetH5PFilePathTest
 
         // Act
         // Assert
-        Assert.ThrowsAsync<NotFoundException>(async () => await systemUnderTest.Handle(new GetH5PFilePathCommand
-        {
-            CourseId = 1,
-            ElementId = 2,
-            WebServiceToken = "token"
-        }, CancellationToken.None));
+        Assert.ThrowsAsync<NotFoundException>(async () => await systemUnderTest.Handle(
+            new GetH5PFilePathCommand
+            {
+                CourseId = 1,
+                ElementId = 2,
+                WebServiceToken = "token"
+            }, CancellationToken.None));
     }
 
     [Test]
@@ -94,11 +95,12 @@ public class GetH5PFilePathTest
 
         // Act
         // Assert
-        Assert.ThrowsAsync<NotFoundException>(async () => await systemUnderTest.Handle(new GetH5PFilePathCommand
-        {
-            CourseId = 1,
-            ElementId = 2,
-            WebServiceToken = "token"
-        }, CancellationToken.None));
+        Assert.ThrowsAsync<NotFoundException>(async () => await systemUnderTest.Handle(
+            new GetH5PFilePathCommand
+            {
+                CourseId = 1,
+                ElementId = 2,
+                WebServiceToken = "token"
+            }, CancellationToken.None));
     }
 }

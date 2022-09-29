@@ -1,5 +1,5 @@
-using AdLerBackend.API.Controllers.LearningElements.H5P;
-using AdLerBackend.Application.LearningElement.H5P.GetH5PFilePath;
+using AdLerBackend.API.Controllers.LearningElements;
+using AdLerBackend.Application.LearningElement.GetLearningElementSource;
 using MediatR;
 using NSubstitute;
 
@@ -12,12 +12,12 @@ public class H5PControllerTest
     {
         // Arrange
         var mediatorMock = Substitute.For<IMediator>();
-        var controller = new H5PController(mediatorMock);
+        var controller = new LearningElementsController(mediatorMock);
 
         // Act
-        await controller.GetH5PFilePath("token", 1, 2);
+        await controller.GetLearningElementSource("token", 1, 2);
 
         // Assert
-        await mediatorMock.Received(1).Send(Arg.Any<GetH5PFilePathCommand>());
+        await mediatorMock.Received(1).Send(Arg.Any<GetLearningElementSourceCommand>());
     }
 }

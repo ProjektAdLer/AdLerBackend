@@ -15,9 +15,15 @@ public class Modules
     public string ModName { get; set; }
     public int Instance { get; set; }
     public CompletionData CompletionData { get; set; }
+    public IList<FileContents>? Contents { get; set; }
 }
 
 public class CompletionData
 {
     public int State { get; set; }
+}
+
+public class FileContents
+{
+    public string fileUrl { get; set; }
 }

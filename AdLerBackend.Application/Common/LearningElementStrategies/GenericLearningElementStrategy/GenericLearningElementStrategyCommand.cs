@@ -1,7 +1,0 @@
-using AdLerBackend.Application.Common.LearningElementStrategies.H5PLearningElementStrategy;
-
-namespace AdLerBackend.Application.Common.LearningElementStrategies.GenericLearningElementStrategy;
-
-public record GenericLearningElementStrategyCommand : H5PLearningElementStrategyCommand
-{
-}

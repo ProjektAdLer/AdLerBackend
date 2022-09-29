@@ -41,6 +41,7 @@ public class UploadCourseTest
             {
                 Id = 1,
                 ElementType = "h5p",
+                ElementCategory = "h5p",
                 Identifier = new Identifier
                 {
                     Value = "path1"
@@ -50,6 +51,7 @@ public class UploadCourseTest
             {
                 Id = 2,
                 ElementType = "h5p",
+                ElementCategory = "h5p",
                 Identifier = new Identifier
                 {
                     Value = "path2"
@@ -80,7 +82,8 @@ public class UploadCourseTest
         fakedDsl.LearningWorld.LearningElements[0] = new Application.Common.Responses.Course.LearningElement
         {
             Id = 13337,
-            ElementType = "h5p"
+            ElementType = "h5p",
+            ElementCategory = "h5p"
         };
 
         _lmsBackupProcessor.GetLevelDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedDsl);
@@ -162,7 +165,8 @@ public class UploadCourseTest
         fakedDsl.LearningWorld.LearningElements[0] = new Application.Common.Responses.Course.LearningElement
         {
             Id = 13337,
-            ElementType = "h5p"
+            ElementType = "h5p",
+            ElementCategory = "h5p"
         };
 
         _lmsBackupProcessor.GetLevelDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedDsl);

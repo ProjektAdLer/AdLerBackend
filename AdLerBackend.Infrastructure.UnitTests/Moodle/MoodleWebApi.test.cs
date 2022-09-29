@@ -237,4 +237,19 @@ public class MoodleWebApiTest
         // Assert with FluentAssertions
         result.Should().BeEquivalentTo(obj);
     }
+
+    [Test]
+    public async Task ScoreGenericLoearningElement_Valid_CallsMoodle()
+    {
+        // Arrange
+        var obj = AutoFaker.Generate<MoodleWebApi.ScoreGenericLearningElementResponse>();
+        obj.Status = true;
+        _mockHttp.When("*").Respond("application/json", JsonSerializer.Serialize(obj));
+
+        // Act
+        var result = await _systemUnderTest.ScoreGenericLearningElement("token", 1);
+
+        // Assert with FluentAssertions
+        result.Should().BeTrue();
+    }
 }

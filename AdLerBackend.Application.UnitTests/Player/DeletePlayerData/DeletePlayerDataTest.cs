@@ -1,7 +1,6 @@
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Player.DeletePlayerData;
-using AdLerBackend.Application.Player.DeleteUserData;
 using NSubstitute;
 
 namespace AdLerBackend.Application.UnitTests.Player.DeletePlayerData;

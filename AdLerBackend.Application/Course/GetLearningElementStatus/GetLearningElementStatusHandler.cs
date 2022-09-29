@@ -1,7 +1,9 @@
 using AdLerBackend.Application.Common;
 using AdLerBackend.Application.Common.InternalUseCases.GetAllLearningElementsFromLms;
-using AdLerBackend.Application.Common.LearningElementStrategies.GenericLearningElementStrategy;
-using AdLerBackend.Application.Common.LearningElementStrategies.H5PLearningElementStrategy;
+using AdLerBackend.Application.Common.LearningElementStrategies.GetLearningElementScoreStrategies.
+    GenericGetLearningElementScoreStrategy;
+using AdLerBackend.Application.Common.LearningElementStrategies.GetLearningElementScoreStrategies.
+    GetH5PLearningElementScoreStrategy;
 using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.Common.Responses.LearningElements;
 using MediatR;
@@ -34,13 +36,12 @@ public class
             WebServiceToken = request.WebServiceToken
         });
 
-        // Filter all non-H5P elements fron  the list
-        var allH5PElements = allModulesInCourse.ModulesWithID.Where(x => x.Module?.ModName == "h5pactivity").ToList();
+        var allH5PElements = allModulesInCourse.ModulesWithID.ToList();
 
         foreach (var moduleWithId in allH5PElements)
         {
             var response = await _mediator.Send(GetStrategy(moduleWithId.Module!.ModName,
-                new GenericLearningElementStrategyCommand
+                new GenericGetLearningElementScoreScoreStrategyCommand
                 {
                     ElementId = moduleWithId.Id,
                     LearningElementMoule = moduleWithId.Module,
@@ -55,12 +56,12 @@ public class
 
 
     public static CommandWithToken<LearningElementScoreResponse> GetStrategy(string learningElementType,
-        GenericLearningElementStrategyCommand commandWithParams)
+        GenericGetLearningElementScoreScoreStrategyCommand commandWithParams)
     {
         switch (learningElementType)
         {
             case "h5pactivity":
-                return new H5PLearningElementStrategyCommand
+                return new GetH5PLearningElementScoreStrategyCommand
                 {
                     ElementId = commandWithParams.ElementId,
                     LearningElementMoule = commandWithParams.LearningElementMoule,

@@ -25,4 +25,9 @@ public class SerializationService : ISerialization
         }) ?? throw new Exception("Could not deserialize String");
         return retVal;
     }
+
+    public bool IsValidJsonString(string jsonString)
+    {
+        return jsonString.StartsWith("{") && jsonString.EndsWith("}");
+    }
 }

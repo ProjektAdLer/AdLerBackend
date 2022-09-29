@@ -1,5 +1,6 @@
 using AdLerBackend.Application.Common.InternalUseCases.GetLearningElementLmsInformation;
-using AdLerBackend.Application.Common.LearningElementStrategies.GenericLearningElementStrategy;
+using AdLerBackend.Application.Common.LearningElementStrategies.GetLearningElementScoreStrategies.
+    GenericGetLearningElementScoreStrategy;
 using AdLerBackend.Application.Common.Responses.LearningElements;
 using AdLerBackend.Application.Course.GetLearningElementStatus;
 using MediatR;
@@ -33,7 +34,7 @@ public class
 
         return await _mediator.Send(
             GetLearningElementStatusHandler.GetStrategy(learningElementModule.LearningElementData.ModName,
-                new GenericLearningElementStrategyCommand
+                new GenericGetLearningElementScoreScoreStrategyCommand
                 {
                     ElementId = request.learningElementId,
                     LearningElementMoule = learningElementModule.LearningElementData,

@@ -3,7 +3,7 @@
 public class LearningWorldDtoResponse
 {
     public LearningWorld LearningWorld { get; set; }
-}    
+}
 
 public class Identifier
 {
@@ -22,6 +22,7 @@ public class LearningElement
     public int LearningSpaceParentId { get; set; }
     public object Requirements { get; set; }
     public List<MetaData>? MetaData { get; set; }
+    public string ElementCategory { get; set; }
 }
 
 public class LearningElementValueList

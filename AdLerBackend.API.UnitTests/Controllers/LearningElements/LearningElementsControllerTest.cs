@@ -1,7 +1,7 @@
 using AdLerBackend.API.Controllers.LearningElements;
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.LearningElement.GetLearningElementScore;
-using AdLerBackend.Application.LearningElement.H5P.ScoreH5PElement;
+using AdLerBackend.Application.LearningElement.ScoreLearningElement;
 using MediatR;
 using NSubstitute;
 
@@ -23,7 +23,7 @@ public class LearningElementsControllerTest
         });
 
         // Assert
-        await mediatorMock.Received(1).Send(Arg.Any<ScoreElementCommand>());
+        await mediatorMock.Received(1).Send(Arg.Any<ScoreLearningElementCommand>());
     }
 
     [Test]

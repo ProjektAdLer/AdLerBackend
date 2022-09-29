@@ -1,9 +1,10 @@
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.Responses.LearningElements;
 using AdLerBackend.Application.LearningElement.GetLearningElementScore;
-using AdLerBackend.Application.LearningElement.H5P.ScoreH5PElement;
+using AdLerBackend.Application.LearningElement.ScoreLearningElement;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace AdLerBackend.API.Controllers.LearningElements;
 
@@ -16,9 +17,10 @@ public class LearningElementsController : BaseApiController
 
     [HttpPatch("Course/{courseId}/Element/{elementId}")]
     public async Task<ActionResult<ScoreLearningElementResponse>> ScoreElement([FromHeader] string token,
-        [FromRoute] int elementId, [FromRoute] int courseId, [FromBody] ScoreElementParams scoreElementParams)
+        [FromRoute] int elementId, [FromRoute] int courseId,
+        [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ScoreElementParams? scoreElementParams)
     {
-        return await Mediator.Send(new ScoreElementCommand
+        return await Mediator.Send(new ScoreLearningElementCommand
         {
             WebServiceToken = token,
             ElementId = elementId,

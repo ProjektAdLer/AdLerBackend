@@ -7,7 +7,7 @@ using NSubstitute;
 
 #pragma warning disable CS8618
 
-namespace AdLerBackend.Application.UnitTests.LearningElement.H5P;
+namespace AdLerBackend.Application.UnitTests.LearningElements.H5P;
 
 public class GetH5PFilePathTest
 {

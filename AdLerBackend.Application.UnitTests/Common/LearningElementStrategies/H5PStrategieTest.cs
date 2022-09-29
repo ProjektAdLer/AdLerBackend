@@ -1,5 +1,6 @@
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.LearningElementStrategies.H5PLearningElementStrategy;
+using AdLerBackend.Application.Common.LearningElementStrategies.GetLearningElementScoreStrategies.
+    GetH5PLearningElementScoreStrategy;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using NSubstitute;
 
@@ -21,7 +22,7 @@ public class H5PStrategieTest
     public async Task Handle_Valid()
     {
         // Arrange
-        var systemUnderTest = new H5PLearningElementStrategieHandler(_moodle);
+        var systemUnderTest = new GetH5PLearningElementScoreStrategyHandler(_moodle);
         _moodle.GetH5PAttemptsAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new H5PAttempts
         {
             usersattempts = new List<Usersattempt>
@@ -44,7 +45,7 @@ public class H5PStrategieTest
 
 
         // Act
-        var result = await systemUnderTest.Handle(new H5PLearningElementStrategyCommand
+        var result = await systemUnderTest.Handle(new GetH5PLearningElementScoreStrategyCommand
         {
             ElementId = 1,
             LearningElementMoule = new Modules

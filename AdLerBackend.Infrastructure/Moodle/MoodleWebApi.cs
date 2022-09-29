@@ -89,6 +89,20 @@ public class MoodleWebApi : IMoodle
         });
     }
 
+    public async Task<bool> ScoreGenericLearningElement(string token, int learningElementId)
+    {
+        var response = await MoodleCallAsync<ScoreGenericLearningElementResponse>(new Dictionary<string, string>
+        {
+            {"wstoken", token},
+            {"moodlewsrestformat", "json"},
+            {"wsfunction", "format_tiles_update_activity_completion_status_manually"},
+            {"cmid", learningElementId.ToString()},
+            {"completed", "1"}
+        });
+
+        return response.Status;
+    }
+
 
     public virtual async Task<MoodleUserDataResponse> GetMoodleUserDataAsync(string token)
     {
@@ -247,5 +261,11 @@ public class MoodleWebApi : IMoodle
         }
 
         public Endpoints Endpoint { get; set; } = Endpoints.Webservice;
+    }
+
+
+    public class ScoreGenericLearningElementResponse
+    {
+        public bool Status { get; set; }
     }
 }

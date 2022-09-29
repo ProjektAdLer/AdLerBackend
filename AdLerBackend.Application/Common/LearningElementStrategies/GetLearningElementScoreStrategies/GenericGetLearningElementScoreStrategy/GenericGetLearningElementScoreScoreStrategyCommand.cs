@@ -1,0 +1,9 @@
+using AdLerBackend.Application.Common.LearningElementStrategies.GetLearningElementScoreStrategies.
+    GetH5PLearningElementScoreStrategy;
+
+namespace AdLerBackend.Application.Common.LearningElementStrategies.GetLearningElementScoreStrategies.
+    GenericGetLearningElementScoreStrategy;
+
+public record GenericGetLearningElementScoreScoreStrategyCommand : GetH5PLearningElementScoreStrategyCommand
+{
+}

@@ -58,4 +58,6 @@ public interface IMoodle
     Task<bool> ProcessXAPIStatementAsync(string token, string statement);
 
     Task<H5PAttempts> GetH5PAttemptsAsync(string token, int h5pActivityId);
+
+    Task<bool> ScoreGenericLearningElement(string token, int learningElementId);
 }

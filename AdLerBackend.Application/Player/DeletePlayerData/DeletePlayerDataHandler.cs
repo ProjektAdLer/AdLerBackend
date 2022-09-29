@@ -1,8 +1,7 @@
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Player.DeletePlayerData;
 using MediatR;
 
-namespace AdLerBackend.Application.Player.DeleteUserData;
+namespace AdLerBackend.Application.Player.DeletePlayerData;
 
 public class DeletePlayerDataHandler : IRequestHandler<DeletePlayerDataCommand, bool>
 {

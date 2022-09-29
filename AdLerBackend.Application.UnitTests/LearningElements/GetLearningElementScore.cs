@@ -1,5 +1,6 @@
 using AdLerBackend.Application.Common.InternalUseCases.GetLearningElementLmsInformation;
-using AdLerBackend.Application.Common.LearningElementStrategies.H5PLearningElementStrategy;
+using AdLerBackend.Application.Common.LearningElementStrategies.GetLearningElementScoreStrategies.
+    GetH5PLearningElementScoreStrategy;
 using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.Common.Responses.LearningElements;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
@@ -42,7 +43,7 @@ public class GetLearningElementScore
                 }
             });
 
-        _mediator.Send(Arg.Any<H5PLearningElementStrategyCommand>()).Returns(new LearningElementScoreResponse
+        _mediator.Send(Arg.Any<GetH5PLearningElementScoreStrategyCommand>()).Returns(new LearningElementScoreResponse
         {
             successss = sucess,
             ElementId = 1

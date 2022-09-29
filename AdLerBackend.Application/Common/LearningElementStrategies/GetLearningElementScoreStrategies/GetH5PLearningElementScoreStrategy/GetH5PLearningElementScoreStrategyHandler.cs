@@ -2,21 +2,22 @@ using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LearningElements;
 using MediatR;
 
-namespace AdLerBackend.Application.Common.LearningElementStrategies.H5PLearningElementStrategy;
+namespace AdLerBackend.Application.Common.LearningElementStrategies.GetLearningElementScoreStrategies.
+    GetH5PLearningElementScoreStrategy;
 
 public class
-    H5PLearningElementStrategieHandler : IRequestHandler<H5PLearningElementStrategyCommand,
+    GetH5PLearningElementScoreStrategyHandler : IRequestHandler<GetH5PLearningElementScoreStrategyCommand,
         LearningElementScoreResponse>
 {
     private readonly IMoodle _moodle;
 
-    public H5PLearningElementStrategieHandler(IMoodle moodle)
+    public GetH5PLearningElementScoreStrategyHandler(IMoodle moodle)
     {
         _moodle = moodle;
     }
 
 
-    public async Task<LearningElementScoreResponse> Handle(H5PLearningElementStrategyCommand request,
+    public async Task<LearningElementScoreResponse> Handle(GetH5PLearningElementScoreStrategyCommand request,
         CancellationToken cancellationToken)
     {
         var instanceId = request.LearningElementMoule.Instance;

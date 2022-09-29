@@ -90,7 +90,7 @@ public class UploadCourseCommandHandler : IRequestHandler<UploadCourseCommand, b
         Stream backupFile)
     {
         var storedH5PFilePaths = new List<string>();
-        if (courseInformation.LearningWorld.LearningElements.Any(x => x.ElementType == "h5p"))
+        if (courseInformation.LearningWorld.LearningElements.Any(x => x.ElementCategory == "h5p"))
         {
             var h5PFilesInBackup = _lmsBackupProcessor.GetH5PFilesFromBackup(backupFile);
             storedH5PFilePaths = _fileAccess.StoreH5PFilesForCourse(new CourseStoreH5PDto

@@ -15,6 +15,7 @@
           "Value": "a"
         },
         "ElementType": "h5p",
+        "ElementCategory": "h5p",
         "LearningElementValue": null,
         "Requirements": null
       },

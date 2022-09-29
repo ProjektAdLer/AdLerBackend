@@ -53,11 +53,25 @@ public class SerializationServiceTest
         var service = new SerializationService();
 
         // Act
-        var result =  service.GetObjectFromJsonString<Root>(
+        var result = service.GetObjectFromJsonString<Root>(
             "{\"browsers\":{\"firefox\":{\"name\":\"Firefox\",\"pref_url\":\"about:config\",\"releases\":{\"1\":{\"release_date\":\"2004-11-09\",\"status\":\"retired\",\"engine\":\"Gecko\",\"engine_version\":\"1.7\"}}}}}");
 
         // Assert
         Assert.NotNull(result);
+    }
+
+    [TestCase("{}", true)]
+    [TestCase("string", false)]
+    public async Task IsValidJsonString(string json, bool expected)
+    {
+        // Arrange
+        var service = new SerializationService();
+
+        // Act
+        var result = service.IsValidJsonString(json);
+
+        // Assert
+        Assert.AreEqual(expected, result);
     }
 }
 

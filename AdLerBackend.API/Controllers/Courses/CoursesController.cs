@@ -18,6 +18,7 @@ namespace AdLerBackend.API.Controllers.Courses;
 /// <summary>
 ///     Manages all the Courses
 /// </summary>
+[Route("api/Courses")]
 public class CoursesController : BaseApiController
 {
     public CoursesController(IMediator mediator) : base(mediator)

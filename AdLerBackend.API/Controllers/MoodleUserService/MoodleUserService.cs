@@ -1,5 +1,4 @@
-﻿using AdLerBackend.Application.Common.Responses;
-using AdLerBackend.Application.Common.Responses.LMSAdapter;
+﻿using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Moodle.GetMoodleToken;
 using AdLerBackend.Application.Moodle.GetUserData;
 using MediatR;
@@ -9,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdLerBackend.API.Controllers.MoodleUserService;
 
+[Route("api/Users")]
 public class MoodleLoginController : BaseApiController
 {
     public MoodleLoginController(IMediator mediator) : base(mediator)

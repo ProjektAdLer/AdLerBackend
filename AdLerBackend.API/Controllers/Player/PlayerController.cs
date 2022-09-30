@@ -9,12 +9,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdLerBackend.API.Controllers.Player;
 
+/// <summary>
+///     Player controller
+/// </summary>
+[Route("api/PlayerData")]
 public class PlayerController : BaseApiController
 {
     public PlayerController(IMediator mediator) : base(mediator)
     {
     }
 
+    /// <summary>
+    ///     Get player data
+    /// </summary>
+    /// <param name="token">LMS Token</param>
+    /// <returns></returns>
     [HttpGet]
     public async Task<ActionResult<PlayerDataResponse>> GetPlayer([FromHeader] string token)
     {
@@ -24,6 +33,12 @@ public class PlayerController : BaseApiController
         });
     }
 
+    /// <summary>
+    ///     Update player data
+    /// </summary>
+    /// <param name="token">LMS Token</param>
+    /// <param name="patch">The Value to update in JsonPatch Notation</param>
+    /// <returns></returns>
     [HttpPatch]
     public async Task<ActionResult<PlayerDataResponse>> UpdatePlayer([FromHeader] string token,
         [FromBody] JsonPatchDocument<PlayerData> patch)
@@ -35,6 +50,11 @@ public class PlayerController : BaseApiController
         });
     }
 
+    /// <summary>
+    ///     Delete player data
+    /// </summary>
+    /// <param name="token">LMS Token</param>
+    /// <returns></returns>
     [HttpDelete]
     public async Task<ActionResult<bool>> DeletePlayer([FromHeader] string token)
     {

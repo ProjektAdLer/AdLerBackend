@@ -1,8 +1,10 @@
-﻿namespace AdLerBackend.Application.Common.Responses.Course;
+﻿using System.Text.Json.Serialization;
+
+namespace AdLerBackend.Application.Common.Responses.Course;
 
 public class LearningWorldDtoResponse
 {
-    public LearningWorld LearningWorld { get; set; }
+    [JsonPropertyName("LearningWorld")] public LearningWorld LearningWorld { get; set; }
 }
 
 public class Identifier
@@ -15,20 +17,13 @@ public class LearningElement
 {
     public int Id { get; set; }
     public Identifier Identifier { get; set; }
+    public string Url { get; set; }
     public string Description { get; set; }
     public string Goals { get; set; }
-    public string ElementType { get; set; }
-    public List<LearningElementValueList> LearningElementValueList { get; set; }
-    public int LearningSpaceParentId { get; set; }
-    public object Requirements { get; set; }
-    public List<MetaData>? MetaData { get; set; }
     public string ElementCategory { get; set; }
-}
-
-public class LearningElementValueList
-{
-    public string Type { get; set; }
-    public string Value { get; set; }
+    public string ElementType { get; set; }
+    public List<Identifier> LearningElementValueList { get; set; }
+    public int LearningSpaceParentId { get; set; }
 }
 
 public class LearningSpace
@@ -38,7 +33,9 @@ public class LearningSpace
     public string Description { get; set; }
     public string Goals { get; set; }
     public List<int> LearningSpaceContent { get; set; }
-    public object Requirements { get; set; }
+    public int RequiredPoints { get; set; }
+    public int IncludedPoints { get; set; }
+    public List<int> Requirements { get; set; }
 }
 
 public class LearningWorld
@@ -47,14 +44,7 @@ public class LearningWorld
     public Identifier Identifier { get; set; }
     public string Description { get; set; }
     public string Goals { get; set; }
-    public List<object> LearningWorldContent { get; set; }
-    public List<object> Topics { get; set; }
+    public List<int> LearningWorldContent { get; set; }
     public List<LearningSpace> LearningSpaces { get; set; }
     public List<LearningElement> LearningElements { get; set; }
-}
-
-public class MetaData
-{
-    public string Key { get; set; }
-    public string Value { get; set; }
 }

@@ -1,7 +1,6 @@
 ﻿using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.Course;
-using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Course.GetCourseDetail;
 using AdLerBackend.Domain.Entities;
 using AutoBogus;
@@ -52,7 +51,7 @@ public class GetCourseDetailTest
         };
 
         _courseRepository.GetAsync(Arg.Any<int>()).Returns(courseDatabaseResponse);
-        
+
         var stream = new MemoryStream();
         _fileAccess.GetFileStream(Arg.Any<string>()).Returns(stream);
 
@@ -90,9 +89,6 @@ public class GetCourseDetailTest
         // Assert
         Assert.NotNull(result);
         Assert.That(result.LearningWorld.LearningElements.Count, Is.EqualTo(2));
-
-        // Hydrates the H5P files
-        Assert.That(result.LearningWorld.LearningElements[0].MetaData, Is.Not.Null);
     }
 
     [Test]

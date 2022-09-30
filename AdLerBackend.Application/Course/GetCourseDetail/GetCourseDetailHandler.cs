@@ -32,29 +32,11 @@ public class GetCourseDetailHandler : IRequestHandler<GetCourseDetailCommand, Le
         if (course == null)
             throw new NotFoundException("Course with the Id " + request.CourseId + " not found");
 
-
         // Get Course DSL 
         await using var fileStream = _fileAccess.GetFileStream(course.DslLocation);
 
         // Parse DSL File
         var dslFile = await _serialization.GetObjectFromJsonStreamAsync<LearningWorldDtoResponse>(fileStream);
-
-        // Give every element a fake metadata, so the Frontend wont crash
-        foreach (var learningWorldLearningElement in dslFile.LearningWorld.LearningElements)
-            learningWorldLearningElement.MetaData = new List<MetaData>
-            {
-                new()
-                {
-                    Key = "h5pFileName",
-                    Value = "Metadaten bitte aus dem Frontend rausschmeissen"
-                },
-                new()
-                {
-                    Key = "h5pContextId",
-                    Value = "1337420069"
-                }
-            };
-
 
         return new LearningWorldDtoResponse
         {

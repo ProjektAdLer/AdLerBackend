@@ -1,5 +1,6 @@
 ﻿using AdLerBackend.API.Common.ProblemDetails;
 using AdLerBackend.Application.Common.Exceptions;
+using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -18,7 +19,8 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             {typeof(InvalidTokenException), HandleInvalidTokenException},
             {typeof(NotFoundException), HandleNotFoundException},
             {typeof(ForbiddenAccessException), HandleForbiddenAccessException},
-            {typeof(CourseCreationException), HandleCourseCreationException}
+            {typeof(CourseCreationException), HandleCourseCreationException},
+            {typeof(LmsException), HandleGenericLmsException}
         };
     }
 
@@ -26,6 +28,19 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     {
         HandleException(context);
         base.OnException(context);
+    }
+
+    private void HandleGenericLmsException(ExceptionContext context)
+    {
+        var exception = context.Exception as LmsException;
+        var problemDetails = new ProblemDetails
+        {
+            Detail = exception.Message,
+            Status = StatusCodes.Status500InternalServerError,
+            Title = "The LMS adapter encountered an error"
+        };
+
+        context.Result = new ObjectResult(problemDetails);
     }
 
     private void HandleCourseCreationException(ExceptionContext context)

@@ -1,6 +1,7 @@
 ﻿using AdLerBackend.API.Common.ProblemDetails;
 using AdLerBackend.API.Filters;
 using AdLerBackend.Application.Common.Exceptions;
+using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -23,6 +24,22 @@ public class ApiExceptionFilterAttributeTest
 
         _context = new ExceptionContext(actionContext, new List<IFilterMetadata>());
         _filter = new ApiExceptionFilterAttribute();
+    }
+
+    [Test]
+    public void ApiExceptionFilterAttribute_Should_HandleGenericLmsException()
+    {
+        // Arrange
+        var exception = new LmsException("Test exception");
+        _context.Exception = exception;
+
+        // Act
+        _filter.OnException(_context);
+
+        // Assert
+        var result = _context.Result as ObjectResult;
+        var resultValue = result!.Value;
+        Assert.IsInstanceOf<ProblemDetails>(resultValue);
     }
 
     [Test]
@@ -124,7 +141,7 @@ public class ApiExceptionFilterAttributeTest
 
         Assert.IsInstanceOf<ProblemDetails>(resultValue);
     }
-    
+
     [Test]
     public void ApiExceptionFilterAttribute_CourseCreationException()
     {

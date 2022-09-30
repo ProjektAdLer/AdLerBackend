@@ -20,7 +20,7 @@ public class
             case "invalidlogin":
                 throw new InvalidMoodleLoginException();
             default:
-                throw new LmsException("Irgendwas ist mit dem LMS schief gelaufen");
+                throw ex;
         }
     }
 }

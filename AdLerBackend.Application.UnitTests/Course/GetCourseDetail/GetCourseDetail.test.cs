@@ -61,7 +61,7 @@ public class GetCourseDetailTest
             new()
             {
                 Id = 1,
-                ElementType = "h5p",
+                ElementCategory = "h5p",
                 Identifier = new Identifier
                 {
                     Value = "path1"
@@ -70,7 +70,7 @@ public class GetCourseDetailTest
             new()
             {
                 Id = 2,
-                ElementType = "h5p",
+                ElementCategory = "h5p",
                 Identifier = new Identifier
                 {
                     Value = "path2"

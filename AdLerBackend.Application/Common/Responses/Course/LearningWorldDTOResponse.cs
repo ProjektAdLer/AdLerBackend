@@ -17,11 +17,9 @@ public class LearningElement
 {
     public int Id { get; set; }
     public Identifier Identifier { get; set; }
-    public string Url { get; set; }
     public string Description { get; set; }
     public string Goals { get; set; }
     public string ElementCategory { get; set; }
-    public string ElementType { get; set; }
     public List<Identifier> LearningElementValueList { get; set; }
     public int LearningSpaceParentId { get; set; }
 }

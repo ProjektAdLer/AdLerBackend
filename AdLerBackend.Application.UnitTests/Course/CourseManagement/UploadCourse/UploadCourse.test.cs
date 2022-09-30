@@ -40,7 +40,6 @@ public class UploadCourseTest
             new()
             {
                 Id = 1,
-                ElementType = "h5p",
                 ElementCategory = "h5p",
                 Identifier = new Identifier
                 {
@@ -50,7 +49,6 @@ public class UploadCourseTest
             new()
             {
                 Id = 2,
-                ElementType = "h5p",
                 ElementCategory = "h5p",
                 Identifier = new Identifier
                 {
@@ -82,7 +80,6 @@ public class UploadCourseTest
         fakedDsl.LearningWorld.LearningElements[0] = new Application.Common.Responses.Course.LearningElement
         {
             Id = 13337,
-            ElementType = "h5p",
             ElementCategory = "h5p"
         };
 
@@ -165,7 +162,6 @@ public class UploadCourseTest
         fakedDsl.LearningWorld.LearningElements[0] = new Application.Common.Responses.Course.LearningElement
         {
             Id = 13337,
-            ElementType = "h5p",
             ElementCategory = "h5p"
         };
 

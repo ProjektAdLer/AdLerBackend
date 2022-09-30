@@ -2,7 +2,9 @@
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.InternalUseCases.CheckUserPrivileges;
+using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Course.CourseManagement.DeleteCourse;
+using AdLerBackend.Application.Moodle.GetUserData;
 using AdLerBackend.Domain.Entities;
 using MediatR;
 using NSubstitute;
@@ -32,11 +34,17 @@ public class DeleteCourseTest
     {
         // Arrange
         var systemUnderTest = new DeleteCourseHandler(_courseRepository, _fileAccess, _mediator);
-        
+
         var courseMock = new CourseEntity
         {
-            Id = 1
+            Id = 1,
+            AuthorId = 1
         };
+
+        _mediator.Send(Arg.Any<GetMoodleUserDataCommand>()).Returns(new MoodleUserDataResponse
+        {
+            UserId = 1
+        });
 
         _courseRepository.GetAsync(Arg.Any<int>()).Returns(courseMock);
 
@@ -59,7 +67,7 @@ public class DeleteCourseTest
     }
 
     [Test]
-    public Task Handle_UserNotAdmin_ShouldThorwException()
+    public async Task Handle_UserNotAdmin_ShouldThorwException()
     {
         // Arrange
         var systemUnderTest = new DeleteCourseHandler(_courseRepository, _fileAccess, _mediator);
@@ -72,6 +80,54 @@ public class DeleteCourseTest
             CourseId = 1,
             WebServiceToken = "testToken"
         }, CancellationToken.None));
-        return Task.CompletedTask;
+    }
+
+    [Test]
+    public async Task Handle_CourseNotExistent_ShouldThorwException()
+    {
+        // Arrange
+        var systemUnderTest = new DeleteCourseHandler(_courseRepository, _fileAccess, _mediator);
+
+        _courseRepository.GetAsync(Arg.Any<int>()).Returns((CourseEntity?) null);
+
+        _fileAccess.DeleteCourse(Arg.Any<CourseDeleteDto>()).Returns(true);
+
+        // Act
+        // Assert
+        Assert.ThrowsAsync<NotFoundException>(async () => await systemUnderTest.Handle(new DeleteCourseCommand
+        {
+            CourseId = 1,
+            WebServiceToken = "testToken"
+        }, CancellationToken.None));
+    }
+
+    [Test]
+    public async Task Handle_CourseNotFromSameAuthor_ShouldThorwException()
+    {
+        // Arrange
+        var systemUnderTest = new DeleteCourseHandler(_courseRepository, _fileAccess, _mediator);
+
+        var courseMock = new CourseEntity
+        {
+            Id = 1,
+            AuthorId = 1337
+        };
+
+        _mediator.Send(Arg.Any<GetMoodleUserDataCommand>()).Returns(new MoodleUserDataResponse
+        {
+            UserId = 1
+        });
+
+        _courseRepository.GetAsync(Arg.Any<int>()).Returns(courseMock);
+
+        _fileAccess.DeleteCourse(Arg.Any<CourseDeleteDto>()).Returns(true);
+
+        // Act
+        // Assert
+        Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await systemUnderTest.Handle(new DeleteCourseCommand
+        {
+            CourseId = 1,
+            WebServiceToken = "testToken"
+        }, CancellationToken.None));
     }
 }

@@ -58,7 +58,7 @@ public class UploadCourseCommandHandler : IRequestHandler<UploadCourseCommand, b
 
 
         var storedH5PFilePaths = StoreH5PFiles(courseInformation, userInformation, request.BackupFileStream);
-        var h5PFilesInCourse = GetH5PLocationEntities(storedH5PFilePaths!);
+        var h5PFilesInCourse = GetH5PLocationEntities(storedH5PFilePaths);
 
         // Get Course DSL 
         await using var fileStream = _fileAccess.GetFileStream(dslLocation);

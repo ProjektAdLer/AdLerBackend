@@ -30,7 +30,7 @@ public class ScoreLearningElementHandler : IRequestHandler<ScoreLearningElementC
             WebServiceToken = request.WebServiceToken
         }, cancellationToken);
 
-        var ElementScoreResponse = await _mediator.Send(GetStrategy(learningElementModule.LearningElementData.ModName,
+        var elementScoreResponse = await _mediator.Send(GetStrategy(learningElementModule.LearningElementData.ModName,
             new GetStrategyParams
             {
                 LearningElementMoule = learningElementModule.LearningElementData,
@@ -40,7 +40,7 @@ public class ScoreLearningElementHandler : IRequestHandler<ScoreLearningElementC
 
         return new ScoreLearningElementResponse
         {
-            isSuceess = ElementScoreResponse.isSuceess
+            isSuceess = elementScoreResponse.isSuceess
         };
     }
 
@@ -56,12 +56,15 @@ public class ScoreLearningElementHandler : IRequestHandler<ScoreLearningElementC
                     ScoreElementParams = commandWithParams.ScoreElementParams,
                     WebServiceToken = commandWithParams.WebServiceToken
                 };
-            default:
+            case "url":
+            case "resource":
                 return new ScoreGenericLearningElementStrategyCommand
                 {
                     Module = commandWithParams.LearningElementMoule,
                     WebServiceToken = commandWithParams.WebServiceToken
                 };
+            default:
+                throw new NotImplementedException("Strategy for this element type is not implemented " + elementType);
         }
     }
 

@@ -125,11 +125,12 @@ public class GetLearningElementSourceTest
 
         // Act
         // Assert
-        Assert.ThrowsAsync<Exception>(async () => await systemUnderTest.Handle(new GetLearningElementSourceCommand
-        {
-            CourseId = 1,
-            ElementId = 1,
-            WebServiceToken = "token"
-        }, CancellationToken.None));
+        Assert.ThrowsAsync<NotImplementedException>(async () => await systemUnderTest.Handle(
+            new GetLearningElementSourceCommand
+            {
+                CourseId = 1,
+                ElementId = 1,
+                WebServiceToken = "token"
+            }, CancellationToken.None));
     }
 }

@@ -28,15 +28,11 @@ public class
         switch (module.LearningElementData.ModName)
         {
             case "resource":
-                return new GetLearningElementSourceResponse
-                {
-                    FilePath = module.LearningElementData.Contents[0].fileUrl + "&token=" +
-                               request.WebServiceToken
-                };
             case "url":
                 return new GetLearningElementSourceResponse
                 {
-                    FilePath = module.LearningElementData.Contents[0].fileUrl + "&token=" +
+                    // At this point, we assume, that the moodle resource has a file attached to it.
+                    FilePath = module.LearningElementData.Contents![0].fileUrl + "&token=" +
                                request.WebServiceToken
                 };
             case "h5pactivity":
@@ -52,7 +48,7 @@ public class
                     FilePath = data.FilePath
                 };
                 break;
-            default: throw new Exception("Unknown module type" + module.LearningElementData.ModName);
+            default: throw new NotImplementedException("Unknown module type" + module.LearningElementData.ModName);
         }
     }
 }

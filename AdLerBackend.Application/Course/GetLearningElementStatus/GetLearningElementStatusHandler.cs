@@ -34,13 +34,13 @@ public class
         {
             CourseId = request.CourseId,
             WebServiceToken = request.WebServiceToken
-        });
+        }, cancellationToken);
 
-        var allH5PElements = allModulesInCourse.ModulesWithID.ToList();
+        var allElements = allModulesInCourse.ModulesWithID.ToList();
 
-        foreach (var moduleWithId in allH5PElements)
+        foreach (var moduleWithId in allElements)
         {
-            var response = await _mediator.Send(GetStrategy(moduleWithId.Module!.ModName,
+            var response = await _mediator.Send(GetStrategy(moduleWithId.Module.ModName,
                 new GenericGetLearningElementScoreScoreStrategyCommand
                 {
                     ElementId = moduleWithId.Id,
@@ -67,8 +67,11 @@ public class
                     LearningElementMoule = commandWithParams.LearningElementMoule,
                     WebServiceToken = commandWithParams.WebServiceToken
                 };
+            case "url": return commandWithParams;
+            case "resource": return commandWithParams;
             default:
-                return commandWithParams;
+                throw new NotImplementedException(
+                    "The learning element type is not implemented: " + learningElementType);
         }
     }
 }

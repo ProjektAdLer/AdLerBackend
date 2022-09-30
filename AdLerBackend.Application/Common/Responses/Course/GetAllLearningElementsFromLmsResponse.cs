@@ -10,5 +10,5 @@ public class GetAllLearningElementsFromLmsResponse
 public class ModuleWithId
 {
     public int Id { get; set; }
-    public Modules? Module { get; set; }
+    public Modules Module { get; set; }
 }

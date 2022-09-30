@@ -12,8 +12,7 @@ public class
     private readonly IMoodle _moodle;
     private readonly ISerialization _serialization;
 
-    public ScoreH5PElementStrategyHandler(ISerialization serialization, IMoodle moodle,
-        IMediator mediator)
+    public ScoreH5PElementStrategyHandler(ISerialization serialization, IMoodle moodle)
     {
         _serialization = serialization;
         _moodle = moodle;
@@ -28,7 +27,6 @@ public class
         var contextId = request.Module.contextid;
 
         // Deserialize the XAPI Event
-
         var xapiEvent =
             _serialization.GetObjectFromJsonString<RawH5PEvent>(request.ScoreElementParams.SerializedXapiEvent!);
 
@@ -42,7 +40,7 @@ public class
         var inText = JsonSerializer.Serialize(xapiEvent);
 
         // Send the XAPI Event to the LRS
-        var isSuccess = await _moodle.ProcessXAPIStatementAsync(request.WebServiceToken, inText);
+        var isSuccess = await _moodle.ProcessXapiStatementAsync(request.WebServiceToken, inText);
 
         return new ScoreLearningElementResponse
         {

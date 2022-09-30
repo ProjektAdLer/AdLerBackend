@@ -6,6 +6,9 @@ using MediatR;
 
 namespace AdLerBackend.Application.Common.InternalUseCases.GetLearningElementLmsInformation;
 
+/// <summary>
+///     Gets a single Element from Moodle which is specified int the DSL from AMG
+/// </summary>
 public class GetLearningElementLmsInformationHandler : IRequestHandler<GetLearningElementLmsInformationCommand,
     GetLearningElementLmsInformationResponse>
 {
@@ -63,7 +66,7 @@ public class GetLearningElementLmsInformationHandler : IRequestHandler<GetLearni
         };
     }
 
-    private static Modules? GetModuleFromCourse(CourseContent[] courseContent, Func<Modules, bool> del)
+    private static Modules? GetModuleFromCourse(IEnumerable<CourseContent> courseContent, Func<Modules, bool> del)
     {
         return courseContent.SelectMany(content => content.Modules).FirstOrDefault(del);
     }

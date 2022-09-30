@@ -6,6 +6,9 @@ using MediatR;
 
 namespace AdLerBackend.Application.Common.InternalUseCases.GetAllLearningElementsFromLms;
 
+/// <summary>
+///     Gets all Learning Elements from a LMS Course, that are referenced in the Course Description (DSL) from the AMG
+/// </summary>
 public class GetAllLearningElementsFromLmsHandler : IRequestHandler<GetAllLearningElementsFromLmsCommand,
     GetAllLearningElementsFromLmsResponse>
 {
@@ -56,7 +59,9 @@ public class GetAllLearningElementsFromLmsHandler : IRequestHandler<GetAllLearni
         foreach (var moduleWIthIdAndFileName in data)
         {
             moduleWIthIdAndFileName.FileName = dslObject.LearningWorld.LearningElements
-                .Find(x => x.Id == moduleWIthIdAndFileName.Id)!.Identifier.Value;
+                                                   .Find(x => x.Id == moduleWIthIdAndFileName.Id)?.Identifier?.Value ??
+                                               throw new NotFoundException("Element with the Id " +
+                                                                           moduleWIthIdAndFileName.Id + " not found");
 
             moduleWIthIdAndFileName.Modules = courseContent.SelectMany(x => x.Modules)
                 .FirstOrDefault(x => x.Name == moduleWIthIdAndFileName.FileName)!;
@@ -70,7 +75,7 @@ public class GetAllLearningElementsFromLmsHandler : IRequestHandler<GetAllLearni
         foreach (var datapoint in data)
             response.ModulesWithID.Add(new ModuleWithId
             {
-                Id = datapoint.Id,
+                Id = (int) datapoint.Id!,
                 Module = datapoint.Modules
             });
 
@@ -80,7 +85,7 @@ public class GetAllLearningElementsFromLmsHandler : IRequestHandler<GetAllLearni
     private class ModuleWIthIdAndFileName
     {
         public string? FileName { get; set; }
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public Modules? Modules { get; set; }
     }
 }

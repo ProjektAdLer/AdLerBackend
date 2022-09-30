@@ -53,11 +53,11 @@ public interface IMoodle
     ///     Processes an XAPI Statement
     /// </summary>
     /// <param name="token"></param>
-    /// <param name="statement"></param>
+    /// <param name="statement">The Statement of the XAPI Request</param>
     /// <returns>Returns True, if the Statement hase been processed successfully </returns>
-    Task<bool> ProcessXAPIStatementAsync(string token, string statement);
+    Task<bool> ProcessXapiStatementAsync(string token, string statement);
 
-    Task<H5PAttempts> GetH5PAttemptsAsync(string token, int h5pActivityId);
+    Task<H5PAttempts> GetH5PAttemptsAsync(string token, int h5PActivityId);
 
     Task<bool> ScoreGenericLearningElement(string token, int learningElementId);
 }

@@ -203,7 +203,7 @@ public class MoodleWebApiTest
                 "application/json", "[true]");
 
         // Act
-        var result = await _systemUnderTest.ProcessXAPIStatementAsync("moodleToken", "testXApi");
+        var result = await _systemUnderTest.ProcessXapiStatementAsync("moodleToken", "testXApi");
 
         // Assert
         Assert.That(result, Is.EqualTo(true));
@@ -218,7 +218,7 @@ public class MoodleWebApiTest
                 "application/json", "[false]");
 
         // Act
-        var result = await _systemUnderTest.ProcessXAPIStatementAsync("moodleToken", "testXApi");
+        var result = await _systemUnderTest.ProcessXapiStatementAsync("moodleToken", "testXApi");
 
         // Assert
         Assert.That(result, Is.EqualTo(false));

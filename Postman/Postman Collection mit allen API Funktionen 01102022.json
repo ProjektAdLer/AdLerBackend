@@ -1,0 +1,1415 @@
+{
+	"info": {
+		"_postman_id": "f55f2156-a7f1-46c7-9f38-dea55dd0ad03",
+		"name": "AdLerBackend.API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16930694"
+	},
+	"item": [
+		{
+			"name": "api",
+			"item": [
+				{
+					"name": "Courses",
+					"item": [
+						{
+							"name": "{course Id}",
+							"item": [
+								{
+									"name": "Gets the World File of a Course",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "token",
+												"value": "laborum est"
+											},
+											{
+												"key": "Accept",
+												"value": "text/plain"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/Courses/:courseId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"Courses",
+												":courseId"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "17500212",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Success",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "token",
+														"value": "laborum est"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/Courses/:courseId",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"Courses",
+														":courseId"
+													],
+													"variable": [
+														{
+															"key": "courseId",
+															"value": "17500212",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"learningWorld\": {\n    \"idNumber\": \"deserunt est veniam mollit\",\n    \"identifier\": {\n      \"type\": \"mollit ut consectetur voluptate\",\n      \"value\": \"ad voluptate est\"\n    },\n    \"description\": \"ea anim qui\",\n    \"goals\": \"voluptate commodo\",\n    \"learningWorldContent\": [\n      88459,\n      -8022177\n    ],\n    \"learningSpaces\": [\n      {\n        \"spaceId\": -44338780,\n        \"identifier\": {\n          \"type\": \"qui ex\",\n          \"value\": \"laborum quis\"\n        },\n        \"description\": \"dolore\",\n        \"goals\": \"laboris est commodo\",\n        \"learningSpaceContent\": [\n          -12287465,\n          99314370\n        ],\n        \"requiredPoints\": -94533626,\n        \"includedPoints\": -14219056,\n        \"requirements\": [\n          -35365931,\n          -66287041\n        ]\n      },\n      {\n        \"spaceId\": -89658153,\n        \"identifier\": {\n          \"type\": \"in esse ad\",\n          \"value\": \"occaecat in enim nostrud\"\n        },\n        \"description\": \"elit\",\n        \"goals\": \"voluptate Excepteur ullamco\",\n        \"learningSpaceContent\": [\n          -67639940,\n          -3672527\n        ],\n        \"requiredPoints\": 87429315,\n        \"includedPoints\": -27617131,\n        \"requirements\": [\n          -70748038,\n          80814703\n        ]\n      }\n    ],\n    \"learningElements\": [\n      {\n        \"id\": 83980659,\n        \"identifier\": {\n          \"type\": \"in do\",\n          \"value\": \"nulla sunt enim\"\n        },\n        \"description\": \"voluptate\",\n        \"goals\": \"ad Duis\",\n        \"elementCategory\": \"deserunt sunt voluptate tempor\",\n        \"learningElementValueList\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"learningSpaceParentId\": -18968631\n      },\n      {\n        \"id\": -76243158,\n        \"identifier\": {\n          \"type\": \"elit\",\n          \"value\": \"commodo veniam D\"\n        },\n        \"description\": \"ea fugiat laborum dolor\",\n        \"goals\": \"nostrud officia minim cillum dolor\",\n        \"elementCategory\": \"sunt consectetur sit\",\n        \"learningElementValueList\": [\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"type\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"learningSpaceParentId\": -201457\n      }\n    ]\n  }\n}"
+										}
+									]
+								},
+								{
+									"name": "Deletes a Course by Id",
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "token",
+												"value": "laborum est"
+											},
+											{
+												"key": "Accept",
+												"value": "text/plain"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/Courses/:courseId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"Courses",
+												":courseId"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "17500212",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Success",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "token",
+														"value": "laborum est"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/Courses/:courseId",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"Courses",
+														":courseId"
+													],
+													"variable": [
+														{
+															"key": "courseId",
+															"value": "17500212",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "false"
+										}
+									]
+								},
+								{
+									"name": "Gets the Status of all Learning Elements in a Course",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "token",
+												"value": "laborum est"
+											},
+											{
+												"key": "Accept",
+												"value": "text/plain"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/Courses/:courseId/status",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"Courses",
+												":courseId",
+												"status"
+											],
+											"variable": [
+												{
+													"key": "courseId",
+													"value": "17500212",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Success",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "token",
+														"value": "laborum est"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/Courses/:courseId/status",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"Courses",
+														":courseId",
+														"status"
+													],
+													"variable": [
+														{
+															"key": "courseId",
+															"value": "17500212",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"courseId\": -41257458,\n  \"learningElements\": [\n    {\n      \"elementId\": 28326429,\n      \"successss\": true\n    },\n    {\n      \"elementId\": 5290999,\n      \"successss\": true\n    }\n  ]\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Gets All Courses a User is enrolled in",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "The Users WebService Token",
+										"key": "token",
+										"value": "laborum est"
+									},
+									{
+										"key": "Accept",
+										"value": "text/plain"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Courses",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"Courses"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "The Users WebService Token",
+												"key": "token",
+												"value": "laborum est"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/Courses",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"Courses"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"courses\": [\n    {\n      \"courseName\": \"quis magna aliquip Lorem\",\n      \"courseId\": 28305516\n    },\n    {\n      \"courseName\": \"est eiusmod\",\n      \"courseId\": 60775392\n    }\n  ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Uploads a Course to the Backend\r\nBeware: The Course also has to be imported into moodle manually",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "token",
+										"value": "laborum est"
+									},
+									{
+										"key": "Content-Type",
+										"value": "multipart/form-data"
+									},
+									{
+										"key": "Accept",
+										"value": "text/plain"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "backupFile",
+											"type": "file",
+											"src": []
+										},
+										{
+											"key": "dslFile",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/Courses",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"Courses"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Success",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "token",
+												"value": "laborum est"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "backupFile",
+													"type": "file",
+													"src": []
+												},
+												{
+													"key": "dslFile",
+													"type": "file",
+													"src": []
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/api/Courses",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"Courses"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "false"
+								}
+							]
+						},
+						{
+							"name": "Gets all Courses that a Author has created",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "token",
+										"value": "laborum est"
+									},
+									{
+										"key": "Accept",
+										"value": "text/plain"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Courses/author/:authorId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"Courses",
+										"author",
+										":authorId"
+									],
+									"variable": [
+										{
+											"key": "authorId",
+											"value": "17500212",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "token",
+												"value": "laborum est"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/Courses/author/:authorId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"Courses",
+												"author",
+												":authorId"
+											],
+											"variable": [
+												{
+													"key": "authorId",
+													"value": "17500212",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"courses\": [\n    {\n      \"courseName\": \"consectetur velit nulla in\",\n      \"courseId\": 54901203\n    },\n    {\n      \"courseName\": \"dolore\",\n      \"courseId\": -13597590\n    }\n  ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Uploads a base h5p file needed to render h5ps in the Frontend",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "token",
+										"value": "laborum est"
+									},
+									{
+										"key": "Content-Type",
+										"value": "multipart/form-data"
+									},
+									{
+										"key": "Accept",
+										"value": "text/plain"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "h5PBaseFile",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/Courses/H5PBase",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"Courses",
+										"H5PBase"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Success",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "token",
+												"value": "laborum est"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "h5PBaseFile",
+													"type": "file",
+													"src": []
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/api/Courses/H5PBase",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"Courses",
+												"H5PBase"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "false"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Learning Elements",
+					"item": [
+						{
+							"name": "Course/{course Id}/Element/{element Id}",
+							"item": [
+								{
+									"name": "Try to Score a Learning Element",
+									"request": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "LMS User Token",
+												"key": "token",
+												"value": "laborum est"
+											},
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "text/plain"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"serializedXapiEvent\": \"Ut consectetur\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/api/LearningElements/Course/:courseId/Element/:elementId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"LearningElements",
+												"Course",
+												":courseId",
+												"Element",
+												":elementId"
+											],
+											"variable": [
+												{
+													"key": "elementId",
+													"value": "17500212",
+													"description": "(Required) Id of the Element in the Course"
+												},
+												{
+													"key": "courseId",
+													"value": "17500212",
+													"description": "(Required) Id of the Course"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Success",
+											"originalRequest": {
+												"method": "PATCH",
+												"header": [
+													{
+														"description": "LMS User Token",
+														"key": "token",
+														"value": "laborum est"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"serializedXapiEvent\": \"Ut consectetur\"\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/api/LearningElements/Course/:courseId/Element/:elementId",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"LearningElements",
+														"Course",
+														":courseId",
+														"Element",
+														":elementId"
+													],
+													"variable": [
+														{
+															"key": "elementId",
+															"value": "17500212",
+															"description": "(Required) Id of the Element in the Course"
+														},
+														{
+															"key": "courseId",
+															"value": "17500212",
+															"description": "(Required) Id of the Course"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"isSuceess\": false\n}"
+										}
+									]
+								},
+								{
+									"name": "Gets a Score for the Learning Element",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Lms Webservice Token",
+												"key": "token",
+												"value": "laborum est"
+											},
+											{
+												"key": "Accept",
+												"value": "text/plain"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/LearningElements/Course/:courseId/Element/:elementId/Score",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"LearningElements",
+												"Course",
+												":courseId",
+												"Element",
+												":elementId",
+												"Score"
+											],
+											"variable": [
+												{
+													"key": "elementId",
+													"value": "17500212",
+													"description": "(Required) Id of a Element"
+												},
+												{
+													"key": "courseId",
+													"value": "17500212",
+													"description": "(Required) Id of the Course the Element is located in"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Success",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"description": "Lms Webservice Token",
+														"key": "token",
+														"value": "laborum est"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/LearningElements/Course/:courseId/Element/:elementId/Score",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"LearningElements",
+														"Course",
+														":courseId",
+														"Element",
+														":elementId",
+														"Score"
+													],
+													"variable": [
+														{
+															"key": "elementId",
+															"value": "17500212",
+															"description": "(Required) Id of a Element"
+														},
+														{
+															"key": "courseId",
+															"value": "17500212",
+															"description": "(Required) Id of the Course the Element is located in"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"elementId\": -37092145,\n  \"successss\": false\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Gets the Source of a Learning Element, which is needed to display it",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Lms Webservice Token",
+										"key": "token",
+										"value": "laborum est"
+									},
+									{
+										"key": "Accept",
+										"value": "text/plain"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/LearningElements/FilePath/Course/:courseId/Element/:elementId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"LearningElements",
+										"FilePath",
+										"Course",
+										":courseId",
+										"Element",
+										":elementId"
+									],
+									"variable": [
+										{
+											"key": "elementId",
+											"value": "17500212",
+											"description": "(Required) Id of a Element"
+										},
+										{
+											"key": "courseId",
+											"value": "17500212",
+											"description": "(Required) Id of the Course the Element is located in"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Lms Webservice Token",
+												"key": "token",
+												"value": "laborum est"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/LearningElements/FilePath/Course/:courseId/Element/:elementId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"LearningElements",
+												"FilePath",
+												"Course",
+												":courseId",
+												"Element",
+												":elementId"
+											],
+											"variable": [
+												{
+													"key": "elementId",
+													"value": "17500212",
+													"description": "(Required) Id of a Element"
+												},
+												{
+													"key": "courseId",
+													"value": "17500212",
+													"description": "(Required) Id of the Course the Element is located in"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"filePath\": \"ipsum labore\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "/api/Users/UserData",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "text/plain"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Users/UserData?WebServiceToken=laborum est",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"Users",
+										"UserData"
+									],
+									"query": [
+										{
+											"key": "WebServiceToken",
+											"value": "laborum est"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/Users/UserData?WebServiceToken=laborum est",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"Users",
+												"UserData"
+											],
+											"query": [
+												{
+													"key": "WebServiceToken",
+													"value": "laborum est"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"moodleUserName\": \"Lorem consectetur ut nulla\",\n  \"isAdmin\": false,\n  \"userId\": 16038566,\n  \"userEmail\": \"minim\"\n}"
+								},
+								{
+									"name": "Bad Request",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/Users/UserData?WebServiceToken=laborum est",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"Users",
+												"UserData"
+											],
+											"query": [
+												{
+													"key": "WebServiceToken",
+													"value": "laborum est"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"type\": \"do aliqua\",\n  \"title\": \"in dolore\",\n  \"status\": 99233217,\n  \"detail\": \"culpa incididunt dolor officia reprehenderit\",\n  \"instance\": \"eu laboris\"\n}"
+								},
+								{
+									"name": "Server Error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/Users/UserData?WebServiceToken=laborum est",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"Users",
+												"UserData"
+											],
+											"query": [
+												{
+													"key": "WebServiceToken",
+													"value": "laborum est"
+												}
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "/api/Users/Login",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "text/plain"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Users/Login?UserName=administrator&Password=gvf!tyg6gba*tjc8NFB",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"Users",
+										"Login"
+									],
+									"query": [
+										{
+											"key": "UserName",
+											"value": "administrator"
+										},
+										{
+											"key": "Password",
+											"value": "gvf!tyg6gba*tjc8NFB"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/Users/Login?UserName=laborum est&Password=laborum est",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"Users",
+												"Login"
+											],
+											"query": [
+												{
+													"key": "UserName",
+													"value": "laborum est"
+												},
+												{
+													"key": "Password",
+													"value": "laborum est"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"moodleToken\": \"nostrud laborum culpa\"\n}"
+								}
+							]
+						},
+						{
+							"name": "/api/Users/Login Student",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "text/plain"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Users/Login?UserName=student&Password=wve2rxz7wfm3BPH-ykh",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"Users",
+										"Login"
+									],
+									"query": [
+										{
+											"key": "UserName",
+											"value": "student"
+										},
+										{
+											"key": "Password",
+											"value": "wve2rxz7wfm3BPH-ykh"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/api/Users/Login?UserName=laborum est&Password=laborum est",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"Users",
+												"Login"
+											],
+											"query": [
+												{
+													"key": "UserName",
+													"value": "laborum est"
+												},
+												{
+													"key": "Password",
+													"value": "laborum est"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"moodleToken\": \"nostrud laborum culpa\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Player Data",
+					"item": [
+						{
+							"name": "Get player data",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "LMS Token",
+										"key": "token",
+										"value": "laborum est"
+									},
+									{
+										"key": "Accept",
+										"value": "text/plain"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/PlayerData",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"PlayerData"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Success",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "LMS Token",
+												"key": "token",
+												"value": "laborum est"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/PlayerData",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"PlayerData"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"playerGender\": \"Male\",\n  \"playerWorldColor\": \"Green\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Update player data",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"description": "LMS Token",
+										"key": "token",
+										"value": "laborum est"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "text/plain"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  {\n    \"value\": {},\n    \"path\": \"adipisicing fugiat commodo aliqua est\",\n    \"op\": \"ad eiusmod veniam ex\",\n    \"from\": \"officia cillum Ut\"\n  },\n  {\n    \"value\": {},\n    \"path\": \"esse\",\n    \"op\": \"Ut ipsum\",\n    \"from\": \"sit id consectetur\"\n  }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/PlayerData",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"PlayerData"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Success",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"description": "LMS Token",
+												"key": "token",
+												"value": "laborum est"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n  {\n    \"value\": {},\n    \"path\": \"labore laboris quis\",\n    \"op\": \"ut adipisicing occaecat dolor\",\n    \"from\": \"qui Excepteur\"\n  },\n  {\n    \"value\": {},\n    \"path\": \"et non\",\n    \"op\": \"cupidatat Lorem ea\",\n    \"from\": \"dolore tempor occ\"\n  }\n]",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/api/PlayerData",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"PlayerData"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"playerGender\": \"Male\",\n  \"playerWorldColor\": \"Green\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Delete player data",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "LMS Token",
+										"key": "token",
+										"value": "laborum est"
+									},
+									{
+										"key": "Accept",
+										"value": "text/plain"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/PlayerData",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"PlayerData"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Success",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "LMS Token",
+												"key": "token",
+												"value": "laborum est"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/PlayerData",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"PlayerData"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "true"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "/",
+			"type": "string"
+		}
+	]
+}

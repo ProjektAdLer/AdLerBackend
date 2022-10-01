@@ -4,6 +4,7 @@ using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Infrastructure.Moodle;
 using AutoBogus;
 using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using NSubstitute;
 using NSubstitute.Extensions;
 using RichardSzalay.MockHttp;
@@ -12,6 +13,7 @@ namespace AdLerBackend.Infrastructure.UnitTests.Moodle;
 
 public class MoodleWebApiTest
 {
+    private IConfiguration _configuration;
     private MockHttpMessageHandler _mockHttp = null!;
     private MoodleWebApi _systemUnderTest = null!;
 
@@ -19,14 +21,16 @@ public class MoodleWebApiTest
     public void SetUp()
     {
         _mockHttp = new MockHttpMessageHandler();
-        _systemUnderTest = new MoodleWebApi(_mockHttp.ToHttpClient());
+        _configuration = Substitute.For<IConfiguration>();
+        _configuration["moodleUrl"].Returns("http://whatever.com");
+        _systemUnderTest = new MoodleWebApi(_mockHttp.ToHttpClient(), _configuration);
     }
 
     [Test]
     public async Task UsUserAdmin_Valid_HeIs()
     {
         // Arrange
-        var test = Substitute.ForPartsOf<MoodleWebApi>(_mockHttp.ToHttpClient());
+        var test = Substitute.ForPartsOf<MoodleWebApi>(_mockHttp.ToHttpClient(), _configuration);
         test.Configure().GetMoodleUserDataAsync("token").Returns(new MoodleUserDataResponse
         {
             IsAdmin = true,

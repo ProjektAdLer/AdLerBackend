@@ -2,6 +2,7 @@ using System.Reflection;
 using AdLerBackend.API.Filters;
 using AdLerBackend.Application;
 using AdLerBackend.Infrastructure;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 
@@ -11,15 +12,30 @@ Directory.CreateDirectory("wwwroot");
 
 var builder = WebApplication.CreateBuilder(args);
 
+// If the config file does not exist, create it
+if (!File.Exists("./config/config.json"))
+{
+    File.WriteAllText("./config/config.json", JsonConvert.SerializeObject(new
+    {
+        useHttps = "false",
+        httpPort = 433,
+        moodleUrl = "Bitte eine Moodle URL angeben"
+    }, Formatting.Indented));
+
+    // shut down programm with message in dialog
+    Console.WriteLine("Bitte config.json anpassen und Programm erneut starten");
+    Environment.Exit(1);
+}
+
 // Use Global AdLer Config File (Most likely coming from a docker volume)
-builder.Configuration.AddJsonFile("./config/config.json", true);
+builder.Configuration.AddJsonFile("./config/config.json", false);
 
 // Add HTTPS support
 if (!builder.Environment.IsDevelopment())
     builder.WebHost.ConfigureKestrel(options =>
     {
-        if (builder.Configuration["useHttps"] == "True")
-            options.ListenAnyIP(int.Parse(builder.Configuration["httpsPort"]),
+        if (builder.Configuration["useHttps"].ToLower() == "true")
+            options.ListenAnyIP(int.Parse(builder.Configuration["httpsPort"] ?? "433"),
                 listenOptions =>
                 {
                     listenOptions.UseHttps("./config/cert/AdLerBackend.pfx",

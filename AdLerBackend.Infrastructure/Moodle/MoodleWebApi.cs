@@ -2,17 +2,20 @@
 using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
+using Microsoft.Extensions.Configuration;
 
 namespace AdLerBackend.Infrastructure.Moodle;
 
 public class MoodleWebApi : IMoodle
 {
     private readonly HttpClient _client;
+    private readonly IConfiguration _configuration;
 
 
-    public MoodleWebApi(HttpClient client)
+    public MoodleWebApi(HttpClient client, IConfiguration configuration)
     {
         _client = client;
+        _configuration = configuration;
     }
 
     public async Task<MoodleUserTokenResponse> GetMoodleUserTokenAsync(string userName, string password)
@@ -213,10 +216,10 @@ public class MoodleWebApi : IMoodle
             switch (options.Endpoint)
             {
                 case PostToMoodleOptions.Endpoints.Webservice:
-                    url = "https://testmoodle.cluuub.xyz/webservice/rest/server.php";
+                    url = _configuration["moodleUrl"] + "/webservice/rest/server.php";
                     break;
                 case PostToMoodleOptions.Endpoints.Login:
-                    url = "https://testmoodle.cluuub.xyz/login/token.php";
+                    url = _configuration["moodleUrl"] + "/login/token.php";
                     break;
             }
 

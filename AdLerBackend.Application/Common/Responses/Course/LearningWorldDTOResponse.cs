@@ -20,8 +20,9 @@ public class LearningElement
     public string Description { get; set; }
     public string Goals { get; set; }
     public string ElementCategory { get; set; }
+
     public List<Identifier> LearningElementValueList { get; set; }
-    public int LearningSpaceParentId { get; set; }
+    //public int LearningSpaceParentId { get; set; }
 }
 
 public class LearningSpace
@@ -31,8 +32,10 @@ public class LearningSpace
     public string Description { get; set; }
     public string Goals { get; set; }
     public List<int> LearningSpaceContent { get; set; }
+
     public int RequiredPoints { get; set; }
-    public int IncludedPoints { get; set; }
+    //public int IncludedPoints { get; set; }
+
     public List<int> Requirements { get; set; }
 }
 

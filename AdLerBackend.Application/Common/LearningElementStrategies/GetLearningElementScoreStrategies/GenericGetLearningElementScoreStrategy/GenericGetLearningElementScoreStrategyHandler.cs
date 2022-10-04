@@ -1,7 +1,8 @@
 using AdLerBackend.Application.Common.Responses.LearningElements;
 using MediatR;
 
-namespace AdLerBackend.Application.Common.LearningElementStrategies.GetLearningElementScoreStrategies.GenericGetLearningElementScoreStrategy;
+namespace AdLerBackend.Application.Common.LearningElementStrategies.GetLearningElementScoreStrategies.
+    GenericGetLearningElementScoreStrategy;
 
 public class
     GenericGetLearningElementScoreStrategyHandler : IRequestHandler<GenericGetLearningElementScoreScoreStrategyCommand,
@@ -12,6 +13,7 @@ public class
     {
         return Task.FromResult(new LearningElementScoreResponse
         {
+            ElementId = request.ElementId,
             successss = request.LearningElementMoule.CompletionData.State == 1
         });
     }

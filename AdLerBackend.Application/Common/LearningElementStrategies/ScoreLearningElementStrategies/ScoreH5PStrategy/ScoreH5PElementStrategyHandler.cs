@@ -42,6 +42,8 @@ public class
         // Send the XAPI Event to the LRS
         var isSuccess = await _moodle.ProcessXapiStatementAsync(request.WebServiceToken, inText);
 
+        // TODO: Check, if 
+
         return new ScoreLearningElementResponse
         {
             isSuceess = isSuccess

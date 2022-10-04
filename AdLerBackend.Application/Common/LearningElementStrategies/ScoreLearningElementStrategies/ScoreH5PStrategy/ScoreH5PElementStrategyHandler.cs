@@ -42,11 +42,12 @@ public class
         // Send the XAPI Event to the LRS
         var isSuccess = await _moodle.ProcessXapiStatementAsync(request.WebServiceToken, inText);
 
-        // TODO: Check, if 
+
+        var isAttemptASucess = await _moodle.GetH5PAttemptsAsync(request.WebServiceToken, request.Module.Instance);
 
         return new ScoreLearningElementResponse
         {
-            isSuceess = isSuccess
+            isSuceess = isAttemptASucess.usersattempts[0].scored.attempts[0].success == 1 && isSuccess
         };
     }
 }

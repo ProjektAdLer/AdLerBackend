@@ -22,7 +22,7 @@ public class LearningElement
     public string ElementCategory { get; set; }
 
     public List<Identifier> LearningElementValueList { get; set; }
-    //public int LearningSpaceParentId { get; set; }
+    public int LearningSpaceParentId { get; set; }
 }
 
 public class LearningSpace

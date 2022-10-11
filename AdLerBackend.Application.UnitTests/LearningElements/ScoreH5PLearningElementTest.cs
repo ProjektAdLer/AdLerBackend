@@ -38,6 +38,26 @@ public class ScoreH5PLearningElementTest
 
         _serialization.GetObjectFromJsonString<RawH5PEvent>(Arg.Any<string>()).Returns(fakeXapi);
 
+        _moodle.GetH5PAttemptsAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new H5PAttempts
+        {
+            usersattempts = new List<Usersattempt>
+            {
+                new()
+                {
+                    scored = new Scored
+                    {
+                        attempts = new List<Attempt>
+                        {
+                            new()
+                            {
+                                success = 1
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
 
         var systemUnderTest =
             new ScoreH5PElementStrategyHandler(_serialization, _moodle);

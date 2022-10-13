@@ -7,10 +7,14 @@ public class File
 {
     [XmlElement(ElementName = "contenthash")]
     public string Contenthash { get; set; }
-    
+
     [XmlElement(ElementName = "component")]
     public string Component { get; set; }
+
     [XmlElement(ElementName = "filename")] public string Filename { get; set; }
+
+    [XmlElement(ElementName = "contextid")]
+    public int Contextid { get; set; }
 }
 
 [XmlRoot(ElementName = "files")]

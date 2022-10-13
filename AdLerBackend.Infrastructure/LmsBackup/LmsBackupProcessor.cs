@@ -23,10 +23,11 @@ public class LmsBackupProcessor : ILmsBackupProcessor
 
         var h5PHashes = (from file in filesDescription.File
             where file.Component == "mod_h5pactivity" && file.Filename != "."
-            select new H5PWorkingStorage {H5PFileName = file.Filename, H5PContentHash = file.Contenthash}).ToList();
+            select new H5PWorkingStorage
+                {H5PFileName = file.Filename, H5PContentHash = file.Contenthash, contextid = file.Contextid}).ToList();
 
         // remove duplicates from h5pHashes by Contenthash since files are represented twice in the backup
-        h5PHashes = h5PHashes.GroupBy(x => x.H5PContentHash).Select(x => x.First()).ToList();
+        h5PHashes = h5PHashes.GroupBy(x => x.contextid).Select(x => x.First()).ToList();
 
         if (h5PHashes.Count == 0)
             return new List<H5PDto>();
@@ -101,5 +102,6 @@ public class LmsBackupProcessor : ILmsBackupProcessor
         public Stream? H5PFile { get; set; }
         public string? H5PFileName { get; init; }
         public string? H5PContentHash { get; init; }
+        public int? contextid { get; init; }
     }
 }

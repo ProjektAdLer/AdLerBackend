@@ -18,7 +18,7 @@ if (!File.Exists("./config/config.json"))
     File.WriteAllText("./config/config.json", JsonConvert.SerializeObject(new
     {
         useHttps = "false",
-        httpPort = 433,
+        httpPort = 80,
         moodleUrl = "Bitte eine Moodle URL angeben"
     }, Formatting.Indented));
 

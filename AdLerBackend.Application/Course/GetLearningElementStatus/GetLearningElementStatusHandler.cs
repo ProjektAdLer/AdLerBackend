@@ -30,13 +30,13 @@ public class
             LearningElements = new List<LearningElementScoreResponse>()
         };
 
-        var allModulesInCourse = await _mediator.Send(new GetAllLearningElementsFromLmsCommand
+        var allModulesInCourseResp = await _mediator.Send(new GetAllLearningElementsFromLmsCommand
         {
             CourseId = request.CourseId,
             WebServiceToken = request.WebServiceToken
         }, cancellationToken);
 
-        var allElements = allModulesInCourse.ModulesWithID.ToList();
+        var allElements = allModulesInCourseResp.ModulesWithID.ToList();
 
         foreach (var moduleWithId in allElements)
         {

@@ -3,19 +3,22 @@ using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LearningElements;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 
 namespace AdLerBackend.Application.Common.LearningElementStrategies.ScoreLearningElementStrategies.ScoreH5PStrategy;
 
 public class
     ScoreH5PElementStrategyHandler : IRequestHandler<ScoreH5PElementStrategyCommand, ScoreLearningElementResponse>
 {
+    private readonly IConfiguration _config;
     private readonly IMoodle _moodle;
     private readonly ISerialization _serialization;
 
-    public ScoreH5PElementStrategyHandler(ISerialization serialization, IMoodle moodle)
+    public ScoreH5PElementStrategyHandler(ISerialization serialization, IMoodle moodle, IConfiguration config)
     {
         _serialization = serialization;
         _moodle = moodle;
+        _config = config;
     }
 
     public async Task<ScoreLearningElementResponse> Handle(ScoreH5PElementStrategyCommand request,
@@ -34,7 +37,7 @@ public class
         xapiEvent.actor.name = userData.MoodleUserName;
         xapiEvent.actor.mbox = userData.UserEmail;
 
-        xapiEvent.@object.id = "https://testmoodle.cluuub.xyz/xapi/activity/" + contextId;
+        xapiEvent.@object.id = _config["moodleUrl"] + "/xapi/activity/" + contextId;
 
         // serialize the XAPI Event again
         var inText = JsonSerializer.Serialize(xapiEvent);

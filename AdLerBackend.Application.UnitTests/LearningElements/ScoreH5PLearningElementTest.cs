@@ -3,6 +3,7 @@ using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.LearningElementStrategies.ScoreLearningElementStrategies.ScoreH5PStrategy;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AutoBogus;
+using Microsoft.Extensions.Configuration;
 using NSubstitute;
 
 #pragma warning disable CS8618
@@ -25,6 +26,15 @@ public class ScoreH5PLearningElementTest
     public async Task ScoreH5PElement_Valid_CallsWebservices()
     {
         // Arrange
+
+        var inMemorySettings = new Dictionary<string, string>
+        {
+            {"moodleUrl", "https://whatever.com"}
+        };
+
+        IConfiguration configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(inMemorySettings)
+            .Build();
 
         _moodle.GetMoodleUserDataAsync(Arg.Any<string>()).Returns(new MoodleUserDataResponse
         {
@@ -60,7 +70,7 @@ public class ScoreH5PLearningElementTest
 
 
         var systemUnderTest =
-            new ScoreH5PElementStrategyHandler(_serialization, _moodle);
+            new ScoreH5PElementStrategyHandler(_serialization, _moodle, configuration);
 
         // Act
         await systemUnderTest.Handle(new ScoreH5PElementStrategyCommand

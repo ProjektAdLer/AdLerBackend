@@ -37,7 +37,12 @@ public class
         xapiEvent.actor.name = userData.MoodleUserName;
         xapiEvent.actor.mbox = userData.UserEmail;
 
-        xapiEvent.@object.id = _config["moodleUrl"] + "/xapi/activity/" + contextId;
+        var moodleURL = _config["MoodleURL"];
+
+        // if last character is a slash, remove it
+        if (moodleURL[^1] == '/') moodleURL = moodleURL[..^1];
+
+        xapiEvent.@object.id = moodleURL + "/xapi/activity/" + contextId;
 
         // serialize the XAPI Event again
         var inText = JsonSerializer.Serialize(xapiEvent);

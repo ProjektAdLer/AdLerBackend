@@ -99,8 +99,8 @@ public class StorageService : IFileAccess
             var filePath = _fileSystem.Path.Join(workingPath, entry.FullName);
             var dirName = _fileSystem.Path.GetDirectoryName(filePath);
 
-            _fileSystem.Directory.CreateDirectory(dirName);
-            using var unpackedFile = _fileSystem.File.OpenWrite(filePath);
+            _fileSystem.Directory.CreateDirectory(dirName.Trim());
+            using var unpackedFile = _fileSystem.File.OpenWrite(filePath.Trim());
             inputStream.CopyTo(unpackedFile);
             unpackedFile.Flush();
         }

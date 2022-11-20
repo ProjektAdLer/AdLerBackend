@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AdLerBackend.API.Controllers.MoodleUserService;
 
-[Route("api/Users")]
+[Route("v1/Users")]
 public class MoodleLoginController : BaseApiController
 {
     public MoodleLoginController(IMediator mediator) : base(mediator)

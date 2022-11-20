@@ -12,7 +12,7 @@ namespace AdLerBackend.API.Controllers.Player;
 /// <summary>
 ///     Player controller
 /// </summary>
-[Route("api/PlayerData")]
+[Route("v1/PlayerData")]
 public class PlayerController : BaseApiController
 {
     public PlayerController(IMediator mediator) : base(mediator)

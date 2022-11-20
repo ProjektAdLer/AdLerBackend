@@ -12,7 +12,7 @@ namespace AdLerBackend.API.Controllers.LearningElements;
 /// <summary>
 ///     Controller for learning elements
 /// </summary>
-[Route("api/LearningElements")]
+[Route("v1")]
 public class LearningElementsController : BaseApiController
 {
     public LearningElementsController(IMediator mediator) : base(mediator)
@@ -49,7 +49,7 @@ public class LearningElementsController : BaseApiController
     /// <param name="elementId">Id of a Element</param>
     /// <param name="courseId">Id of the Course the Element is located in</param>
     /// <returns></returns>
-    [HttpGet("Course/{courseId}/Element/{elementId}/Score")]
+    [HttpGet("Course/{courseId}/LearningElement/{elementId}/Score")]
     public async Task<LearningElementScoreResponse> GetElementScore([FromHeader] string token,
         [FromRoute] int elementId, [FromRoute] int courseId)
     {
@@ -68,7 +68,7 @@ public class LearningElementsController : BaseApiController
     /// <param name="elementId">Id of a Element</param>
     /// <param name="courseId">Id of the Course the Element is located in</param>
     /// <returns></returns>
-    [HttpGet("FilePath/Course/{courseId}/Element/{elementId}")]
+    [HttpGet("FilePath/Course/{courseId}/LearningElement/{elementId}/Source")]
     public async Task<ActionResult<GetLearningElementSourceResponse>> GetLearningElementSource(
         [FromHeader] string token,
         [FromRoute] int elementId, [FromRoute] int courseId)

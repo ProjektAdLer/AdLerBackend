@@ -80,6 +80,7 @@ public class CoursesController : BaseApiController
     /// <param name="token"></param>
     /// <returns></returns>
     [HttpPost]
+    [DisableRequestSizeLimit]
     public async Task<bool> CreateCourse(IFormFile backupFile, IFormFile dslFile, [FromHeader] string token)
     {
         return await Mediator.Send(new UploadCourseCommand

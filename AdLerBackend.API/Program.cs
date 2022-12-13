@@ -2,6 +2,7 @@ using System.Reflection;
 using AdLerBackend.API.Filters;
 using AdLerBackend.Application;
 using AdLerBackend.Infrastructure;
+using Microsoft.AspNetCore.Http.Features;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -65,6 +66,11 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration, builder.Environment.IsDevelopment());
+builder.Services.Configure<FormOptions>(opt =>
+{
+    //100MB
+    opt.ValueLengthLimit = 104857600;
+});
 
 builder.Services.AddCors(options =>
 {

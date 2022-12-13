@@ -70,6 +70,8 @@ builder.Services.Configure<FormOptions>(opt =>
 {
     //100MB
     opt.ValueLengthLimit = 104857600;
+    opt.MultipartBodyLengthLimit = 104857600;
+    opt.MultipartHeadersLengthLimit = 104857600;
 });
 
 builder.Services.AddCors(options =>

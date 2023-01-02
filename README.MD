@@ -14,3 +14,4 @@ Die Momentanen Konfigurationsmöglichkeiten sind:
 ### Ein Https Zertifikat bereitstellen
 Wenn `useHttps` auf `true` gesetzt wird, muss ein gültiges Zertifikat angegeben werden.
 Dazu muss in dem Ordner `AdLerBackend.API/config/cert` ein Zertifikat abgelegt werden.
+

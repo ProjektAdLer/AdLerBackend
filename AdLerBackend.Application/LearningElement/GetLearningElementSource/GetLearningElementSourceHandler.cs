@@ -47,7 +47,6 @@ public class
                 {
                     FilePath = data.FilePath
                 };
-                break;
             default: throw new NotImplementedException("Unknown module type" + module.LearningElementData.ModName);
         }
     }

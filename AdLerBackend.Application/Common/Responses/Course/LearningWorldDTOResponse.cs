@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿#pragma warning disable CS8618
+using System.Text.Json.Serialization;
 
 namespace AdLerBackend.Application.Common.Responses.Course;
 

@@ -1,4 +1,5 @@
-﻿namespace AdLerBackend.Application.Common.Responses.Course;
+﻿#pragma warning disable CS8618
+namespace AdLerBackend.Application.Common.Responses.Course;
 
 public class GetCourseOverviewResponse
 {

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿#pragma warning disable CS8618
+using MediatR;
 
 namespace AdLerBackend.Application.Common;
 

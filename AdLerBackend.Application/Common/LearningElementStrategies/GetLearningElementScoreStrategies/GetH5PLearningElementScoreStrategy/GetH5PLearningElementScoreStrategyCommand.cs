@@ -1,6 +1,7 @@
 using AdLerBackend.Application.Common.Responses.LearningElements;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 
+#pragma warning disable CS8618
 namespace AdLerBackend.Application.Common.LearningElementStrategies.GetLearningElementScoreStrategies.
     GetH5PLearningElementScoreStrategy;
 

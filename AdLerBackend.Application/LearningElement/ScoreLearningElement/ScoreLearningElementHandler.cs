@@ -68,10 +68,12 @@ public class ScoreLearningElementHandler : IRequestHandler<ScoreLearningElementC
         }
     }
 
+#pragma warning disable CS8618
     private class GetStrategyParams
     {
         public string WebServiceToken { get; set; }
         public ScoreElementParams ScoreElementParams { get; init; }
         public Modules LearningElementMoule { get; init; }
     }
+#pragma warning restore CS8618
 }

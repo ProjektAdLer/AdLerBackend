@@ -1,4 +1,5 @@
-﻿using AdLerBackend.Domain.Entities.Common;
+﻿#pragma warning disable CS8618
+using AdLerBackend.Domain.Entities.Common;
 
 namespace AdLerBackend.Domain.Entities;
 

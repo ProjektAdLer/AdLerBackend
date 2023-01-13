@@ -1,3 +1,4 @@
+#pragma warning disable CS8618
 using AdLerBackend.Domain.Entities.PlayerData;
 
 namespace AdLerBackend.Application.Common.Responses.Player;

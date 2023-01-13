@@ -5,13 +5,10 @@ namespace AdLerBackend.Application.Common.LearningElementStrategies.ScoreLearnin
 
 public class ScoreH5PElementStrategyValidator : AbstractValidator<ScoreH5PElementStrategyCommand>
 {
-    private readonly ISerialization _serialization;
-
     public ScoreH5PElementStrategyValidator(ISerialization serialization)
     {
-        _serialization = serialization;
         // Has to be a Valid JSON
-        RuleFor(x => x.ScoreElementParams.SerializedXapiEvent).Must(x => _serialization.IsValidJsonString(x))
+        RuleFor(x => x.ScoreElementParams.SerializedXapiEvent!).Must(serialization.IsValidJsonString)
             .WithMessage("Content is not a valid JSON");
     }
 }

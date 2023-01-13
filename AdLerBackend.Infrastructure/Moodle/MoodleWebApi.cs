@@ -231,7 +231,7 @@ public class MoodleWebApi : IMoodle
             throw new LmsException("Die Moodle Web Api ist nicht erreichbar: URL: " + url, e);
         }
     }
-
+#pragma warning disable CS8618
     private class UserTokenResponse
     {
         public string Token { get; set; }
@@ -271,4 +271,5 @@ public class MoodleWebApi : IMoodle
     {
         public bool Status { get; set; }
     }
+#pragma warning restore CS8618
 }

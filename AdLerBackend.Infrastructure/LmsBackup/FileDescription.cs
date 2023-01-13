@@ -1,4 +1,5 @@
 ﻿using System.Xml.Serialization;
+#pragma warning disable CS8618
 
 namespace AdLerBackend.Infrastructure.LmsBackup;
 

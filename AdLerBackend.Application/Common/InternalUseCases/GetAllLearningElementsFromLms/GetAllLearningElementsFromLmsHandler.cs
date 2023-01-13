@@ -73,11 +73,15 @@ public class GetAllLearningElementsFromLmsHandler : IRequestHandler<GetAllLearni
         };
 
         foreach (var datapoint in data)
+        {
+            if (datapoint.Modules == null || datapoint.Id == null)
+                throw new NotFoundException("Element with the Id " + datapoint.Id + " not found");
             response.ModulesWithID.Add(new ModuleWithId
             {
                 Id = (int) datapoint.Id!,
                 Module = datapoint.Modules
             });
+        }
 
         return response;
     }

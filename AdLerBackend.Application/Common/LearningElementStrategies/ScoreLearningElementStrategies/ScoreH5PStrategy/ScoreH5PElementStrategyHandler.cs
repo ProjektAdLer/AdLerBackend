@@ -37,12 +37,16 @@ public class
         xapiEvent.actor.name = userData.MoodleUserName;
         xapiEvent.actor.mbox = userData.UserEmail;
 
-        var moodleURL = _config["MoodleURL"];
+        var moodleUrl = _config["MoodleURL"];
+
+        // if moodle url is not set, throw exception
+        if (string.IsNullOrEmpty(moodleUrl))
+            throw new Exception("Moodle URL is not set in the configuration file");
 
         // if last character is a slash, remove it
-        if (moodleURL[^1] == '/') moodleURL = moodleURL[..^1];
+        if (moodleUrl[^1] == '/') moodleUrl = moodleUrl[..^1];
 
-        xapiEvent.@object.id = moodleURL + "/xapi/activity/" + contextId;
+        xapiEvent.@object.id = moodleUrl + "/xapi/activity/" + contextId;
 
         // serialize the XAPI Event again
         var inText = JsonSerializer.Serialize(xapiEvent);

@@ -82,10 +82,8 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             Detail = exception.Message,
             Status = StatusCodes.Status404NotFound
         };
-
-
+        
         context.Result = new NotFoundObjectResult(details);
-
         context.ExceptionHandled = true;
     }
 

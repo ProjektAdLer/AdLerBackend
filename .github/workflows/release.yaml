@@ -10,7 +10,7 @@ jobs:
       matrix:
         os: [ubuntu-18.04, ubuntu-20.04, windows-latest, macos-latest]
     env:
-      dotNetVersion: net6.0
+      dotNetVersion: net7.0
       dotNetConfiguration: Release
     steps:
       # checkout the repo
@@ -22,7 +22,7 @@ jobs:
       - name: Setup Dotnet for use with actions
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.x'
+          dotnet-version: '7.x'
 
       - name: Cache Nuget Packages
         uses: actions/cache@v2
@@ -42,7 +42,7 @@ jobs:
       contents: read
       packages: write
     env:
-      dotNetVersion: net6.0
+      dotNetVersion: net7.0
       dotNetConfiguration: Release
       REGISTRY: ghcr.io
       IMAGE_NAME: ${{ github.repository }}

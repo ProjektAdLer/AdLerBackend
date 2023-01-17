@@ -68,10 +68,10 @@ builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration, builder.Environment.IsDevelopment());
 builder.Services.Configure<FormOptions>(opt =>
 {
-    //100MB
-    opt.ValueLengthLimit = 104857600;
-    opt.MultipartBodyLengthLimit = 104857600;
-    opt.MultipartHeadersLengthLimit = 104857600;
+    //1GB
+    opt.ValueLengthLimit = 1048576000;
+    opt.MultipartBodyLengthLimit = 1048576000;
+    opt.MultipartHeadersLengthLimit = 1048576000;
 });
 
 builder.Services.AddCors(options =>

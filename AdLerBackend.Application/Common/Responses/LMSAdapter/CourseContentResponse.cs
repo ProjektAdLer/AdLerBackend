@@ -1,7 +1,7 @@
 ﻿#pragma warning disable CS8618
 namespace AdLerBackend.Application.Common.Responses.LMSAdapter;
 
-public class CourseContent
+public class WorldContent
 {
     public IList<Modules> Modules { get; set; }
 }

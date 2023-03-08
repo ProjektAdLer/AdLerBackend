@@ -1,6 +1,6 @@
 ﻿using AdLerBackend.Domain.Entities;
 using AdLerBackend.Infrastructure.Repositories.Common;
-using AdLerBackend.Infrastructure.UnitTests.Repositories.Courses;
+using AdLerBackend.Infrastructure.UnitTests.Repositories.Worlds;
 
 namespace AdLerBackend.Infrastructure.UnitTests.Repositories.Common;
 
@@ -10,7 +10,7 @@ public class GenericRepositoryTest : TestWithSqlite
     public async Task Add_Valid_AddsAEntityToDB()
     {
         // Arrange
-        var testEntity = new CourseEntity
+        var testEntity = new WorldEntity
         {
             Id = 1,
             Name = "Test Course",
@@ -24,13 +24,13 @@ public class GenericRepositoryTest : TestWithSqlite
                 }
             }
         };
-        var repository = new GenericRepository<CourseEntity>(DbContext);
+        var repository = new GenericRepository<WorldEntity>(DbContext);
 
         // Act
         await repository.AddAsync(testEntity);
 
         // Assert, that the entity was added to the database
-        var entity = DbContext.Courses.FirstOrDefault();
+        var entity = DbContext.Worlds.FirstOrDefault();
         Assert.NotNull(entity);
     }
 
@@ -38,14 +38,14 @@ public class GenericRepositoryTest : TestWithSqlite
     public async Task Delete_Valid_DeletesEntityFromDb()
     {
         // Arrange
-        var testEntity = new CourseEntity
+        var testEntity = new WorldEntity
         {
             Id = 1,
             Name = "Test Course",
             AuthorId = 1,
             DslLocation = "Test Dsl Location"
         };
-        var repository = new GenericRepository<CourseEntity>(DbContext);
+        var repository = new GenericRepository<WorldEntity>(DbContext);
 
         // Act
         await repository.AddAsync(testEntity);
@@ -53,7 +53,7 @@ public class GenericRepositoryTest : TestWithSqlite
         await repository.DeleteAsync(1);
 
         // Assert, that the entity was deleted from the database
-        var entity = DbContext.Courses.FirstOrDefault();
+        var entity = DbContext.Worlds.FirstOrDefault();
         Assert.Null(entity);
     }
 
@@ -61,14 +61,14 @@ public class GenericRepositoryTest : TestWithSqlite
     public async Task Exists_Valid_ReturnsTrueIfEntitEsists()
     {
         // Arrange
-        var testEntity = new CourseEntity
+        var testEntity = new WorldEntity
         {
             Id = 1,
             Name = "Test Course",
             AuthorId = 1,
             DslLocation = "Test Dsl Location"
         };
-        var repository = new GenericRepository<CourseEntity>(DbContext);
+        var repository = new GenericRepository<WorldEntity>(DbContext);
 
         // Act
         await repository.AddAsync(testEntity);
@@ -84,7 +84,7 @@ public class GenericRepositoryTest : TestWithSqlite
     {
         // Arrange
 
-        var repository = new GenericRepository<CourseEntity>(DbContext);
+        var repository = new GenericRepository<WorldEntity>(DbContext);
 
         // Act
 
@@ -98,14 +98,14 @@ public class GenericRepositoryTest : TestWithSqlite
     public async Task GetAll_Valid_GetsAllEntites()
     {
         // Arrange
-        var testEntity = new CourseEntity
+        var testEntity = new WorldEntity
         {
             Id = 1,
             Name = "Test Course",
             AuthorId = 1,
             DslLocation = "Test Dsl Location"
         };
-        var repository = new GenericRepository<CourseEntity>(DbContext);
+        var repository = new GenericRepository<WorldEntity>(DbContext);
 
         // Act
         await repository.AddAsync(testEntity);
@@ -123,14 +123,14 @@ public class GenericRepositoryTest : TestWithSqlite
     public async Task Update_Valid_UpdatesEntity()
     {
         // Arrange
-        var testEntity = new CourseEntity
+        var testEntity = new WorldEntity
         {
             Id = 1,
             Name = "Test Course",
             AuthorId = 1,
             DslLocation = "Test Dsl Location"
         };
-        var repository = new GenericRepository<CourseEntity>(DbContext);
+        var repository = new GenericRepository<WorldEntity>(DbContext);
 
         await repository.AddAsync(testEntity);
 
@@ -139,7 +139,7 @@ public class GenericRepositoryTest : TestWithSqlite
         await repository.UpdateAsync(testEntity);
 
         // Assert
-        var entity = DbContext.Courses.FirstOrDefault();
+        var entity = DbContext.Worlds.FirstOrDefault();
         Assert.That(entity.Name, Is.EqualTo("Updated Name"));
     }
 }

@@ -6,8 +6,8 @@ using AdLerBackend.Infrastructure.Moodle;
 using AdLerBackend.Infrastructure.Repositories;
 using AdLerBackend.Infrastructure.Repositories.BaseContext;
 using AdLerBackend.Infrastructure.Repositories.Common;
-using AdLerBackend.Infrastructure.Repositories.Courses;
 using AdLerBackend.Infrastructure.Repositories.Player;
+using AdLerBackend.Infrastructure.Repositories.Worlds;
 using AdLerBackend.Infrastructure.Services;
 using AdLerBackend.Infrastructure.Storage;
 using Microsoft.Extensions.Configuration;
@@ -23,11 +23,11 @@ public static class ConfigureServices
     {
         var httpClient = new HttpClient();
         // Add Moodle to DI
-        services.AddSingleton<IMoodle, MoodleWebApi>();
+        services.AddSingleton<ILMS, MoodleWebApi>();
         services.AddSingleton<ILmsBackupProcessor, LmsBackupProcessor>();
         services.AddScoped<IFileAccess, StorageService>();
         services.AddSingleton<ISerialization, SerializationService>();
-        services.AddScoped<ICourseRepository, CourseRepository>();
+        services.AddScoped<IWorldRepository, WorldRepository>();
         services.AddScoped<IPlayerRepository, PlayerRepository>();
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddTransient<IFileSystem, FileSystem>();

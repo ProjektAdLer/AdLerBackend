@@ -1,6 +1,6 @@
 using AdLerBackend.Application.Common.DTOs;
+using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.ScoreH5PStrategy;
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.LearningElementStrategies.ScoreLearningElementStrategies.ScoreH5PStrategy;
 using FluentAssertions;
 using FluentValidation.TestHelper;
 using NSubstitute;
@@ -20,7 +20,7 @@ public class ScoreH5PElementValidatorTest
         {
             ScoreElementParams = new ScoreElementParams
             {
-                SerializedXapiEvent = "string"
+                SerializedXAPIEvent = "string"
             }
         };
 

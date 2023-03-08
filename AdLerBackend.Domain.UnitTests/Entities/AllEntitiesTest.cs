@@ -23,6 +23,6 @@ public class CourseEntityTest
 
     private static IEnumerable<TestCaseData> GetTestCases()
     {
-        yield return new TestCaseData(new CourseEntity());
+        yield return new TestCaseData(new WorldEntity());
     }
 }

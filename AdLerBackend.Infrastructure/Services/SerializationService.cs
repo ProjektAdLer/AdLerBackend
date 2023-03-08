@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using AdLerBackend.Application.Common.Exceptions.LMSBAckupProcessor;
+using AdLerBackend.Application.Common.Exceptions.LMSBackupProcessor;
 using AdLerBackend.Application.Common.Interfaces;
 
 namespace AdLerBackend.Infrastructure.Services;

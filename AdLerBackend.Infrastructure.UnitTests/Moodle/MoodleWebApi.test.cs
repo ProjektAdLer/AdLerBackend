@@ -31,15 +31,15 @@ public class MoodleWebApiTest
     {
         // Arrange
         var test = Substitute.ForPartsOf<MoodleWebApi>(_mockHttp.ToHttpClient(), _configuration);
-        test.Configure().GetMoodleUserDataAsync("token").Returns(new MoodleUserDataResponse
+        test.Configure().GetLMSUserDataAsync("token").Returns(new LMSUserDataResponse
         {
             IsAdmin = true,
             UserId = 1,
-            MoodleUserName = "testUser"
+            LMSUserName = "testUser"
         });
 
         // Act
-        var result = await test.IsMoodleAdminAsync("token");
+        var result = await test.IsLMSAdminAsync("token");
 
         // Assert
         Assert.IsTrue(result);
@@ -53,7 +53,7 @@ public class MoodleWebApiTest
             "{\"total\":6,\"courses\":[{\"id\":315,\"fullname\":\"MetrikenTeil1Lernwelt\",\"displayname\":\"MetrikenTeil1Lernwelt\",\"shortname\":\"MetrikenTeil1Lernwelt\",\"categoryid\":10,\"categoryname\":\"PhilippsTesträume\",\"sortorder\":0,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"showactivitydates\":true,\"showcompletionconditions\":true,\"contacts\":[],\"enrollmentmethods\":[\"guest\"]},{\"id\":320,\"fullname\":\"Metriken_Teil2_Lernwelt\",\"displayname\":\"Metriken_Teil2_Lernwelt\",\"shortname\":\"Metriken_Teil2_Lernwelt\",\"categoryid\":10,\"categoryname\":\"PhilippsTesträume\",\"sortorder\":0,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"showactivitydates\":true,\"showcompletionconditions\":true,\"contacts\":[],\"enrollmentmethods\":[\"guest\"]},{\"id\":321,\"fullname\":\"Metriken_Teil3_Lernwelt\",\"displayname\":\"Metriken_Teil3_Lernwelt\",\"shortname\":\"Metriken_Teil3_Lernwelt\",\"categoryid\":10,\"categoryname\":\"PhilippsTesträume\",\"sortorder\":0,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"showactivitydates\":true,\"showcompletionconditions\":true,\"contacts\":[],\"enrollmentmethods\":[\"guest\"]},{\"id\":329,\"fullname\":\"MetrikenTeil3Lernwelt\",\"displayname\":\"MetrikenTeil3Lernwelt\",\"shortname\":\"MetrikenTeil3Lernwelt\",\"categoryid\":5,\"categoryname\":\"DimisTests\",\"sortorder\":0,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"showactivitydates\":true,\"showcompletionconditions\":true,\"contacts\":[],\"enrollmentmethods\":[\"guest\"]},{\"id\":330,\"fullname\":\"MetrikenTeil3LernweltMitUuidcopy1\",\"displayname\":\"MetrikenTeil3LernweltMitUuidcopy1\",\"shortname\":\"MetrikenTeil3Lernwelt_1\",\"categoryid\":5,\"categoryname\":\"DimisTests\",\"sortorder\":0,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"showactivitydates\":true,\"showcompletionconditions\":true,\"contacts\":[],\"enrollmentmethods\":[\"guest\"]},{\"id\":286,\"fullname\":\"LernweltMetriken\",\"displayname\":\"LernweltMetriken\",\"shortname\":\"LernweltMetriken\",\"categoryid\":5,\"categoryname\":\"DimisTests\",\"sortorder\":40004,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"showactivitydates\":true,\"showcompletionconditions\":true,\"contacts\":[],\"enrollmentmethods\":[\"guest\"]}],\"warnings\":[]}");
 
         // Act
-        var result = await _systemUnderTest.GetCoursesForUserAsync("token");
+        var result = await _systemUnderTest.GetWorldsForUserAsync("token");
 
         // Assert
         Assert.That(result.Total, Is.EqualTo(6));
@@ -69,7 +69,7 @@ public class MoodleWebApiTest
             );
 
         // Act
-        var result = await _systemUnderTest.GetCourseContentAsync("token", 1);
+        var result = await _systemUnderTest.GetWorldContentAsync("token", 1);
 
         // Assert
         Assert.That(result, Has.Length.EqualTo(4));
@@ -84,10 +84,10 @@ public class MoodleWebApiTest
                 "application/json", "{\"token\":\"testToken\"}");
 
         // Act
-        var result = await _systemUnderTest.GetMoodleUserTokenAsync("moodleUser", "moodlePassword");
+        var result = await _systemUnderTest.GetLMSUserTokenAsync("moodleUser", "moodlePassword");
 
         // Assert
-        Assert.That(result.MoodleToken, Is.EqualTo("testToken"));
+        Assert.That(result.LMSToken, Is.EqualTo("testToken"));
     }
 
     [Test]
@@ -101,7 +101,7 @@ public class MoodleWebApiTest
             );
 
         // Act
-        var result = await _systemUnderTest.SearchCoursesAsync("testToken", "testSearch");
+        var result = await _systemUnderTest.SearchWorldsAsync("testToken", "testSearch");
 
         // Assert
         Assert.That(result.Total, Is.EqualTo(2));
@@ -117,7 +117,7 @@ public class MoodleWebApiTest
                 "{\"error\":\"Invalidlogin,pleasetryagain\",\"errorcode\":\"invalidlogin\",\"stacktrace\":null,\"debuginfo\":null,\"reproductionlink\":null}");
 
         Assert.ThrowsAsync<LmsException>(() =>
-            _systemUnderTest.GetMoodleUserTokenAsync("moodleUser", "moodlePassword"));
+            _systemUnderTest.GetLMSUserTokenAsync("moodleUser", "moodlePassword"));
         return Task.CompletedTask;
     }
 
@@ -129,7 +129,7 @@ public class MoodleWebApiTest
             .Throw(new HttpRequestException());
 
         var exception = Assert.ThrowsAsync<LmsException>(async () =>
-            await _systemUnderTest.GetMoodleUserTokenAsync("moodleUser", "moodlePassword"));
+            await _systemUnderTest.GetLMSUserTokenAsync("moodleUser", "moodlePassword"));
         return Task.CompletedTask;
     }
 
@@ -143,7 +143,7 @@ public class MoodleWebApiTest
                 "<blablabla>");
 
         var exception = Assert.ThrowsAsync<LmsException>(async () =>
-            await _systemUnderTest.GetMoodleUserTokenAsync("moodleUser", "moodlePassword"));
+            await _systemUnderTest.GetLMSUserTokenAsync("moodleUser", "moodlePassword"));
 
         // check exception message
         Assert.That(exception!.Message, Is.EqualTo("Das Ergebnis der Moodle Web Api konnte nicht gelesen werden"));
@@ -174,7 +174,7 @@ public class MoodleWebApiTest
                 "application/json", JsonSerializer.Serialize(list));
 
         // Act
-        var result = await _systemUnderTest.GetMoodleUserDataAsync("moodleToken");
+        var result = await _systemUnderTest.GetLMSUserDataAsync("moodleToken");
 
         // Assert
         Assert.That(result.IsAdmin, Is.EqualTo(true));
@@ -191,7 +191,7 @@ public class MoodleWebApiTest
                 "{\"exception\":\"moodle_exception\",\"errorcode\":\"invalidtoken\",\"message\":\"Invalidtoken-tokennotfound\"}");
 
         var exception = Assert.ThrowsAsync<LmsException>(async () =>
-            await _systemUnderTest.GetMoodleUserDataAsync("moodleToken"));
+            await _systemUnderTest.GetLMSUserDataAsync("moodleToken"));
 
         // check exception message
         Assert.That(exception!.LmsErrorCode, Is.EqualTo("invalidtoken"));
@@ -251,7 +251,7 @@ public class MoodleWebApiTest
         _mockHttp.When("*").Respond("application/json", JsonSerializer.Serialize(obj));
 
         // Act
-        var result = await _systemUnderTest.ScoreGenericLearningElement("token", 1);
+        var result = await _systemUnderTest.ScoreGenericElement("token", 1);
 
         // Assert with FluentAssertions
         result.Should().BeTrue();

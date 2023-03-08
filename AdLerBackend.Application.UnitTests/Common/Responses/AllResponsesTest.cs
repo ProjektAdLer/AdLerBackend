@@ -1,5 +1,5 @@
 using AdLerBackend.Application.Common.Responses.Course;
-using AdLerBackend.Application.Common.Responses.LearningElements;
+using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.Player;
 using AutoBogus;
@@ -26,12 +26,12 @@ public class AllResponsesTest
     private static IEnumerable<TestCaseData> GetTestCases()
     {
         yield return new TestCaseData(new PlayerDataResponse());
-        yield return new TestCaseData(new LearningElementStatusResponse());
-        yield return new TestCaseData(new LearningElementScoreResponse());
-        yield return new TestCaseData(new CourseResponse());
+        yield return new TestCaseData(new ElementStatusResponse());
+        yield return new TestCaseData(new ElementScoreResponse());
+        yield return new TestCaseData(new WorldResponse());
         yield return new TestCaseData(new LearningWorld());
         yield return new TestCaseData(new PlayerDataResponse());
-        yield return new TestCaseData(new ScoreLearningElementResponse());
-        yield return new TestCaseData(new CourseContent());
+        yield return new TestCaseData(new ScoreElementResponse());
+        yield return new TestCaseData(new WorldContent());
     }
 }

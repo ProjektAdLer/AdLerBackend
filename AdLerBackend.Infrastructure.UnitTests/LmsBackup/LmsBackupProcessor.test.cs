@@ -1,5 +1,5 @@
 ﻿using AdLerBackend.Application.Common.Exceptions;
-using AdLerBackend.Application.Common.Exceptions.LMSBAckupProcessor;
+using AdLerBackend.Application.Common.Exceptions.LMSBackupProcessor;
 using AdLerBackend.Infrastructure.LmsBackup;
 
 #pragma warning disable CS8618
@@ -35,7 +35,7 @@ public class LmsBackupProcessorTest
         var systemUnderTest = new LmsBackupProcessor();
 
         // Act
-        var result = systemUnderTest.GetLevelDescriptionFromBackup(_dslFileStream);
+        var result = systemUnderTest.GetWorldDescriptionFromBackup(_dslFileStream);
 
         // Assert
         Assert.That(result, Is.Not.Null);

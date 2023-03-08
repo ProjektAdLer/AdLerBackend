@@ -1,42 +1,41 @@
 ﻿using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.Responses;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
-using AdLerBackend.Application.Moodle.GetMoodleToken;
+using AdLerBackend.Application.LMS.GetLMSToken;
 using NSubstitute;
 
 namespace AdLerBackend.Application.UnitTests.Moodle.GetMoodleToken;
 
 public class GerMoodleUserTokenHandlerTest
 {
-    private IMoodle _moodleMock;
-    private GetMoodleUserTokenHandler _systemUnderTest;
+    private ILMS _ilmsMock;
+    private GetLMSUserTokenHandler _systemUnderTest;
 
     [SetUp]
     public void SetUp()
     {
-        _moodleMock = Substitute.For<IMoodle>();
-        _systemUnderTest = new GetMoodleUserTokenHandler(_moodleMock);
+        _ilmsMock = Substitute.For<ILMS>();
+        _systemUnderTest = new GetLMSUserTokenHandler(_ilmsMock);
     }
 
     [Test]
     public async Task Handle_Should_Return_Token()
     {
         // Arrange
-        var request = new GetMoodleTokenCommand
+        var request = new GetLMSTokenCommand
         {
             UserName = "username",
             Password = "password"
         };
-        _moodleMock.GetMoodleUserTokenAsync(request.UserName, request.Password).Returns(new MoodleUserTokenResponse
+        _ilmsMock.GetLMSUserTokenAsync(request.UserName, request.Password).Returns(new LMSUserTokenResponse
         {
-            MoodleToken = "token"
+            LMSToken = "token"
         });
 
         // Act
         var result = await _systemUnderTest.Handle(request, CancellationToken.None);
 
         // Assert
-        await _moodleMock.Received(1).GetMoodleUserTokenAsync(request.UserName, request.Password);
-        Assert.That("token", Is.EqualTo(result.MoodleToken));
+        await _ilmsMock.Received(1).GetLMSUserTokenAsync(request.UserName, request.Password);
+        Assert.That("token", Is.EqualTo(result.LMSToken));
     }
 }

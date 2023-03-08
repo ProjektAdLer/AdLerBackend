@@ -13,22 +13,22 @@ namespace AdLerBackend.Application.UnitTests.Player.UpdatePlayerData;
 
 public class UpdatePlayerDataTest
 {
-    private IMoodle _moodle;
+    private ILMS _ilms;
     private IPlayerRepository _playerRepository;
 
     [SetUp]
     public void Setup()
     {
         _playerRepository = Substitute.For<IPlayerRepository>();
-        _moodle = Substitute.For<IMoodle>();
+        _ilms = Substitute.For<ILMS>();
     }
 
     [Test]
     public async Task UpdatePlayerData_Valid()
     {
         // Arrange
-        var systemUnderTest = new UpdatePlayerDataHandler(_playerRepository, _moodle);
-        _moodle.GetMoodleUserDataAsync(Arg.Any<string>()).Returns(new MoodleUserDataResponse
+        var systemUnderTest = new UpdatePlayerDataHandler(_playerRepository, _ilms);
+        _ilms.GetLMSUserDataAsync(Arg.Any<string>()).Returns(new LMSUserDataResponse
         {
             UserId = 1
         });

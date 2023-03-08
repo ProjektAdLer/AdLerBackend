@@ -1,10 +1,9 @@
-using AdLerBackend.Application.Common.InternalUseCases.GetLearningElementLmsInformation;
-using AdLerBackend.Application.Common.LearningElementStrategies.GetLearningElementScoreStrategies.
-    GetH5PLearningElementScoreStrategy;
+using AdLerBackend.Application.Common.ElementStrategies.GetElementScoreStrategies.GetH5PElementScoreStrategy;
+using AdLerBackend.Application.Common.InternalUseCases.GetElementLmsInformation;
 using AdLerBackend.Application.Common.Responses.Course;
-using AdLerBackend.Application.Common.Responses.LearningElements;
+using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
-using AdLerBackend.Application.LearningElement.GetLearningElementScore;
+using AdLerBackend.Application.Element.GetElementScore;
 using FluentAssertions;
 using MediatR;
 using NSubstitute;
@@ -28,12 +27,12 @@ public class GetLearningElementScore
     public async Task GetLearningElementScore_Valid_GetsScoreFromApi(string modname, bool sucess)
     {
         // Arrange
-        var systemUnderTest = new GetLearningElementScoreHandler(_mediator);
+        var systemUnderTest = new GetElementScoreHandler(_mediator);
 
-        _mediator.Send(Arg.Any<GetLearningElementLmsInformationCommand>())
-            .Returns(new GetLearningElementLmsInformationResponse
+        _mediator.Send(Arg.Any<GetElementLmsInformationCommand>())
+            .Returns(new GetElementLmsInformationResponse
             {
-                LearningElementData = new Modules
+                ElementData = new Modules
                 {
                     contextid = 1,
                     Id = 1,
@@ -43,35 +42,35 @@ public class GetLearningElementScore
                 }
             });
 
-        _mediator.Send(Arg.Any<GetH5PLearningElementScoreStrategyCommand>()).Returns(new LearningElementScoreResponse
+        _mediator.Send(Arg.Any<GetH5PElementScoreStrategyCommand>()).Returns(new ElementScoreResponse
         {
-            successss = sucess,
+            Success = sucess,
             ElementId = 1
         });
 
 
         // Act
-        var result = await systemUnderTest.Handle(new GetLearningElementScoreCommand
+        var result = await systemUnderTest.Handle(new GetElementScoreCommand
         {
-            learningElementId = 1,
+            ElementId = 1,
             lerningWorldId = 1,
             WebServiceToken = "token"
         }, CancellationToken.None);
 
         // Assert
-        result.successss.Should().Be(sucess);
+        result.Success.Should().Be(sucess);
     }
 
     [TestCase("INVALID", false)]
     public async Task GetLearningElementScore_InvalidLearningElementType_GetsScoreFromApi(string modname, bool sucess)
     {
         // Arrange
-        var systemUnderTest = new GetLearningElementScoreHandler(_mediator);
+        var systemUnderTest = new GetElementScoreHandler(_mediator);
 
-        _mediator.Send(Arg.Any<GetLearningElementLmsInformationCommand>())
-            .Returns(new GetLearningElementLmsInformationResponse
+        _mediator.Send(Arg.Any<GetElementLmsInformationCommand>())
+            .Returns(new GetElementLmsInformationResponse
             {
-                LearningElementData = new Modules
+                ElementData = new Modules
                 {
                     contextid = 1,
                     Id = 1,
@@ -81,9 +80,9 @@ public class GetLearningElementScore
                 }
             });
 
-        _mediator.Send(Arg.Any<GetH5PLearningElementScoreStrategyCommand>()).Returns(new LearningElementScoreResponse
+        _mediator.Send(Arg.Any<GetH5PElementScoreStrategyCommand>()).Returns(new ElementScoreResponse
         {
-            successss = sucess,
+            Success = sucess,
             ElementId = 1
         });
 
@@ -91,9 +90,9 @@ public class GetLearningElementScore
         // Act
         // Assert
         Assert.ThrowsAsync<NotImplementedException>(async () => await systemUnderTest.Handle(
-            new GetLearningElementScoreCommand
+            new GetElementScoreCommand
             {
-                learningElementId = 1,
+                ElementId = 1,
                 lerningWorldId = 1,
                 WebServiceToken = "token"
             }, CancellationToken.None));

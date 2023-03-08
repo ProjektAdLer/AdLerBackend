@@ -1,9 +1,9 @@
-using AdLerBackend.Application.Common.InternalUseCases.GetLearningElementLmsInformation;
+using AdLerBackend.Application.Common.InternalUseCases.GetElementLmsInformation;
 using AdLerBackend.Application.Common.Responses.Course;
-using AdLerBackend.Application.Common.Responses.LearningElements;
+using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
-using AdLerBackend.Application.LearningElement.GetLearningElementSource;
-using AdLerBackend.Application.LearningElement.GetLearningElementSource.GetH5PFilePath;
+using AdLerBackend.Application.Element.GetElementSource;
+using AdLerBackend.Application.Element.GetElementSource.GetH5PFilePath;
 using FluentAssertions;
 using MediatR;
 using NSubstitute;
@@ -25,12 +25,12 @@ public class GetLearningElementSourceTest
     public async Task GetLearningElementSource_Valid_GenericElements(string resourceType)
     {
         // Arrange
-        var systemUnderTest = new GetLearningElementSourceHandler(_mediator);
+        var systemUnderTest = new GetElementSourceHandler(_mediator);
 
-        _mediator.Send(Arg.Any<GetLearningElementLmsInformationCommand>())
-            .Returns(new GetLearningElementLmsInformationResponse
+        _mediator.Send(Arg.Any<GetElementLmsInformationCommand>())
+            .Returns(new GetElementLmsInformationResponse
             {
-                LearningElementData = new Modules
+                ElementData = new Modules
                 {
                     ModName = resourceType,
                     Contents = new List<FileContents>
@@ -44,9 +44,9 @@ public class GetLearningElementSourceTest
             });
 
         // Act
-        var result = await systemUnderTest.Handle(new GetLearningElementSourceCommand
+        var result = await systemUnderTest.Handle(new GetElementSourceCommand
         {
-            CourseId = 1,
+            WorldId = 1,
             ElementId = 1,
             WebServiceToken = "token"
         }, CancellationToken.None);
@@ -59,12 +59,12 @@ public class GetLearningElementSourceTest
     public async Task GetLearningElementSource_Valid_H5PElements()
     {
         // Arrange
-        var systemUnderTest = new GetLearningElementSourceHandler(_mediator);
+        var systemUnderTest = new GetElementSourceHandler(_mediator);
 
-        _mediator.Send(Arg.Any<GetLearningElementLmsInformationCommand>())
-            .Returns(new GetLearningElementLmsInformationResponse
+        _mediator.Send(Arg.Any<GetElementLmsInformationCommand>())
+            .Returns(new GetElementLmsInformationResponse
             {
-                LearningElementData = new Modules
+                ElementData = new Modules
                 {
                     ModName = "h5pactivity",
                     Contents = new List<FileContents>
@@ -78,15 +78,15 @@ public class GetLearningElementSourceTest
             });
 
         _mediator.Send(Arg.Any<GetH5PFilePathCommand>())
-            .Returns(new GetLearningElementSourceResponse
+            .Returns(new GetElementSourceResponse
             {
                 FilePath = "testURL"
             });
 
         // Act
-        var result = await systemUnderTest.Handle(new GetLearningElementSourceCommand
+        var result = await systemUnderTest.Handle(new GetElementSourceCommand
         {
-            CourseId = 1,
+            WorldId = 1,
             ElementId = 1,
             WebServiceToken = "token"
         }, CancellationToken.None);
@@ -99,12 +99,12 @@ public class GetLearningElementSourceTest
     public async Task GetLearningElementSource_InvalidRessourceName_Throws()
     {
         // Arrange
-        var systemUnderTest = new GetLearningElementSourceHandler(_mediator);
+        var systemUnderTest = new GetElementSourceHandler(_mediator);
 
-        _mediator.Send(Arg.Any<GetLearningElementLmsInformationCommand>())
-            .Returns(new GetLearningElementLmsInformationResponse
+        _mediator.Send(Arg.Any<GetElementLmsInformationCommand>())
+            .Returns(new GetElementLmsInformationResponse
             {
-                LearningElementData = new Modules
+                ElementData = new Modules
                 {
                     ModName = "h5pactivity123456789",
                     Contents = new List<FileContents>
@@ -118,7 +118,7 @@ public class GetLearningElementSourceTest
             });
 
         _mediator.Send(Arg.Any<GetH5PFilePathCommand>())
-            .Returns(new GetLearningElementSourceResponse
+            .Returns(new GetElementSourceResponse
             {
                 FilePath = "testURL"
             });
@@ -126,9 +126,9 @@ public class GetLearningElementSourceTest
         // Act
         // Assert
         Assert.ThrowsAsync<NotImplementedException>(async () => await systemUnderTest.Handle(
-            new GetLearningElementSourceCommand
+            new GetElementSourceCommand
             {
-                CourseId = 1,
+                WorldId = 1,
                 ElementId = 1,
                 WebServiceToken = "token"
             }, CancellationToken.None));

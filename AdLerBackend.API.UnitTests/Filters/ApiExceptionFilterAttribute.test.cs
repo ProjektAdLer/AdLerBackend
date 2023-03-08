@@ -46,7 +46,7 @@ public class ApiExceptionFilterAttributeTest
     public void ApiExceptionFilterAttribute_Should_Handle_InvalidMoodleLogin()
     {
         // Arrange
-        _context.Exception = new InvalidMoodleLoginException();
+        _context.Exception = new InvalidLMSLoginException();
 
         // Act
         _filter.OnException(_context);
@@ -146,7 +146,7 @@ public class ApiExceptionFilterAttributeTest
     public void ApiExceptionFilterAttribute_CourseCreationException()
     {
         // Arrange
-        _context.Exception = new CourseCreationException("Test");
+        _context.Exception = new WorldCreationException("Test");
 
         // Act
         _filter.OnException(_context);

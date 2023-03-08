@@ -1,6 +1,6 @@
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.LearningElement.GetLearningElementSource.GetH5PFilePath;
+using AdLerBackend.Application.Element.GetElementSource.GetH5PFilePath;
 using AdLerBackend.Domain.Entities;
 using AutoBogus;
 using NSubstitute;
@@ -11,20 +11,20 @@ namespace AdLerBackend.Application.UnitTests.LearningElements.H5P;
 
 public class GetH5PFilePathTest
 {
-    private ICourseRepository _courseRepository;
+    private IWorldRepository _worldRepository;
 
     [SetUp]
     public void Setup()
     {
-        _courseRepository = Substitute.For<ICourseRepository>();
+        _worldRepository = Substitute.For<IWorldRepository>();
     }
 
     [Test]
     public async Task GetH5PFilePath_WhenCalled_ReturnsH5PFilePath()
     {
         // Arrange
-        var systemUnderTest = new GetH5PFilePathHandler(_courseRepository);
-        var courseMock = AutoFaker.Generate<CourseEntity>();
+        var systemUnderTest = new GetH5PFilePathHandler(_worldRepository);
+        var courseMock = AutoFaker.Generate<WorldEntity>();
 
         courseMock.Id = 1;
         courseMock.H5PFilesInCourse = new List<H5PLocationEntity>
@@ -37,12 +37,12 @@ public class GetH5PFilePathTest
             }
         };
 
-        _courseRepository.GetAsync(Arg.Any<int>()).Returns(courseMock);
+        _worldRepository.GetAsync(Arg.Any<int>()).Returns(courseMock);
 
         // Act
         var result = await systemUnderTest.Handle(new GetH5PFilePathCommand
         {
-            CourseId = 1,
+            WorldId = 1,
             ElementId = 2,
             WebServiceToken = "token"
         }, CancellationToken.None);
@@ -55,17 +55,17 @@ public class GetH5PFilePathTest
     public async Task GetH5PFilePath_CourseNotFound_Throws()
     {
         // Arrange
-        var systemUnderTest = new GetH5PFilePathHandler(_courseRepository);
+        var systemUnderTest = new GetH5PFilePathHandler(_worldRepository);
 
 
-        _courseRepository.GetAsync(Arg.Any<int>()).Returns((CourseEntity) null);
+        _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity) null);
 
         // Act
         // Assert
         Assert.ThrowsAsync<NotFoundException>(async () => await systemUnderTest.Handle(
             new GetH5PFilePathCommand
             {
-                CourseId = 1,
+                WorldId = 1,
                 ElementId = 2,
                 WebServiceToken = "token"
             }, CancellationToken.None));
@@ -75,10 +75,10 @@ public class GetH5PFilePathTest
     public async Task GetH5PFilePath_H5PFileNotFound_Throws()
     {
         // Arrange
-        var systemUnderTest = new GetH5PFilePathHandler(_courseRepository);
+        var systemUnderTest = new GetH5PFilePathHandler(_worldRepository);
 
 
-        var courseMock = AutoFaker.Generate<CourseEntity>();
+        var courseMock = AutoFaker.Generate<WorldEntity>();
 
         courseMock.Id = 1;
         courseMock.H5PFilesInCourse = new List<H5PLocationEntity>
@@ -91,14 +91,14 @@ public class GetH5PFilePathTest
             }
         };
 
-        _courseRepository.GetAsync(Arg.Any<int>()).Returns(courseMock);
+        _worldRepository.GetAsync(Arg.Any<int>()).Returns(courseMock);
 
         // Act
         // Assert
         Assert.ThrowsAsync<NotFoundException>(async () => await systemUnderTest.Handle(
             new GetH5PFilePathCommand
             {
-                CourseId = 1,
+                WorldId = 1,
                 ElementId = 2,
                 WebServiceToken = "token"
             }, CancellationToken.None));

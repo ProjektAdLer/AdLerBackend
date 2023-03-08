@@ -8,20 +8,20 @@ namespace AdLerBackend.Application.UnitTests.Common.InternalUseCases;
 
 public class CheckUserPrivilegesTest
 {
-    private IMoodle _moodle;
+    private ILMS _ilms;
 
     [SetUp]
     public void Setup()
     {
-        _moodle = Substitute.For<IMoodle>();
+        _ilms = Substitute.For<ILMS>();
     }
 
     [Test]
     public async Task CheckUserPrivileges_WhenUserIsNotAdmin_ThrowsException()
     {
         // Arrange
-        _moodle.IsMoodleAdminAsync(Arg.Any<string>()).Returns(false);
-        var systemUnderTest = new CheckUserPrivilegesHandler(_moodle);
+        _ilms.IsLMSAdminAsync(Arg.Any<string>()).Returns(false);
+        var systemUnderTest = new CheckUserPrivilegesHandler(_ilms);
 
         // Act
         // Assert
@@ -37,8 +37,8 @@ public class CheckUserPrivilegesTest
     public async Task CheckUserPrivileges_ReturnsUnitValue()
     {
         // Arrange
-        _moodle.IsMoodleAdminAsync(Arg.Any<string>()).Returns(true);
-        var systemUnderTest = new CheckUserPrivilegesHandler(_moodle);
+        _ilms.IsLMSAdminAsync(Arg.Any<string>()).Returns(true);
+        var systemUnderTest = new CheckUserPrivilegesHandler(_ilms);
 
         // Act
         var ret = await systemUnderTest.Handle(new CheckUserPrivilegesCommand

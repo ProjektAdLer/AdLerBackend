@@ -15,12 +15,12 @@ public class StorageService : IFileAccess
         _fileSystem = fileSystem;
     }
 
-    public List<string>? StoreH5PFilesForCourse(CourseStoreH5PDto courseToStoreH5P)
+    public List<string>? StoreH5PFilesForWorld(WorldStoreH5PDto worldToStoreH5P)
     {
-        var workingDir = _fileSystem.Path.Join("wwwroot", "courses", courseToStoreH5P.AuthorId.ToString(),
-            courseToStoreH5P.CourseInforamtion.LearningWorld.Identifier.Value, "h5p");
+        var workingDir = _fileSystem.Path.Join("wwwroot", "courses", worldToStoreH5P.AuthorId.ToString(),
+            worldToStoreH5P.WorldInforamtion.LearningWorld.Identifier.Value, "h5p");
 
-        var h5PFilePaths = courseToStoreH5P.H5PFiles.Select(item =>
+        var h5PFilePaths = worldToStoreH5P.H5PFiles.Select(item =>
         {
             var zipStream = new ZipArchive(item.H5PFile!, ZipArchiveMode.Read);
 
@@ -35,22 +35,22 @@ public class StorageService : IFileAccess
         return h5PFilePaths;
     }
 
-    public string StoreDslFileForCourse(StoreCourseDslDto courseToStoreH5P)
+    public string StoreATFFileForWorld(StoreWorldATFDto worldToStoreH5P)
     {
-        courseToStoreH5P.DslFile.Position = 0;
-        var workingDir = _fileSystem.Path.Join("wwwroot", "courses", courseToStoreH5P.AuthorId.ToString(),
-            courseToStoreH5P.CourseInforamtion.LearningWorld.Identifier.Value);
+        worldToStoreH5P.ATFFile.Position = 0;
+        var workingDir = _fileSystem.Path.Join("wwwroot", "courses", worldToStoreH5P.AuthorId.ToString(),
+            worldToStoreH5P.WorldInforamtion.LearningWorld.Identifier.Value);
 
         // save stream on courseToStore on disk
         var dslFilePath = _fileSystem.Path.Combine(workingDir,
-            courseToStoreH5P.CourseInforamtion.LearningWorld.Identifier.Value + ".json");
+            worldToStoreH5P.WorldInforamtion.LearningWorld.Identifier.Value + ".json");
 
         // create directory if not exists
         if (!_fileSystem.Directory.Exists(workingDir))
             _fileSystem.Directory.CreateDirectory(workingDir);
 
         var fileStream = _fileSystem.FileStream.Create(dslFilePath, FileMode.Create);
-        courseToStoreH5P.DslFile.CopyTo(fileStream);
+        worldToStoreH5P.ATFFile.CopyTo(fileStream);
         fileStream.Close();
         return dslFilePath;
     }
@@ -80,10 +80,10 @@ public class StorageService : IFileAccess
         return workingPath;
     }
 
-    public bool DeleteCourse(CourseDeleteDto courseToDelete)
+    public bool DeleteWorld(WorldDeleteDto worldToDelete)
     {
-        var workingDir = _fileSystem.Path.Join("wwwroot", "courses", courseToDelete.AuthorId.ToString(),
-            courseToDelete.CourseName);
+        var workingDir = _fileSystem.Path.Join("wwwroot", "courses", worldToDelete.AuthorId.ToString(),
+            worldToDelete.WorldName);
 
         _fileSystem.Directory.Delete(workingDir, true);
         return true;

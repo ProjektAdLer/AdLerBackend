@@ -7,23 +7,23 @@ namespace AdLerBackend.Application.UnitTests.Player.DeletePlayerData;
 
 public class DeletePlayerDataTest
 {
-    private IMoodle _moodle;
+    private ILMS _ilms;
     private IPlayerRepository _playerRepository;
 
     [SetUp]
     public void Setup()
     {
         _playerRepository = Substitute.For<IPlayerRepository>();
-        _moodle = Substitute.For<IMoodle>();
+        _ilms = Substitute.For<ILMS>();
     }
 
     [Test]
     public async Task Handler_DeletesPlayer()
     {
         // Arrange
-        var systemUnderTest = new DeletePlayerDataHandler(_playerRepository, _moodle);
+        var systemUnderTest = new DeletePlayerDataHandler(_playerRepository, _ilms);
 
-        _moodle.GetMoodleUserDataAsync(Arg.Any<string>()).Returns(new MoodleUserDataResponse
+        _ilms.GetLMSUserDataAsync(Arg.Any<string>()).Returns(new LMSUserDataResponse
         {
             UserId = 1
         });

@@ -33,10 +33,10 @@ public class StorageServiceTest
     {
         // Arrange
         var storageService = new StorageService(_fileSystem);
-        var CourseDtoFake = new CourseStoreH5PDto
+        var CourseDtoFake = new WorldStoreH5PDto
         {
             AuthorId = 1,
-            CourseInforamtion = AutoFaker.Generate<LearningWorldDtoResponse>(),
+            WorldInforamtion = AutoFaker.Generate<WorldDtoResponse>(),
             H5PFiles = new List<H5PDto>
             {
                 new()
@@ -47,16 +47,19 @@ public class StorageServiceTest
             }
         };
 
-        CourseDtoFake.CourseInforamtion.LearningWorld.Identifier.Value = "LearningWorldIdentifier";
+        CourseDtoFake.WorldInforamtion.LearningWorld.Identifier.Value = "LearningWorldIdentifier";
 
         // Act
-        var retunValue = storageService.StoreH5PFilesForCourse(CourseDtoFake);
+        var retunValue = storageService.StoreH5PFilesForWorld(CourseDtoFake);
 
         // Assert
-        var path = _fileSystem.Path.Combine("wwwroot","courses","1","LearningWorldIdentifier","h5p","H5PName","Folder");
+        var path = _fileSystem.Path.Combine("wwwroot", "courses", "1", "LearningWorldIdentifier", "h5p", "H5PName",
+            "Folder");
         var fileInFolder =
-            _fileSystem.Path.Combine("wwwroot","courses","1","LearningWorldIdentifier","h5p","H5PName","Folder","FileInFolder");
-        var textFile = _fileSystem.Path.Combine("wwwroot","courses","1","LearningWorldIdentifier","h5p","H5PName","fileAtRoot.txt");
+            _fileSystem.Path.Combine("wwwroot", "courses", "1", "LearningWorldIdentifier", "h5p", "H5PName", "Folder",
+                "FileInFolder");
+        var textFile = _fileSystem.Path.Combine("wwwroot", "courses", "1", "LearningWorldIdentifier", "h5p", "H5PName",
+            "fileAtRoot.txt");
         Assert.IsTrue(_fileSystem.Directory.Exists(path));
         Assert.IsTrue(
             _fileSystem.File.Exists(fileInFolder));
@@ -64,7 +67,9 @@ public class StorageServiceTest
 
 
         Assert.That(retunValue!, Has.Count.EqualTo(1));
-        Assert.That(retunValue![0], Is.EqualTo(_fileSystem.Path.Combine("wwwroot","courses","1","LearningWorldIdentifier","h5p","H5PName")));
+        Assert.That(retunValue![0],
+            Is.EqualTo(_fileSystem.Path.Combine("wwwroot", "courses", "1", "LearningWorldIdentifier", "h5p",
+                "H5PName")));
     }
 
     [Test]
@@ -72,18 +77,18 @@ public class StorageServiceTest
     {
         // Arrange
         var storageService = new StorageService(_fileSystem);
-        var dto = new StoreCourseDslDto
+        var dto = new StoreWorldATFDto
         {
             AuthorId = 1,
-            CourseInforamtion = AutoFaker.Generate<LearningWorldDtoResponse>(),
+            WorldInforamtion = AutoFaker.Generate<WorldDtoResponse>(),
             //DSL_Document.json contains data that is required for the test and should be loaded from disk
-            DslFile = new FileStream("../../../Storage/TestFiles/DSL_Document.json", FileMode.Open)
+            ATFFile = new FileStream("../../../Storage/TestFiles/DSL_Document.json", FileMode.Open)
         };
 
-        dto.CourseInforamtion.LearningWorld.Identifier.Value = "LearningWorldIdentifier";
+        dto.WorldInforamtion.LearningWorld.Identifier.Value = "LearningWorldIdentifier";
 
         // Act
-        var dslLocation = storageService.StoreDslFileForCourse(dto);
+        var dslLocation = storageService.StoreATFFileForWorld(dto);
 
         // Assert
         var file = _fileSystem.Path.Combine("wwwroot", "courses", "1", "LearningWorldIdentifier",
@@ -150,10 +155,10 @@ public class StorageServiceTest
     public void DeleteCourse_Valid_DeletesCourse()
     {
         // Arrange
-        var dto = new CourseDeleteDto
+        var dto = new WorldDeleteDto
         {
             AuthorId = 1,
-            CourseName = "CourseName"
+            WorldName = "CourseName"
         };
         var folder = Path.Combine("wwwroot", "courses", "1", "CourseName");
         var file = Path.Combine(folder, "CourseName.json");
@@ -165,7 +170,7 @@ public class StorageServiceTest
         var storageService = new StorageService(_fileSystem);
 
         // Act
-        storageService.DeleteCourse(dto);
+        storageService.DeleteWorld(dto);
 
         // Assert
         Assert.IsFalse(_fileSystem.Directory.Exists(folder));

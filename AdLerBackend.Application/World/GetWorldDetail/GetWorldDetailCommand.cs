@@ -1,0 +1,9 @@
+﻿using AdLerBackend.Application.Common;
+using AdLerBackend.Application.Common.Responses.Course;
+
+namespace AdLerBackend.Application.World.GetWorldDetail;
+
+public record GetWorldDetailCommand : CommandWithToken<WorldDtoResponse>
+{
+    public int WorldId { get; init; }
+}

@@ -6,19 +6,19 @@ namespace AdLerBackend.Application.Player.GetPlayerData;
 
 public class GetPlayerDataHandler : IRequestHandler<GetPlayerDataCommand, PlayerDataResponse>
 {
-    private readonly IMoodle _moodle;
+    private readonly ILMS _ilms;
     private readonly IPlayerRepository _playerDataRepository;
 
-    public GetPlayerDataHandler(IMoodle moodle, IPlayerRepository playerDataRepository1)
+    public GetPlayerDataHandler(ILMS ilms, IPlayerRepository playerDataRepository1)
     {
-        _moodle = moodle;
+        _ilms = ilms;
         _playerDataRepository = playerDataRepository1;
     }
 
     public async Task<PlayerDataResponse> Handle(GetPlayerDataCommand request, CancellationToken cancellationToken)
     {
         // Get Player Id from Moodle
-        var playerMoodleData = await _moodle.GetMoodleUserDataAsync(request.WebServiceToken);
+        var playerMoodleData = await _ilms.GetLMSUserDataAsync(request.WebServiceToken);
 
         // Get Player Data from Database
         var playerData = await _playerDataRepository.EnsureGetAsync(playerMoodleData.UserId);

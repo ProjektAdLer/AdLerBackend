@@ -1,10 +1,9 @@
 ﻿using AdLerBackend.Application.Common.Behaviours;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
-using AdLerBackend.Application.Common.Responses;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
-using AdLerBackend.Application.Moodle.GetMoodleToken;
-using AdLerBackend.Application.Moodle.GetUserData;
+using AdLerBackend.Application.LMS.GetLMSToken;
+using AdLerBackend.Application.LMS.GetUserData;
 using MediatR;
 using MediatR.Pipeline;
 
@@ -17,15 +16,15 @@ public class ExceptionHandlingBehaviourTest
     {
         // Arrange
         var systemUnderTest =
-            new ExceptionHandlingBehaviour<IRequest<MoodleUserDataResponse>, MoodleUserDataResponse, LmsException>();
+            new ExceptionHandlingBehaviour<IRequest<LMSUserDataResponse>, LMSUserDataResponse, LmsException>();
 
         // Act
         Assert.ThrowsAsync<InvalidTokenException>(() =>
-            systemUnderTest.Handle(new GetMoodleUserDataCommand(), new LmsException
+            systemUnderTest.Handle(new GetLMSUserDataCommand(), new LmsException
                 {
                     LmsErrorCode = "invalidtoken"
                 },
-                new RequestExceptionHandlerState<MoodleUserDataResponse>(), CancellationToken.None));
+                new RequestExceptionHandlerState<LMSUserDataResponse>(), CancellationToken.None));
         return Task.CompletedTask;
     }
 
@@ -34,15 +33,15 @@ public class ExceptionHandlingBehaviourTest
     {
         // Arrange
         var systemUnderTest =
-            new ExceptionHandlingBehaviour<IRequest<MoodleUserTokenResponse>, MoodleUserTokenResponse, LmsException>();
+            new ExceptionHandlingBehaviour<IRequest<LMSUserTokenResponse>, LMSUserTokenResponse, LmsException>();
 
         // Act
-        Assert.ThrowsAsync<InvalidMoodleLoginException>(() =>
-            systemUnderTest.Handle(new GetMoodleTokenCommand(), new LmsException
+        Assert.ThrowsAsync<InvalidLMSLoginException>(() =>
+            systemUnderTest.Handle(new GetLMSTokenCommand(), new LmsException
                 {
                     LmsErrorCode = "invalidlogin"
                 },
-                new RequestExceptionHandlerState<MoodleUserTokenResponse>(), CancellationToken.None));
+                new RequestExceptionHandlerState<LMSUserTokenResponse>(), CancellationToken.None));
         return Task.CompletedTask;
     }
 
@@ -51,18 +50,18 @@ public class ExceptionHandlingBehaviourTest
     {
         // Arrange
         var systemUnderTest =
-            new ExceptionHandlingBehaviour<IRequest<MoodleUserTokenResponse>, MoodleUserTokenResponse, LmsException>();
+            new ExceptionHandlingBehaviour<IRequest<LMSUserTokenResponse>, LMSUserTokenResponse, LmsException>();
 
         // Act
         Assert.ThrowsAsync<LmsException>(() =>
-            systemUnderTest.Handle(new GetMoodleTokenCommand(), new LmsException
+            systemUnderTest.Handle(new GetLMSTokenCommand(), new LmsException
                 {
                     LmsErrorCode = "invalidErrorCode"
                 },
-                new RequestExceptionHandlerState<MoodleUserTokenResponse>(), CancellationToken.None));
+                new RequestExceptionHandlerState<LMSUserTokenResponse>(), CancellationToken.None));
         return Task.CompletedTask;
     }
-    
+
     // [Test]
     // public Task ExceptionBehaviour_NotLmsException_ForwardException()
     // {

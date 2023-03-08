@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace AdLerBackend.Infrastructure.Moodle;
 
-public class MoodleWebApi : IMoodle
+public class MoodleWebApi : ILMS
 {
     private readonly HttpClient _client;
     private readonly IConfiguration _configuration;
@@ -18,7 +18,7 @@ public class MoodleWebApi : IMoodle
         _configuration = configuration;
     }
 
-    public async Task<MoodleUserTokenResponse> GetMoodleUserTokenAsync(string userName, string password)
+    public async Task<LMSUserTokenResponse> GetLMSUserTokenAsync(string userName, string password)
     {
         var resp = await MoodleCallAsync<UserTokenResponse>(new Dictionary<string, string>
         {
@@ -30,27 +30,27 @@ public class MoodleWebApi : IMoodle
             Endpoint = PostToMoodleOptions.Endpoints.Login
         });
 
-        return new MoodleUserTokenResponse
+        return new LMSUserTokenResponse
         {
-            MoodleToken = resp.Token
+            LMSToken = resp.Token
         };
     }
 
-    public async Task<CourseContent[]> GetCourseContentAsync(string token, int courseId)
+    public async Task<WorldContent[]> GetWorldContentAsync(string token, int worldId)
     {
-        var resp = await MoodleCallAsync<CourseContent[]>(new Dictionary<string, string>
+        var resp = await MoodleCallAsync<WorldContent[]>(new Dictionary<string, string>
         {
             {"wstoken", token},
             {"moodlewsrestformat", "json"},
             {"wsfunction", "core_course_get_contents"},
-            {"courseid", courseId.ToString()}
+            {"courseid", worldId.ToString()}
         });
         return resp;
     }
 
-    public async Task<MoodleCourseListResponse> GetCoursesForUserAsync(string token)
+    public async Task<LMSWorldListResponse> GetWorldsForUserAsync(string token)
     {
-        return await MoodleCallAsync<MoodleCourseListResponse>(new Dictionary<string, string>
+        return await MoodleCallAsync<LMSWorldListResponse>(new Dictionary<string, string>
         {
             {"wstoken", token},
             {"moodlewsrestformat", "json"},
@@ -61,9 +61,9 @@ public class MoodleWebApi : IMoodle
         });
     }
 
-    public async Task<bool> IsMoodleAdminAsync(string token)
+    public async Task<bool> IsLMSAdminAsync(string token)
     {
-        var userData = await GetMoodleUserDataAsync(token);
+        var userData = await GetLMSUserDataAsync(token);
         return userData.IsAdmin;
     }
 
@@ -92,14 +92,14 @@ public class MoodleWebApi : IMoodle
         });
     }
 
-    public async Task<bool> ScoreGenericLearningElement(string token, int learningElementId)
+    public async Task<bool> ScoreGenericElement(string token, int elementId)
     {
         var response = await MoodleCallAsync<ScoreGenericLearningElementResponse>(new Dictionary<string, string>
         {
             {"wstoken", token},
             {"moodlewsrestformat", "json"},
             {"wsfunction", "format_tiles_update_activity_completion_status_manually"},
-            {"cmid", learningElementId.ToString()},
+            {"cmid", elementId.ToString()},
             {"completed", "1"}
         });
 
@@ -107,7 +107,7 @@ public class MoodleWebApi : IMoodle
     }
 
 
-    public virtual async Task<MoodleUserDataResponse> GetMoodleUserDataAsync(string token)
+    public virtual async Task<LMSUserDataResponse> GetLMSUserDataAsync(string token)
     {
         var generalInformationResponse = await MoodleCallAsync<GeneralUserDataResponse>(new Dictionary<string, string>
         {
@@ -126,19 +126,19 @@ public class MoodleWebApi : IMoodle
                 {"values[0]", generalInformationResponse.Userid.ToString()}
             });
 
-        return new MoodleUserDataResponse
+        return new LMSUserDataResponse
         {
-            MoodleUserName = generalInformationResponse.Username,
+            LMSUserName = generalInformationResponse.Username,
             IsAdmin = generalInformationResponse.Userissiteadmin,
             UserId = generalInformationResponse.Userid,
             UserEmail = detailedUserInformaionResponse[0].Email
         };
     }
 
-    public async Task<MoodleCourseListResponse> SearchCoursesAsync(string token, string searchString,
+    public async Task<LMSWorldListResponse> SearchWorldsAsync(string token, string searchString,
         bool limitToEnrolled = false)
     {
-        var resp = await MoodleCallAsync<MoodleCourseListResponse>(new Dictionary<string, string>
+        var resp = await MoodleCallAsync<LMSWorldListResponse>(new Dictionary<string, string>
         {
             {"wstoken", token},
             {"moodlewsrestformat", "json"},

@@ -1,22 +1,22 @@
-﻿using AdLerBackend.Application.Moodle.GetMoodleToken;
+﻿using AdLerBackend.Application.LMS.GetLMSToken;
 using FluentValidation.TestHelper;
 
 namespace AdLerBackend.Application.UnitTests.Moodle.GetMoodleToken;
 
 public class MoodleLoginCommandValidatorTest
 {
-    private GetMoodleTokenCommandValidator _validator;
+    private GetLMSTokenCommandValidator _validator;
 
     [SetUp]
     public void Setup()
     {
-        _validator = new GetMoodleTokenCommandValidator();
+        _validator = new GetLMSTokenCommandValidator();
     }
 
     [Test]
     public void Should_have_error_when_username_is_null()
     {
-        var command = new GetMoodleTokenCommand
+        var command = new GetLMSTokenCommand
         {
             UserName = null,
             Password = "password"
@@ -32,7 +32,7 @@ public class MoodleLoginCommandValidatorTest
     [Test]
     public void Should_have_error_when_username_is_empty()
     {
-        var command = new GetMoodleTokenCommand
+        var command = new GetLMSTokenCommand
         {
             UserName = "",
             Password = "password"
@@ -48,7 +48,7 @@ public class MoodleLoginCommandValidatorTest
     [Test]
     public void Should_have_error_when_password_is_null()
     {
-        var command = new GetMoodleTokenCommand
+        var command = new GetLMSTokenCommand
         {
             UserName = "username",
             Password = null
@@ -64,7 +64,7 @@ public class MoodleLoginCommandValidatorTest
     [Test]
     public void Should_have_error_when_password_is_empty()
     {
-        var command = new GetMoodleTokenCommand
+        var command = new GetLMSTokenCommand
         {
             UserName = "username",
             Password = ""

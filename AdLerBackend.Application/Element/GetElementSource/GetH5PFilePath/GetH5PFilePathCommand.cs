@@ -1,0 +1,3 @@
+namespace AdLerBackend.Application.Element.GetElementSource.GetH5PFilePath;
+
+public record GetH5PFilePathCommand : GetElementSourceCommand;

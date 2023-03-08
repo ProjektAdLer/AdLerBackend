@@ -1,5 +1,5 @@
 using AdLerBackend.Infrastructure.Repositories.Player;
-using AdLerBackend.Infrastructure.UnitTests.Repositories.Courses;
+using AdLerBackend.Infrastructure.UnitTests.Repositories.Worlds;
 
 namespace AdLerBackend.Infrastructure.UnitTests.Repositories.Player;
 

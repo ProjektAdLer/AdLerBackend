@@ -15,11 +15,11 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
         {
             {typeof(ValidationException), HandleValidationException},
-            {typeof(InvalidMoodleLoginException), HandleMoodleLoginException},
+            {typeof(InvalidLMSLoginException), HandleLMSLoginException},
             {typeof(InvalidTokenException), HandleInvalidTokenException},
             {typeof(NotFoundException), HandleNotFoundException},
             {typeof(ForbiddenAccessException), HandleForbiddenAccessException},
-            {typeof(CourseCreationException), HandleCourseCreationException},
+            {typeof(WorldCreationException), HandleWorldCreationException},
             {typeof(LmsException), HandleGenericLmsException}
         };
     }
@@ -43,13 +43,13 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         context.Result = new ObjectResult(problemDetails);
     }
 
-    private void HandleCourseCreationException(ExceptionContext context)
+    private void HandleWorldCreationException(ExceptionContext context)
     {
-        var exception = context.Exception as CourseCreationException;
+        var exception = context.Exception as WorldCreationException;
         var problemDateils = new ProblemDetails
         {
             Detail = exception.Message,
-            Title = "Course creation failed",
+            Title = "World creation failed",
             Status = StatusCodes.Status409Conflict,
             Instance = context.HttpContext.Request.Path
         };
@@ -82,7 +82,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             Detail = exception.Message,
             Status = StatusCodes.Status404NotFound
         };
-        
+
         context.Result = new NotFoundObjectResult(details);
         context.ExceptionHandled = true;
     }
@@ -136,7 +136,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         context.ExceptionHandled = true;
     }
 
-    private void HandleMoodleLoginException(ExceptionContext context)
+    private void HandleLMSLoginException(ExceptionContext context)
     {
         var details = new MoodleLoginProblemDetails
         {

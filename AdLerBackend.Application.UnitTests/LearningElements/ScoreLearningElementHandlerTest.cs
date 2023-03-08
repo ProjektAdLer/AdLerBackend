@@ -1,12 +1,11 @@
 using AdLerBackend.Application.Common.DTOs;
-using AdLerBackend.Application.Common.InternalUseCases.GetLearningElementLmsInformation;
-using AdLerBackend.Application.Common.LearningElementStrategies.ScoreLearningElementStrategies.
-    ScoreGenericLearningElementStrategy;
-using AdLerBackend.Application.Common.LearningElementStrategies.ScoreLearningElementStrategies.ScoreH5PStrategy;
+using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.ScoreGenericLearningElementStrategy;
+using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.ScoreH5PStrategy;
+using AdLerBackend.Application.Common.InternalUseCases.GetElementLmsInformation;
 using AdLerBackend.Application.Common.Responses.Course;
-using AdLerBackend.Application.Common.Responses.LearningElements;
+using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
-using AdLerBackend.Application.LearningElement.ScoreLearningElement;
+using AdLerBackend.Application.Element.ScoreElement;
 using FluentAssertions;
 using MediatR;
 using NSubstitute;
@@ -28,67 +27,67 @@ public class ScoreLearningElementHandlerTest
     [TestCase("resource", false)]
     public async Task Handle_CallsStrategy(string activityName, bool expected)
     {
-        var systemUnderTest = new ScoreLearningElementHandler(_mediator);
-        _mediator.Send(Arg.Any<GetLearningElementLmsInformationCommand>()).Returns(
-            new GetLearningElementLmsInformationResponse
+        var systemUnderTest = new ScoreElementHandler(_mediator);
+        _mediator.Send(Arg.Any<GetElementLmsInformationCommand>()).Returns(
+            new GetElementLmsInformationResponse
             {
-                LearningElementData = new Modules
+                ElementData = new Modules
                 {
                     ModName = activityName
                 }
             });
 
-        _mediator.Send(Arg.Any<ScoreH5PElementStrategyCommand>()).Returns(new ScoreLearningElementResponse
+        _mediator.Send(Arg.Any<ScoreH5PElementStrategyCommand>()).Returns(new ScoreElementResponse
         {
-            isSuceess = expected
+            IsSuccess = expected
         });
-        _mediator.Send(Arg.Any<ScoreGenericLearningElementStrategyCommand>()).Returns(new ScoreLearningElementResponse
+        _mediator.Send(Arg.Any<ScoreGenericElementStrategyCommand>()).Returns(new ScoreElementResponse
         {
-            isSuceess = expected
+            IsSuccess = expected
         });
 
         // Act
 
-        var result = await systemUnderTest.Handle(new ScoreLearningElementCommand
+        var result = await systemUnderTest.Handle(new ScoreElementCommand
         {
-            CourseId = 1,
+            WorldId = 1,
             ElementId = 1,
             ScoreElementParams = new ScoreElementParams(),
             WebServiceToken = "token"
         }, CancellationToken.None);
 
         // Assert
-        result.isSuceess.Should().Be(expected);
+        result.IsSuccess.Should().Be(expected);
     }
 
     [TestCase("INVALID", false)]
     public async Task Handle_InvalidElementType_Throws(string activityName, bool expected)
     {
-        var systemUnderTest = new ScoreLearningElementHandler(_mediator);
-        _mediator.Send(Arg.Any<GetLearningElementLmsInformationCommand>()).Returns(
-            new GetLearningElementLmsInformationResponse
+        var systemUnderTest = new ScoreElementHandler(_mediator);
+        _mediator.Send(Arg.Any<GetElementLmsInformationCommand>()).Returns(
+            new GetElementLmsInformationResponse
             {
-                LearningElementData = new Modules
+                ElementData = new Modules
                 {
                     ModName = activityName
                 }
             });
 
-        _mediator.Send(Arg.Any<ScoreH5PElementStrategyCommand>()).Returns(new ScoreLearningElementResponse
+        _mediator.Send(Arg.Any<ScoreH5PElementStrategyCommand>()).Returns(new ScoreElementResponse
         {
-            isSuceess = expected
+            IsSuccess = expected
         });
-        _mediator.Send(Arg.Any<ScoreGenericLearningElementStrategyCommand>()).Returns(new ScoreLearningElementResponse
+        _mediator.Send(Arg.Any<ScoreGenericElementStrategyCommand>()).Returns(new ScoreElementResponse
         {
-            isSuceess = expected
+            IsSuccess = expected
         });
 
         // Act
         // Assert
         Assert.ThrowsAsync<NotImplementedException>(async () => await systemUnderTest.Handle(
-            new ScoreLearningElementCommand
+            new ScoreElementCommand
             {
-                CourseId = 1,
+                WorldId = 1,
                 ElementId = 1,
                 ScoreElementParams = new ScoreElementParams(),
                 WebServiceToken = "token"

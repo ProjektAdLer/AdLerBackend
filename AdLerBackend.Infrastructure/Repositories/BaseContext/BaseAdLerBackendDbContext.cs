@@ -13,14 +13,14 @@ public class BaseAdLerBackendDbContext : DbContext
     {
     }
 
-    public DbSet<CourseEntity> Courses { get; set; } = null!;
+    public DbSet<WorldEntity> Worlds { get; set; } = null!;
     private DbSet<H5PLocationEntity> H5PLocations { get; set; } = null!;
     private DbSet<PlayerData> PlayerData { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<CourseEntity>()
-            .HasMany(x => x.H5PFilesInCourse).WithOne().HasForeignKey("CourseEntityId")
+        modelBuilder.Entity<WorldEntity>()
+            .HasMany(x => x.H5PFilesInCourse).WithOne().HasForeignKey("WorldEntityId")
             .OnDelete(DeleteBehavior.Cascade);
         modelBuilder.Entity<H5PLocationEntity>()
             .Property("Id").UseIdentityColumn();

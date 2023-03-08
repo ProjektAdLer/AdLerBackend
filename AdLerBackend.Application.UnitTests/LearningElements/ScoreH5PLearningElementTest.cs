@@ -1,6 +1,6 @@
 using AdLerBackend.Application.Common.DTOs;
+using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.ScoreH5PStrategy;
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.LearningElementStrategies.ScoreLearningElementStrategies.ScoreH5PStrategy;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AutoBogus;
 using Microsoft.Extensions.Configuration;
@@ -12,13 +12,13 @@ namespace AdLerBackend.Application.UnitTests.LearningElements;
 
 public class ScoreH5PLearningElementTest
 {
-    private IMoodle _moodle;
+    private ILMS _ilms;
     private ISerialization _serialization;
 
     [SetUp]
     public void Setup()
     {
-        _moodle = Substitute.For<IMoodle>();
+        _ilms = Substitute.For<ILMS>();
         _serialization = Substitute.For<ISerialization>();
     }
 
@@ -36,19 +36,19 @@ public class ScoreH5PLearningElementTest
             .AddInMemoryCollection(inMemorySettings)
             .Build();
 
-        _moodle.GetMoodleUserDataAsync(Arg.Any<string>()).Returns(new MoodleUserDataResponse
+        _ilms.GetLMSUserDataAsync(Arg.Any<string>()).Returns(new LMSUserDataResponse
         {
             IsAdmin = false,
             UserEmail = "email",
             UserId = 1,
-            MoodleUserName = "moodleUserName"
+            LMSUserName = "moodleUserName"
         });
 
         var fakeXapi = AutoFaker.Generate<RawH5PEvent>();
 
         _serialization.GetObjectFromJsonString<RawH5PEvent>(Arg.Any<string>()).Returns(fakeXapi);
 
-        _moodle.GetH5PAttemptsAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new H5PAttempts
+        _ilms.GetH5PAttemptsAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new H5PAttempts
         {
             usersattempts = new List<Usersattempt>
             {
@@ -70,14 +70,14 @@ public class ScoreH5PLearningElementTest
 
 
         var systemUnderTest =
-            new ScoreH5PElementStrategyHandler(_serialization, _moodle, configuration);
+            new ScoreH5PElementStrategyHandler(_serialization, _ilms, configuration);
 
         // Act
         await systemUnderTest.Handle(new ScoreH5PElementStrategyCommand
         {
             ScoreElementParams = new ScoreElementParams
             {
-                SerializedXapiEvent = "xapiEvent"
+                SerializedXAPIEvent = "xapiEvent"
             },
             Module = new Modules
             {
@@ -91,6 +91,6 @@ public class ScoreH5PLearningElementTest
         }, CancellationToken.None);
 
         // Assert
-        await _moodle.Received(1).GetMoodleUserDataAsync(Arg.Any<string>());
+        await _ilms.Received(1).GetLMSUserDataAsync(Arg.Any<string>());
     }
 }

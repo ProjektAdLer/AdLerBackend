@@ -47,7 +47,7 @@ public class StorageServiceTest
             }
         };
 
-        CourseDtoFake.WorldInforamtion.LearningWorld.Identifier.Value = "LearningWorldIdentifier";
+        CourseDtoFake.WorldInforamtion.World.LmsElementIdentifier.Value = "LearningWorldIdentifier";
 
         // Act
         var retunValue = storageService.StoreH5PFilesForWorld(CourseDtoFake);
@@ -85,7 +85,7 @@ public class StorageServiceTest
             ATFFile = new FileStream("../../../Storage/TestFiles/DSL_Document.json", FileMode.Open)
         };
 
-        dto.WorldInforamtion.LearningWorld.Identifier.Value = "LearningWorldIdentifier";
+        dto.WorldInforamtion.World.LmsElementIdentifier.Value = "LearningWorldIdentifier";
 
         // Act
         var dslLocation = storageService.StoreATFFileForWorld(dto);

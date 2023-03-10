@@ -38,9 +38,6 @@ public class GetWorldDetailHandler : IRequestHandler<GetWorldDetailCommand, Worl
         // Parse DSL File
         var dslFile = await _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(fileStream);
 
-        return new WorldDtoResponse
-        {
-            LearningWorld = dslFile.LearningWorld
-        };
+        return dslFile;
     }
 }

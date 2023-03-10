@@ -1,52 +1,60 @@
 ﻿#pragma warning disable CS8618
-using System.Text.Json.Serialization;
-
 namespace AdLerBackend.Application.Common.Responses.Course;
 
+// This is Version 0.3 of the ATF File
 public class WorldDtoResponse
 {
-    [JsonPropertyName("LearningWorld")] public LearningWorld LearningWorld { get; set; }
+    public string FileVersion { get; set; }
+    public string AmgVersion { get; set; }
+    public string Author { get; set; }
+    public string Language { get; set; }
+    public World World { get; set; }
 }
 
-public class Identifier
+public class Element
+{
+    public int ElementId { get; set; }
+    public LmsElementIdentifier LmsElementIdentifier { get; set; }
+    public string ElementName { get; set; }
+    public string ElementDescription { get; set; }
+    public List<string> ElementGoals { get; set; }
+    public string ElementCategory { get; set; }
+    public string ElementFileType { get; set; }
+    public int ElementMaxScore { get; set; }
+}
+
+public class LmsElementIdentifier
 {
     public string Type { get; set; }
     public string Value { get; set; }
 }
 
-public class LearningElement
-{
-    public int Id { get; set; }
-    public Identifier Identifier { get; set; }
-    public string Description { get; set; }
-    public string Goals { get; set; }
-    public string ElementCategory { get; set; }
-
-    public List<Identifier> LearningElementValueList { get; set; }
-    public int LearningSpaceParentId { get; set; }
-}
-
-public class LearningSpace
+public class Space
 {
     public int SpaceId { get; set; }
-    public Identifier Identifier { get; set; }
-    public string Description { get; set; }
-    public string Goals { get; set; }
-    public List<int> LearningSpaceContent { get; set; }
-
-    public int RequiredPoints { get; set; }
-    //public int IncludedPoints { get; set; }
-
-    public List<int> Requirements { get; set; }
+    public LmsElementIdentifier LmsElementIdentifier { get; set; }
+    public string SpaceName { get; set; }
+    public string SpaceDescription { get; set; }
+    public List<string> SpaceGoals { get; set; }
+    public List<int> SpaceContents { get; set; }
+    public int RequiredPointsToComplete { get; set; }
+    public string RequiredSpacesToEnter { get; set; }
 }
 
-public class LearningWorld
+public class Topic
 {
-    public string IdNumber { get; set; }
-    public Identifier Identifier { get; set; }
-    public string Description { get; set; }
-    public string Goals { get; set; }
-    public List<int> LearningWorldContent { get; set; }
-    public List<LearningSpace> LearningSpaces { get; set; }
-    public List<LearningElement> LearningElements { get; set; }
+    public int TopicId { get; set; }
+    public string TopicName { get; set; }
+    public List<int> TopicContents { get; set; }
+}
+
+public class World
+{
+    public LmsElementIdentifier LmsElementIdentifier { get; set; }
+    public string WorldName { get; set; }
+    public string WorldDescription { get; set; }
+    public List<string> WorldGoals { get; set; }
+    public List<Topic> Topics { get; set; }
+    public List<Space> Spaces { get; set; }
+    public List<Element> Elements { get; set; }
 }

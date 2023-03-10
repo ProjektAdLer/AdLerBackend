@@ -48,8 +48,8 @@ public class GetLearningElementLmsInformationHandler : IRequestHandler<GetElemen
         var courseContent = await _ilms.GetWorldContentAsync(request.WebServiceToken, searchedCourses.Courses[0].Id);
 
 
-        var searchedFileName = dslObject.LearningWorld.LearningElements.Find(x => x.Id == request.ElementId)?
-            .Identifier
+        var searchedFileName = dslObject.World.Elements.Find(x => x.ElementId == request.ElementId)?
+            .LmsElementIdentifier
             .Value;
 
         if (searchedFileName == null)

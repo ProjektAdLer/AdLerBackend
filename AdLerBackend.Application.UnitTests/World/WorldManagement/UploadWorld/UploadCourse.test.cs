@@ -35,22 +35,22 @@ public class UploadWorldTest
         _serialization = Substitute.For<ISerialization>();
 
         var mockedDsl = AutoFaker.Generate<WorldDtoResponse>();
-        mockedDsl.LearningWorld.LearningElements = new List<LearningElement>
+        mockedDsl.World.Elements = new List<Application.Common.Responses.Course.Element>
         {
             new()
             {
-                Id = 1,
+                ElementId = 1,
                 ElementCategory = "h5p",
-                Identifier = new Identifier
+                LmsElementIdentifier = new LmsElementIdentifier
                 {
                     Value = "path1"
                 }
             },
             new()
             {
-                Id = 2,
+                ElementId = 2,
                 ElementCategory = "h5p",
-                Identifier = new Identifier
+                LmsElementIdentifier = new LmsElementIdentifier
                 {
                     Value = "path2"
                 }
@@ -77,9 +77,9 @@ public class UploadWorldTest
         });
 
         var fakedDsl = AutoFaker.Generate<WorldDtoResponse>();
-        fakedDsl.LearningWorld.LearningElements[0] = new LearningElement
+        fakedDsl.World.Elements[0] = new Application.Common.Responses.Course.Element
         {
-            Id = 13337,
+            ElementId = 13337,
             ElementCategory = "h5p"
         };
 
@@ -109,13 +109,13 @@ public class UploadWorldTest
         await systemUnderTest.Handle(new UploadWorldCommand
         {
             BackupFileStream = new MemoryStream(),
-            DslFileStream = new MemoryStream(),
+            ATFFileStream = new MemoryStream(),
             WebServiceToken = "testToken"
         }, CancellationToken.None);
 
         // Assert that AddAsync has been called with the correct entity
         await _worldRepository.Received(1)
-            .AddAsync(Arg.Is<WorldEntity>(x => x.Name == fakedDsl.LearningWorld.Identifier.Value));
+            .AddAsync(Arg.Is<WorldEntity>(x => x.Name == fakedDsl.World.LmsElementIdentifier.Value));
     }
 
     [Test]
@@ -139,7 +139,7 @@ public class UploadWorldTest
             await systemUnderTest.Handle(new UploadWorldCommand
             {
                 BackupFileStream = new MemoryStream(),
-                DslFileStream = new MemoryStream(),
+                ATFFileStream = new MemoryStream(),
                 WebServiceToken = "testToken"
             }, CancellationToken.None));
         return Task.CompletedTask;
@@ -159,9 +159,9 @@ public class UploadWorldTest
         });
 
         var fakedDsl = AutoFaker.Generate<WorldDtoResponse>();
-        fakedDsl.LearningWorld.LearningElements[0] = new LearningElement
+        fakedDsl.World.Elements[0] = new Application.Common.Responses.Course.Element
         {
-            Id = 13337,
+            ElementId = 13337,
             ElementCategory = "h5p"
         };
 
@@ -175,7 +175,7 @@ public class UploadWorldTest
             await systemUnderTest.Handle(new UploadWorldCommand
             {
                 BackupFileStream = new MemoryStream(),
-                DslFileStream = new MemoryStream(),
+                ATFFileStream = new MemoryStream(),
                 WebServiceToken = "testToken"
             }, CancellationToken.None));
         return Task.CompletedTask;
@@ -215,12 +215,12 @@ public class UploadWorldTest
         var result = await systemUnderTest.Handle(new UploadWorldCommand
         {
             BackupFileStream = new MemoryStream(),
-            DslFileStream = new MemoryStream(),
+            ATFFileStream = new MemoryStream(),
             WebServiceToken = "testToken"
         }, CancellationToken.None);
 
         // Assert that AddAsync has been called with the correct entity
         await _worldRepository.Received(1)
-            .AddAsync(Arg.Is<WorldEntity>(x => x.Name == fakedDsl.LearningWorld.Identifier.Value));
+            .AddAsync(Arg.Is<WorldEntity>(x => x.Name == fakedDsl.World.LmsElementIdentifier.Value));
     }
 }

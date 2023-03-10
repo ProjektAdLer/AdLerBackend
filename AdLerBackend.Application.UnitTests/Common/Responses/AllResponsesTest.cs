@@ -29,7 +29,7 @@ public class AllResponsesTest
         yield return new TestCaseData(new ElementStatusResponse());
         yield return new TestCaseData(new ElementScoreResponse());
         yield return new TestCaseData(new WorldResponse());
-        yield return new TestCaseData(new LearningWorld());
+        yield return new TestCaseData(new Application.Common.Responses.Course.World());
         yield return new TestCaseData(new PlayerDataResponse());
         yield return new TestCaseData(new ScoreElementResponse());
         yield return new TestCaseData(new WorldContent());

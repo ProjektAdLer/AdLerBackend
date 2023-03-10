@@ -18,7 +18,7 @@ public class StorageService : IFileAccess
     public List<string>? StoreH5PFilesForWorld(WorldStoreH5PDto worldToStoreH5P)
     {
         var workingDir = _fileSystem.Path.Join("wwwroot", "courses", worldToStoreH5P.AuthorId.ToString(),
-            worldToStoreH5P.WorldInforamtion.LearningWorld.Identifier.Value, "h5p");
+            worldToStoreH5P.WorldInforamtion.World.LmsElementIdentifier.Value, "h5p");
 
         var h5PFilePaths = worldToStoreH5P.H5PFiles.Select(item =>
         {
@@ -39,11 +39,11 @@ public class StorageService : IFileAccess
     {
         worldToStoreH5P.ATFFile.Position = 0;
         var workingDir = _fileSystem.Path.Join("wwwroot", "courses", worldToStoreH5P.AuthorId.ToString(),
-            worldToStoreH5P.WorldInforamtion.LearningWorld.Identifier.Value);
+            worldToStoreH5P.WorldInforamtion.World.LmsElementIdentifier.Value);
 
         // save stream on courseToStore on disk
         var dslFilePath = _fileSystem.Path.Combine(workingDir,
-            worldToStoreH5P.WorldInforamtion.LearningWorld.Identifier.Value + ".json");
+            worldToStoreH5P.WorldInforamtion.World.LmsElementIdentifier.Value + ".json");
 
         // create directory if not exists
         if (!_fileSystem.Directory.Exists(workingDir))

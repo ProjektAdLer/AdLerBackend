@@ -85,7 +85,7 @@ public class WorldsController : BaseApiController
         return await Mediator.Send(new UploadWorldCommand
         {
             BackupFileStream = backupFile.OpenReadStream(),
-            DslFileStream = atfFile.OpenReadStream(),
+            ATFFileStream = atfFile.OpenReadStream(),
             WebServiceToken = token
         });
     }

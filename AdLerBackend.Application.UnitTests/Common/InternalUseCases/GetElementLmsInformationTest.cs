@@ -52,14 +52,14 @@ public class GerElementLmsInformationTest
         _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
             .Returns(new WorldDtoResponse
             {
-                LearningWorld = new LearningWorld
+                World = new Application.Common.Responses.Course.World
                 {
-                    LearningElements = new List<LearningElement>
+                    Elements = new List<Application.Common.Responses.Course.Element>
                     {
                         new()
                         {
-                            Id = 1337,
-                            Identifier = new Identifier
+                            ElementId = 1337,
+                            LmsElementIdentifier = new LmsElementIdentifier
                             {
                                 Value = "searchedFileName"
                             }
@@ -123,14 +123,14 @@ public class GerElementLmsInformationTest
         _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
             .Returns(new WorldDtoResponse
             {
-                LearningWorld = new LearningWorld
+                World = new Application.Common.Responses.Course.World
                 {
-                    LearningElements = new List<LearningElement>
+                    Elements = new List<Application.Common.Responses.Course.Element>
                     {
                         new()
                         {
-                            Id = 1337,
-                            Identifier = new Identifier
+                            ElementId = 1337,
+                            LmsElementIdentifier = new LmsElementIdentifier
                             {
                                 Value = "searchedFileName"
                             }
@@ -189,14 +189,14 @@ public class GerElementLmsInformationTest
         _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
             .Returns(new WorldDtoResponse
             {
-                LearningWorld = new LearningWorld
+                World = new Application.Common.Responses.Course.World
                 {
-                    LearningElements = new List<LearningElement>
+                    Elements = new List<Application.Common.Responses.Course.Element>
                     {
                         new()
                         {
-                            Id = 1337,
-                            Identifier = new Identifier
+                            ElementId = 1337,
+                            LmsElementIdentifier = new LmsElementIdentifier
                             {
                                 Value = "searchedFileName"
                             }
@@ -271,14 +271,15 @@ public class GerElementLmsInformationTest
         _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
             .Returns(new WorldDtoResponse
             {
-                LearningWorld = new LearningWorld
+                World = new Application.Common.Responses.Course.World
                 {
-                    LearningElements = new List<LearningElement>
+                    Elements = new List<Application.Common.Responses.Course.Element
+                    >
                     {
                         new()
                         {
-                            Id = 1337,
-                            Identifier = new Identifier
+                            ElementId = 1337,
+                            LmsElementIdentifier = new LmsElementIdentifier
                             {
                                 Value = "searchedFileName1234"
                             }

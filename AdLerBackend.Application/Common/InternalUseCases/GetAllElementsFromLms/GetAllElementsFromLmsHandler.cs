@@ -42,7 +42,7 @@ public class GetAllElementsFromLmsHandler : IRequestHandler<GetAllElementsFromLm
         // Parse DSL File
         var dslObject = await _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(fileStream);
 
-        dslObject.LearningWorld.LearningElements.Select(x => x.Id).ToList().ForEach(x =>
+        dslObject.World.Elements.Select(x => x.ElementId).ToList().ForEach(x =>
         {
             data.Add(new ModuleWIthIdAndFileName
             {
@@ -58,8 +58,9 @@ public class GetAllElementsFromLmsHandler : IRequestHandler<GetAllElementsFromLm
 
         foreach (var moduleWIthIdAndFileName in data)
         {
-            moduleWIthIdAndFileName.FileName = dslObject.LearningWorld.LearningElements
-                                                   .Find(x => x.Id == moduleWIthIdAndFileName.Id)?.Identifier?.Value ??
+            moduleWIthIdAndFileName.FileName = dslObject.World.Elements
+                                                   .Find(x => x.ElementId == moduleWIthIdAndFileName.Id)
+                                                   ?.LmsElementIdentifier?.Value ??
                                                throw new NotFoundException("Element with the Id " +
                                                                            moduleWIthIdAndFileName.Id + " not found");
 

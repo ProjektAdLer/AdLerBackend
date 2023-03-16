@@ -1,0 +1,183 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "fileVersion": {
+      "type": "string"
+    },
+    "amgVersion": {
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    },
+    "language": {
+      "type": "string",
+      "enum": ["de", "en"]
+    },
+    "world": {
+      "type": "object",
+      "properties": {
+        "lmsElementIdentifier": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": ["type", "value"]
+        },
+        "worldName": {
+          "type": "string"
+        },
+        "worldDescription": {
+          "type": "string"
+        },
+        "worldGoals": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "topics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "topicId": {
+                "type": "integer"
+              },
+              "topicName": {
+                "type": "string"
+              },
+              "topicContents": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
+            },
+            "required": ["topicId", "topicName", "topicContents"]
+          }
+        },
+        "spaces": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "spaceId": {
+                "type": "integer"
+              },
+              "lmsElementIdentifier": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "required": ["type", "value"]
+              },
+              "spaceName": {
+                "type": "string"
+              },
+              "spaceDescription": {
+                "type": "string"
+              },
+              "spaceGoals": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "spaceContents": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                },
+                "minItems": 1
+              },
+
+              "requiredPointsToComplete": {
+                "type": "integer"
+              },
+              "requiredSpacesToEnter": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "spaceId",
+              "lmsElementIdentifier",
+              "spaceDescription",
+              "spaceGoals",
+              "spaceContents",
+              "requiredSpacesToEnter",
+              "spaceName"
+            ]
+          },
+          "minItems": 1
+        },
+        "elements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "elementId": {
+                "type": "integer"
+              },
+              "lmsElementIdentifier": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "required": ["type", "value"]
+              },
+              "elementName": {
+                "type": "string"
+              },
+              "elementDescription": {
+                "type": "string"
+              },
+              "elementGoals": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "elementCategory": {
+                "type": "string"
+              },
+              "elementFileType": {
+                "type": "string"
+              },
+              "elementMaxScore": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "elementId",
+              "lmsElementIdentifier",
+              "elementCategory",
+              "elementFileType",
+              "elementMaxScore",
+              "elementName"
+            ],
+            "minItems": 1
+          }
+        }
+      },
+      "required": ["lmsElementIdentifier", "spaces", "elements", "worldName"]
+    }
+  },
+  "required": ["fileVersion", "world"]
+}

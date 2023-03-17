@@ -33,10 +33,20 @@
 
     <ItemGroup>
       <EmbeddedResource Remove="Common\Responses\Internal\**" />
+      <None Remove="Common\Schemas\schema0_3.json" />
+      <EmbeddedResource Include="Common\Schemas\schema0_3.json" />
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="Common\Responses\Internal\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="Common\Schemas\schema0_3.json">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

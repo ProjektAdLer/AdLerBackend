@@ -15,6 +15,7 @@ public class MoodleWebApiTest
 {
     private IConfiguration _configuration;
     private MockHttpMessageHandler _mockHttp = null!;
+    private MoodleUtils _moodleUtils;
     private MoodleWebApi _systemUnderTest = null!;
 
     [SetUp]
@@ -22,15 +23,32 @@ public class MoodleWebApiTest
     {
         _mockHttp = new MockHttpMessageHandler();
         _configuration = Substitute.For<IConfiguration>();
+        _moodleUtils = Substitute.For<MoodleUtils>();
         _configuration["moodleUrl"].Returns("http://whatever.com");
-        _systemUnderTest = new MoodleWebApi(_mockHttp.ToHttpClient(), _configuration);
+        _systemUnderTest = new MoodleWebApi(_mockHttp.ToHttpClient(), _configuration, _moodleUtils);
+    }
+
+    [Test]
+    public async Task UploadCourseWorldToLMS_Valid()
+    {
+        // Arrange
+        _mockHttp.When("*").Respond("application/json",
+            "{\"data\":{\"course_id\":1337}}");
+
+        //_moodleUtils.ConvertFileStreamToBase64(Arg.Any<Stream>()).Returns("base64");
+
+        // Act
+        var result = await _systemUnderTest.UploadCourseWorldToLMS("token", new MemoryStream());
+
+        // Assert
+        Assert.That(result, Is.EqualTo(1337));
     }
 
     [Test]
     public async Task UsUserAdmin_Valid_HeIs()
     {
         // Arrange
-        var test = Substitute.ForPartsOf<MoodleWebApi>(_mockHttp.ToHttpClient(), _configuration);
+        var test = Substitute.ForPartsOf<MoodleWebApi>(_mockHttp.ToHttpClient(), _configuration, _moodleUtils);
         test.Configure().GetLMSUserDataAsync("token").Returns(new LMSUserDataResponse
         {
             IsAdmin = true,

@@ -60,4 +60,12 @@ public interface ILMS
     Task<H5PAttempts> GetH5PAttemptsAsync(string token, int h5PActivityId);
 
     Task<bool> ScoreGenericElement(string token, int elementId);
+
+    /**
+     * Uploads a Course Backup to the LMS
+     * The Course is being send as Base64 encoded String
+     * @param token The LMS Webservice Token
+     * @param backupFileStream The Stream of the Backup File
+     */
+    Task<int> UploadCourseWorldToLMS(string token, Stream backupFileStream);
 }

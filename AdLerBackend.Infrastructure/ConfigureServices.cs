@@ -21,7 +21,6 @@ public static class ConfigureServices
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
         IConfiguration configuration, bool isDevelopment)
     {
-        var httpClient = new HttpClient();
         // Add Moodle to DI
         services.AddSingleton<ILMS, MoodleWebApi>();
         services.AddSingleton<ILmsBackupProcessor, LmsBackupProcessor>();
@@ -31,7 +30,8 @@ public static class ConfigureServices
         services.AddScoped<IPlayerRepository, PlayerRepository>();
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddTransient<IFileSystem, FileSystem>();
-        services.AddSingleton(httpClient);
+        services.AddSingleton(new MoodleUtils());
+        services.AddSingleton(new HttpClient());
 
 
         if (isDevelopment)

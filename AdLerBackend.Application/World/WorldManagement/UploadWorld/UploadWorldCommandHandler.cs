@@ -14,19 +14,21 @@ namespace AdLerBackend.Application.World.WorldManagement.UploadWorld;
 public class UploadWorldCommandHandler : IRequestHandler<UploadWorldCommand, bool>
 {
     private readonly IFileAccess _fileAccess;
+    private readonly ILMS _lms;
     private readonly ILmsBackupProcessor _lmsBackupProcessor;
     private readonly IMediator _mediator;
     private readonly ISerialization _serialization;
     private readonly IWorldRepository _worldRepository;
 
     public UploadWorldCommandHandler(ILmsBackupProcessor lmsBackupProcessor, IMediator mediator,
-        IFileAccess fileAccess, IWorldRepository worldRepository, ISerialization serialization)
+        IFileAccess fileAccess, IWorldRepository worldRepository, ISerialization serialization, ILMS lms)
     {
         _lmsBackupProcessor = lmsBackupProcessor;
         _mediator = mediator;
         _fileAccess = fileAccess;
         _worldRepository = worldRepository;
         _serialization = serialization;
+        _lms = lms;
     }
 
     public async Task<bool> Handle(UploadWorldCommand request, CancellationToken cancellationToken)
@@ -56,6 +58,9 @@ public class UploadWorldCommandHandler : IRequestHandler<UploadWorldCommand, boo
             courseInformation.World.LmsElementIdentifier.Value);
 
         if (existsCourseForAuthor) throw new WorldCreationException("World already exists in Database");
+
+        // Upload the Backup File to the LMS
+        await _lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
 
         var atfLocation = _fileAccess.StoreATFFileForWorld(new StoreWorldATFDto
         {
@@ -90,6 +95,7 @@ public class UploadWorldCommandHandler : IRequestHandler<UploadWorldCommand, boo
         };
 
         await _worldRepository.AddAsync(courseEntity);
+
 
         return true;
     }

@@ -10,12 +10,14 @@ public class MoodleWebApi : ILMS
 {
     private readonly HttpClient _client;
     private readonly IConfiguration _configuration;
+    private readonly MoodleUtils _moodleUtils;
 
 
-    public MoodleWebApi(HttpClient client, IConfiguration configuration)
+    public MoodleWebApi(HttpClient client, IConfiguration configuration, MoodleUtils moodleUtils)
     {
         _client = client;
         _configuration = configuration;
+        _moodleUtils = moodleUtils;
     }
 
     public async Task<LMSUserTokenResponse> GetLMSUserTokenAsync(string userName, string password)
@@ -106,6 +108,22 @@ public class MoodleWebApi : ILMS
         return response.Status;
     }
 
+    public async Task<int> UploadCourseWorldToLMS(string token, Stream backupFileStream)
+    {
+        // Encode the Stream in Base64
+        var base64String = _moodleUtils.ConvertFileStreamToBase64(backupFileStream);
+
+        var response = await MoodleCallAsync<UploadWorldPluginResponse>(new Dictionary<string, string>
+        {
+            {"wstoken", token},
+            {"moodlewsrestformat", "json"},
+            {"wsfunction", "local_adler_upload_course"},
+            {"mbz", base64String}
+        });
+
+        return response.Data.Course_Id;
+    }
+
 
     public virtual async Task<LMSUserDataResponse> GetLMSUserDataAsync(string token)
     {
@@ -150,6 +168,7 @@ public class MoodleWebApi : ILMS
 
         return resp;
     }
+
 
     private async Task<TDtoType> MoodleCallAsync<TDtoType>(Dictionary<string, string> wsParams,
         PostToMoodleOptions? options = null)
@@ -249,6 +268,15 @@ public class MoodleWebApi : ILMS
         public string Email { get; set; }
     }
 
+    public class UploadWorldPluginResponse
+    {
+        public Data Data { get; set; }
+    }
+
+    public class Data
+    {
+        public int Course_Id { get; set; }
+    }
 
     private class MoodleWsErrorResponse
     {

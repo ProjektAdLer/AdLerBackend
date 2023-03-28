@@ -20,6 +20,7 @@ namespace AdLerBackend.Application.UnitTests.World.WorldManagement.UploadWorld;
 public class UploadWorldTest
 {
     private IFileAccess _fileAccess;
+    private ILMS _ilms;
     private ILmsBackupProcessor _lmsBackupProcessor;
     private IMediator _mediator;
     private ISerialization _serialization;
@@ -33,6 +34,7 @@ public class UploadWorldTest
         _fileAccess = Substitute.For<IFileAccess>();
         _worldRepository = Substitute.For<IWorldRepository>();
         _serialization = Substitute.For<ISerialization>();
+        _ilms = Substitute.For<ILMS>();
 
         var mockedDsl = AutoFaker.Generate<WorldDtoResponse>();
         mockedDsl.World.Elements = new List<Application.Common.Responses.Course.Element>
@@ -65,9 +67,10 @@ public class UploadWorldTest
     public async Task Handle_Valid_TriggersUpload()
     {
         // Arrange
+
         var systemUnderTest =
             new UploadWorldCommandHandler(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
-                _serialization);
+                _serialization, _ilms);
 
         _mediator.Send(Arg.Any<CheckUserPrivilegesCommand>()).Returns(Unit.Task);
 
@@ -124,7 +127,7 @@ public class UploadWorldTest
         // Arrange
         var systemUnderTest =
             new UploadWorldCommandHandler(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
-                _serialization);
+                _serialization, _ilms);
 
         _mediator.Send(Arg.Any<CheckUserPrivilegesCommand>()).Throws(new ForbiddenAccessException(""));
 
@@ -151,7 +154,7 @@ public class UploadWorldTest
         // Arrange
         var systemUnderTest =
             new UploadWorldCommandHandler(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
-                _serialization);
+                _serialization, _ilms);
 
         _mediator.Send(Arg.Any<GetLMSUserDataCommand>()).Returns(new LMSUserDataResponse
         {
@@ -188,7 +191,7 @@ public class UploadWorldTest
         // Arrange
         var systemUnderTest =
             new UploadWorldCommandHandler(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
-                _serialization);
+                _serialization, _ilms);
 
         _mediator.Send(Arg.Any<GetLMSUserDataCommand>()).Returns(new LMSUserDataResponse
         {

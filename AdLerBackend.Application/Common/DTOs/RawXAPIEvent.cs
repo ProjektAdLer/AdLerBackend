@@ -1,87 +1,90 @@
 #pragma warning disable CS8618
 using System.Text.Json.Serialization;
 
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
 namespace AdLerBackend.Application.Common.DTOs;
 
 public class Actor
 {
-    public string name { get; set; }
-    public string mbox { get; set; }
-    public string objectType { get; set; }
+    public string Name { get; set; }
+    public string Mbox { get; set; }
+    public string ObjectType { get; set; }
 }
 
 public class Category
 {
-    public string id { get; set; }
-    public string objectType { get; set; }
+    public string Id { get; set; }
+    public string ObjectType { get; set; }
 }
 
 public class Context
 {
-    public ContextActivities contextActivities { get; set; }
+    public ContextActivities ContextActivities { get; set; }
 }
 
 public class ContextActivities
 {
-    public List<Category> category { get; set; }
+    public List<Category> Category { get; set; }
 }
 
-public class Definition
+public abstract class Definition
 {
-    public Extensions extensions { get; set; }
-    public Name name { get; set; }
+    public Extensions Extensions { get; set; }
+    public Name Name { get; set; }
 }
 
 public class Display
 {
-    [JsonPropertyName("en-US")] public string EnUS { get; set; }
+    [JsonPropertyName("en-US")] public string EnUs { get; set; }
 }
 
 public class Extensions
 {
     [JsonPropertyName("http://h5p.org/x-api/h5p-local-content-id")]
-    public string HttpH5pOrgXApiH5pLocalContentId { get; set; }
+    public string HttpH5POrgXApiH5PLocalContentId { get; set; }
 }
 
 public class Name
 {
-    [JsonPropertyName("en-US")] public string EnUS { get; set; }
+    [JsonPropertyName("en-US")] public string EnUs { get; set; }
 }
 
 public class Object
 {
-    public string id { get; set; }
-    public string objectType { get; set; }
-    public Definition definition { get; set; }
+    public string Id { get; set; }
+    public string ObjectType { get; set; }
+    public Definition Definition { get; set; }
 }
 
 public class Result
 {
-    public Score score { get; set; }
-    public bool completion { get; set; }
-    public string duration { get; set; }
-    public bool success { get; set; }
+    public Score Score { get; set; }
+    public bool Completion { get; set; }
+    public string Duration { get; set; }
+    public bool Success { get; set; }
 }
 
 public class RawH5PEvent
 {
-    public Actor actor { get; set; }
-    public Verb verb { get; set; }
-    public Object @object { get; set; }
-    public Context context { get; set; }
-    public Result result { get; set; }
+    public Actor Actor { get; set; }
+    public Verb Verb { get; set; }
+    public Object Object { get; set; }
+    public Context Context { get; set; }
+    public Result Result { get; set; }
 }
 
 public class Score
 {
-    public int min { get; set; }
-    public int max { get; set; }
-    public int raw { get; set; }
-    public double scaled { get; set; }
+    public int Min { get; set; }
+    public int Max { get; set; }
+    public int Raw { get; set; }
+    public double Scaled { get; set; }
 }
 
 public class Verb
 {
-    public string id { get; set; }
-    public Display display { get; set; }
+    public string Id { get; set; }
+    public Display Display { get; set; }
 }

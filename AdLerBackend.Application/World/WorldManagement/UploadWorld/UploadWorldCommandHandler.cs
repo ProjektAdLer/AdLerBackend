@@ -63,11 +63,11 @@ public class UploadWorldCommandHandler : IRequestHandler<UploadWorldCommand, boo
         // disabled until LMS is ready - PG
         //await _lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
 
-        var atfLocation = _fileAccess.StoreATFFileForWorld(new StoreWorldATFDto
+        var atfLocation = _fileAccess.StoreATFFileForWorld(new StoreWorldAtfDto
         {
             AuthorId = userInformation.UserId,
-            ATFFile = request.ATFFileStream,
-            WorldInforamtion = courseInformation
+            AtfFile = request.ATFFileStream,
+            WorldInformation = courseInformation
         });
 
 
@@ -111,7 +111,7 @@ public class UploadWorldCommandHandler : IRequestHandler<UploadWorldCommand, boo
             storedH5PFilePaths = _fileAccess.StoreH5PFilesForWorld(new WorldStoreH5PDto
             {
                 AuthorId = userData.UserId,
-                WorldInforamtion = courseInformation,
+                WorldInformation = courseInformation,
                 H5PFiles = h5PFilesInBackup
             });
         }

@@ -36,7 +36,7 @@ public class StorageServiceTest
         var CourseDtoFake = new WorldStoreH5PDto
         {
             AuthorId = 1,
-            WorldInforamtion = AutoFaker.Generate<WorldDtoResponse>(),
+            WorldInformation = AutoFaker.Generate<WorldDtoResponse>(),
             H5PFiles = new List<H5PDto>
             {
                 new()
@@ -47,7 +47,7 @@ public class StorageServiceTest
             }
         };
 
-        CourseDtoFake.WorldInforamtion.World.LmsElementIdentifier.Value = "LearningWorldIdentifier";
+        CourseDtoFake.WorldInformation.World.LmsElementIdentifier.Value = "LearningWorldIdentifier";
 
         // Act
         var retunValue = storageService.StoreH5PFilesForWorld(CourseDtoFake);
@@ -77,15 +77,15 @@ public class StorageServiceTest
     {
         // Arrange
         var storageService = new StorageService(_fileSystem);
-        var dto = new StoreWorldATFDto
+        var dto = new StoreWorldAtfDto
         {
             AuthorId = 1,
-            WorldInforamtion = AutoFaker.Generate<WorldDtoResponse>(),
+            WorldInformation = AutoFaker.Generate<WorldDtoResponse>(),
             //DSL_Document.json contains data that is required for the test and should be loaded from disk
-            ATFFile = new FileStream("../../../Storage/TestFiles/DSL_Document.json", FileMode.Open)
+            AtfFile = new FileStream("../../../Storage/TestFiles/DSL_Document.json", FileMode.Open)
         };
 
-        dto.WorldInforamtion.World.LmsElementIdentifier.Value = "LearningWorldIdentifier";
+        dto.WorldInformation.World.LmsElementIdentifier.Value = "LearningWorldIdentifier";
 
         // Act
         var dslLocation = storageService.StoreATFFileForWorld(dto);

@@ -3,5 +3,5 @@ namespace AdLerBackend.Application.Common.DTOs;
 
 public class ScoreElementParams
 {
-    public string? SerializedXAPIEvent { get; set; }
+    public string? SerializedXApiEvent { get; init; }
 }

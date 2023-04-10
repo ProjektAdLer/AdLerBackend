@@ -9,22 +9,22 @@ public class
     GetH5PElementScoreStrategyHandler : IRequestHandler<GetH5PElementScoreStrategyCommand,
         ElementScoreResponse>
 {
-    private readonly ILMS _ilms;
+    private readonly ILMS _lms;
 
-    public GetH5PElementScoreStrategyHandler(ILMS ilms)
+    public GetH5PElementScoreStrategyHandler(ILMS lms)
     {
-        _ilms = ilms;
+        _lms = lms;
     }
 
 
     public async Task<ElementScoreResponse> Handle(GetH5PElementScoreStrategyCommand request,
         CancellationToken cancellationToken)
     {
-        var instanceId = request.ElementMoule.Instance;
+        var instanceId = request.ElementModule.Instance;
 
-        var allUserAttempts = await _ilms.GetH5PAttemptsAsync(request.WebServiceToken, instanceId);
+        var allUserAttempts = await _lms.GetH5PAttemptsAsync(request.WebServiceToken, instanceId);
 
-        var success = allUserAttempts?.usersattempts[0]?.scored?.attempts[0]?.success ?? 0;
+        var success = allUserAttempts.usersattempts[0].scored.attempts[0].success;
 
         return new ElementScoreResponse
         {

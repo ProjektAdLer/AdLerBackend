@@ -11,13 +11,13 @@ public class
     ScoreH5PElementStrategyHandler : IRequestHandler<ScoreH5PElementStrategyCommand, ScoreElementResponse>
 {
     private readonly IConfiguration _config;
-    private readonly ILMS _ilms;
+    private readonly ILMS _lms;
     private readonly ISerialization _serialization;
 
-    public ScoreH5PElementStrategyHandler(ISerialization serialization, ILMS ilms, IConfiguration config)
+    public ScoreH5PElementStrategyHandler(ISerialization serialization, ILMS lms, IConfiguration config)
     {
         _serialization = serialization;
-        _ilms = ilms;
+        _lms = lms;
         _config = config;
     }
 
@@ -25,17 +25,17 @@ public class
         CancellationToken cancellationToken)
     {
         // Get User Data
-        var userData = await _ilms.GetLMSUserDataAsync(request.WebServiceToken);
+        var userData = await _lms.GetLMSUserDataAsync(request.WebServiceToken);
 
         var contextId = request.Module.contextid;
 
-        // Deserialize the XAPI Event
-        var xapiEvent =
+        // Deserialize the XApi Event
+        var xApiEvent =
             _serialization.GetObjectFromJsonString<RawH5PEvent>(request.ScoreElementParams.SerializedXApiEvent!);
 
 
-        xapiEvent.Actor.Name = userData.LMSUserName;
-        xapiEvent.Actor.Mbox = userData.UserEmail;
+        xApiEvent.Actor.Name = userData.LMSUserName;
+        xApiEvent.Actor.Mbox = userData.UserEmail;
 
         var moodleUrl = _config["MoodleURL"];
 
@@ -46,20 +46,21 @@ public class
         // if last character is a slash, remove it
         if (moodleUrl[^1] == '/') moodleUrl = moodleUrl[..^1];
 
-        xapiEvent.Object.Id = moodleUrl + "/xapi/activity/" + contextId;
+        // ReSharper disable once StringLiteralTypo
+        xApiEvent.Object.Id = moodleUrl + "/xapi/activity/" + contextId;
 
-        // serialize the XAPI Event again
-        var inText = JsonSerializer.Serialize(xapiEvent);
+        // serialize the XApi Event again
+        var inText = JsonSerializer.Serialize(xApiEvent);
 
-        // Send the XAPI Event to the LRS
-        var isSuccess = await _ilms.ProcessXapiStatementAsync(request.WebServiceToken, inText);
+        // Send the XApi Event to the LRS
+        var isSuccess = await _lms.ProcessXapiStatementAsync(request.WebServiceToken, inText);
 
 
-        var isAttemptASucess = await _ilms.GetH5PAttemptsAsync(request.WebServiceToken, request.Module.Instance);
+        var isAttemptASuccess = await _lms.GetH5PAttemptsAsync(request.WebServiceToken, request.Module.Instance);
 
         return new ScoreElementResponse
         {
-            IsSuccess = isAttemptASucess.usersattempts[0].scored.attempts[0].success == 1 && isSuccess
+            IsSuccess = isAttemptASuccess.usersattempts[0].scored.attempts[0].success == 1 && isSuccess
         };
     }
 }

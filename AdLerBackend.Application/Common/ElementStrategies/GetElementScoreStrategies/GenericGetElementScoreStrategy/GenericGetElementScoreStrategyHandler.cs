@@ -14,7 +14,7 @@ public class
         return Task.FromResult(new ElementScoreResponse
         {
             ElementId = request.ElementId,
-            Success = request.ElementMoule.CompletionData.State == 1
+            Success = request.ElementModule.CompletionData.State == 1
         });
     }
 }

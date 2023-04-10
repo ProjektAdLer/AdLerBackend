@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
+using NSubstitute;
 
 namespace AdLerBackend.API.UnitTests.Filters;
 
@@ -24,7 +26,10 @@ public class ApiExceptionFilterAttributeTest
         };
 
         _context = new ExceptionContext(actionContext, new List<IFilterMetadata>());
-        _filter = new ApiExceptionFilterAttribute();
+
+        var loggerMock = Substitute.For<ILogger<ApiExceptionFilterAttribute>>();
+
+        _filter = new ApiExceptionFilterAttribute(loggerMock);
     }
 
     [Test]

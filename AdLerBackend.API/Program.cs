@@ -13,6 +13,9 @@ Directory.CreateDirectory("wwwroot");
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 // If the config file does not exist, create it
 if (!File.Exists("./config/config.json"))
 {
@@ -49,7 +52,7 @@ if (!builder.Environment.IsDevelopment())
 
 
 builder.Services.AddControllers(
-    options => { options.Filters.Add(new ApiExceptionFilterAttribute()); }
+    options => { options.Filters.Add<ApiExceptionFilterAttribute>(); }
 ).AddNewtonsoftJson(opts =>
 {
     // This converts enum integers to its corresponding string value

@@ -13,11 +13,13 @@ namespace AdLerBackend.API.Filters;
 public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
 {
     private readonly IDictionary<Type, Action<ExceptionContext>> _exceptionHandlers;
+    private readonly ILogger<ApiExceptionFilterAttribute> _logger;
 
     /// <summary>
     /// </summary>
-    public ApiExceptionFilterAttribute()
+    public ApiExceptionFilterAttribute(ILogger<ApiExceptionFilterAttribute> logger)
     {
+        _logger = logger;
         _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
         {
             {typeof(ValidationException), HandleValidationException},
@@ -36,6 +38,9 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     /// <param name="context"></param>
     public override void OnException(ExceptionContext context)
     {
+        // Log the exception
+        // TODO: This logs every exception, even if it is an invalid Token for Example
+        _logger.LogError(context.Exception, "An unhandled exception occurred");
         HandleException(context);
         base.OnException(context);
     }

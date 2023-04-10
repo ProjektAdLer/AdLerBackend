@@ -60,7 +60,8 @@ public class UploadWorldCommandHandler : IRequestHandler<UploadWorldCommand, boo
         if (existsCourseForAuthor) throw new WorldCreationException("World already exists in Database");
 
         // Upload the Backup File to the LMS
-        await _lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
+        // disabled until LMS is ready - PG
+        //await _lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
 
         var atfLocation = _fileAccess.StoreATFFileForWorld(new StoreWorldATFDto
         {

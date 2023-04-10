@@ -1,4 +1,5 @@
-﻿using AdLerBackend.API.Common.ProblemDetails;
+﻿using System.Net;
+using AdLerBackend.API.Common;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using Microsoft.AspNetCore.Mvc;
@@ -6,16 +7,21 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace AdLerBackend.API.Filters;
 
+/// <summary>
+///     Handles exceptions thrown in the API
+/// </summary>
 public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
 {
     private readonly IDictionary<Type, Action<ExceptionContext>> _exceptionHandlers;
 
+    /// <summary>
+    /// </summary>
     public ApiExceptionFilterAttribute()
     {
         _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
         {
             {typeof(ValidationException), HandleValidationException},
-            {typeof(InvalidLMSLoginException), HandleLMSLoginException},
+            {typeof(InvalidLMSLoginException), HandleLmsLoginException},
             {typeof(InvalidTokenException), HandleInvalidTokenException},
             {typeof(NotFoundException), HandleNotFoundException},
             {typeof(ForbiddenAccessException), HandleForbiddenAccessException},
@@ -24,127 +30,139 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         };
     }
 
+    /// <summary>
+    ///     Handles the exception
+    /// </summary>
+    /// <param name="context"></param>
     public override void OnException(ExceptionContext context)
     {
         HandleException(context);
         base.OnException(context);
     }
 
-    private void HandleGenericLmsException(ExceptionContext context)
-    {
-        var exception = context.Exception as LmsException;
-        var problemDetails = new ProblemDetails
-        {
-            Detail = exception.Message,
-            Status = StatusCodes.Status500InternalServerError,
-            Title = "The LMS adapter encountered an error"
-        };
-
-        context.Result = new ObjectResult(problemDetails);
-    }
-
-    private void HandleWorldCreationException(ExceptionContext context)
-    {
-        var exception = context.Exception as WorldCreationException;
-        var problemDateils = new ProblemDetails
-        {
-            Detail = exception.Message,
-            Title = "World creation failed",
-            Status = StatusCodes.Status409Conflict,
-            Instance = context.HttpContext.Request.Path
-        };
-
-        context.Result = new ConflictObjectResult(problemDateils);
-    }
-
-    private void HandleForbiddenAccessException(ExceptionContext context)
-    {
-        var exception = context.Exception as ForbiddenAccessException;
-        var problemDetails = new ProblemDetails
-        {
-            Instance = context.HttpContext.Request.Path,
-            Detail = exception!.Message,
-            Title = "Forbidden Access"
-        };
-
-        context.Result = new UnauthorizedObjectResult(problemDetails)
-        {
-            StatusCode = StatusCodes.Status403Forbidden
-        };
-    }
-
-    private void HandleNotFoundException(ExceptionContext context)
-    {
-        var exception = (NotFoundException) context.Exception;
-        var details = new ProblemDetails
-        {
-            Title = "The requestet Resource was not found",
-            Detail = exception.Message,
-            Status = StatusCodes.Status404NotFound
-        };
-
-        context.Result = new NotFoundObjectResult(details);
-        context.ExceptionHandled = true;
-    }
-
-    private void HandleInvalidTokenException(ExceptionContext context)
-    {
-        var details = new MoodleTokenProblemDetails();
-
-        context.Result = new UnauthorizedObjectResult(details);
-
-        context.ExceptionHandled = true;
-    }
-
     private void HandleException(ExceptionContext context)
     {
         var type = context.Exception.GetType();
-        if (_exceptionHandlers.ContainsKey(type))
-            _exceptionHandlers[type].Invoke(context);
+        if (_exceptionHandlers.TryGetValue(type, out var handler))
+            handler.Invoke(context);
         else
             HandleUnknownException(context);
     }
 
-    private void HandleUnknownException(ExceptionContext context)
+    private static void SetResult(ExceptionContext context, ProblemDetails problemDetails)
     {
-        var details = new ProblemDetails
+        context.Result = new ObjectResult(problemDetails);
+        context.ExceptionHandled = true;
+    }
+
+    private static void HandleGenericLmsException(ExceptionContext context)
+    {
+        var exception = (LmsException) context.Exception;
+        var problemDetails = new ProblemDetails
+        {
+            Detail = exception.Message,
+            Status = StatusCodes.Status500InternalServerError,
+            Title = "The LMS adapter encountered an error",
+            Type = ErrorCodes.LmsError
+        };
+
+        SetResult(context, problemDetails);
+    }
+
+    private static void HandleWorldCreationException(ExceptionContext context)
+    {
+        var exception = (WorldCreationException) context.Exception;
+
+        var problemDetails = new ProblemDetails
+        {
+            Detail = exception.Message,
+            Title = "World creation failed",
+            Status = StatusCodes.Status409Conflict,
+            Type = ErrorCodes.WorldCreationErrorDuplicate
+        };
+
+        SetResult(context, problemDetails);
+    }
+
+
+    private static void HandleForbiddenAccessException(ExceptionContext context)
+    {
+        var exception = (ForbiddenAccessException) context.Exception;
+        var problemDetails = new ProblemDetails
+        {
+            Detail = exception.Message,
+            Title = "Forbidden Access",
+            Status = StatusCodes.Status403Forbidden,
+            Type = ErrorCodes.Forbidden
+        };
+        SetResult(context, problemDetails);
+    }
+
+    private static void HandleNotFoundException(ExceptionContext context)
+    {
+        var exception = (NotFoundException) context.Exception;
+        var problemDetails = new ProblemDetails
+        {
+            Title = "The requested Resource was not found",
+            Detail = exception.Message,
+            Status = StatusCodes.Status404NotFound,
+            Type = ErrorCodes.NotFound
+        };
+
+        SetResult(context, problemDetails);
+    }
+
+    private static void HandleInvalidTokenException(ExceptionContext context)
+    {
+        var problemDetails = new ProblemDetails
+        {
+            Title = "Invalid token",
+            Status = (int) HttpStatusCode.Unauthorized,
+            Type = ErrorCodes.LmsTokenInvalid,
+            Detail = "The provided token is invalid"
+        };
+
+        SetResult(context, problemDetails);
+    }
+
+
+    private static void HandleUnknownException(ExceptionContext context)
+    {
+        var problemDetails = new ProblemDetails
         {
             Title = "An unknown error occurred while processing your request.",
             Status = StatusCodes.Status500InternalServerError,
-            Detail = context.Exception.Message
+            Detail = context.Exception.Message,
+            Type = ErrorCodes.UnknownError
         };
 
-        context.Result = new ObjectResult(details)
-        {
-            StatusCode = StatusCodes.Status500InternalServerError
-        };
-
-        context.ExceptionHandled = true;
+        SetResult(context, problemDetails);
     }
 
-    private void HandleValidationException(ExceptionContext context)
+    private static void HandleValidationException(ExceptionContext context)
     {
         var exception = (ValidationException) context.Exception;
 
-        var details = new ValidationProblemDetails(exception.Errors)
+        var problemDetails = new ValidationProblemDetails(exception.Errors)
         {
-            Type = "Validation Error"
+            Type = ErrorCodes.ValidationError,
+            Status = StatusCodes.Status400BadRequest,
+            Title = "Validation Error"
         };
 
-        context.Result = new BadRequestObjectResult(details);
-
-        context.ExceptionHandled = true;
+        SetResult(context, problemDetails);
     }
 
-    private void HandleLMSLoginException(ExceptionContext context)
+    private static void HandleLmsLoginException(ExceptionContext context)
     {
-        var details = new MoodleLoginProblemDetails
+        var problemDetails = new ProblemDetails
         {
-            Detail = "The Moodle Login Data Provided is wrong"
+            Title = "LMS login error",
+            Status = StatusCodes.Status401Unauthorized,
+            Type = ErrorCodes.InvalidLogin,
+            Detail = "The Lms Login Data Provided is wrong"
         };
 
-        context.Result = new UnauthorizedObjectResult(details);
-
-        context.ExceptionHandled = true;
+        SetResult(context, problemDetails);
     }
 }

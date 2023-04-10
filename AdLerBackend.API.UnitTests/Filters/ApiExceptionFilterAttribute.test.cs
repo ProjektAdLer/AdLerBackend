@@ -1,7 +1,8 @@
-﻿using AdLerBackend.API.Common.ProblemDetails;
+﻿using AdLerBackend.API.Common;
 using AdLerBackend.API.Filters;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -52,10 +53,10 @@ public class ApiExceptionFilterAttributeTest
         _filter.OnException(_context);
 
         // Assert
-        var result = _context.Result as UnauthorizedObjectResult;
+        var result = _context.Result as ObjectResult;
         var resultValue = result!.Value;
 
-        Assert.IsInstanceOf<MoodleLoginProblemDetails>(resultValue);
+        Assert.IsInstanceOf<ProblemDetails>(resultValue);
     }
 
     [Test]
@@ -68,13 +69,13 @@ public class ApiExceptionFilterAttributeTest
         _filter.OnException(_context);
 
         // Assert
-        Assert.That(_context.Result, Is.InstanceOf<BadRequestObjectResult>());
-        var result = (BadRequestObjectResult) _context.Result!;
+        Assert.That(_context.Result, Is.InstanceOf<ObjectResult>());
+        var result = (ObjectResult) _context.Result!;
 
         Assert.That(result.Value, Is.InstanceOf<ValidationProblemDetails>());
         var resultValue = (ValidationProblemDetails) result.Value!;
 
-        Assert.That(resultValue.Type, Is.EqualTo("Validation Error"));
+        Assert.That(resultValue.Type, Is.EqualTo(ErrorCodes.ValidationError));
     }
 
     [Test]
@@ -90,8 +91,8 @@ public class ApiExceptionFilterAttributeTest
         var result = _context.Result as ObjectResult;
         var resultValue = result!.Value as ProblemDetails;
 
-        Assert.IsInstanceOf<ProblemDetails>(resultValue);
-        Assert.That(resultValue!.Title, Is.EqualTo("An unknown error occurred while processing your request."));
+        Assert.That(resultValue, Is.InstanceOf<ProblemDetails>());
+        resultValue!.Type.Should().Be(ErrorCodes.UnknownError);
     }
 
     [Test]
@@ -104,10 +105,11 @@ public class ApiExceptionFilterAttributeTest
         _filter.OnException(_context);
 
         // Assert
-        var result = _context.Result as UnauthorizedObjectResult;
-        var resultValue = result!.Value;
+        var result = _context.Result as ObjectResult;
+        var resultValue = result!.Value as ProblemDetails;
 
-        Assert.IsInstanceOf<MoodleTokenProblemDetails>(resultValue);
+        Assert.IsInstanceOf<ProblemDetails>(resultValue);
+        if (resultValue != null) resultValue.Type.Should().Be(ErrorCodes.LmsTokenInvalid);
     }
 
     [Test]
@@ -120,7 +122,7 @@ public class ApiExceptionFilterAttributeTest
         _filter.OnException(_context);
 
         // Assert
-        var result = _context.Result as NotFoundObjectResult;
+        var result = _context.Result as ObjectResult;
         var resultValue = result!.Value;
 
         Assert.IsInstanceOf<ProblemDetails>(resultValue);
@@ -136,7 +138,7 @@ public class ApiExceptionFilterAttributeTest
         _filter.OnException(_context);
 
         // Assert
-        var result = _context.Result as UnauthorizedObjectResult;
+        var result = _context.Result as ObjectResult;
         var resultValue = result!.Value;
 
         Assert.IsInstanceOf<ProblemDetails>(resultValue);
@@ -152,7 +154,7 @@ public class ApiExceptionFilterAttributeTest
         _filter.OnException(_context);
 
         // Assert
-        var result = _context.Result as ConflictObjectResult;
+        var result = _context.Result as ObjectResult;
         var resultValue = result!.Value;
 
         Assert.IsInstanceOf<ProblemDetails>(resultValue);

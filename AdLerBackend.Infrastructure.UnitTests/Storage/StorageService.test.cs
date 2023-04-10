@@ -88,7 +88,7 @@ public class StorageServiceTest
         dto.WorldInformation.World.LmsElementIdentifier.Value = "LearningWorldIdentifier";
 
         // Act
-        var dslLocation = storageService.StoreATFFileForWorld(dto);
+        var dslLocation = storageService.StoreAtfFileForWorld(dto);
 
         // Assert
         var file = _fileSystem.Path.Combine("wwwroot", "courses", "1", "LearningWorldIdentifier",

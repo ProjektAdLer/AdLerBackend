@@ -47,7 +47,7 @@ public class ApiExceptionFilterAttributeTest
     public void ApiExceptionFilterAttribute_Should_Handle_InvalidMoodleLogin()
     {
         // Arrange
-        _context.Exception = new InvalidLMSLoginException();
+        _context.Exception = new InvalidLmsLoginException();
 
         // Act
         _filter.OnException(_context);

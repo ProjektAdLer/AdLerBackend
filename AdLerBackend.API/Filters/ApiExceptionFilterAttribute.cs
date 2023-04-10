@@ -21,7 +21,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
         {
             {typeof(ValidationException), HandleValidationException},
-            {typeof(InvalidLMSLoginException), HandleLmsLoginException},
+            {typeof(InvalidLmsLoginException), HandleLmsLoginException},
             {typeof(InvalidTokenException), HandleInvalidTokenException},
             {typeof(NotFoundException), HandleNotFoundException},
             {typeof(ForbiddenAccessException), HandleForbiddenAccessException},

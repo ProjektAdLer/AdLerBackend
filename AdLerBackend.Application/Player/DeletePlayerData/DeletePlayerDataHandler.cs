@@ -16,7 +16,7 @@ public class DeletePlayerDataHandler : IRequestHandler<DeletePlayerDataCommand, 
 
     public async Task<bool> Handle(DeletePlayerDataCommand request, CancellationToken cancellationToken)
     {
-        var moodleData = await _ilms.GetLMSUserDataAsync(request.WebServiceToken);
+        var moodleData = await _ilms.GetLmsUserDataAsync(request.WebServiceToken);
         await _playerRepository.DeleteAsync(moodleData.UserId);
 
         return true;

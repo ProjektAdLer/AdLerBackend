@@ -38,7 +38,7 @@ public class MoodleWebApiTest
         //_moodleUtils.ConvertFileStreamToBase64(Arg.Any<Stream>()).Returns("base64");
 
         // Act
-        var result = await _systemUnderTest.UploadCourseWorldToLMS("token", new MemoryStream());
+        var result = await _systemUnderTest.UploadCourseWorldToLms("token", new MemoryStream());
 
         // Assert
         Assert.That(result, Is.EqualTo(1337));
@@ -49,7 +49,7 @@ public class MoodleWebApiTest
     {
         // Arrange
         var test = Substitute.ForPartsOf<MoodleWebApi>(_mockHttp.ToHttpClient(), _configuration, _moodleUtils);
-        test.Configure().GetLMSUserDataAsync("token").Returns(new LMSUserDataResponse
+        test.Configure().GetLmsUserDataAsync("token").Returns(new LMSUserDataResponse
         {
             IsAdmin = true,
             UserId = 1,
@@ -57,7 +57,7 @@ public class MoodleWebApiTest
         });
 
         // Act
-        var result = await test.IsLMSAdminAsync("token");
+        var result = await test.IsLmsAdminAsync("token");
 
         // Assert
         Assert.IsTrue(result);
@@ -102,7 +102,7 @@ public class MoodleWebApiTest
                 "application/json", "{\"token\":\"testToken\"}");
 
         // Act
-        var result = await _systemUnderTest.GetLMSUserTokenAsync("moodleUser", "moodlePassword");
+        var result = await _systemUnderTest.GetLmsUserTokenAsync("moodleUser", "moodlePassword");
 
         // Assert
         Assert.That(result.LMSToken, Is.EqualTo("testToken"));
@@ -135,7 +135,7 @@ public class MoodleWebApiTest
                 "{\"error\":\"Invalidlogin,pleasetryagain\",\"errorcode\":\"invalidlogin\",\"stacktrace\":null,\"debuginfo\":null,\"reproductionlink\":null}");
 
         Assert.ThrowsAsync<LmsException>(() =>
-            _systemUnderTest.GetLMSUserTokenAsync("moodleUser", "moodlePassword"));
+            _systemUnderTest.GetLmsUserTokenAsync("moodleUser", "moodlePassword"));
         return Task.CompletedTask;
     }
 
@@ -147,7 +147,7 @@ public class MoodleWebApiTest
             .Throw(new HttpRequestException());
 
         var exception = Assert.ThrowsAsync<LmsException>(async () =>
-            await _systemUnderTest.GetLMSUserTokenAsync("moodleUser", "moodlePassword"));
+            await _systemUnderTest.GetLmsUserTokenAsync("moodleUser", "moodlePassword"));
         return Task.CompletedTask;
     }
 
@@ -161,7 +161,7 @@ public class MoodleWebApiTest
                 "<blablabla>");
 
         var exception = Assert.ThrowsAsync<LmsException>(async () =>
-            await _systemUnderTest.GetLMSUserTokenAsync("moodleUser", "moodlePassword"));
+            await _systemUnderTest.GetLmsUserTokenAsync("moodleUser", "moodlePassword"));
 
         // check exception message
         Assert.That(exception!.Message, Is.EqualTo("Das Ergebnis der Moodle Web Api konnte nicht gelesen werden"));
@@ -192,7 +192,7 @@ public class MoodleWebApiTest
                 "application/json", JsonSerializer.Serialize(list));
 
         // Act
-        var result = await _systemUnderTest.GetLMSUserDataAsync("moodleToken");
+        var result = await _systemUnderTest.GetLmsUserDataAsync("moodleToken");
 
         // Assert
         Assert.That(result.IsAdmin, Is.EqualTo(true));
@@ -209,7 +209,7 @@ public class MoodleWebApiTest
                 "{\"exception\":\"moodle_exception\",\"errorcode\":\"invalidtoken\",\"message\":\"Invalidtoken-tokennotfound\"}");
 
         var exception = Assert.ThrowsAsync<LmsException>(async () =>
-            await _systemUnderTest.GetLMSUserDataAsync("moodleToken"));
+            await _systemUnderTest.GetLmsUserDataAsync("moodleToken"));
 
         // check exception message
         Assert.That(exception!.LmsErrorCode, Is.EqualTo("invalidtoken"));
@@ -225,7 +225,7 @@ public class MoodleWebApiTest
                 "application/json", "[true]");
 
         // Act
-        var result = await _systemUnderTest.ProcessXapiStatementAsync("moodleToken", "testXApi");
+        var result = await _systemUnderTest.ProcessXApiStatementAsync("moodleToken", "testXApi");
 
         // Assert
         Assert.That(result, Is.EqualTo(true));
@@ -240,7 +240,7 @@ public class MoodleWebApiTest
                 "application/json", "[false]");
 
         // Act
-        var result = await _systemUnderTest.ProcessXapiStatementAsync("moodleToken", "testXApi");
+        var result = await _systemUnderTest.ProcessXApiStatementAsync("moodleToken", "testXApi");
 
         // Assert
         Assert.That(result, Is.EqualTo(false));

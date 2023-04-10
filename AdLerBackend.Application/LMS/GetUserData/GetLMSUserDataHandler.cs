@@ -15,7 +15,7 @@ public class GetLMSUserDataHandler : IRequestHandler<GetLMSUserDataCommand, LMSU
 
     public async Task<LMSUserDataResponse> Handle(GetLMSUserDataCommand request, CancellationToken cancellationToken)
     {
-        var lmsUserDataDto = await _ilmsContext.GetLMSUserDataAsync(request.WebServiceToken);
+        var lmsUserDataDto = await _ilmsContext.GetLmsUserDataAsync(request.WebServiceToken);
         return lmsUserDataDto;
     }
 }

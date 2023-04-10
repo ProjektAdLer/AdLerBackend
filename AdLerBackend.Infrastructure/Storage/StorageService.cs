@@ -35,7 +35,7 @@ public class StorageService : IFileAccess
         return h5PFilePaths;
     }
 
-    public string StoreATFFileForWorld(StoreWorldAtfDto worldToStoreH5P)
+    public string StoreAtfFileForWorld(StoreWorldAtfDto worldToStoreH5P)
     {
         worldToStoreH5P.AtfFile.Position = 0;
         var workingDir = _fileSystem.Path.Join("wwwroot", "courses", worldToStoreH5P.AuthorId.ToString(),

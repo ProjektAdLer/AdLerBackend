@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace AdLerBackend.API.Controllers.LMSUserService;
 
 [Route("api/Users")]
-public class LMSLoginController : BaseApiController
+public class LmsLoginController : BaseApiController
 {
-    public LMSLoginController(IMediator mediator) : base(mediator)
+    public LmsLoginController(IMediator mediator) : base(mediator)
     {
     }
 
@@ -19,14 +19,14 @@ public class LMSLoginController : BaseApiController
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
-    public async Task<ActionResult<LMSUserDataResponse>> GetLMSUserData(
+    public async Task<ActionResult<LMSUserDataResponse>> GetLmsUserData(
         [FromQuery] GetLMSUserDataCommand command)
     {
         return await Mediator.Send(command);
     }
 
     [HttpGet("Login")]
-    public async Task<ActionResult<LMSUserTokenResponse>> GetLMSUserToken(
+    public async Task<ActionResult<LMSUserTokenResponse>> GetLmsUserToken(
         [FromQuery] GetLMSTokenCommand command)
     {
         return await Mediator.Send(command);

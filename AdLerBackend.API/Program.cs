@@ -20,11 +20,11 @@ if (!File.Exists("./config/config.json"))
     {
         useHttps = "false",
         httpPort = 80,
-        moodleUrl = "Bitte eine Moodle URL angeben"
+        moodleUrl = "Please specify moodle url"
     }, Formatting.Indented));
 
-    // shut down programm with message in dialog
-    Console.WriteLine("Bitte config.json anpassen und Programm erneut starten");
+    // shut down program with message in dialog
+    Console.WriteLine("Please edit the config file in ./config/config.json and restart the program.");
     Environment.Exit(1);
 }
 
@@ -35,7 +35,7 @@ builder.Configuration.AddJsonFile("./config/config.json", false);
 if (!builder.Environment.IsDevelopment())
     builder.WebHost.ConfigureKestrel(options =>
     {
-        if (builder.Configuration["useHttps"].ToLower() == "true")
+        if (builder.Configuration["useHttps"]?.ToLower() == "true")
             options.ListenAnyIP(int.Parse(builder.Configuration["httpsPort"] ?? "433"),
                 listenOptions =>
                 {

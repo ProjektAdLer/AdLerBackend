@@ -15,6 +15,10 @@ namespace AdLerBackend.API.Controllers.Player;
 [Route("api/PlayerData")]
 public class PlayerController : BaseApiController
 {
+    /// <summary>
+    ///     Constructor
+    /// </summary>
+    /// <param name="mediator"></param>
     public PlayerController(IMediator mediator) : base(mediator)
     {
     }

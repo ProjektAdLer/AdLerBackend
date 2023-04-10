@@ -84,7 +84,7 @@ public class WorldsControllerTest
         var controller = new WorldsController(mediatorMock);
 
         // Act
-        await controller.GetWorldATF("token", 1337);
+        await controller.GetWorldAtf("token", 1337);
 
         // Assert
         await mediatorMock.Received(1).Send(

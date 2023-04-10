@@ -15,6 +15,10 @@ namespace AdLerBackend.API.Controllers.Elements;
 [Route("api/Elements")]
 public class ElementsController : BaseApiController
 {
+    /// <summary>
+    ///     Constructor
+    /// </summary>
+    /// <param name="mediator"></param>
     public ElementsController(IMediator mediator) : base(mediator)
     {
     }

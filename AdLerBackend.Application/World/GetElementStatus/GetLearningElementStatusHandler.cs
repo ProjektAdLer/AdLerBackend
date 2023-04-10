@@ -42,7 +42,7 @@ public class
                 new GenericGetElementScoreScoreStrategyCommand
                 {
                     ElementId = moduleWithId.Id,
-                    ElementModule = moduleWithId.Module,
+                    ElementMoule = moduleWithId.Module,
                     WebServiceToken = request.WebServiceToken
                 }), cancellationToken);
 
@@ -62,7 +62,7 @@ public class
                 return new GetH5PElementScoreStrategyCommand
                 {
                     ElementId = commandWithParams.ElementId,
-                    ElementModule = commandWithParams.ElementModule,
+                    ElementMoule = commandWithParams.ElementMoule,
                     WebServiceToken = commandWithParams.WebServiceToken
                 };
             case "url": return commandWithParams;

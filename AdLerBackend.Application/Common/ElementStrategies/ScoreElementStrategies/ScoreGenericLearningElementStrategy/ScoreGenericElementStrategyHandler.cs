@@ -8,11 +8,11 @@ namespace AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategi
 public class ScoreGenericElementStrategyHandler : IRequestHandler<ScoreGenericElementStrategyCommand,
     ScoreElementResponse>
 {
-    private readonly ILMS _lms;
+    private readonly ILMS _ilms;
 
-    public ScoreGenericElementStrategyHandler(ILMS lms)
+    public ScoreGenericElementStrategyHandler(ILMS ilms)
     {
-        _lms = lms;
+        _ilms = ilms;
     }
 
     public async Task<ScoreElementResponse> Handle(ScoreGenericElementStrategyCommand request,
@@ -20,7 +20,7 @@ public class ScoreGenericElementStrategyHandler : IRequestHandler<ScoreGenericEl
     {
         return new ScoreElementResponse
         {
-            IsSuccess = await _lms.ScoreGenericElement(request.WebServiceToken, request.Module.Id)
+            IsSuccess = await _ilms.ScoreGenericElement(request.WebServiceToken, request.Module.Id)
         };
     }
 }

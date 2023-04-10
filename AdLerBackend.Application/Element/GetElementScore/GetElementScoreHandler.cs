@@ -36,7 +36,7 @@ public class
                 new GenericGetElementScoreScoreStrategyCommand
                 {
                     ElementId = request.ElementId,
-                    ElementModule = learningElementModule.ElementData,
+                    ElementMoule = learningElementModule.ElementData,
                     WebServiceToken = request.WebServiceToken
                 })
             , cancellationToken);

@@ -8,5 +8,5 @@ namespace AdLerBackend.Application.Common.ElementStrategies.GetElementScoreStrat
 public record GetH5PElementScoreStrategyCommand : CommandWithToken<ElementScoreResponse>
 {
     public int ElementId { get; init; }
-    public Modules ElementModule { get; init; }
+    public Modules ElementMoule { get; init; }
 }

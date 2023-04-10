@@ -15,7 +15,7 @@ public class CheckUserPrivilegesHandler : IRequestHandler<CheckUserPrivilegesCom
 
     public async Task<Unit> Handle(CheckUserPrivilegesCommand request, CancellationToken cancellationToken)
     {
-        if (!await _lms.IsLmsAdminAsync(request.WebServiceToken))
+        if (!await _lms.IsLMSAdminAsync(request.WebServiceToken))
             throw new ForbiddenAccessException("User is not " + request.Role);
 
         return Unit.Value;

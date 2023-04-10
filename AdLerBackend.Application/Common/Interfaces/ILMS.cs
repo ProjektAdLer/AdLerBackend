@@ -9,7 +9,7 @@ public interface ILMS
     /// </summary>
     /// <param name="token">LMS Webservice Token</param>
     /// <returns>LMS User Data6</returns>
-    Task<LMSUserDataResponse> GetLmsUserDataAsync(string token);
+    Task<LMSUserDataResponse> GetLMSUserDataAsync(string token);
 
     /// <summary>
     ///     Gets the LMS Webservice Token for a given Account
@@ -17,15 +17,14 @@ public interface ILMS
     /// <param name="userName">LMS User Name</param>
     /// <param name="password">LMS User Password</param>
     /// <returns>The LMS Token</returns>
-    Task<LMSUserTokenResponse> GetLmsUserTokenAsync(string userName, string password);
+    Task<LMSUserTokenResponse> GetLMSUserTokenAsync(string userName, string password);
 
     /// <summary>
     ///     Searches all Worlds, that are avalibale for the given LMS User
     /// </summary>
     /// <param name="token">Token of the LMS User</param>
     /// <param name="searchString">The World to get Searched for</param>
-    /// <param name="limitToEnrolled">if the Search should only return courses where the user in enrolled in</param>
-    /// <returns>A List of all found Courses</returns>
+    /// <returns>A List of all found Coruses</returns>
     Task<LMSWorldListResponse> SearchWorldsAsync(string token, string searchString, bool limitToEnrolled = false);
 
     /// <summary>
@@ -48,7 +47,7 @@ public interface ILMS
     /// </summary>
     /// <param name="token"></param>
     /// <returns></returns>
-    Task<bool> IsLmsAdminAsync(string token);
+    Task<bool> IsLMSAdminAsync(string token);
 
     /// <summary>
     ///     Processes an XAPI Statement
@@ -56,7 +55,7 @@ public interface ILMS
     /// <param name="token"></param>
     /// <param name="statement">The Statement of the XAPI Request</param>
     /// <returns>Returns True, if the Statement hase been processed successfully </returns>
-    Task<bool> ProcessXApiStatementAsync(string token, string statement);
+    Task<bool> ProcessXapiStatementAsync(string token, string statement);
 
     Task<H5PAttempts> GetH5PAttemptsAsync(string token, int h5PActivityId);
 
@@ -68,6 +67,5 @@ public interface ILMS
      * @param token The LMS Webservice Token
      * @param backupFileStream The Stream of the Backup File
      */
-    // ReSharper disable once UnusedMemberInSuper.Global
-    Task<int> UploadCourseWorldToLms(string token, Stream backupFileStream);
+    Task<int> UploadCourseWorldToLMS(string token, Stream backupFileStream);
 }

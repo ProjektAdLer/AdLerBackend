@@ -34,13 +34,13 @@ public class LMSLoginControllerTest
         // Arrange
         var mediatorMock = Substitute.For<IMediator>();
         mediatorMock.Send(Arg.Any<GetLMSUserDataCommand>()).Throws(
-            new InvalidLmsLoginException());
+            new InvalidLMSLoginException());
 
 
         var controller = new LmsLoginController(mediatorMock);
 
         // Expect exception to be thrown
-        Assert.ThrowsAsync<InvalidLmsLoginException>(() => controller.GetLmsUserData(new GetLMSUserDataCommand
+        Assert.ThrowsAsync<InvalidLMSLoginException>(() => controller.GetLmsUserData(new GetLMSUserDataCommand
         {
             WebServiceToken = "TestToken"
         }));

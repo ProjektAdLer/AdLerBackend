@@ -63,7 +63,7 @@ public class UploadWorldCommandHandler : IRequestHandler<UploadWorldCommand, boo
         // disabled until LMS is ready - PG
         //await _lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
 
-        var atfLocation = _fileAccess.StoreAtfFileForWorld(new StoreWorldAtfDto
+        var atfLocation = _fileAccess.StoreATFFileForWorld(new StoreWorldAtfDto
         {
             AuthorId = userInformation.UserId,
             AtfFile = request.ATFFileStream,

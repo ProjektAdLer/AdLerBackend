@@ -25,7 +25,7 @@ public class
         CancellationToken cancellationToken)
     {
         // Get User Data
-        var userData = await _lms.GetLmsUserDataAsync(request.WebServiceToken);
+        var userData = await _lms.GetLMSUserDataAsync(request.WebServiceToken);
 
         var contextId = request.Module.contextid;
 
@@ -53,7 +53,7 @@ public class
         var inText = JsonSerializer.Serialize(xApiEvent);
 
         // Send the XApi Event to the LRS
-        var isSuccess = await _lms.ProcessXApiStatementAsync(request.WebServiceToken, inText);
+        var isSuccess = await _lms.ProcessXapiStatementAsync(request.WebServiceToken, inText);
 
 
         var isAttemptASuccess = await _lms.GetH5PAttemptsAsync(request.WebServiceToken, request.Module.Instance);

@@ -16,7 +16,7 @@ public class
         throw ex.LmsErrorCode switch
         {
             "invalidtoken" => new InvalidTokenException(),
-            "invalidlogin" => new InvalidLmsLoginException(),
+            "invalidlogin" => new InvalidLMSLoginException(),
             _ => ex
         };
     }

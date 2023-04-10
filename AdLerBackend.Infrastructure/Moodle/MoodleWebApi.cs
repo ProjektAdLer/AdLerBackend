@@ -20,7 +20,7 @@ public class MoodleWebApi : ILMS
         _moodleUtils = moodleUtils;
     }
 
-    public async Task<LMSUserTokenResponse> GetLmsUserTokenAsync(string userName, string password)
+    public async Task<LMSUserTokenResponse> GetLMSUserTokenAsync(string userName, string password)
     {
         var resp = await MoodleCallAsync<UserTokenResponse>(new Dictionary<string, string>
         {
@@ -63,13 +63,13 @@ public class MoodleWebApi : ILMS
         });
     }
 
-    public async Task<bool> IsLmsAdminAsync(string token)
+    public async Task<bool> IsLMSAdminAsync(string token)
     {
-        var userData = await GetLmsUserDataAsync(token);
+        var userData = await GetLMSUserDataAsync(token);
         return userData.IsAdmin;
     }
 
-    public async Task<bool> ProcessXApiStatementAsync(string token, string statement)
+    public async Task<bool> ProcessXapiStatementAsync(string token, string statement)
     {
         var returnValue = await MoodleCallAsync<IList<bool>>(new Dictionary<string, string>
         {
@@ -108,7 +108,7 @@ public class MoodleWebApi : ILMS
         return response.Status;
     }
 
-    public async Task<int> UploadCourseWorldToLms(string token, Stream backupFileStream)
+    public async Task<int> UploadCourseWorldToLMS(string token, Stream backupFileStream)
     {
         // Encode the Stream in Base64
         var base64String = _moodleUtils.ConvertFileStreamToBase64(backupFileStream);
@@ -125,7 +125,7 @@ public class MoodleWebApi : ILMS
     }
 
 
-    public virtual async Task<LMSUserDataResponse> GetLmsUserDataAsync(string token)
+    public virtual async Task<LMSUserDataResponse> GetLMSUserDataAsync(string token)
     {
         var generalInformationResponse = await MoodleCallAsync<GeneralUserDataResponse>(new Dictionary<string, string>
         {
@@ -253,19 +253,19 @@ public class MoodleWebApi : ILMS
 #pragma warning disable CS8618
     private class UserTokenResponse
     {
-        public string Token { get; }
+        public string Token { get; set; }
     }
 
     private class GeneralUserDataResponse
     {
-        public string Username { get; }
-        public bool Userissiteadmin { get; }
-        public int Userid { get; }
+        public string Username { get; set; }
+        public bool Userissiteadmin { get; set; }
+        public int Userid { get; set; }
     }
 
     private class DetailedUserDataResponse
     {
-        public string Email { get; }
+        public string Email { get; set; }
     }
 
     public class UploadWorldPluginResponse
@@ -280,7 +280,7 @@ public class MoodleWebApi : ILMS
 
     private class MoodleWsErrorResponse
     {
-        public string Errorcode { get; }
+        public string Errorcode { get; set; }
     }
 
     private class PostToMoodleOptions

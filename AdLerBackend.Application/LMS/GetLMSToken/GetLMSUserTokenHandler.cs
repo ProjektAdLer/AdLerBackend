@@ -15,7 +15,7 @@ public class GetLMSUserTokenHandler : IRequestHandler<GetLMSTokenCommand, LMSUse
 
     public async Task<LMSUserTokenResponse> Handle(GetLMSTokenCommand request, CancellationToken cancellationToken)
     {
-        var lmsTokenDto = await _ilms.GetLmsUserTokenAsync(request.UserName, request.Password);
+        var lmsTokenDto = await _ilms.GetLMSUserTokenAsync(request.UserName, request.Password);
         return lmsTokenDto;
     }
 }

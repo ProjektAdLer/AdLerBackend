@@ -18,7 +18,7 @@ public class GetPlayerDataHandler : IRequestHandler<GetPlayerDataCommand, Player
     public async Task<PlayerDataResponse> Handle(GetPlayerDataCommand request, CancellationToken cancellationToken)
     {
         // Get Player Id from Moodle
-        var playerMoodleData = await _ilms.GetLmsUserDataAsync(request.WebServiceToken);
+        var playerMoodleData = await _ilms.GetLMSUserDataAsync(request.WebServiceToken);
 
         // Get Player Data from Database
         var playerData = await _playerDataRepository.EnsureGetAsync(playerMoodleData.UserId);

@@ -5,6 +5,6 @@ namespace AdLerBackend.Application.Common.DTOs.Storage;
 
 public class WorldBaseStorageDto
 {
-    public WorldDtoResponse WorldInformation { get; init; }
-    public int AuthorId { get; init; }
+    public WorldDtoResponse WorldInforamtion { get; set; }
+    public int AuthorId { get; set; }
 }

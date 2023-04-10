@@ -13,11 +13,14 @@ public class
         CancellationToken cancellationToken)
     {
         var ex = (LmsException) exception;
-        throw ex.LmsErrorCode switch
+        switch (ex.LmsErrorCode)
         {
-            "invalidtoken" => new InvalidTokenException(),
-            "invalidlogin" => new InvalidLMSLoginException(),
-            _ => ex
-        };
+            case "invalidtoken":
+                throw new InvalidTokenException();
+            case "invalidlogin":
+                throw new InvalidLMSLoginException();
+            default:
+                throw ex;
+        }
     }
 }

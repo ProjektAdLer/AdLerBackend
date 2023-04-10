@@ -31,11 +31,11 @@ public class
 
         // Deserialize the XAPI Event
         var xapiEvent =
-            _serialization.GetObjectFromJsonString<RawH5PEvent>(request.ScoreElementParams.SerializedXApiEvent!);
+            _serialization.GetObjectFromJsonString<RawH5PEvent>(request.ScoreElementParams.SerializedXAPIEvent!);
 
 
-        xapiEvent.Actor.Name = userData.LMSUserName;
-        xapiEvent.Actor.Mbox = userData.UserEmail;
+        xapiEvent.actor.name = userData.LMSUserName;
+        xapiEvent.actor.mbox = userData.UserEmail;
 
         var moodleUrl = _config["MoodleURL"];
 
@@ -46,7 +46,7 @@ public class
         // if last character is a slash, remove it
         if (moodleUrl[^1] == '/') moodleUrl = moodleUrl[..^1];
 
-        xapiEvent.Object.Id = moodleUrl + "/xapi/activity/" + contextId;
+        xapiEvent.@object.id = moodleUrl + "/xapi/activity/" + contextId;
 
         // serialize the XAPI Event again
         var inText = JsonSerializer.Serialize(xapiEvent);

@@ -212,7 +212,7 @@ public class MoodleWebApi : ILMS
         {
             wsErrorData = TryRead<MoodleWsErrorResponse>(responseString);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             // ignored
         }

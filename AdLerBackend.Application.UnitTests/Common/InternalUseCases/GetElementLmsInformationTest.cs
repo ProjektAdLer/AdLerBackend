@@ -48,7 +48,7 @@ public class GerElementLmsInformationTest
             }
         });
 
-        _fileAccess.GetFileStream(Arg.Any<string>()).Returns(new MemoryStream());
+        _fileAccess.GetReadFileStream(Arg.Any<string>()).Returns(new MemoryStream());
         _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
             .Returns(new WorldDtoResponse
             {
@@ -119,7 +119,7 @@ public class GerElementLmsInformationTest
 
         _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity?) null);
 
-        _fileAccess.GetFileStream(Arg.Any<string>()).Returns(new MemoryStream());
+        _fileAccess.GetReadFileStream(Arg.Any<string>()).Returns(new MemoryStream());
         _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
             .Returns(new WorldDtoResponse
             {
@@ -185,7 +185,7 @@ public class GerElementLmsInformationTest
 
         _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity?) null);
 
-        _fileAccess.GetFileStream(Arg.Any<string>()).Returns(new MemoryStream());
+        _fileAccess.GetReadFileStream(Arg.Any<string>()).Returns(new MemoryStream());
         _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
             .Returns(new WorldDtoResponse
             {
@@ -267,7 +267,7 @@ public class GerElementLmsInformationTest
             }
         });
 
-        _fileAccess.GetFileStream(Arg.Any<string>()).Returns(new MemoryStream());
+        _fileAccess.GetReadFileStream(Arg.Any<string>()).Returns(new MemoryStream());
         _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
             .Returns(new WorldDtoResponse
             {

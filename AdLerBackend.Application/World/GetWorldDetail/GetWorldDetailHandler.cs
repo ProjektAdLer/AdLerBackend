@@ -33,7 +33,7 @@ public class GetWorldDetailHandler : IRequestHandler<GetWorldDetailCommand, Worl
             throw new NotFoundException("Course with the Id " + request.WorldId + " not found");
 
         // Get Course DSL 
-        await using var fileStream = _fileAccess.GetFileStream(course.DslLocation);
+        await using var fileStream = _fileAccess.GetReadFileStream(course.DslLocation);
 
         // Parse DSL File
         var dslFile = await _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(fileStream);

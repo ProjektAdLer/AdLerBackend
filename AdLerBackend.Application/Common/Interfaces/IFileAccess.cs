@@ -6,7 +6,7 @@ public interface IFileAccess
 {
     public List<string>? StoreH5PFilesForWorld(WorldStoreH5PDto worldToStoreH5P);
     public string StoreATFFileForWorld(StoreWorldATFDto worldToStoreH5P);
-    public Stream GetFileStream(string filePath);
+    public Stream GetReadFileStream(string filePath);
     public string StoreH5PBase(Stream fileStream);
     public bool DeleteWorld(WorldDeleteDto worldToDelete);
 }

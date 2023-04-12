@@ -53,7 +53,7 @@ public class GetWorldDetailTest
         _worldRepository.GetAsync(Arg.Any<int>()).Returns(courseDatabaseResponse);
 
         var stream = new MemoryStream();
-        _fileAccess.GetFileStream(Arg.Any<string>()).Returns(stream);
+        _fileAccess.GetReadFileStream(Arg.Any<string>()).Returns(stream);
 
         var mockedDsl = AutoFaker.Generate<WorldDtoResponse>();
         mockedDsl.World.Elements = new List<Application.Common.Responses.Course.Element>

@@ -4,6 +4,9 @@ using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using Microsoft.Extensions.Configuration;
 
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Local
+
 namespace AdLerBackend.Infrastructure.Moodle;
 
 public class MoodleWebApi : ILMS
@@ -122,6 +125,47 @@ public class MoodleWebApi : ILMS
         });
 
         return response.Data.Course_Id;
+    }
+
+    public async Task<bool> GetElementScoreFromPlugin(string token, int elementId)
+    {
+        var response = await MoodleCallAsync<PluginElementScore>(new Dictionary<string, string>
+        {
+            {"wstoken", token},
+            {"moodlewsrestformat", "json"},
+            {"wsfunction", "local_adler_score_get_element_scores"},
+            {"module_ids[0]", elementId.ToString()}
+        });
+
+        // Todo replace with the actual score
+        return response.data[0].score > 0;
+    }
+
+    public async Task<bool> ScoreGenericElementViaPlugin(string token, int elementId)
+    {
+        var response = await MoodleCallAsync<PluginElementScore>(new Dictionary<string, string>
+        {
+            {"wstoken", token},
+            {"moodlewsrestformat", "json"},
+            {"wsfunction", "local_adler_score_primitive_learning_element"},
+            {"module_id", elementId.ToString()},
+            {"is_completed", "1"}
+        });
+
+        return response.data[0].score > 0;
+    }
+
+    public async Task<bool> ProcessXApiViaPlugin(string token, string statement)
+    {
+        var response = await MoodleCallAsync<PluginElementScore>(new Dictionary<string, string>
+        {
+            {"wstoken", token},
+            {"moodlewsrestformat", "json"},
+            {"wsfunction", "local_adler_score_h5p_learning_element"},
+            {"xapi", statement}
+        });
+
+        return response.data[0].score > 0;
     }
 
 
@@ -251,6 +295,17 @@ public class MoodleWebApi : ILMS
         }
     }
 #pragma warning disable CS8618
+    public class PluginElementScoreData
+    {
+        public int module_id { get; set; }
+        public int score { get; set; }
+    }
+
+    public class PluginElementScore
+    {
+        public List<PluginElementScoreData> data { get; set; }
+    }
+
     private class UserTokenResponse
     {
         public string Token { get; set; }

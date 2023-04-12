@@ -112,7 +112,7 @@ public class StorageServiceTest
         var storageService = new StorageService(_fileSystem);
 
         // Act
-        var fileStream = storageService.GetFileStream(filePath);
+        var fileStream = storageService.GetReadFileStream(filePath);
 
         // Assert
         Assert.That(fileStream, Is.Not.Null);
@@ -128,7 +128,7 @@ public class StorageServiceTest
 
         // Act
         // Assert
-        Assert.Throws<NotFoundException>(() => storageService.GetFileStream(filePath));
+        Assert.Throws<NotFoundException>(() => storageService.GetReadFileStream(filePath));
     }
 
     [Test]

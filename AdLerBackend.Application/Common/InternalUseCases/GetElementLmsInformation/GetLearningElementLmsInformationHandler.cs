@@ -36,7 +36,7 @@ public class GetLearningElementLmsInformationHandler : IRequestHandler<GetElemen
             throw new NotFoundException("Course with the Id " + request.WorldId + " not found");
 
         // Get Course DSL 
-        await using var fileStream = _fileAccess.GetFileStream(course.DslLocation);
+        await using var fileStream = _fileAccess.GetReadFileStream(course.DslLocation);
 
         // Parse DSL File
         var dslObject = await _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(fileStream);

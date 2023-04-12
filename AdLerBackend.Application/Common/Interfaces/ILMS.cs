@@ -57,10 +57,6 @@ public interface ILMS
     /// <returns>Returns True, if the Statement hase been processed successfully </returns>
     Task<bool> ProcessXapiStatementAsync(string token, string statement);
 
-    Task<H5PAttempts> GetH5PAttemptsAsync(string token, int h5PActivityId);
-
-    Task<bool> ScoreGenericElement(string token, int elementId);
-
     /**
      * Uploads a Course Backup to the LMS
      * The Course is being send as Base64 encoded String
@@ -68,4 +64,28 @@ public interface ILMS
      * @param backupFileStream The Stream of the Backup File
      */
     Task<int> UploadCourseWorldToLMS(string token, Stream backupFileStream);
+
+    /// <summary>
+    ///     Gets the Score of an Element from the LMS via the Plugin
+    /// </summary>
+    /// <param name="token">Webservice Token</param>
+    /// <param name="elementId">The Module ID if the Element</param>
+    /// <returns></returns>
+    Task<bool> GetElementScoreFromPlugin(string token, int elementId);
+
+    /// <summary>
+    ///     Scores an Element via the Plugin
+    /// </summary>
+    /// <param name="token">Webservice Token</param>
+    /// <param name="elementId">The Module ID if the Element</param>
+    /// <returns></returns>
+    Task<bool> ScoreGenericElementViaPlugin(string token, int elementId);
+
+    /// <summary>
+    ///     Processes an XAPI Statement via the Plugin
+    /// </summary>
+    /// <param name="token">Webservice Token</param>
+    /// <param name="statement">The Statement of the XAPI Request</param>
+    /// <returns></returns>
+    Task<bool> ProcessXApiViaPlugin(string token, string statement);
 }

@@ -1,7 +1,6 @@
-using AdLerBackend.Application.Common.ElementStrategies.GetElementScoreStrategies.GenericGetElementScoreStrategy;
+using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.InternalUseCases.GetElementLmsInformation;
 using AdLerBackend.Application.Common.Responses.Elements;
-using AdLerBackend.Application.World.GetElementStatus;
 using MediatR;
 
 namespace AdLerBackend.Application.Element.GetElementScore;
@@ -12,11 +11,13 @@ namespace AdLerBackend.Application.Element.GetElementScore;
 public class
     GetElementScoreHandler : IRequestHandler<GetElementScoreCommand, ElementScoreResponse>
 {
+    private readonly ILMS _lms;
     private readonly IMediator _mediator;
 
-    public GetElementScoreHandler(IMediator mediator)
+    public GetElementScoreHandler(IMediator mediator, ILMS lms)
     {
         _mediator = mediator;
+        _lms = lms;
     }
 
     public async Task<ElementScoreResponse> Handle(GetElementScoreCommand request,
@@ -30,15 +31,13 @@ public class
             WebServiceToken = request.WebServiceToken
         }, cancellationToken);
 
+        var result =
+            await _lms.GetElementScoreFromPlugin(request.WebServiceToken, learningElementModule.ElementData.Id);
 
-        return await _mediator.Send(
-            GetLearningElementStatusHandler.GetStrategy(learningElementModule.ElementData.ModName,
-                new GenericGetElementScoreScoreStrategyCommand
-                {
-                    ElementId = request.ElementId,
-                    ElementMoule = learningElementModule.ElementData,
-                    WebServiceToken = request.WebServiceToken
-                })
-            , cancellationToken);
+        return new ElementScoreResponse
+        {
+            ElementId = request.ElementId,
+            Success = result
+        };
     }
 }

@@ -51,15 +51,15 @@ public class
         // serialize the XAPI Event again
         var inText = JsonSerializer.Serialize(xapiEvent);
 
-        // Send the XAPI Event to the LRS
+        // Send the XAPI Event to the LMS
         var isSuccess = await _ilms.ProcessXapiStatementAsync(request.WebServiceToken, inText);
 
 
-        var isAttemptASucess = await _ilms.GetH5PAttemptsAsync(request.WebServiceToken, request.Module.Instance);
+        var isAttemptASucess = await _ilms.GetElementScoreFromPlugin(request.WebServiceToken, request.Module.Id);
 
         return new ScoreElementResponse
         {
-            IsSuccess = isAttemptASucess.usersattempts[0].scored.attempts[0].success == 1 && isSuccess
+            IsSuccess = isAttemptASucess
         };
     }
 }

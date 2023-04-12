@@ -75,7 +75,7 @@ public class UploadWorldCommandHandler : IRequestHandler<UploadWorldCommand, boo
         var h5PFilesInCourse = GetH5PLocationEntities(storedH5PFilePaths);
 
         // Get Course DSL 
-        await using var fileStream = _fileAccess.GetFileStream(atfLocation);
+        await using var fileStream = _fileAccess.GetReadFileStream(atfLocation);
 
         // Parse DSL File
         var dslFile = await _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(fileStream);

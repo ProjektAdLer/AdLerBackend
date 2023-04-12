@@ -55,11 +55,11 @@ public class StorageService : IFileAccess
         return dslFilePath;
     }
 
-    public Stream GetFileStream(string filePath)
+    public Stream GetReadFileStream(string filePath)
     {
         try
         {
-            var fileStream = _fileSystem.FileStream.Create(filePath, FileMode.Open);
+            var fileStream = _fileSystem.FileStream.Create(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return fileStream;
         }
         catch (Exception e)

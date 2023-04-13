@@ -48,25 +48,7 @@ public class ScoreH5PLearningElementTest
 
         _serialization.GetObjectFromJsonString<RawH5PEvent>(Arg.Any<string>()).Returns(fakeXapi);
 
-        _ilms.GetH5PAttemptsAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new H5PAttempts
-        {
-            usersattempts = new List<Usersattempt>
-            {
-                new()
-                {
-                    scored = new Scored
-                    {
-                        attempts = new List<Attempt>
-                        {
-                            new()
-                            {
-                                success = 1
-                            }
-                        }
-                    }
-                }
-            }
-        });
+        _ilms.ScoreGenericElementViaPlugin(Arg.Any<string>(), Arg.Any<int>()).Returns(true);
 
 
         var systemUnderTest =

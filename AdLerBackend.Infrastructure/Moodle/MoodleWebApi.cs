@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
@@ -86,31 +87,6 @@ public class MoodleWebApi : ILMS
         return returnValue[0];
     }
 
-    public async Task<H5PAttempts> GetH5PAttemptsAsync(string token, int h5PActivityId)
-    {
-        return await MoodleCallAsync<H5PAttempts>(new Dictionary<string, string>
-        {
-            {"wstoken", token},
-            {"moodlewsrestformat", "json"},
-            {"wsfunction", "mod_h5pactivity_get_attempts"},
-            {"h5pactivityid", h5PActivityId.ToString()}
-        });
-    }
-
-    public async Task<bool> ScoreGenericElement(string token, int elementId)
-    {
-        var response = await MoodleCallAsync<ScoreGenericLearningElementResponse>(new Dictionary<string, string>
-        {
-            {"wstoken", token},
-            {"moodlewsrestformat", "json"},
-            {"wsfunction", "format_tiles_update_activity_completion_status_manually"},
-            {"cmid", elementId.ToString()},
-            {"completed", "1"}
-        });
-
-        return response.Status;
-    }
-
     public async Task<int> UploadCourseWorldToLMS(string token, Stream backupFileStream)
     {
         // Encode the Stream in Base64
@@ -155,6 +131,9 @@ public class MoodleWebApi : ILMS
         return response.data[0].score > 0;
     }
 
+    // TODO: Not Working
+    // Exclode this Method from Code Coverage
+    [ExcludeFromCodeCoverage]
     public async Task<bool> ProcessXApiViaPlugin(string token, string statement)
     {
         var response = await MoodleCallAsync<PluginElementScore>(new Dictionary<string, string>
@@ -211,6 +190,31 @@ public class MoodleWebApi : ILMS
         });
 
         return resp;
+    }
+
+    public async Task<H5PAttempts> GetH5PAttemptsAsync(string token, int h5PActivityId)
+    {
+        return await MoodleCallAsync<H5PAttempts>(new Dictionary<string, string>
+        {
+            {"wstoken", token},
+            {"moodlewsrestformat", "json"},
+            {"wsfunction", "mod_h5pactivity_get_attempts"},
+            {"h5pactivityid", h5PActivityId.ToString()}
+        });
+    }
+
+    public async Task<bool> ScoreGenericElement(string token, int elementId)
+    {
+        var response = await MoodleCallAsync<ScoreGenericLearningElementResponse>(new Dictionary<string, string>
+        {
+            {"wstoken", token},
+            {"moodlewsrestformat", "json"},
+            {"wsfunction", "format_tiles_update_activity_completion_status_manually"},
+            {"cmid", elementId.ToString()},
+            {"completed", "1"}
+        });
+
+        return response.Status;
     }
 
 

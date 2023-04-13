@@ -1,3 +1,4 @@
+using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
 using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
@@ -9,19 +10,21 @@ namespace AdLerBackend.Application.UnitTests.World.GetElementStatus;
 
 public class GetElementStatusTest
 {
+    private ILMS _ilms;
     private IMediator _mediator;
 
     [SetUp]
     public void Setup()
     {
         _mediator = Substitute.For<IMediator>();
+        _ilms = Substitute.For<ILMS>();
     }
 
     [Test]
     public async Task GetLearningElementStatusHandler_Valid_GivesAllScores()
     {
         // Arrange
-        var systemUnderTest = new GetLearningElementStatusHandler(_mediator);
+        var systemUnderTest = new GetLearningElementStatusHandler(_mediator, _ilms);
 
         _mediator.Send(Arg.Any<GetAllElementsFromLmsCommand>()).Returns(
             new GetAllElementsFromLmsResponse

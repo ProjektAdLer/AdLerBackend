@@ -1,13 +1,14 @@
-﻿using System.Text.Json;
-using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
+﻿using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Infrastructure.Moodle;
 using AutoBogus;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using NSubstitute;
 using NSubstitute.Extensions;
 using RichardSzalay.MockHttp;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace AdLerBackend.Infrastructure.UnitTests.Moodle;
 
@@ -273,5 +274,56 @@ public class MoodleWebApiTest
 
         // Assert with FluentAssertions
         result.Should().BeTrue();
+    }
+
+    [Test]
+    public async Task GetElementScoreFromPlugin_ReturnsFalse_WhenScoreIsZero()
+    {
+        // Arrange
+        var expectedResponse = new MoodleWebApi.PluginElementScore
+        {
+            data = new List<MoodleWebApi.PluginElementScoreData>
+            {
+                new()
+                {
+                    score = 0,
+                    module_id = 123
+                }
+            }
+        };
+
+        _mockHttp.When("*").Respond("application/json",
+            JsonConvert.SerializeObject(expectedResponse));
+
+        // Act
+        var result = await _systemUnderTest.GetElementScoreFromPlugin("token", 123);
+
+        // Assert
+        Assert.IsFalse(result);
+    }
+
+    [Test]
+    public async Task ScoreGenericElementViaPlugin_ReturnsTrue_WhenScoreIsGreaterThanZero()
+    {
+        var expectedResponse = new MoodleWebApi.PluginElementScore
+        {
+            data = new List<MoodleWebApi.PluginElementScoreData>
+            {
+                new()
+                {
+                    score = 1,
+                    module_id = 123
+                }
+            }
+        };
+
+        _mockHttp.When("*").Respond("application/json",
+            JsonConvert.SerializeObject(expectedResponse));
+
+        // Act
+        var result = await _systemUnderTest.ScoreGenericElementViaPlugin("token", 123);
+
+        // Assert
+        Assert.IsTrue(result);
     }
 }

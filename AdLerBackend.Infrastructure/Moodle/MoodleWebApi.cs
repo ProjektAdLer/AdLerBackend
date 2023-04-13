@@ -147,6 +147,32 @@ public class MoodleWebApi : ILMS
         return response.data[0].score > 0;
     }
 
+    public async Task<LmsCourseStatusResponse> GetCourseStatusViaPlugin(string token, int courseId)
+    {
+        var response = await MoodleCallAsync<ResponseWithDataArray<PluginElementScoreData>>(
+            new Dictionary<string, string>
+            {
+                {"wstoken", token},
+                {"moodlewsrestformat", "json"},
+                {"wsfunction", "local_adler_score_get_course_scores"},
+                {"course_id", courseId.ToString()}
+            });
+
+        var courseStatus = new LmsCourseStatusResponse
+        {
+            ElementScores = response.Data
+                .Where(x => x.score != null) // Filter out non-AdLer Courses
+                .Select(x => new LmsElementStatus // Map to LMS Element Status
+                {
+                    ModuleId = x.module_id,
+                    HasScored = x.score > 0
+                })
+                .ToList()
+        };
+
+        return courseStatus;
+    }
+
 
     public virtual async Task<LMSUserDataResponse> GetLMSUserDataAsync(string token)
     {
@@ -302,7 +328,7 @@ public class MoodleWebApi : ILMS
     public class PluginElementScoreData
     {
         public int module_id { get; set; }
-        public int score { get; set; }
+        public int? score { get; set; }
     }
 
     public class PluginElementScore
@@ -357,6 +383,11 @@ public class MoodleWebApi : ILMS
     public class ScoreGenericLearningElementResponse
     {
         public bool Status { get; set; }
+    }
+
+    public class ResponseWithDataArray<T>
+    {
+        public IList<T> Data { get; set; }
     }
 #pragma warning restore CS8618
 }

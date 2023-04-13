@@ -63,7 +63,8 @@ public class GetAllElementsFromLms
                             LmsElementIdentifier = new LmsElementIdentifier
                             {
                                 Value = "searchedFileName"
-                            }
+                            },
+                            ElementName = "searchedFileName"
                         }
                     }
                 }

@@ -326,4 +326,31 @@ public class MoodleWebApiTest
         // Assert
         Assert.IsTrue(result);
     }
+
+    [Test]
+    public async Task GetCourseStatusViaPlugin_ReturnsValidResponse_WhenResponseIsValid()
+    {
+        var webResponse = new MoodleWebApi.ResponseWithDataArray<MoodleWebApi.PluginElementScoreData>
+        {
+            Data = new List<MoodleWebApi.PluginElementScoreData>
+            {
+                new()
+                {
+                    score = 1,
+                    module_id = 1
+                }
+            }
+        };
+
+        _mockHttp.When("*").Respond("application/json",
+            JsonConvert.SerializeObject(webResponse));
+
+        // Act
+        var result = await _systemUnderTest.GetCourseStatusViaPlugin("token", 123);
+
+        // Assert
+        Assert.That(result.ElementScores.Count, Is.EqualTo(1));
+        Assert.That(result.ElementScores[0].HasScored, Is.EqualTo(true));
+        Assert.That(result.ElementScores[0].ModuleId, Is.EqualTo(1));
+    }
 }

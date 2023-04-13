@@ -1,16 +1,13 @@
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.Course;
-using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using MediatR;
 
 namespace AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
 
-/// <summary>
-///     Gets all Learning Elements from a LMS Course, that are referenced in the Course Description (DSL) from the AMG
-/// </summary>
-public class GetAllElementsFromLmsHandler : IRequestHandler<GetAllElementsFromLmsCommand,
-    GetAllElementsFromLmsResponse>
+public class
+    GetAllElementsFromLmsHandler : IRequestHandler<GetAllElementsFromLmsCommand,
+        GetAllElementsFromLmsWithAdLerIdResponse>
 {
     private readonly IFileAccess _fileAccess;
     private readonly ILMS _lms;
@@ -26,71 +23,38 @@ public class GetAllElementsFromLmsHandler : IRequestHandler<GetAllElementsFromLm
         _lms = lms;
     }
 
-    public async Task<GetAllElementsFromLmsResponse> Handle(GetAllElementsFromLmsCommand request,
+    public async Task<GetAllElementsFromLmsWithAdLerIdResponse> Handle(GetAllElementsFromLmsCommand request,
         CancellationToken cancellationToken)
     {
-        var data = new List<ModuleWIthIdAndFileName>();
+        // Get Course from DB
+        var course = await _worldRepository.GetAsync(request.WorldId) ??
+                     throw new NotFoundException($"Course with the Id {request.WorldId} not found");
 
-        // Get Course from Database
-        var course = await _worldRepository.GetAsync(request.WorldId);
-        if (course == null)
-            throw new NotFoundException("Course with the Id " + request.WorldId + " not found");
-
-        // Get Course DSL 
+        // Get ATF File
         await using var fileStream = _fileAccess.GetReadFileStream(course.DslLocation);
-
-        // Parse DSL File
         var dslObject = await _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(fileStream);
 
-        dslObject.World.Elements.Select(x => x.ElementId).ToList().ForEach(x =>
-        {
-            data.Add(new ModuleWIthIdAndFileName
-            {
-                Id = x
-            });
-        });
+        var atfIdWithFileName = dslObject.World.Elements.Select(x => x.ElementId)
+            .Select(x => new
+                {Id = x, FileName = dslObject.World.Elements.Find(e => e.ElementId == x)?.ElementName})
+            .ToList();
 
-        // Get Course from Moodle
         var searchedCourse = await _lms.SearchWorldsAsync(request.WebServiceToken, course.Name);
-
-        // Get Course Content from Moodle
         var courseContent = await _lms.GetWorldContentAsync(request.WebServiceToken, searchedCourse.Courses[0].Id);
 
-        foreach (var moduleWIthIdAndFileName in data)
+        // Get the LMS-Modules by their name
+        var modulesWithId = atfIdWithFileName.Select(x =>
         {
-            moduleWIthIdAndFileName.FileName = dslObject.World.Elements
-                                                   .Find(x => x.ElementId == moduleWIthIdAndFileName.Id)
-                                                   ?.LmsElementIdentifier?.Value ??
-                                               throw new NotFoundException("Element with the Id " +
-                                                                           moduleWIthIdAndFileName.Id + " not found");
+            var module = courseContent.SelectMany(c => c.Modules).FirstOrDefault(m => m.Name == x.FileName)
+                         ?? throw new NotFoundException($"Element with the Id {x.Id} not found");
 
-            moduleWIthIdAndFileName.Modules = courseContent.SelectMany(x => x.Modules)
-                .FirstOrDefault(x => x.Name == moduleWIthIdAndFileName.FileName)!;
-        }
+            return new ModuleWithId {AdLerId = x.Id!, LmsModule = module};
+        }).ToList();
 
-        var response = new GetAllElementsFromLmsResponse
+        return new GetAllElementsFromLmsWithAdLerIdResponse
         {
-            ModulesWithID = new List<ModuleWithId>()
+            ModulesWithAdLerId = modulesWithId,
+            LmsCourseId = searchedCourse.Courses[0].Id
         };
-
-        foreach (var datapoint in data)
-        {
-            if (datapoint.Modules == null || datapoint.Id == null)
-                throw new NotFoundException("Element with the Id " + datapoint.Id + " not found");
-            response.ModulesWithID.Add(new ModuleWithId
-            {
-                Id = (int) datapoint.Id!,
-                Module = datapoint.Modules
-            });
-        }
-
-        return response;
-    }
-
-    private class ModuleWIthIdAndFileName
-    {
-        public string? FileName { get; set; }
-        public int? Id { get; set; }
-        public Modules? Modules { get; set; }
     }
 }

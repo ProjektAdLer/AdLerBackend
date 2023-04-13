@@ -113,10 +113,10 @@ public class WorldsController : BaseApiController
     /// <param name="worldId"></param>
     /// <returns></returns>
     [HttpGet("{worldId}/status")]
-    public async Task<ActionResult<ElementStatusResponse>> GetElementStatus([FromHeader] string token,
+    public async Task<ActionResult<WorldStatusResponse>> GetElementStatus([FromHeader] string token,
         [FromRoute] int worldId)
     {
-        return await Mediator.Send(new GetElementStatusCommand
+        return await Mediator.Send(new GetWorldStatusCommand
         {
             WorldId = worldId,
             WebServiceToken = token

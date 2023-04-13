@@ -103,6 +103,6 @@ public class WorldsControllerTest
 
         // Assert
         await mediatorMock.Received(1).Send(
-            Arg.Is<GetElementStatusCommand>(x => x.WebServiceToken == "token"));
+            Arg.Is<GetWorldStatusCommand>(x => x.WebServiceToken == "token"));
     }
 }

@@ -88,4 +88,6 @@ public interface ILMS
     /// <param name="statement">The Statement of the XAPI Request</param>
     /// <returns></returns>
     Task<bool> ProcessXApiViaPlugin(string token, string statement);
+
+    Task<LmsCourseStatusResponse> GetCourseStatusViaPlugin(string token, int courseId);
 }

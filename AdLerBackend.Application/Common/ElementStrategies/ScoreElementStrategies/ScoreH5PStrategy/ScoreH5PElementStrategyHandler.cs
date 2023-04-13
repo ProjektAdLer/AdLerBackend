@@ -24,6 +24,14 @@ public class
     public async Task<ScoreElementResponse> Handle(ScoreH5PElementStrategyCommand request,
         CancellationToken cancellationToken)
     {
+        var moodleUrl = _config["MoodleURL"];
+
+        // if moodle url is not set, throw exception
+        if (string.IsNullOrEmpty(moodleUrl))
+            throw new ArgumentException("Moodle URL is not set in the configuration file");
+
+        // if last character is a slash, remove it
+        if (moodleUrl[^1] == '/') moodleUrl = moodleUrl[..^1];
         // Get User Data
         var userData = await _ilms.GetLMSUserDataAsync(request.WebServiceToken);
 
@@ -37,14 +45,6 @@ public class
         xapiEvent.actor.name = userData.LMSUserName;
         xapiEvent.actor.mbox = userData.UserEmail;
 
-        var moodleUrl = _config["MoodleURL"];
-
-        // if moodle url is not set, throw exception
-        if (string.IsNullOrEmpty(moodleUrl))
-            throw new Exception("Moodle URL is not set in the configuration file");
-
-        // if last character is a slash, remove it
-        if (moodleUrl[^1] == '/') moodleUrl = moodleUrl[..^1];
 
         xapiEvent.@object.id = moodleUrl + "/xapi/activity/" + contextId;
 

@@ -26,7 +26,7 @@ public class AllResponsesTest
     private static IEnumerable<TestCaseData> GetTestCases()
     {
         yield return new TestCaseData(new PlayerDataResponse());
-        yield return new TestCaseData(new ElementStatusResponse());
+        yield return new TestCaseData(new WorldStatusResponse());
         yield return new TestCaseData(new ElementScoreResponse());
         yield return new TestCaseData(new WorldResponse());
         yield return new TestCaseData(new Application.Common.Responses.Course.World());

@@ -22,14 +22,15 @@ public class ScoreH5PLearningElementTest
         _serialization = Substitute.For<ISerialization>();
     }
 
-    [Test]
-    public async Task ScoreH5PElement_Valid_CallsWebservices()
+    [TestCase("https://whatever.com")]
+    [TestCase("https://whatever.com/")]
+    public async Task ScoreH5PElement_Valid_CallsWebservices(string url)
     {
         // Arrange
 
         var inMemorySettings = new Dictionary<string, string>
         {
-            {"moodleUrl", "https://whatever.com"}
+            {"moodleUrl", url}
         };
 
         IConfiguration configuration = new ConfigurationBuilder()
@@ -74,5 +75,43 @@ public class ScoreH5PLearningElementTest
 
         // Assert
         await _ilms.Received(1).GetLMSUserDataAsync(Arg.Any<string>());
+    }
+
+    [Test]
+    public async Task ScoreH5PElement_NoURLSet_ThrowsException()
+    {
+        // Arrange
+
+        var inMemorySettings = new Dictionary<string, string>
+        {
+            {"moodleUrl", ""}
+        };
+
+        IConfiguration configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(inMemorySettings)
+            .Build();
+
+        var systemUnderTest = new ScoreH5PElementStrategyHandler(_serialization, _ilms, configuration);
+
+
+        // Act
+        // Assert
+        Assert.ThrowsAsync<ArgumentException>(async () => await systemUnderTest.Handle(
+            new ScoreH5PElementStrategyCommand
+            {
+                ScoreElementParams = new ScoreElementParams
+                {
+                    SerializedXAPIEvent = "xapiEvent"
+                },
+                Module = new Modules
+                {
+                    contextid = 123,
+                    Id = 123,
+                    Instance = 123,
+                    Name = "name"
+                },
+
+                WebServiceToken = "token"
+            }, CancellationToken.None));
     }
 }

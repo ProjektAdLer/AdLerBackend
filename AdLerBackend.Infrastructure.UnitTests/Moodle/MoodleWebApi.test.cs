@@ -223,10 +223,10 @@ public class MoodleWebApiTest
         // Arrange
         _mockHttp.When("*")
             .Respond(
-                "application/json", "[true]");
+                "application/json", "{\"data\":[{\"module_id\":209,\"score\":17}]}");
 
         // Act
-        var result = await _systemUnderTest.ProcessXapiStatementAsync("moodleToken", "testXApi");
+        var result = await _systemUnderTest.ProcessXApiViaPlugin("moodleToken", "testXApi");
 
         // Assert
         Assert.That(result, Is.EqualTo(true));
@@ -238,10 +238,10 @@ public class MoodleWebApiTest
         // Arrange
         _mockHttp.When("*")
             .Respond(
-                "application/json", "[false]");
+                "application/json", "{\"data\":[{\"module_id\":209,\"score\":0}]}");
 
         // Act
-        var result = await _systemUnderTest.ProcessXapiStatementAsync("moodleToken", "testXApi");
+        var result = await _systemUnderTest.ProcessXApiViaPlugin("moodleToken", "testXApi");
 
         // Assert
         Assert.That(result, Is.EqualTo(false));

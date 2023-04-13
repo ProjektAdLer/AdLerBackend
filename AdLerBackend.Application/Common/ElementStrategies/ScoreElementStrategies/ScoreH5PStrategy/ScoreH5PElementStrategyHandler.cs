@@ -52,7 +52,7 @@ public class
         var inText = JsonSerializer.Serialize(xapiEvent);
 
         // Send the XAPI Event to the LMS
-        var isSuccess = await _ilms.ProcessXapiStatementAsync(request.WebServiceToken, inText);
+        var isSuccess = await _ilms.ProcessXApiViaPlugin(request.WebServiceToken, inText);
 
 
         var isAttemptASucess = await _ilms.GetElementScoreFromPlugin(request.WebServiceToken, request.Module.Id);

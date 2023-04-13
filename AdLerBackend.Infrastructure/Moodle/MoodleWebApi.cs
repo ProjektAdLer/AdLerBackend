@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
+﻿using System.Text.Json;
 using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
@@ -73,20 +72,6 @@ public class MoodleWebApi : ILMS
         return userData.IsAdmin;
     }
 
-    public async Task<bool> ProcessXapiStatementAsync(string token, string statement)
-    {
-        var returnValue = await MoodleCallAsync<IList<bool>>(new Dictionary<string, string>
-        {
-            {"wstoken", token},
-            {"moodlewsrestformat", "json"},
-            {"wsfunction", "core_xapi_statement_post"},
-            {"component", "mod_h5pactivity"},
-            {"requestjson", "[" + statement + "]"}
-        });
-
-        return returnValue[0];
-    }
-
     public async Task<int> UploadCourseWorldToLMS(string token, Stream backupFileStream)
     {
         // Encode the Stream in Base64
@@ -131,9 +116,6 @@ public class MoodleWebApi : ILMS
         return response.data[0].score > 0;
     }
 
-    // TODO: Not Working
-    // Exclode this Method from Code Coverage
-    [ExcludeFromCodeCoverage]
     public async Task<bool> ProcessXApiViaPlugin(string token, string statement)
     {
         var response = await MoodleCallAsync<PluginElementScore>(new Dictionary<string, string>
@@ -141,7 +123,7 @@ public class MoodleWebApi : ILMS
             {"wstoken", token},
             {"moodlewsrestformat", "json"},
             {"wsfunction", "local_adler_score_h5p_learning_element"},
-            {"xapi", statement}
+            {"xapi", "[" + statement + "]"}
         });
 
         return response.data[0].score > 0;

@@ -49,14 +49,6 @@ public interface ILMS
     /// <returns></returns>
     Task<bool> IsLMSAdminAsync(string token);
 
-    /// <summary>
-    ///     Processes an XAPI Statement
-    /// </summary>
-    /// <param name="token"></param>
-    /// <param name="statement">The Statement of the XAPI Request</param>
-    /// <returns>Returns True, if the Statement hase been processed successfully </returns>
-    Task<bool> ProcessXapiStatementAsync(string token, string statement);
-
     /**
      * Uploads a Course Backup to the LMS
      * The Course is being send as Base64 encoded String

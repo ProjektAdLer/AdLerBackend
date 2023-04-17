@@ -4,18 +4,19 @@ namespace AdLerBackend.Domain.Entities;
 
 public class H5PLocationEntity : IBaseEntity
 {
-#pragma warning disable CS8618
     /// <summary>
-    ///     This Empty Constructor is needed for EntityFramework
+    ///     This Empty Constructor is needed for EntityFramework as well as for AutoMapper.
     ///     see https://docs.microsoft.com/en-us/ef/core/modeling/constructors
     /// </summary>
     [UsedImplicitly]
-    public H5PLocationEntity()
+    private H5PLocationEntity()
     {
+        Path = string.Empty;
+        ElementId = 0;
+        Id = null;
     }
-#pragma warning restore CS8618
 
-    public H5PLocationEntity(string path, int elementId, int? id)
+    public H5PLocationEntity(string path, int? elementId = null, int? id = null)
     {
         Path = path;
         ElementId = elementId;
@@ -23,6 +24,6 @@ public class H5PLocationEntity : IBaseEntity
     }
 
     public string Path { get; set; }
-    public int ElementId { get; set; }
+    public int? ElementId { get; set; }
     public int? Id { get; set; }
 }

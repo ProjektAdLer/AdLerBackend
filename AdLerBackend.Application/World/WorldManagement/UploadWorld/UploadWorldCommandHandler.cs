@@ -71,25 +71,23 @@ public class UploadWorldCommandHandler : IRequestHandler<UploadWorldCommand, boo
         });
 
 
-        var storedH5PFilePaths = StoreH5PFiles(courseInformation, userInformation, request.BackupFileStream);
-        var h5PFilesInCourse = GetH5PLocationEntities(storedH5PFilePaths);
-
         // Get Course DSL 
         await using var fileStream = _fileAccess.GetReadFileStream(atfLocation);
 
         // Parse DSL File
         var dslFile = await _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(fileStream);
 
-        foreach (var h5PLocationEntity in h5PFilesInCourse)
-        {
-            var fileName = Path.GetFileName(h5PLocationEntity.Path);
-            h5PLocationEntity.ElementId = dslFile.World.Elements.First(x =>
-                x.LmsElementIdentifier.Value == fileName).ElementId;
-        }
+        var storedH5PFilePaths = StoreH5PFiles(courseInformation, userInformation, request.BackupFileStream);
+
+        var h5PLocationEntities = (from filePath in storedH5PFilePaths
+            let fileName = Path.GetFileName(filePath)
+            let element = dslFile.World.Elements.FirstOrDefault(x => x.LmsElementIdentifier?.Value == fileName)
+            where element != null
+            select new H5PLocationEntity(filePath, element.ElementId)).ToList();
 
         var courseEntity = new WorldEntity(
             courseInformation.World.LmsElementIdentifier.Value,
-            h5PFilesInCourse,
+            h5PLocationEntities,
             atfLocation,
             userInformation.UserId
         );
@@ -116,15 +114,5 @@ public class UploadWorldCommandHandler : IRequestHandler<UploadWorldCommand, boo
         }
 
         return storedH5PFilePaths!;
-    }
-
-
-    private List<H5PLocationEntity> GetH5PLocationEntities(List<string> storedH5PFilePaths)
-    {
-        if (storedH5PFilePaths.Count == 0) return new List<H5PLocationEntity>();
-        return storedH5PFilePaths.Select(x => new H5PLocationEntity
-        {
-            Path = x
-        }).ToList();
     }
 }

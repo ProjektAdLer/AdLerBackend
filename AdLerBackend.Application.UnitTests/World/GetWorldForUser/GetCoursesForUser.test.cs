@@ -2,6 +2,7 @@
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.World.GetWorldsForUser;
 using AdLerBackend.Domain.Entities;
+using AdLerBackend.Domain.UnitTests.TestingUtils;
 using NSubstitute;
 
 #pragma warning disable CS8618
@@ -48,11 +49,7 @@ public class GetWorldsForUserTest
 
         _worldRepository.GetAllByStrings(Arg.Any<List<string>>()).Returns(new List<WorldEntity>
         {
-            new()
-            {
-                Id = 1,
-                Name = "FullName"
-            }
+            WorldEntityFactory.CreateWorldEntity(id: 1, name: "FullName")
         });
 
         // Act

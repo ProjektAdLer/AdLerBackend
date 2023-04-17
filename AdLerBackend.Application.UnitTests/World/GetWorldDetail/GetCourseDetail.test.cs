@@ -10,6 +10,7 @@ using NSubstitute;
 
 namespace AdLerBackend.Application.UnitTests.World.GetWorldDetail;
 
+
 public class GetWorldDetailTest
 {
     private IFileAccess _fileAccess;

@@ -32,13 +32,9 @@ public class GetAllElementsFromLms
         var systemUnderTest =
             new GetAllElementsFromLmsHandler(_worldRepository, _fileAccess, _serialization, _ilms);
 
-        _worldRepository.GetAsync(Arg.Any<int>()).Returns(new WorldEntity
-        {
-            Id = 2,
-            Name = "name",
-            AuthorId = 1234,
-            DslLocation = "asd",
-            H5PFilesInCourse = new List<H5PLocationEntity>
+        var worldEntity = new WorldEntity(
+            "name",
+            new List<H5PLocationEntity>
             {
                 new()
                 {
@@ -46,8 +42,15 @@ public class GetAllElementsFromLms
                     Path = "path",
                     ElementId = 4
                 }
-            }
-        });
+            },
+            "asd",
+            1234,
+            2
+        );
+
+
+        _worldRepository.GetAsync(Arg.Any<int>()).Returns(worldEntity);
+
 
         _fileAccess.GetReadFileStream(Arg.Any<string>()).Returns(new MemoryStream());
         _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())

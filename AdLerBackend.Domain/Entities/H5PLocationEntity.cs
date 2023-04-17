@@ -1,6 +1,4 @@
-﻿#pragma warning disable CS8618
-using AdLerBackend.Domain.Entities.Common;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 namespace AdLerBackend.Domain.Entities;
 

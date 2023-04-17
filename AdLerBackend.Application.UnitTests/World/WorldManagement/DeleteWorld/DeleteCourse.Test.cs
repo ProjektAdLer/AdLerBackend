@@ -35,18 +35,28 @@ public class DeleteWorldTest
         // Arrange
         var systemUnderTest = new DeleteWorldHandler(_worldRepository, _fileAccess, _mediator);
 
-        var courseMock = new WorldEntity
-        {
-            Id = 1,
-            AuthorId = 1
-        };
+        var worldEntity = new WorldEntity(
+            "name",
+            new List<H5PLocationEntity>
+            {
+                new()
+                {
+                    Id = 3,
+                    Path = "path",
+                    ElementId = 4
+                }
+            },
+            "asd",
+            1,
+            1
+        );
 
         _mediator.Send(Arg.Any<GetLMSUserDataCommand>()).Returns(new LMSUserDataResponse
         {
             UserId = 1
         });
 
-        _worldRepository.GetAsync(Arg.Any<int>()).Returns(courseMock);
+        _worldRepository.GetAsync(Arg.Any<int>()).Returns(worldEntity);
 
         _fileAccess.DeleteWorld(Arg.Any<WorldDeleteDto>()).Returns(true);
 
@@ -107,18 +117,29 @@ public class DeleteWorldTest
         // Arrange
         var systemUnderTest = new DeleteWorldHandler(_worldRepository, _fileAccess, _mediator);
 
-        var courseMock = new WorldEntity
-        {
-            Id = 1,
-            AuthorId = 1337
-        };
+        var worldEntity = new WorldEntity(
+            "name",
+            new List<H5PLocationEntity>
+            {
+                new()
+                {
+                    Id = 3,
+                    Path = "path",
+                    ElementId = 4
+                }
+            },
+            "asd",
+            1337,
+            1
+        );
+
 
         _mediator.Send(Arg.Any<GetLMSUserDataCommand>()).Returns(new LMSUserDataResponse
         {
             UserId = 1
         });
 
-        _worldRepository.GetAsync(Arg.Any<int>()).Returns(courseMock);
+        _worldRepository.GetAsync(Arg.Any<int>()).Returns(worldEntity);
 
         _fileAccess.DeleteWorld(Arg.Any<WorldDeleteDto>()).Returns(true);
 

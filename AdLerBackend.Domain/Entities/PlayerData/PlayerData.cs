@@ -1,7 +1,5 @@
-using AdLerBackend.Domain.Entities.Common;
 using JetBrains.Annotations;
 
-#pragma warning disable CS8618
 namespace AdLerBackend.Domain.Entities.PlayerData;
 
 // All the data here has to have default values

@@ -1,10 +1,7 @@
-﻿using System.Runtime.CompilerServices;
-using AdLerBackend.Domain.Entities.Common;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 namespace AdLerBackend.Domain.Entities;
 
-[assembly: InternalsVisibleTo("ClassA")]
 public class WorldEntity : IBaseEntity
 {
 #pragma warning disable CS8618
@@ -14,7 +11,7 @@ public class WorldEntity : IBaseEntity
     ///     (EF Core cannot set navigation properties using a constructor.)
     /// </summary>
     [UsedImplicitly]
-    public WorldEntity()
+    internal WorldEntity()
     {
         // Initialize every property with a default value
         Id = null;

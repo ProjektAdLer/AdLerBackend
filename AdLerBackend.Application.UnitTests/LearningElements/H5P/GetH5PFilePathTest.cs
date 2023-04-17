@@ -24,18 +24,19 @@ public class GetH5PFilePathTest
     {
         // Arrange
         var systemUnderTest = new GetH5PFilePathHandler(_worldRepository);
-        var courseMock = AutoFaker.Generate<WorldEntity>();
-
-        courseMock.Id = 1;
-        courseMock.H5PFilesInCourse = new List<H5PLocationEntity>
-        {
-            new()
+        var faker = new AutoFaker<WorldEntity>()
+            .RuleFor(x => x.Id, 1)
+            .RuleFor(x => x.H5PFilesInCourse, new List<H5PLocationEntity>
             {
-                Id = 2,
-                ElementId = 2,
-                Path = "path"
-            }
-        };
+                new()
+                {
+                    Id = 2,
+                    ElementId = 2,
+                    Path = "path"
+                }
+            });
+
+        var courseMock = faker.Generate();
 
         _worldRepository.GetAsync(Arg.Any<int>()).Returns(courseMock);
 
@@ -77,19 +78,19 @@ public class GetH5PFilePathTest
         // Arrange
         var systemUnderTest = new GetH5PFilePathHandler(_worldRepository);
 
-
-        var courseMock = AutoFaker.Generate<WorldEntity>();
-
-        courseMock.Id = 1;
-        courseMock.H5PFilesInCourse = new List<H5PLocationEntity>
-        {
-            new()
+        var faker = new AutoFaker<WorldEntity>()
+            .RuleFor(x => x.Id, 1)
+            .RuleFor(x => x.H5PFilesInCourse, new List<H5PLocationEntity>
             {
-                Id = 24,
-                ElementId = 23,
-                Path = "path"
-            }
-        };
+                new()
+                {
+                    Id = 24,
+                    ElementId = 23,
+                    Path = "path"
+                }
+            });
+
+        var courseMock = faker.Generate();
 
         _worldRepository.GetAsync(Arg.Any<int>()).Returns(courseMock);
 

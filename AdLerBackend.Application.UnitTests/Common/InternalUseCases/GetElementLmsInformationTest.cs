@@ -1,331 +1,93 @@
-using AdLerBackend.Application.Common.Exceptions;
-using AdLerBackend.Application.Common.Interfaces;
+using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
 using AdLerBackend.Application.Common.InternalUseCases.GetElementLmsInformation;
 using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
-using AdLerBackend.Domain.Entities;
-using AdLerBackend.Domain.UnitTests.TestingUtils;
+using MediatR;
 using NSubstitute;
 
 namespace AdLerBackend.Application.UnitTests.Common.InternalUseCases;
 
-public class GerElementLmsInformationTest
+public class GetElementLmsInformationTest
 {
-    private IFileAccess _fileAccess;
-    private ILMS _ilms;
-    private ISerialization _serialization;
-    private IWorldRepository _worldRepository;
+    private IMediator _mediator;
 
     [SetUp]
     public void Setup()
     {
-        _ilms = Substitute.For<ILMS>();
-        _worldRepository = Substitute.For<IWorldRepository>();
-        _fileAccess = Substitute.For<IFileAccess>();
-        _serialization = Substitute.For<ISerialization>();
+        _mediator = Substitute.For<IMediator>();
     }
 
     [Test]
-    public async Task GetLearningElementLmsInformation_Valid_RetunsCourseModule()
+    public async Task Handle_Valid_ReturnsSingleModule()
     {
         // Arrange
-        var systemUnderTest =
-            new GetLearningElementLmsInformationHandler(_ilms, _worldRepository, _fileAccess, _serialization);
-
-        var worldEntity = new WorldEntity(
-            "name",
-            new List<H5PLocationEntity>
+        var systemUnderTest = new GetLearningElementLmsInformationHandler(_mediator);
+        _mediator.Send(Arg.Any<GetAllElementsFromLmsCommand>()).Returns(
+            new GetAllElementsFromLmsWithAdLerIdResponse
             {
-                // new()
-                // {
-                //     Id = 3,
-                //     Path = "path",
-                //     ElementId = 4
-                // },
-                H5PLocationEntityFactory.CreateH5PLocationEntity()
-            },
-            "asd",
-            1234,
-            2
-        );
-
-        _worldRepository.GetAsync(Arg.Any<int>()).Returns(worldEntity);
-
-        _fileAccess.GetReadFileStream(Arg.Any<string>()).Returns(new MemoryStream());
-        _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
-            .Returns(new WorldDtoResponse
-            {
-                World = new Application.Common.Responses.Course.World
-                {
-                    Elements = new List<Application.Common.Responses.Course.Element>
-                    {
-                        new()
-                        {
-                            ElementId = 1337,
-                            LmsElementIdentifier = new LmsElementIdentifier
-                            {
-                                Value = "searchedFileName"
-                            }
-                        }
-                    }
-                }
-            });
-
-        _ilms.SearchWorldsAsync(Arg.Any<string>(), Arg.Any<string>()).Returns(new LMSWorldListResponse
-        {
-            Courses = new List<MoodleCourse>
-            {
-                new()
-                {
-                    Id = 1
-                }
-            }
-        });
-
-        _ilms.GetWorldContentAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new[]
-        {
-            new WorldContent
-            {
-                Modules = new List<Modules>
+                LmsCourseId = 1,
+                ModulesWithAdLerId = new List<ModuleWithId>
                 {
                     new()
                     {
-                        Name = "searchedFileName",
-                        contextid = 123
+                        AdLerId = 2,
+                        LmsModule = new Modules
+                        {
+                            Id = 3,
+                            Name = "TestName",
+                            ModName = "ModName"
+                        }
                     }
                 }
             }
-        });
+        );
+
 
         // Act
-
-        var result =
-            await systemUnderTest.Handle(new GetElementLmsInformationCommand
-            {
-                WorldId = 1,
-                ElementId = 1337,
-                WebServiceToken = "token"
-            }, CancellationToken.None);
-
+        var result = systemUnderTest.Handle(new GetElementLmsInformationCommand
+        {
+            ElementId = 2,
+            WorldId = 1
+        }, CancellationToken.None).Result;
 
         // Assert
-
-        Assert.NotNull(result);
+        Assert.That(result.ElementData.Id, Is.EqualTo(3));
+        Assert.That(result.ElementData.ModName, Is.EqualTo("ModName"));
     }
 
     [Test]
-    public async Task GetLearningElementLmsInformation_WrongCourseId_Throws()
+    public async Task Handle_ModuleNotExisting_ThrowsOperationException()
     {
         // Arrange
-        var systemUnderTest =
-            new GetLearningElementLmsInformationHandler(_ilms, _worldRepository, _fileAccess, _serialization);
-
-        _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity?) null);
-
-        _fileAccess.GetReadFileStream(Arg.Any<string>()).Returns(new MemoryStream());
-        _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
-            .Returns(new WorldDtoResponse
+        var systemUnderTest = new GetLearningElementLmsInformationHandler(_mediator);
+        _mediator.Send(Arg.Any<GetAllElementsFromLmsCommand>()).Returns(
+            new GetAllElementsFromLmsWithAdLerIdResponse
             {
-                World = new Application.Common.Responses.Course.World
-                {
-                    Elements = new List<Application.Common.Responses.Course.Element>
-                    {
-                        new()
-                        {
-                            ElementId = 1337,
-                            LmsElementIdentifier = new LmsElementIdentifier
-                            {
-                                Value = "searchedFileName"
-                            }
-                        }
-                    }
-                }
-            });
-
-        _ilms.SearchWorldsAsync(Arg.Any<string>(), Arg.Any<string>()).Returns(new LMSWorldListResponse
-        {
-            Courses = new List<MoodleCourse>
-            {
-                new()
-                {
-                    Id = 1
-                }
-            }
-        });
-
-        _ilms.GetWorldContentAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new[]
-        {
-            new WorldContent
-            {
-                Modules = new List<Modules>
+                LmsCourseId = 1,
+                ModulesWithAdLerId = new List<ModuleWithId>
                 {
                     new()
                     {
-                        Name = "searchedFileName",
-                        contextid = 123
-                    }
-                }
-            }
-        });
-
-        // Act
-        //Assert
-        Assert.ThrowsAsync<NotFoundException>(async () =>
-            await systemUnderTest.Handle(new GetElementLmsInformationCommand
-            {
-                WorldId = 1,
-                ElementId = 13333337,
-                WebServiceToken = "token"
-            }, CancellationToken.None));
-    }
-
-    [Test]
-    public async Task GetLearningElementLmsInformation_WrongElementId_Throws()
-    {
-        // Arrange
-        var systemUnderTest =
-            new GetLearningElementLmsInformationHandler(_ilms, _worldRepository, _fileAccess, _serialization);
-
-        _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity?) null);
-
-        _fileAccess.GetReadFileStream(Arg.Any<string>()).Returns(new MemoryStream());
-        _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
-            .Returns(new WorldDtoResponse
-            {
-                World = new Application.Common.Responses.Course.World
-                {
-                    Elements = new List<Application.Common.Responses.Course.Element>
-                    {
-                        new()
+                        AdLerId = 2,
+                        LmsModule = new Modules
                         {
-                            ElementId = 1337,
-                            LmsElementIdentifier = new LmsElementIdentifier
-                            {
-                                Value = "searchedFileName"
-                            }
+                            Id = 3,
+                            Name = "TestName",
+                            ModName = "ModName"
                         }
                     }
                 }
-            });
-
-        _ilms.SearchWorldsAsync(Arg.Any<string>(), Arg.Any<string>()).Returns(new LMSWorldListResponse
-        {
-            Courses = new List<MoodleCourse>
-            {
-                new()
-                {
-                    Id = 1
-                }
             }
-        });
-
-        _ilms.GetWorldContentAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new[]
-        {
-            new WorldContent
-            {
-                Modules = new List<Modules>
-                {
-                    new()
-                    {
-                        Name = "searchedFileName",
-                        contextid = 123
-                    }
-                }
-            }
-        });
-
-        // Act
-        //Assert
-        Assert.ThrowsAsync<NotFoundException>(async () =>
-            await systemUnderTest.Handle(new GetElementLmsInformationCommand
-            {
-                WorldId = 1,
-                ElementId = 13333337,
-                WebServiceToken = "token"
-            }, CancellationToken.None));
-    }
-
-
-    [Test]
-    public async Task GetLearningElementLmsInformation_CorruptedFileName_Throws()
-    {
-        // Arrange
-        var systemUnderTest =
-            new GetLearningElementLmsInformationHandler(_ilms, _worldRepository, _fileAccess, _serialization);
-
-        var worldEntity = new WorldEntity(
-            "name",
-            new List<H5PLocationEntity>
-            {
-                // new()
-                // {
-                //     Id = 3,
-                //     Path = "path",
-                //     ElementId = 4
-                // }
-            },
-            "asd",
-            1234,
-            2
         );
 
-        _worldRepository.GetAsync(Arg.Any<int>()).Returns(worldEntity);
-
-        _fileAccess.GetReadFileStream(Arg.Any<string>()).Returns(new MemoryStream());
-        _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
-            .Returns(new WorldDtoResponse
-            {
-                World = new Application.Common.Responses.Course.World
-                {
-                    Elements = new List<Application.Common.Responses.Course.Element
-                    >
-                    {
-                        new()
-                        {
-                            ElementId = 1337,
-                            LmsElementIdentifier = new LmsElementIdentifier
-                            {
-                                Value = "searchedFileName1234"
-                            }
-                        }
-                    }
-                }
-            });
-
-        _ilms.SearchWorldsAsync(Arg.Any<string>(), Arg.Any<string>()).Returns(new LMSWorldListResponse
-        {
-            Courses = new List<MoodleCourse>
-            {
-                new()
-                {
-                    Id = 1
-                }
-            }
-        });
-
-        _ilms.GetWorldContentAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new[]
-        {
-            new WorldContent
-            {
-                Modules = new List<Modules>
-                {
-                    new()
-                    {
-                        Name = "searchedFileNamasdasdasde",
-                        contextid = 123
-                    }
-                }
-            }
-        });
-
         // Act
-        //Assert
-        Assert.ThrowsAsync<NotFoundException>(async () =>
-            await systemUnderTest.Handle(new GetElementLmsInformationCommand
-            {
-                WorldId = 1,
-                ElementId = 555,
-                WebServiceToken = "token"
-            }, CancellationToken.None));
+        var result = systemUnderTest.Handle(new GetElementLmsInformationCommand
+        {
+            ElementId = 4,
+            WorldId = 1
+        }, CancellationToken.None);
+
+        // Assert
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await result);
     }
 }

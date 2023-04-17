@@ -36,7 +36,7 @@ public class ExceptionHandlingBehaviourTest
             new ExceptionHandlingBehaviour<IRequest<LMSUserTokenResponse>, LMSUserTokenResponse, LmsException>();
 
         // Act
-        Assert.ThrowsAsync<InvalidLMSLoginException>(() =>
+        Assert.ThrowsAsync<InvalidLmsLoginException>(() =>
             systemUnderTest.Handle(new GetLMSTokenCommand(), new LmsException
                 {
                     LmsErrorCode = "invalidlogin"

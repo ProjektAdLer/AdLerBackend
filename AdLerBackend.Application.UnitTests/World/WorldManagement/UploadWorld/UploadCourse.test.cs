@@ -90,7 +90,7 @@ public class UploadWorldTest
 
         _worldRepository.ExistsForAuthor(Arg.Any<int>(), Arg.Any<string>()).Returns(false);
 
-        _fileAccess.StoreATFFileForWorld(Arg.Any<StoreWorldATFDto>()).Returns("testDSlPath");
+        _fileAccess.StoreAtfFileForWorld(Arg.Any<StoreWorldAtfDto>()).Returns("testDSlPath");
 
         _lmsBackupProcessor.GetH5PFilesFromBackup(Arg.Any<Stream>()).Returns(new List<H5PDto>
 
@@ -204,7 +204,7 @@ public class UploadWorldTest
 
         _worldRepository.ExistsForAuthor(Arg.Any<int>(), Arg.Any<string>()).Returns(false);
 
-        _fileAccess.StoreATFFileForWorld(Arg.Any<StoreWorldATFDto>()).Returns("testDSlPath");
+        _fileAccess.StoreAtfFileForWorld(Arg.Any<StoreWorldAtfDto>()).Returns("testDSlPath");
 
         _lmsBackupProcessor.GetH5PFilesFromBackup(Arg.Any<Stream>()).Returns(new List<H5PDto>());
 

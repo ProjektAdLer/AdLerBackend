@@ -20,7 +20,7 @@ public class ScoreH5PElementValidatorTest
         {
             ScoreElementParams = new ScoreElementParams
             {
-                SerializedXAPIEvent = "string"
+                SerializedXapiEvent = "string"
             }
         };
 

@@ -60,7 +60,7 @@ public class ScoreH5PLearningElementTest
         {
             ScoreElementParams = new ScoreElementParams
             {
-                SerializedXAPIEvent = "xapiEvent"
+                SerializedXapiEvent = "xapiEvent"
             },
             Module = new Modules
             {
@@ -101,7 +101,7 @@ public class ScoreH5PLearningElementTest
             {
                 ScoreElementParams = new ScoreElementParams
                 {
-                    SerializedXAPIEvent = "xapiEvent"
+                    SerializedXapiEvent = "xapiEvent"
                 },
                 Module = new Modules
                 {

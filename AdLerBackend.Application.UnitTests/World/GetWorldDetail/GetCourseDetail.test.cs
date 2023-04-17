@@ -3,13 +3,13 @@ using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.World.GetWorldDetail;
 using AdLerBackend.Domain.Entities;
+using AdLerBackend.Domain.UnitTests.TestingUtils;
 using AutoBogus;
 using NSubstitute;
 
 #pragma warning disable CS8618
 
 namespace AdLerBackend.Application.UnitTests.World.GetWorldDetail;
-
 
 public class GetWorldDetailTest
 {
@@ -35,23 +35,21 @@ public class GetWorldDetailTest
             WebServiceToken = "testToken"
         };
 
-        var courseDatabaseResponse = new WorldEntity
+        var worldEntity = WorldEntityFactory.CreateWorldEntity();
+        worldEntity.Id = 1;
+        worldEntity.H5PFilesInCourse = new List<H5PLocationEntity>
         {
-            Id = 1,
-            H5PFilesInCourse = new List<H5PLocationEntity>
+            new()
             {
-                new()
-                {
-                    Path = Path.Combine("some", "path1")
-                },
-                new()
-                {
-                    Path = Path.Combine("some", "path2")
-                }
+                Path = Path.Combine("some", "path1")
+            },
+            new()
+            {
+                Path = Path.Combine("some", "path2")
             }
         };
 
-        _worldRepository.GetAsync(Arg.Any<int>()).Returns(courseDatabaseResponse);
+        _worldRepository.GetAsync(Arg.Any<int>()).Returns(worldEntity);
 
         var stream = new MemoryStream();
         _fileAccess.GetReadFileStream(Arg.Any<string>()).Returns(stream);

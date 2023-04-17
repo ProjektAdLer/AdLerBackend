@@ -19,7 +19,6 @@
         </PackageReference>
         <PackageReference Include="DeepCloner" Version="0.10.4" />
         <PackageReference Include="FluentAssertions" Version="6.7.0" />
-        <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.9" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0" />
         <PackageReference Include="NSubstitute" Version="4.4.0" />
@@ -31,6 +30,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\AdLerBackend.Application\AdLerBackend.Application.csproj" />
+        <ProjectReference Include="..\AdLerBackend.Domain.UnitTests\AdLerBackend.Domain.UnitTests.csproj" />
     </ItemGroup>
 
 </Project>

@@ -18,5 +18,5 @@ public class PlayerData : IBaseEntity
 #pragma warning restore CS8618
     public PlayerAvatarGender PlayerGender { get; set; } = PlayerAvatarGender.Male;
     public PlayerWorldColor PlayerWorldColor { get; set; } = PlayerWorldColor.Blue;
-    public int? Id { get; init; }
+    public int? Id { get; set; }
 }

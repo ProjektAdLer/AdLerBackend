@@ -1,17 +1,16 @@
 using AdLerBackend.Infrastructure.Repositories.Player;
-using AdLerBackend.Infrastructure.UnitTests.Repositories.Worlds;
 
 namespace AdLerBackend.Infrastructure.UnitTests.Repositories.Player;
 
-public class PlayerRepositoryTest : TestWithSqlite
+public class PlayerRepositoryTest
 {
     [Test]
     public async Task Initializes()
     {
         // Arrange
-
+        var dbContext = ContextCreator.GetNewDbContextInstance();
         // Act
-        var systemUnderTest = new PlayerRepository(DbContext);
+        var systemUnderTest = new PlayerRepository(dbContext);
 
         // Assert
         Assert.NotNull(systemUnderTest);
@@ -21,7 +20,8 @@ public class PlayerRepositoryTest : TestWithSqlite
     public async Task EnsureGetAsync_ReturnsPlayer()
     {
         // Arrange
-        var systemUnderTest = new PlayerRepository(DbContext);
+        var dbContext = ContextCreator.GetNewDbContextInstance();
+        var systemUnderTest = new PlayerRepository(dbContext);
 
         // Act
         var result = await systemUnderTest.EnsureGetAsync(1);
@@ -34,7 +34,8 @@ public class PlayerRepositoryTest : TestWithSqlite
     public async Task EnsureGetAsync_Existing_ReturnsPlayer()
     {
         // Arrange
-        var systemUnderTest = new PlayerRepository(DbContext);
+        var dbContext = ContextCreator.GetNewDbContextInstance();
+        var systemUnderTest = new PlayerRepository(dbContext);
 
         // Act
         var result = await systemUnderTest.EnsureGetAsync(1);

@@ -1,30 +1,24 @@
-﻿using AdLerBackend.Domain.Entities;
+﻿using AdLerBackend.Domain.UnitTests.TestingUtils;
 using AdLerBackend.Infrastructure.Repositories.Worlds;
 
 namespace AdLerBackend.Infrastructure.UnitTests.Repositories.Worlds;
 
-public class WorldRepositoryTest : TestWithSqlite
+public class WorldRepositoryTest
 {
     [Test]
     public async Task GetAllCoursesForAuthor_Valid_GetsThen()
     {
         // Arrange
-        var systemUnderTest = new WorldRepository(DbContext);
-        await systemUnderTest.AddAsync(new WorldEntity
-        {
-            Id = 1,
-            Name = "Test Course",
-            AuthorId = 2,
-            DslLocation = "Test Dsl Location"
-        });
+        var dbContext = ContextCreator.GetNewDbContextInstance();
+        var systemUnderTest = new WorldRepository(dbContext);
 
-        await systemUnderTest.AddAsync(new WorldEntity
-        {
-            Id = 2,
-            Name = "Test Course 2",
-            AuthorId = 2,
-            DslLocation = "Test Dsl Location 2"
-        });
+        var world1 = WorldEntityFactory.CreateWorldEntity(authorId: 2, id: 1);
+
+        await systemUnderTest.AddAsync(world1);
+
+        world1.Id = 2;
+
+        await systemUnderTest.AddAsync(world1);
 
         // Act
         var result = await systemUnderTest.GetAllForAuthor(2);
@@ -37,15 +31,10 @@ public class WorldRepositoryTest : TestWithSqlite
     public async Task ExistsCourseForAuthor_Valid_GetsResult()
     {
         // Arrange
-        var systemUnderTest = new WorldRepository(DbContext);
+        var dbContext = ContextCreator.GetNewDbContextInstance();
+        var systemUnderTest = new WorldRepository(dbContext);
 
-        await systemUnderTest.AddAsync(new WorldEntity
-        {
-            Id = 1,
-            Name = "Test Course",
-            AuthorId = 2,
-            DslLocation = "Test Dsl Location"
-        });
+        await systemUnderTest.AddAsync(WorldEntityFactory.CreateWorldEntity(authorId: 2, name: "Test Course"));
 
         // Act
         var result = await systemUnderTest.ExistsForAuthor(2, "Test Course");
@@ -64,23 +53,12 @@ public class WorldRepositoryTest : TestWithSqlite
     public async Task GetAllCoursesByStrings_Valid_GetsResult()
     {
         // Arrange
-        var systemUnderTest = new WorldRepository(DbContext);
+        var dbContext = ContextCreator.GetNewDbContextInstance();
+        var systemUnderTest = new WorldRepository(dbContext);
 
-        await systemUnderTest.AddAsync(new WorldEntity
-        {
-            Id = 1,
-            Name = "Test Course",
-            AuthorId = 2,
-            DslLocation = "Test Dsl Location"
-        });
+        await systemUnderTest.AddAsync(WorldEntityFactory.CreateWorldEntity("Test Course"));
 
-        await systemUnderTest.AddAsync(new WorldEntity
-        {
-            Id = 2,
-            Name = "Test Course 2",
-            AuthorId = 2,
-            DslLocation = "Test Dsl Location 2"
-        });
+        await systemUnderTest.AddAsync(WorldEntityFactory.CreateWorldEntity("Test Course 2"));
 
         // Act
         var result = await systemUnderTest.GetAllByStrings(new List<string> {"Test Course", "Test Course 2"});
@@ -93,15 +71,10 @@ public class WorldRepositoryTest : TestWithSqlite
     public async Task GetAsync_Valid_GetsResult()
     {
         // Arrange
-        var systemUnderTest = new WorldRepository(DbContext);
+        var dbContext = ContextCreator.GetNewDbContextInstance();
+        var systemUnderTest = new WorldRepository(dbContext);
 
-        await systemUnderTest.AddAsync(new WorldEntity
-        {
-            Id = 1,
-            Name = "Test Course",
-            AuthorId = 2,
-            DslLocation = "Test Dsl Location"
-        });
+        await systemUnderTest.AddAsync(WorldEntityFactory.CreateWorldEntity(id: 1));
 
         // Act
         var result = await systemUnderTest.GetAsync(1);
@@ -114,15 +87,10 @@ public class WorldRepositoryTest : TestWithSqlite
     public async Task Delete_Valid_DeletesCourse_DeletesCourse()
     {
         // Arrange
-        var systemUnderTest = new WorldRepository(DbContext);
+        var dbContext = ContextCreator.GetNewDbContextInstance();
+        var systemUnderTest = new WorldRepository(dbContext);
 
-        await systemUnderTest.AddAsync(new WorldEntity
-        {
-            Id = 1,
-            Name = "Test Course",
-            AuthorId = 2,
-            DslLocation = "Test Dsl Location"
-        });
+        await systemUnderTest.AddAsync(WorldEntityFactory.CreateWorldEntity(id: 1));
 
         // Act
         await systemUnderTest.DeleteAsync(1);

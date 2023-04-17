@@ -24,5 +24,5 @@ public class H5PLocationEntity : IBaseEntity
 
     public string Path { get; set; }
     public int ElementId { get; set; }
-    public int? Id { get; init; }
+    public int? Id { get; set; }
 }

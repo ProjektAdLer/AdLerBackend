@@ -6,6 +6,7 @@ using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.LMS.GetUserData;
 using AdLerBackend.Application.World.GetWorldsForAuthor;
 using AdLerBackend.Domain.Entities;
+using AdLerBackend.Domain.UnitTests.TestingUtils;
 using MediatR;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -68,12 +69,7 @@ public class GetWorldForAuthorHandlerTest
 
         _worldRepository.GetAllForAuthor(1).Returns(new List<WorldEntity>
         {
-            new()
-            {
-                Id = 1,
-                Name = "Test Course",
-                AuthorId = 1
-            }
+            WorldEntityFactory.CreateWorldEntity("Fullname", default, default, 1, 1)
         });
 
         var systemUnderTest = new GetWorldsForAuthorHandler(_worldRepository, _mediator);

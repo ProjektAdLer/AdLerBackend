@@ -19,7 +19,7 @@ public class ElementsControllerTest
         // Act
         await controller.ScoreElement("token", 1, 2, new ScoreElementParams
         {
-            SerializedXAPIEvent = "foo"
+            SerializedXapiEvent = "foo"
         });
 
         // Assert

@@ -18,7 +18,7 @@ public class
             case "invalidtoken":
                 throw new InvalidTokenException();
             case "invalidlogin":
-                throw new InvalidLMSLoginException();
+                throw new InvalidLmsLoginException();
             default:
                 throw ex;
         }

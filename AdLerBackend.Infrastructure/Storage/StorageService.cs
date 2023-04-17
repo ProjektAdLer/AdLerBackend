@@ -35,9 +35,9 @@ public class StorageService : IFileAccess
         return h5PFilePaths;
     }
 
-    public string StoreATFFileForWorld(StoreWorldATFDto worldToStoreH5P)
+    public string StoreAtfFileForWorld(StoreWorldAtfDto worldToStoreH5P)
     {
-        worldToStoreH5P.ATFFile.Position = 0;
+        worldToStoreH5P.AtfFile.Position = 0;
         var workingDir = _fileSystem.Path.Join("wwwroot", "courses", worldToStoreH5P.AuthorId.ToString(),
             worldToStoreH5P.WorldInforamtion.World.LmsElementIdentifier.Value);
 
@@ -50,7 +50,7 @@ public class StorageService : IFileAccess
             _fileSystem.Directory.CreateDirectory(workingDir);
 
         var fileStream = _fileSystem.FileStream.Create(dslFilePath, FileMode.Create);
-        worldToStoreH5P.ATFFile.CopyTo(fileStream);
+        worldToStoreH5P.AtfFile.CopyTo(fileStream);
         fileStream.Close();
         return dslFilePath;
     }

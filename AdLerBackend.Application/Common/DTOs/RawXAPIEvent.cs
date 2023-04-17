@@ -1,6 +1,8 @@
 #pragma warning disable CS8618
 using System.Text.Json.Serialization;
 
+// ReSharper disable InconsistentNaming
+
 namespace AdLerBackend.Application.Common.DTOs;
 
 public class Actor

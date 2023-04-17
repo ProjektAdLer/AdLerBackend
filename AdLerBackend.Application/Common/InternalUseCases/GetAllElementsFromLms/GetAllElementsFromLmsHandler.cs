@@ -45,8 +45,11 @@ public class
         // Get the LMS-Modules by their name
         var modulesWithId = atfIdWithFileName.Select(x =>
         {
-            var module = courseContent.SelectMany(c => c.Modules).FirstOrDefault(m => m.Name == x.FileName)
-                         ?? throw new NotFoundException($"Element with the Id {x.Id} not found");
+            var module = courseContent.SelectMany(c => c.Modules)
+                .FirstOrDefault(m => m.Name == x.FileName);
+
+            if (module == null)
+                throw new NotFoundException($"Element with the Id {x.Id} not found");
 
             return new ModuleWithId {AdLerId = x.Id!, LmsModule = module};
         }).ToList();

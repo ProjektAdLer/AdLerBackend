@@ -77,18 +77,18 @@ public class StorageServiceTest
     {
         // Arrange
         var storageService = new StorageService(_fileSystem);
-        var dto = new StoreWorldATFDto
+        var dto = new StoreWorldAtfDto
         {
             AuthorId = 1,
             WorldInforamtion = AutoFaker.Generate<WorldDtoResponse>(),
             //DSL_Document.json contains data that is required for the test and should be loaded from disk
-            ATFFile = new FileStream("../../../Storage/TestFiles/DSL_Document.json", FileMode.Open)
+            AtfFile = new FileStream("../../../Storage/TestFiles/DSL_Document.json", FileMode.Open)
         };
 
         dto.WorldInforamtion.World.LmsElementIdentifier.Value = "LearningWorldIdentifier";
 
         // Act
-        var dslLocation = storageService.StoreATFFileForWorld(dto);
+        var dslLocation = storageService.StoreAtfFileForWorld(dto);
 
         // Assert
         var file = _fileSystem.Path.Combine("wwwroot", "courses", "1", "LearningWorldIdentifier",

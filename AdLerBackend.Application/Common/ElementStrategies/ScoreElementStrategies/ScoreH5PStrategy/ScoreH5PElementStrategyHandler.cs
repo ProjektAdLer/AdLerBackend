@@ -39,7 +39,7 @@ public class
 
         // Deserialize the XAPI Event
         var xapiEvent =
-            _serialization.GetObjectFromJsonString<RawH5PEvent>(request.ScoreElementParams.SerializedXAPIEvent!);
+            _serialization.GetObjectFromJsonString<RawH5PEvent>(request.ScoreElementParams.SerializedXapiEvent!);
 
 
         xapiEvent.actor.name = userData.LMSUserName;
@@ -54,12 +54,9 @@ public class
         // Send the XAPI Event to the LMS
         var isSuccess = await _ilms.ProcessXApiViaPlugin(request.WebServiceToken, inText);
 
-
-        var isAttemptASucess = await _ilms.GetElementScoreFromPlugin(request.WebServiceToken, request.Module.Id);
-
         return new ScoreElementResponse
         {
-            IsSuccess = isAttemptASucess
+            IsSuccess = isSuccess
         };
     }
 }

@@ -110,7 +110,13 @@ public class GenericRepositoryTest : TestWithSqlite
         // Act
         await repository.AddAsync(testEntity);
 
-        testEntity.Id = 2;
+        testEntity = new WorldEntity
+        {
+            Id = 2,
+            Name = "Test Course",
+            AuthorId = 1,
+            DslLocation = "Test Dsl Location"
+        };
         await repository.AddAsync(testEntity);
 
         var allEntities = await repository.GetAllAsync();

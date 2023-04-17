@@ -29,7 +29,7 @@ public class GetWorldsForUserHandler : IRequestHandler<GetWorldsForUserCommand, 
         {
             Worlds = coursesFromDb.Select(c => new WorldResponse
             {
-                WorldId = c.Id,
+                WorldId = (int) c.Id!,
                 WorldName = c.Name
             }).ToList()
         };

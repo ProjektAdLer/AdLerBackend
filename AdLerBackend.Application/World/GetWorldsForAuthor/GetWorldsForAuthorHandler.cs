@@ -31,7 +31,7 @@ public class GetWorldsForAuthorHandler : IRequestHandler<GetWorldsForAuthorComma
         {
             Worlds = courses.Select(c => new WorldResponse
             {
-                WorldId = c.Id,
+                WorldId = (int) c.Id!,
                 WorldName = c.Name
             }).ToList()
         };

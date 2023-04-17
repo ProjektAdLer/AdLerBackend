@@ -87,13 +87,12 @@ public class UploadWorldCommandHandler : IRequestHandler<UploadWorldCommand, boo
                 x.LmsElementIdentifier.Value == fileName).ElementId;
         }
 
-        var courseEntity = new WorldEntity
-        {
-            Name = courseInformation.World.LmsElementIdentifier.Value,
-            AuthorId = userInformation.UserId,
-            H5PFilesInCourse = h5PFilesInCourse,
-            DslLocation = atfLocation
-        };
+        var courseEntity = new WorldEntity(
+            courseInformation.World.LmsElementIdentifier.Value,
+            h5PFilesInCourse,
+            atfLocation,
+            userInformation.UserId
+        );
 
         await _worldRepository.AddAsync(courseEntity);
 

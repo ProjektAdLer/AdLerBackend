@@ -4,6 +4,7 @@ using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
 using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Domain.Entities;
+using AdLerBackend.Domain.UnitTests.TestingUtils;
 using NSubstitute;
 
 namespace AdLerBackend.Application.UnitTests.Common.InternalUseCases;
@@ -36,12 +37,7 @@ public class GetAllElementsFromLms
             "name",
             new List<H5PLocationEntity>
             {
-                new()
-                {
-                    Id = 3,
-                    Path = "path",
-                    ElementId = 4
-                }
+                H5PLocationEntityFactory.CreateH5PLocationEntity("path", 4, 3)
             },
             "asd",
             1234,

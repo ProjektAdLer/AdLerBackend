@@ -2,6 +2,7 @@ using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Element.GetElementSource.GetH5PFilePath;
 using AdLerBackend.Domain.Entities;
+using AdLerBackend.Domain.UnitTests.TestingUtils;
 using AutoBogus;
 using NSubstitute;
 
@@ -28,12 +29,7 @@ public class GetH5PFilePathTest
             .RuleFor(x => x.Id, 1)
             .RuleFor(x => x.H5PFilesInCourse, new List<H5PLocationEntity>
             {
-                new()
-                {
-                    Id = 2,
-                    ElementId = 2,
-                    Path = "path"
-                }
+                H5PLocationEntityFactory.CreateH5PLocationEntity("path", 2, 2)
             });
 
         var courseMock = faker.Generate();
@@ -82,12 +78,7 @@ public class GetH5PFilePathTest
             .RuleFor(x => x.Id, 1)
             .RuleFor(x => x.H5PFilesInCourse, new List<H5PLocationEntity>
             {
-                new()
-                {
-                    Id = 24,
-                    ElementId = 23,
-                    Path = "path"
-                }
+                H5PLocationEntityFactory.CreateH5PLocationEntity("path", 23, 24)
             });
 
         var courseMock = faker.Generate();

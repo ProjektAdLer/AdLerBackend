@@ -6,6 +6,7 @@ using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.LMS.GetUserData;
 using AdLerBackend.Application.World.WorldManagement.DeleteWorld;
 using AdLerBackend.Domain.Entities;
+using AdLerBackend.Domain.UnitTests.TestingUtils;
 using MediatR;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -39,12 +40,7 @@ public class DeleteWorldTest
             "name",
             new List<H5PLocationEntity>
             {
-                new()
-                {
-                    Id = 3,
-                    Path = "path",
-                    ElementId = 4
-                }
+                H5PLocationEntityFactory.CreateH5PLocationEntity("path", 4, 3)
             },
             "asd",
             1,
@@ -121,12 +117,7 @@ public class DeleteWorldTest
             "name",
             new List<H5PLocationEntity>
             {
-                new()
-                {
-                    Id = 3,
-                    Path = "path",
-                    ElementId = 4
-                }
+                H5PLocationEntityFactory.CreateH5PLocationEntity("path", 3, 4)
             },
             "asd",
             1337,

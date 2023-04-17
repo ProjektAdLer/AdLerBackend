@@ -18,10 +18,7 @@ public class PlayerRepository : GenericRepository<PlayerData>, IPlayerRepository
 
         if (playerData != null) return playerData!;
         // If Player Data is not in Database, create new Player Data and save it to Database
-        var newPlayerData = new PlayerData
-        {
-            Id = id
-        };
+        var newPlayerData = new PlayerData(PlayerAvatarGender.Male, PlayerWorldColor.Blue, id);
 
         await AddAsync(newPlayerData);
 

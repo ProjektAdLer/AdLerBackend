@@ -39,14 +39,8 @@ public class GetWorldDetailTest
         worldEntity.Id = 1;
         worldEntity.H5PFilesInCourse = new List<H5PLocationEntity>
         {
-            new()
-            {
-                Path = Path.Combine("some", "path1")
-            },
-            new()
-            {
-                Path = Path.Combine("some", "path2")
-            }
+            H5PLocationEntityFactory.CreateH5PLocationEntity(Path.Combine("some", "path1")),
+            H5PLocationEntityFactory.CreateH5PLocationEntity(Path.Combine("some", "path2"))
         };
 
         _worldRepository.GetAsync(Arg.Any<int>()).Returns(worldEntity);

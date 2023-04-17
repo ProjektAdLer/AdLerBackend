@@ -2,6 +2,7 @@ using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Player.UpdatePlayerData;
 using AdLerBackend.Domain.Entities.PlayerData;
+using AdLerBackend.Domain.UnitTests.TestingUtils;
 using FluentAssertions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
@@ -33,12 +34,8 @@ public class UpdatePlayerDataTest
             UserId = 1
         });
 
-        _playerRepository.EnsureGetAsync(Arg.Any<int>()).Returns(new PlayerData
-        {
-            Id = 1,
-            PlayerGender = PlayerAvatarGender.Female,
-            PlayerWorldColor = PlayerWorldColor.Blue
-        });
+        _playerRepository.EnsureGetAsync(Arg.Any<int>())
+            .Returns(PlayerDataEntityFactory.CreatePlayerData());
 
         var patchDocument = new JsonPatchDocument<PlayerData>();
         patchDocument.Operations.Add(new Operation<PlayerData>("add", "/playergender", "", "0"));

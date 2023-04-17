@@ -1,7 +1,7 @@
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Player.GetPlayerData;
-using AdLerBackend.Domain.Entities.PlayerData;
+using AdLerBackend.Domain.UnitTests.TestingUtils;
 using NSubstitute;
 
 #pragma warning disable CS8618
@@ -34,12 +34,8 @@ public class GetPlayerDataTest
             LMSUserName = "userName"
         });
 
-        _playerRepository.EnsureGetAsync(Arg.Any<int>()).Returns(new PlayerData
-        {
-            Id = 1,
-            PlayerGender = PlayerAvatarGender.Female,
-            PlayerWorldColor = PlayerWorldColor.Blue
-        });
+        _playerRepository.EnsureGetAsync(Arg.Any<int>())
+            .Returns(PlayerDataEntityFactory.CreatePlayerData());
 
         // Act
         var result = await systemUnderTest.Handle(new GetPlayerDataCommand

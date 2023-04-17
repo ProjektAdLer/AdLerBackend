@@ -4,6 +4,7 @@ using AdLerBackend.Application.Common.InternalUseCases.GetElementLmsInformation;
 using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Domain.Entities;
+using AdLerBackend.Domain.UnitTests.TestingUtils;
 using NSubstitute;
 
 namespace AdLerBackend.Application.UnitTests.Common.InternalUseCases;
@@ -35,12 +36,13 @@ public class GerElementLmsInformationTest
             "name",
             new List<H5PLocationEntity>
             {
-                new()
-                {
-                    Id = 3,
-                    Path = "path",
-                    ElementId = 4
-                }
+                // new()
+                // {
+                //     Id = 3,
+                //     Path = "path",
+                //     ElementId = 4
+                // },
+                H5PLocationEntityFactory.CreateH5PLocationEntity()
             },
             "asd",
             1234,
@@ -255,12 +257,12 @@ public class GerElementLmsInformationTest
             "name",
             new List<H5PLocationEntity>
             {
-                new()
-                {
-                    Id = 3,
-                    Path = "path",
-                    ElementId = 4
-                }
+                // new()
+                // {
+                //     Id = 3,
+                //     Path = "path",
+                //     ElementId = 4
+                // }
             },
             "asd",
             1234,

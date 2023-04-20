@@ -10,6 +10,6 @@ public static class H5PLocationEntityFactory
         int? elementId = null,
         int? id = null)
     {
-        return new H5PLocationEntity(path, elementId, id);
+        return new H5PLocationEntity(path!, elementId, id);
     }
 }

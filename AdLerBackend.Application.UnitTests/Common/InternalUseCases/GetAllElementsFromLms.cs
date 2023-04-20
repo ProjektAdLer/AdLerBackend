@@ -52,6 +52,10 @@ public class GetAllElementsFromLms
         _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
             .Returns(new WorldDtoResponse
             {
+                FileVersion = "FileVersion",
+                AmgVersion = "000",
+                Author = "Author",
+                Language = "Language",
                 World = new Application.Common.Responses.Course.World
                 {
                     Elements = new List<Application.Common.Responses.Course.Element>

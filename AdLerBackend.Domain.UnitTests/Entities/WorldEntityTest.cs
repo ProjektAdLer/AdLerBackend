@@ -41,4 +41,18 @@ public class WorldEntityTest
             Assert.That(instance.Id, Is.EqualTo(null));
         });
     }
+
+    [Test]
+    public void PrivateConstructor_SetsAllParameters2()
+    {
+        var instance = new WorldEntity();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(instance.Name, Is.EqualTo(string.Empty));
+            Assert.That(instance.H5PFilesInCourse, Is.EqualTo(new List<H5PLocationEntity>()));
+            Assert.That(instance.DslLocation, Is.EqualTo(string.Empty));
+            Assert.That(instance.Id, Is.EqualTo(null));
+        });
+    }
 }

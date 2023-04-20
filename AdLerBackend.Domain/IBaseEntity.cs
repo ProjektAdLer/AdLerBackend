@@ -1,6 +1,8 @@
-﻿namespace AdLerBackend.Domain;
+﻿using JetBrains.Annotations;
+
+namespace AdLerBackend.Domain;
 
 public interface IBaseEntity
 {
-    public int? Id { get; set; }
+    [UsedImplicitly] public int? Id { get; set; }
 }

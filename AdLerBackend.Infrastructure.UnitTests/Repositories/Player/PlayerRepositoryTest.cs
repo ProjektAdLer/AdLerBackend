@@ -24,7 +24,7 @@ public class PlayerRepositoryTest
         var systemUnderTest = new PlayerRepository(dbContext);
 
         // Act
-        var result = await systemUnderTest.EnsureGetAsync(1);
+        var result = await systemUnderTest.GetOrCreatePlayerAsync(1);
 
         // Assert
         Assert.NotNull(result);
@@ -38,7 +38,7 @@ public class PlayerRepositoryTest
         var systemUnderTest = new PlayerRepository(dbContext);
 
         // Act
-        var result = await systemUnderTest.EnsureGetAsync(1);
+        var result = await systemUnderTest.GetOrCreatePlayerAsync(1);
 
         // Assert
         Assert.NotNull(result);
@@ -52,8 +52,8 @@ public class PlayerRepositoryTest
         var systemUnderTest = new PlayerRepository(dbContext);
 
         // Act
-        var result = await systemUnderTest.EnsureGetAsync(1);
-        var result2 = await systemUnderTest.EnsureGetAsync(1);
+        var result = await systemUnderTest.GetOrCreatePlayerAsync(1);
+        var result2 = await systemUnderTest.GetOrCreatePlayerAsync(1);
 
         // Assert
         Assert.NotNull(result);

@@ -21,7 +21,7 @@ public class UpdatePlayerDataHandler : IRequestHandler<UpdatePlayerCommand, Play
         var playerMoodleData = await _ilms.GetLMSUserDataAsync(request.WebServiceToken);
 
         // Get Player Data from Database
-        var playerData = await _playerRepository.EnsureGetAsync(playerMoodleData.UserId);
+        var playerData = await _playerRepository.GetOrCreatePlayerAsync(playerMoodleData.UserId);
 
         // Update Player Data
         request.PatchDocument.ApplyTo(playerData);

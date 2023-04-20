@@ -20,30 +20,40 @@ public class GetPlayerDataTest
         _playerRepository = Substitute.For<IPlayerRepository>();
     }
 
+
     [Test]
     public async Task Handle_Valid_GetsPlayerData()
     {
         // Arrange
-        var systemUnderTest = new GetPlayerDataHandler(_ilms, _playerRepository);
-
-        _ilms.GetLMSUserDataAsync(Arg.Any<string>()).Returns(new LMSUserDataResponse
+        var lmsUserDataResponse = new LMSUserDataResponse
         {
             IsAdmin = false,
             UserEmail = "foo@bar.de",
             UserId = 1,
             LMSUserName = "userName"
-        });
+        };
 
-        _playerRepository.EnsureGetAsync(Arg.Any<int>())
+        _ilms.GetLMSUserDataAsync(Arg.Any<string>()).Returns(lmsUserDataResponse);
+
+
+        _playerRepository.GetOrCreatePlayerAsync(1)
             .Returns(PlayerDataEntityFactory.CreatePlayerData());
+
+        var systemUnderTest = new GetPlayerDataUseCase(_ilms, _playerRepository);
 
         // Act
         var result = await systemUnderTest.Handle(new GetPlayerDataCommand
         {
             WebServiceToken = "testToken"
         }, CancellationToken.None);
-
+        
         // Assert
-        Assert.NotNull(result);
+        Assert.Multiple(() =>
+        {
+
+            // Assert
+            Assert.That(PlayerDataEntityFactory.CreatePlayerData().PlayerGender, Is.EqualTo(result.PlayerGender));
+            Assert.That(PlayerDataEntityFactory.CreatePlayerData().PlayerWorldColor, Is.EqualTo(result.PlayerWorldColor));
+        });
     }
 }

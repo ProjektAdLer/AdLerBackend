@@ -10,7 +10,7 @@ public class WorldEntity : IBaseEntity
     ///     (EF Core cannot set navigation properties using a constructor.)
     /// </summary>
     [UsedImplicitly]
-    private WorldEntity()
+    internal WorldEntity()
     {
         // Initialize every property with a default value
         Id = null;

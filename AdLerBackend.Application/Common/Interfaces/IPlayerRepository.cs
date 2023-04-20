@@ -4,5 +4,5 @@ namespace AdLerBackend.Application.Common.Interfaces;
 
 public interface IPlayerRepository : IGenericRepository<PlayerData>
 {
-    public Task<PlayerData> EnsureGetAsync(int id);
+    public Task<PlayerData> GetOrCreatePlayerAsync(int id);
 }

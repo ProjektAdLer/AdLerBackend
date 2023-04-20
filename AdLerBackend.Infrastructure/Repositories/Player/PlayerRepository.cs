@@ -11,7 +11,7 @@ public class PlayerRepository : GenericRepository<PlayerData>, IPlayerRepository
     {
     }
 
-    public async Task<PlayerData> EnsureGetAsync(int id)
+    public async Task<PlayerData> GetOrCreatePlayerAsync(int id)
     {
         // Get Player Data from Database
         var playerData = await GetAsync(id);

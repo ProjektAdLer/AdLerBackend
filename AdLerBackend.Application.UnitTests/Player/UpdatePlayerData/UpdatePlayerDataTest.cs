@@ -34,7 +34,7 @@ public class UpdatePlayerDataTest
             UserId = 1
         });
 
-        _playerRepository.EnsureGetAsync(Arg.Any<int>())
+        _playerRepository.GetOrCreatePlayerAsync(Arg.Any<int>())
             .Returns(PlayerDataEntityFactory.CreatePlayerData());
 
         var patchDocument = new JsonPatchDocument<PlayerData>();
@@ -48,7 +48,7 @@ public class UpdatePlayerDataTest
         }, CancellationToken.None);
 
         // Assert
-        await _playerRepository.Received(1).EnsureGetAsync(Arg.Any<int>());
+        await _playerRepository.Received(1).GetOrCreatePlayerAsync(Arg.Any<int>());
         await _playerRepository.Received(1).UpdateAsync(Arg.Any<PlayerData>());
 
         result.PlayerGender.Should().Be(0);

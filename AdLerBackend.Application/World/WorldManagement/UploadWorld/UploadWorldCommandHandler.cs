@@ -33,22 +33,11 @@ public class UploadWorldCommandHandler : IRequestHandler<UploadWorldCommand, boo
 
     public async Task<bool> Handle(UploadWorldCommand request, CancellationToken cancellationToken)
     {
-        // Validate ATF File
-        await _mediator.Send(new ValidateATFFileCommand
-        {
-            ATFFileStream = request.ATFFileStream
-        }, cancellationToken);
+        await ValidateAtfFile(request, cancellationToken);
 
-        // check if user is Admin
-        await _mediator.Send(new CheckUserPrivilegesCommand
-        {
-            WebServiceToken = request.WebServiceToken
-        }, cancellationToken);
+        await ThrowIfUserIsNotAdmin(request, cancellationToken);
 
-        var userInformation = await _mediator.Send(new GetLMSUserDataCommand
-        {
-            WebServiceToken = request.WebServiceToken
-        }, cancellationToken);
+        var userInformation = await GetUserDataFromLms(request, cancellationToken);
 
 
         var courseInformation = _lmsBackupProcessor.GetWorldDescriptionFromBackup(request.ATFFileStream);
@@ -96,6 +85,31 @@ public class UploadWorldCommandHandler : IRequestHandler<UploadWorldCommand, boo
 
 
         return true;
+    }
+
+    private async Task<LMSUserDataResponse> GetUserDataFromLms(UploadWorldCommand request, CancellationToken cancellationToken)
+    {
+        var userInformation = await _mediator.Send(new GetLMSUserDataCommand
+        {
+            WebServiceToken = request.WebServiceToken
+        }, cancellationToken);
+        return userInformation;
+    }
+
+    private async Task ThrowIfUserIsNotAdmin(UploadWorldCommand request, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new CheckUserPrivilegesCommand
+        {
+            WebServiceToken = request.WebServiceToken
+        }, cancellationToken);
+    }
+
+    private async Task ValidateAtfFile(UploadWorldCommand request, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new ValidateATFFileCommand
+        {
+            ATFFileStream = request.ATFFileStream
+        }, cancellationToken);
     }
 
     private List<string> StoreH5PFiles(WorldDtoResponse courseInformation, LMSUserDataResponse userData,

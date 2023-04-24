@@ -6,60 +6,27 @@ using Microsoft.AspNetCore.Http.Features;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
+if (!File.Exists("./config/config.json")) CreateDefaultConfigAndCrash();
 
 // This is needed, because wwwroot directory must be present in the beginning to serve files from it
 Directory.CreateDirectory("wwwroot");
-
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
-// If the config file does not exist, create it
-if (!File.Exists("./config/config.json"))
-{
-    File.WriteAllText("./config/config.json", JsonConvert.SerializeObject(new
-    {
-        useHttps = "false",
-        httpPort = 80,
-        moodleUrl = "Please specify moodle url"
-    }, Formatting.Indented));
-
-    // shut down program with message in dialog
-    Console.WriteLine("Please edit the config file in ./config/config.json and restart the program.");
-    Environment.Exit(1);
-}
-
 // Use Global AdLer Config File (Most likely coming from a docker volume)
 builder.Configuration.AddJsonFile("./config/config.json", false);
 
-// Add HTTPS support
-if (!builder.Environment.IsDevelopment())
-    builder.WebHost.ConfigureKestrel(options =>
-    {
-        if (builder.Configuration["useHttps"]?.ToLower() == "true")
-            options.ListenAnyIP(int.Parse(builder.Configuration["httpsPort"] ?? "433"),
-                listenOptions =>
-                {
-                    listenOptions.UseHttps("./config/cert/AdLerBackend.pfx",
-                        builder.Configuration["httpsCertificatePassword"]);
-                });
-        else
-            // if builder.Configuration["httpPort"] is not set, use default port 80
-            options.ListenAnyIP(int.Parse(builder.Configuration["httpPort"] ?? "80"));
-    });
+ConfigureHttpOrHttpsFromConfig(builder);
 
 
-builder.Services.AddControllers(
-    options => { options.Filters.Add<ApiExceptionFilterAttribute>(); }
-).AddNewtonsoftJson(opts =>
-{
-    // This converts enum integers to its corresponding string value
-    opts.SerializerSettings.Converters.Add(new StringEnumConverter());
-});
+builder.Services
+    .AddControllers(options => options.Filters.Add<ApiExceptionFilterAttribute>())
+    .AddNewtonsoftJson(opts => opts.SerializerSettings.Converters.Add(new StringEnumConverter()));
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -71,7 +38,7 @@ builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration, builder.Environment.IsDevelopment());
 builder.Services.Configure<FormOptions>(opt =>
 {
-    //1GB
+    //1GB Size Limit TODO: Move to configuration
     opt.ValueLengthLimit = 1048576000;
     opt.MultipartBodyLengthLimit = 1048576000;
     opt.MultipartHeadersLengthLimit = 1048576000;
@@ -103,3 +70,35 @@ app.UseStaticFiles();
 app.MapControllers();
 
 app.Run();
+
+void CreateDefaultConfigAndCrash()
+{
+    File.WriteAllText("./config/config.json", JsonConvert.SerializeObject(new
+    {
+        useHttps = "false",
+        httpPort = 80,
+        moodleUrl = "Please specify moodle url"
+    }, Formatting.Indented));
+
+    // shut down program with message in dialog
+    Console.WriteLine("Please edit the config file in ./config/config.json and restart the program.");
+    Environment.Exit(1);
+}
+
+void ConfigureHttpOrHttpsFromConfig(WebApplicationBuilder webApplicationBuilder)
+{
+    if (!webApplicationBuilder.Environment.IsDevelopment())
+        webApplicationBuilder.WebHost.ConfigureKestrel(options =>
+        {
+            if (webApplicationBuilder.Configuration["useHttps"]?.ToLower() == "true")
+                options.ListenAnyIP(int.Parse(webApplicationBuilder.Configuration["httpsPort"] ?? "433"),
+                    listenOptions =>
+                    {
+                        listenOptions.UseHttps("./config/cert/AdLerBackend.pfx",
+                            webApplicationBuilder.Configuration["httpsCertificatePassword"]);
+                    });
+            else
+                // if builder.Configuration["httpPort"] is not set, use default port 80
+                options.ListenAnyIP(int.Parse(webApplicationBuilder.Configuration["httpPort"] ?? "80"));
+        });
+}

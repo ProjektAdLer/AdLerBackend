@@ -5,7 +5,7 @@ using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Exceptions.LMSBackupProcessor;
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.Responses.Course;
+using AdLerBackend.Application.Common.Responses.World;
 using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 

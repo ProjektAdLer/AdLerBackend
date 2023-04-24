@@ -3,7 +3,7 @@ using System.IO.Abstractions.TestingHelpers;
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Exceptions;
-using AdLerBackend.Application.Common.Responses.Course;
+using AdLerBackend.Application.Common.Responses.World;
 using AdLerBackend.Infrastructure.Storage;
 using AutoBogus;
 

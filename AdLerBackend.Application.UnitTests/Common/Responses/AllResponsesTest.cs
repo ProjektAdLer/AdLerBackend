@@ -1,7 +1,7 @@
-using AdLerBackend.Application.Common.Responses.Course;
 using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.Player;
+using AdLerBackend.Application.Common.Responses.World;
 using AutoBogus;
 using FluentAssertions;
 using Force.DeepCloner;
@@ -29,9 +29,10 @@ public class AllResponsesTest
         yield return new TestCaseData(new WorldStatusResponse());
         yield return new TestCaseData(new ElementScoreResponse());
         yield return new TestCaseData(new WorldResponse());
-        yield return new TestCaseData(new Application.Common.Responses.Course.World());
+        yield return new TestCaseData(new Application.Common.Responses.World.World());
         yield return new TestCaseData(new PlayerDataResponse());
         yield return new TestCaseData(new ScoreElementResponse());
         yield return new TestCaseData(new WorldContent());
+        yield return new TestCaseData(new WorldDtoResponse());
     }
 }

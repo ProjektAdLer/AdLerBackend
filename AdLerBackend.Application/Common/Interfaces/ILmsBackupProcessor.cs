@@ -1,5 +1,5 @@
 ﻿using AdLerBackend.Application.Common.DTOs;
-using AdLerBackend.Application.Common.Responses.Course;
+using AdLerBackend.Application.Common.Responses.World;
 
 namespace AdLerBackend.Application.Common.Interfaces;
 

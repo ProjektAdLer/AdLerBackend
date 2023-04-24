@@ -68,18 +68,6 @@ public class StorageService : IFileAccess
         }
     }
 
-    public string StoreH5PBase(Stream fileStream)
-    {
-        var workingPath = _fileSystem.Path.Combine("wwwroot", "common", "h5pBase");
-
-        _fileSystem.Directory.CreateDirectory(workingPath);
-        var zipStream = new ZipArchive(fileStream, ZipArchiveMode.Read);
-
-        ExtractToDirectory(zipStream, workingPath);
-
-        return workingPath;
-    }
-
     public bool DeleteWorld(WorldDeleteDto worldToDelete)
     {
         var workingDir = _fileSystem.Path.Join("wwwroot", "courses", worldToDelete.AuthorId.ToString(),

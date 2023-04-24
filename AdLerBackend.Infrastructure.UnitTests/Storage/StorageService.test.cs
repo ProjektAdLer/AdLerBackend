@@ -132,26 +132,6 @@ public class StorageServiceTest
     }
 
     [Test]
-    public void StoreH5PBase_Valid_StoresH5pBase()
-    {
-        // Arrange
-        var storageService = new StorageService(_fileSystem);
-
-        var h5pStream = _backupFileStream;
-
-        // Act
-        var h5pBaseLocation = storageService.StoreH5PBase(h5pStream);
-
-        // Assert
-        var path = _fileSystem.Path.Combine("wwwroot", "common", "h5pBase");
-        var file = _fileSystem.Path.Combine(path, "fileAtRoot.txt");
-        Assert.IsTrue(_fileSystem.Directory.Exists(path));
-        Assert.IsTrue(_fileSystem.File.Exists(file));
-
-        Assert.That(h5pBaseLocation, Is.EqualTo(path));
-    }
-
-    [Test]
     public void DeleteCourse_Valid_DeletesCourse()
     {
         // Arrange

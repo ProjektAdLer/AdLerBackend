@@ -1,5 +1,4 @@
 ﻿using System.IO.Abstractions;
-using System.IO.Compression;
 using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
@@ -15,21 +14,27 @@ public class StorageService : IFileAccess
         _fileSystem = fileSystem;
     }
 
-    public List<string>? StoreH5PFilesForWorld(WorldStoreH5PDto worldToStoreH5P)
+    public Dictionary<string, string>? StoreH5PFilesForWorld(WorldStoreH5PDto worldToStoreH5P)
     {
         var workingDir = _fileSystem.Path.Join("wwwroot", "courses", worldToStoreH5P.AuthorId.ToString(),
             worldToStoreH5P.WorldInforamtion.World.LmsElementIdentifier.Value, "h5p");
 
-        var h5PFilePaths = worldToStoreH5P.H5PFiles.Select(item =>
+        // create directory if not exists
+        if (!_fileSystem.Directory.Exists(workingDir))
+            _fileSystem.Directory.CreateDirectory(workingDir);
+
+        var h5PFilePaths = new Dictionary<string, string>();
+
+        foreach (var h5PFile in worldToStoreH5P.H5PFiles)
         {
-            var zipStream = new ZipArchive(item.H5PFile!, ZipArchiveMode.Read);
+            var h5PFilePath = _fileSystem.Path.Combine(workingDir, h5PFile.H5PFileName + ".h5p");
 
-            var directory = _fileSystem.Path.Combine(workingDir, item.H5PFileName!);
+            var fileStream = _fileSystem.FileStream.Create(h5PFilePath, FileMode.Create);
+            h5PFile.H5PFile!.CopyTo(fileStream);
+            fileStream.Close();
 
-            ExtractToDirectory(zipStream, directory);
-
-            return directory;
-        }).ToList();
+            h5PFilePaths.Add(h5PFile.H5PFileName!, h5PFilePath);
+        }
 
 
         return h5PFilePaths;
@@ -75,22 +80,5 @@ public class StorageService : IFileAccess
 
         _fileSystem.Directory.Delete(workingDir, true);
         return true;
-    }
-
-    private void ExtractToDirectory(ZipArchive zipStream, string workingPath)
-    {
-        foreach (var entry in zipStream.Entries)
-        {
-            if (_fileSystem.Path.EndsInDirectorySeparator(entry.FullName)) continue;
-            using var inputStream = entry.Open();
-
-            var filePath = _fileSystem.Path.Join(workingPath, entry.FullName);
-            var dirName = _fileSystem.Path.GetDirectoryName(filePath);
-
-            _fileSystem.Directory.CreateDirectory(dirName.Trim());
-            using var unpackedFile = _fileSystem.File.OpenWrite(filePath.Trim());
-            inputStream.CopyTo(unpackedFile);
-            unpackedFile.Flush();
-        }
     }
 }

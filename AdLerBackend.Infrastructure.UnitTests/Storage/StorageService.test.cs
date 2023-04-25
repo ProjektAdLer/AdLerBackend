@@ -33,7 +33,7 @@ public class StorageServiceTest
     {
         // Arrange
         var storageService = new StorageService(_fileSystem);
-        var CourseDtoFake = new WorldStoreH5PDto
+        var courseDtoFake = new WorldStoreH5PDto
         {
             AuthorId = 1,
             WorldInforamtion = AutoFaker.Generate<WorldDtoResponse>(),
@@ -47,29 +47,15 @@ public class StorageServiceTest
             }
         };
 
-        CourseDtoFake.WorldInforamtion.World.LmsElementIdentifier.Value = "LearningWorldIdentifier";
+        courseDtoFake.WorldInforamtion.World.LmsElementIdentifier.Value = "LearningWorldIdentifier";
 
         // Act
-        var retunValue = storageService.StoreH5PFilesForWorld(CourseDtoFake);
+        var returnedValue = storageService.StoreH5PFilesForWorld(courseDtoFake);
 
         // Assert
-        var path = _fileSystem.Path.Combine("wwwroot", "courses", "1", "LearningWorldIdentifier", "h5p", "H5PName",
-            "Folder");
-        var fileInFolder =
-            _fileSystem.Path.Combine("wwwroot", "courses", "1", "LearningWorldIdentifier", "h5p", "H5PName", "Folder",
-                "FileInFolder");
-        var textFile = _fileSystem.Path.Combine("wwwroot", "courses", "1", "LearningWorldIdentifier", "h5p", "H5PName",
-            "fileAtRoot.txt");
-        Assert.IsTrue(_fileSystem.Directory.Exists(path));
-        Assert.IsTrue(
-            _fileSystem.File.Exists(fileInFolder));
-        Assert.IsTrue(_fileSystem.File.Exists(textFile));
-
-
-        Assert.That(retunValue!, Has.Count.EqualTo(1));
-        Assert.That(retunValue![0],
-            Is.EqualTo(_fileSystem.Path.Combine("wwwroot", "courses", "1", "LearningWorldIdentifier", "h5p",
-                "H5PName")));
+        Assert.That(returnedValue!.First().Key, Is.EqualTo("H5PName"));
+        Assert.That(returnedValue.First().Value,
+            Is.EqualTo("wwwroot\\courses\\1\\LearningWorldIdentifier\\h5p\\H5PName.h5p"));
     }
 
     [Test]

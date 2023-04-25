@@ -102,9 +102,9 @@ public class UploadWorldUseCaseTest
             }
         });
 
-        _fileAccess.StoreH5PFilesForWorld(Arg.Any<WorldStoreH5PDto>()).Returns(new List<string>
+        _fileAccess.StoreH5PFilesForWorld(Arg.Any<WorldStoreH5PDto>()).Returns(new Dictionary<string, string>
         {
-            "path1"
+            {"path1", "path1"}
         });
 
 
@@ -208,9 +208,9 @@ public class UploadWorldUseCaseTest
 
         _lmsBackupProcessor.GetH5PFilesFromBackup(Arg.Any<Stream>()).Returns(new List<H5PDto>());
 
-        _fileAccess.StoreH5PFilesForWorld(Arg.Any<WorldStoreH5PDto>()).Returns(new List<string>
+        _fileAccess.StoreH5PFilesForWorld(Arg.Any<WorldStoreH5PDto>()).Returns(new Dictionary<string, string>
         {
-            "path1"
+            {"path1", "path1"}
         });
 
 

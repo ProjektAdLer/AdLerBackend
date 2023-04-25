@@ -66,13 +66,13 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
         // Parse DSL File
         var dslFile = await _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(fileStream);
 
-        var storedH5PFilePaths = StoreH5PFiles(courseInformation, userInformation, request.BackupFileStream);
+        var h5PNamesWithPaths = StoreH5PFiles(courseInformation, userInformation, request.BackupFileStream);
 
-        var h5PLocationEntities = (from filePath in storedH5PFilePaths
-            let fileName = Path.GetFileName(filePath)
-            let element = dslFile.World.Elements.FirstOrDefault(x => x.LmsElementIdentifier?.Value == fileName)
-            where element != null
-            select new H5PLocationEntity(filePath, element.ElementId)).ToList();
+        var h5PLocationEntities = (from h5PWithPath in h5PNamesWithPaths
+                let h5PName = h5PWithPath.Key
+                let h5PInDsl = dslFile.World.Elements.FirstOrDefault(x => x.LmsElementIdentifier?.Value == h5PName)
+                select new H5PLocationEntity(h5PWithPath.Value, h5PInDsl.ElementId))
+            .ToList();
 
         var courseEntity = new WorldEntity(
             courseInformation.World.LmsElementIdentifier.Value,
@@ -87,7 +87,8 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
         return true;
     }
 
-    private async Task<LMSUserDataResponse> GetUserDataFromLms(UploadWorldCommand request, CancellationToken cancellationToken)
+    private async Task<LMSUserDataResponse> GetUserDataFromLms(UploadWorldCommand request,
+        CancellationToken cancellationToken)
     {
         var userInformation = await _mediator.Send(new GetLMSUserDataCommand
         {
@@ -112,21 +113,19 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
         }, cancellationToken);
     }
 
-    private List<string> StoreH5PFiles(WorldDtoResponse courseInformation, LMSUserDataResponse userData,
+    private Dictionary<string, string> StoreH5PFiles(WorldDtoResponse courseInformation, LMSUserDataResponse userData,
         Stream backupFile)
     {
-        var storedH5PFilePaths = new List<string>();
-        if (courseInformation.World.Elements.Any(x => x.ElementCategory == "h5p"))
-        {
-            var h5PFilesInBackup = _lmsBackupProcessor.GetH5PFilesFromBackup(backupFile);
-            storedH5PFilePaths = _fileAccess.StoreH5PFilesForWorld(new WorldStoreH5PDto
-            {
-                AuthorId = userData.UserId,
-                WorldInforamtion = courseInformation,
-                H5PFiles = h5PFilesInBackup
-            });
-        }
+        if (courseInformation.World.Elements.All(x => x.ElementCategory != "h5p"))
+            return new Dictionary<string, string>();
 
-        return storedH5PFilePaths!;
+        var h5PFilesInBackup = _lmsBackupProcessor.GetH5PFilesFromBackup(backupFile);
+
+        return _fileAccess.StoreH5PFilesForWorld(new WorldStoreH5PDto
+        {
+            AuthorId = userData.UserId,
+            WorldInforamtion = courseInformation,
+            H5PFiles = h5PFilesInBackup
+        })!;
     }
 }

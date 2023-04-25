@@ -1,5 +1,6 @@
 using System.Reflection;
 using AdLerBackend.API.Filters;
+using AdLerBackend.API.Middleware;
 using AdLerBackend.Application;
 using AdLerBackend.Infrastructure;
 using Microsoft.AspNetCore.Http.Features;
@@ -64,8 +65,11 @@ app.UseCors("AllowEverything");
 
 // Disabled for now, because it is not needed
 //app.UseHttpsRedirection();
-
-app.UseStaticFiles();
+app.UseMiddleware<UnzipMiddleware>();
+app.UseStaticFiles(new StaticFileOptions
+{
+    ServeUnknownFileTypes = true
+});
 
 app.MapControllers();
 

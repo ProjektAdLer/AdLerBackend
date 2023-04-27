@@ -280,14 +280,14 @@ public class MoodleWebApiTest
     public async Task GetElementScoreFromPlugin_ReturnsFalse_WhenScoreIsZero()
     {
         // Arrange
-        var expectedResponse = new MoodleWebApi.PluginElementScore
+        var expectedResponse = new MoodleWebApi.ResponseWithDataArray<MoodleWebApi.PluginElementScoreData>
         {
-            data = new List<MoodleWebApi.PluginElementScoreData>
+            Data = new List<MoodleWebApi.PluginElementScoreData>
             {
                 new()
                 {
-                    score = 0,
-                    module_id = 123
+                    Score = 0,
+                    Module_id = 123
                 }
             }
         };
@@ -305,14 +305,14 @@ public class MoodleWebApiTest
     [Test]
     public async Task ScoreGenericElementViaPlugin_ReturnsTrue_WhenScoreIsGreaterThanZero()
     {
-        var expectedResponse = new MoodleWebApi.PluginElementScore
+        var expectedResponse = new MoodleWebApi.ResponseWithDataArray<MoodleWebApi.PluginElementScoreData>
         {
-            data = new List<MoodleWebApi.PluginElementScoreData>
+            Data = new List<MoodleWebApi.PluginElementScoreData>
             {
                 new()
                 {
-                    score = 1,
-                    module_id = 123
+                    Score = 1,
+                    Module_id = 123
                 }
             }
         };
@@ -336,8 +336,8 @@ public class MoodleWebApiTest
             {
                 new()
                 {
-                    score = 1,
-                    module_id = 1
+                    Score = 1,
+                    Module_id = 1
                 }
             }
         };

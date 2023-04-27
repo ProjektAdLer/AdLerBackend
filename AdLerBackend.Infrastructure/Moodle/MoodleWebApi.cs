@@ -4,6 +4,10 @@ using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using Microsoft.Extensions.Configuration;
 
+// ReSharper disable InconsistentNaming
+// ReSharper disable ClassNeverInstantiated.Local
+// ReSharper disable ClassNeverInstantiated.Global
+
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 
@@ -77,7 +81,7 @@ public class MoodleWebApi : ILMS
         // Encode the Stream in Base64
         var base64String = _moodleUtils.ConvertFileStreamToBase64(backupFileStream);
 
-        var response = await MoodleCallAsync<UploadWorldPluginResponse>(new Dictionary<string, string>
+        var response = await MoodleCallAsync<ResponseWithData<CourseData>>(new Dictionary<string, string>
         {
             {"wstoken", token},
             {"moodlewsrestformat", "json"},
@@ -90,43 +94,46 @@ public class MoodleWebApi : ILMS
 
     public async Task<bool> GetElementScoreFromPlugin(string token, int elementId)
     {
-        var response = await MoodleCallAsync<PluginElementScore>(new Dictionary<string, string>
-        {
-            {"wstoken", token},
-            {"moodlewsrestformat", "json"},
-            {"wsfunction", "local_adler_score_get_element_scores"},
-            {"module_ids[0]", elementId.ToString()}
-        });
+        var response = await MoodleCallAsync<ResponseWithDataArray<PluginElementScoreData>>(
+            new Dictionary<string, string>
+            {
+                {"wstoken", token},
+                {"moodlewsrestformat", "json"},
+                {"wsfunction", "local_adler_score_get_element_scores"},
+                {"module_ids[0]", elementId.ToString()}
+            });
 
         // Todo replace with the actual score
-        return response.data[0].score > 0;
+        return response.Data[0].Score > 0;
     }
 
     public async Task<bool> ScoreGenericElementViaPlugin(string token, int elementId)
     {
-        var response = await MoodleCallAsync<PluginElementScore>(new Dictionary<string, string>
-        {
-            {"wstoken", token},
-            {"moodlewsrestformat", "json"},
-            {"wsfunction", "local_adler_score_primitive_learning_element"},
-            {"module_id", elementId.ToString()},
-            {"is_completed", "1"}
-        });
+        var response = await MoodleCallAsync<ResponseWithDataArray<PluginElementScoreData>>(
+            new Dictionary<string, string>
+            {
+                {"wstoken", token},
+                {"moodlewsrestformat", "json"},
+                {"wsfunction", "local_adler_score_primitive_learning_element"},
+                {"module_id", elementId.ToString()},
+                {"is_completed", "1"}
+            });
 
-        return response.data[0].score > 0;
+        return response.Data[0].Score > 0;
     }
 
     public async Task<bool> ProcessXApiViaPlugin(string token, string statement)
     {
-        var response = await MoodleCallAsync<PluginElementScore>(new Dictionary<string, string>
-        {
-            {"wstoken", token},
-            {"moodlewsrestformat", "json"},
-            {"wsfunction", "local_adler_score_h5p_learning_element"},
-            {"xapi", "[" + statement + "]"}
-        });
+        var response = await MoodleCallAsync<ResponseWithDataArray<PluginElementScoreData>>(
+            new Dictionary<string, string>
+            {
+                {"wstoken", token},
+                {"moodlewsrestformat", "json"},
+                {"wsfunction", "local_adler_score_h5p_learning_element"},
+                {"xapi", "[" + statement + "]"}
+            });
 
-        return response.data[0].score > 0;
+        return response.Data[0].Score > 0;
     }
 
     public async Task<LmsCourseStatusResponse> GetCourseStatusViaPlugin(string token, int courseId)
@@ -143,11 +150,11 @@ public class MoodleWebApi : ILMS
         var courseStatus = new LmsCourseStatusResponse
         {
             ElementScores = response.Data
-                .Where(x => x.score != null) // Filter out non-AdLer Courses
+                .Where(x => x.Score != null) // Filter out non-AdLer Courses
                 .Select(x => new LmsElementStatus // Map to LMS Element Status
                 {
-                    ModuleId = x.module_id,
-                    HasScored = x.score > 0
+                    ModuleId = x.Module_id,
+                    HasScored = x.Score > 0
                 })
                 .ToList()
         };
@@ -178,7 +185,7 @@ public class MoodleWebApi : ILMS
         return new LMSUserDataResponse
         {
             LMSUserName = generalInformationResponse.Username,
-            IsAdmin = generalInformationResponse.Userissiteadmin,
+            IsAdmin = generalInformationResponse.UserIsSiteAdmin,
             UserId = generalInformationResponse.Userid,
             UserEmail = detailedUserInformaionResponse[0].Email
         };
@@ -273,10 +280,10 @@ public class MoodleWebApi : ILMS
             // ignored
         }
 
-        if (wsErrorData?.Errorcode != null)
+        if (wsErrorData?.ErrorCode != null)
             throw new LmsException
             {
-                LmsErrorCode = wsErrorData.Errorcode
+                LmsErrorCode = wsErrorData.ErrorCode
             };
     }
 
@@ -306,51 +313,42 @@ public class MoodleWebApi : ILMS
             throw new LmsException("Die Moodle Web Api ist nicht erreichbar: URL: " + url, e);
         }
     }
-#pragma warning disable CS8618
-    public class PluginElementScoreData
+#pragma warning disable CS8618 // Disabled for Response Parsing Classes
+
+    internal class PluginElementScoreData
     {
-        public int module_id { get; set; }
-        public int? score { get; set; }
+        public int Module_id;
+        public int? Score { get; set; }
     }
 
-    public class PluginElementScore
-    {
-        public List<PluginElementScoreData> data { get; set; }
-    }
-
-    private class UserTokenResponse
+    internal class UserTokenResponse
     {
         public string Token { get; set; }
     }
 
-    private class GeneralUserDataResponse
+    internal class GeneralUserDataResponse
     {
         public string Username { get; set; }
-        public bool Userissiteadmin { get; set; }
+        public bool UserIsSiteAdmin { get; set; }
         public int Userid { get; set; }
     }
 
-    private class DetailedUserDataResponse
+    internal class DetailedUserDataResponse
     {
         public string Email { get; set; }
     }
 
-    public class UploadWorldPluginResponse
-    {
-        public Data Data { get; set; }
-    }
-
-    public class Data
+    internal class CourseData
     {
         public int Course_Id { get; set; }
     }
 
-    private class MoodleWsErrorResponse
+    internal class MoodleWsErrorResponse
     {
-        public string Errorcode { get; set; }
+        public string ErrorCode { get; set; }
     }
 
-    private class PostToMoodleOptions
+    internal class PostToMoodleOptions
     {
         public enum Endpoints
         {
@@ -362,14 +360,18 @@ public class MoodleWebApi : ILMS
     }
 
 
-    public class ScoreGenericLearningElementResponse
+    internal class ScoreGenericLearningElementResponse
     {
         public bool Status { get; set; }
     }
 
-    public class ResponseWithDataArray<T>
+    internal class ResponseWithData<T>
+    {
+        public T Data { get; set; }
+    }
+
+    internal class ResponseWithDataArray<T>
     {
         public IList<T> Data { get; set; }
     }
-#pragma warning restore CS8618
 }

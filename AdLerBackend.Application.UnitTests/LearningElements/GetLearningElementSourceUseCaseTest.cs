@@ -1,4 +1,7 @@
+using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
 using AdLerBackend.Application.Common.Responses.Elements;
+using AdLerBackend.Application.Common.Responses.LMSAdapter;
+using AdLerBackend.Application.Common.Responses.World;
 using AdLerBackend.Application.Element.GetElementSource;
 using AdLerBackend.Application.Element.GetElementSource.GetH5PFilePath;
 using FluentAssertions;
@@ -24,21 +27,36 @@ public class GetLearningElementSourceUseCaseTest
         // Arrange
         var systemUnderTest = new GetElementSourceUseCase(_mediator);
 
-        // _mediator.Send(Arg.Any<GetElementLmsInformationCommand>())
-        //     .Returns(new GetElementLmsInformationResponse
-        //     {
-        //         ElementData = new Modules
-        //         {
-        //             ModName = resourceType,
-        //             Contents = new List<FileContents>
-        //             {
-        //                 new()
-        //                 {
-        //                     fileUrl = "testURL"
-        //                 }
-        //             }
-        //         }
-        //     });
+
+        _mediator.Send(Arg.Any<GetAllElementsFromLmsCommand>()).Returns(
+            new GetAllElementsFromLmsWithAdLerIdResponse
+            {
+                LmsCourseId = 1337,
+                ModulesWithAdLerId = new List<ModuleWithId>
+                {
+                    new()
+                    {
+                        IsLocked = false,
+                        AdLerId = 1,
+                        LmsModule = new Modules
+                        {
+                            contextid = 1,
+                            Id = 1,
+                            Instance = 1,
+                            Name = "name",
+                            ModName = resourceType,
+                            Contents = new List<FileContents>
+                            {
+                                new()
+                                {
+                                    fileUrl = "testURL"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        );
 
         // Act
         var result = await systemUnderTest.Handle(new GetElementSourceCommand
@@ -58,21 +76,36 @@ public class GetLearningElementSourceUseCaseTest
         // Arrange
         var systemUnderTest = new GetElementSourceUseCase(_mediator);
 
-        // _mediator.Send(Arg.Any<GetElementLmsInformationCommand>())
-        //     .Returns(new GetElementLmsInformationResponse
-        //     {
-        //         ElementData = new Modules
-        //         {
-        //             ModName = "h5pactivity",
-        //             Contents = new List<FileContents>
-        //             {
-        //                 new()
-        //                 {
-        //                     fileUrl = "testURL"
-        //                 }
-        //             }
-        //         }
-        //     });
+
+        _mediator.Send(Arg.Any<GetAllElementsFromLmsCommand>()).Returns(
+            new GetAllElementsFromLmsWithAdLerIdResponse
+            {
+                LmsCourseId = 1337,
+                ModulesWithAdLerId = new List<ModuleWithId>
+                {
+                    new()
+                    {
+                        IsLocked = false,
+                        AdLerId = 1,
+                        LmsModule = new Modules
+                        {
+                            contextid = 1,
+                            Id = 1,
+                            Instance = 1,
+                            Name = "name",
+                            ModName = "h5pactivity",
+                            Contents = new List<FileContents>
+                            {
+                                new()
+                                {
+                                    fileUrl = "testURL"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        );
 
         _mediator.Send(Arg.Any<GetH5PFilePathCommand>())
             .Returns(new GetElementSourceResponse
@@ -98,21 +131,31 @@ public class GetLearningElementSourceUseCaseTest
         // Arrange
         var systemUnderTest = new GetElementSourceUseCase(_mediator);
 
-        // _mediator.Send(Arg.Any<GetElementLmsInformationCommand>())
-        //     .Returns(new GetElementLmsInformationResponse
-        //     {
-        //         ElementData = new Modules
-        //         {
-        //             ModName = "h5pactivity123456789",
-        //             Contents = new List<FileContents>
-        //             {
-        //                 new()
-        //                 {
-        //                     fileUrl = "testURL"
-        //                 }
-        //             }
-        //         }
-        //     });
+        _mediator.Send(Arg.Any<GetAllElementsFromLmsCommand>()).Returns(
+            new GetAllElementsFromLmsWithAdLerIdResponse
+            {
+                LmsCourseId = 1337,
+                ModulesWithAdLerId = new List<ModuleWithId>
+                {
+                    new()
+                    {
+                        IsLocked = false,
+                        AdLerId = 1,
+                        LmsModule = new Modules
+                        {
+                            ModName = "h5pactivity123456789",
+                            Contents = new List<FileContents>
+                            {
+                                new()
+                                {
+                                    fileUrl = "testURL"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        );
 
         _mediator.Send(Arg.Any<GetH5PFilePathCommand>())
             .Returns(new GetElementSourceResponse

@@ -1,7 +1,10 @@
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.ScoreGenericLearningElementStrategy;
 using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.ScoreH5PStrategy;
+using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
 using AdLerBackend.Application.Common.Responses.Elements;
+using AdLerBackend.Application.Common.Responses.LMSAdapter;
+using AdLerBackend.Application.Common.Responses.World;
 using AdLerBackend.Application.Element.ScoreElement;
 using FluentAssertions;
 using MediatR;
@@ -25,14 +28,29 @@ public class ScoreLearningElementUseCaseTest
     public async Task Handle_CallsStrategy(string activityName, bool expected)
     {
         var systemUnderTest = new ScoreElementUseCase(_mediator);
-        // _mediator.Send(Arg.Any<GetElementLmsInformationCommand>()).Returns(
-        //     new GetElementLmsInformationResponse
-        //     {
-        //         ElementData = new Modules
-        //         {
-        //             ModName = activityName
-        //         }
-        //     });
+
+        _mediator.Send(Arg.Any<GetAllElementsFromLmsCommand>()).Returns(
+            new GetAllElementsFromLmsWithAdLerIdResponse
+            {
+                LmsCourseId = 1337,
+                ModulesWithAdLerId = new List<ModuleWithId>
+                {
+                    new()
+                    {
+                        IsLocked = false,
+                        AdLerId = 1,
+                        LmsModule = new Modules
+                        {
+                            contextid = 1,
+                            Id = 1,
+                            Instance = 1,
+                            Name = "name",
+                            ModName = activityName
+                        }
+                    }
+                }
+            }
+        );
 
         _mediator.Send(Arg.Any<ScoreH5PElementStrategyCommand>()).Returns(new ScoreElementResponse
         {
@@ -61,14 +79,29 @@ public class ScoreLearningElementUseCaseTest
     public async Task Handle_InvalidElementType_Throws(string activityName, bool expected)
     {
         var systemUnderTest = new ScoreElementUseCase(_mediator);
-        // _mediator.Send(Arg.Any<GetElementLmsInformationCommand>()).Returns(
-        //     new GetElementLmsInformationResponse
-        //     {
-        //         ElementData = new Modules
-        //         {
-        //             ModName = activityName
-        //         }
-        //     });
+
+        _mediator.Send(Arg.Any<GetAllElementsFromLmsCommand>()).Returns(
+            new GetAllElementsFromLmsWithAdLerIdResponse
+            {
+                LmsCourseId = 1337,
+                ModulesWithAdLerId = new List<ModuleWithId>
+                {
+                    new()
+                    {
+                        IsLocked = false,
+                        AdLerId = 1,
+                        LmsModule = new Modules
+                        {
+                            contextid = 1,
+                            Id = 1,
+                            Instance = 1,
+                            Name = "name",
+                            ModName = activityName
+                        }
+                    }
+                }
+            }
+        );
 
         _mediator.Send(Arg.Any<ScoreH5PElementStrategyCommand>()).Returns(new ScoreElementResponse
         {

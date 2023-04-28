@@ -54,8 +54,8 @@ public class StorageServiceTest
 
         // Assert
         Assert.That(returnedValue!.First().Key, Is.EqualTo("H5PName"));
-        Assert.That(returnedValue.First().Value,
-            Is.EqualTo("wwwroot\\courses\\1\\LearningWorldIdentifier\\h5p\\H5PName.h5p"));
+        Assert.IsTrue(_fileSystem.File.Exists(Path.Combine("wwwroot", "courses", "1", "LearningWorldIdentifier",
+            "h5p", "H5PName.h5p")));
     }
 
     [Test]

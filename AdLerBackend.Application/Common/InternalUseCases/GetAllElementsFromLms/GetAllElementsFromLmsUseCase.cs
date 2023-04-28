@@ -34,24 +34,20 @@ public class
         await using var fileStream = _fileAccess.GetReadFileStream(course.DslLocation);
         var dslObject = await _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(fileStream);
 
-        var atfIdWithFileName = dslObject.World.Elements.Select(x => x.ElementId)
-            .Select(x => new
-                {Id = x, FileName = dslObject.World.Elements.Find(e => e.ElementId == x)?.ElementName})
-            .ToList();
 
         var searchedCourse = await _lms.SearchWorldsAsync(request.WebServiceToken, course.Name);
         var courseContent = await _lms.GetWorldContentAsync(request.WebServiceToken, searchedCourse.Courses[0].Id);
 
         // Get the LMS-Modules by their name
-        var modulesWithId = atfIdWithFileName.Select(x =>
+        var modulesWithId = dslObject.World.Elements.Select(x =>
         {
             var module = courseContent.SelectMany(c => c.Modules)
-                .FirstOrDefault(m => m.Name == x.FileName);
+                .FirstOrDefault(m => m.Name == x.LmsElementIdentifier.Value);
 
-            if (module == null)
-                throw new NotFoundException($"Element with the Id {x.Id} not found");
+            // If no Module is found just return nothing
+            if (module == null) return new ModuleWithId {IsLocked = true};
 
-            return new ModuleWithId {AdLerId = x.Id!, LmsModule = module};
+            return new ModuleWithId {AdLerId = x.ElementId!, LmsModule = module, IsLocked = false};
         }).ToList();
 
         return new GetAllElementsFromLmsWithAdLerIdResponse

@@ -13,4 +13,5 @@ public class ModuleWithId
 {
     public int AdLerId { get; set; }
     public Modules LmsModule { get; set; }
+    public bool IsLocked { get; set; }
 }

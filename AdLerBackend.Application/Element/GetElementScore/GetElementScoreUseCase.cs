@@ -1,5 +1,5 @@
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.InternalUseCases.GetElementLmsInformation;
+using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
 using AdLerBackend.Application.Common.Responses.Elements;
 using MediatR;
 
@@ -23,16 +23,25 @@ public class
     public async Task<ElementScoreResponse> Handle(GetElementScoreCommand request,
         CancellationToken cancellationToken)
     {
-        // Get LearningElement Activity Id
-        var learningElementModule = await _mediator.Send(new GetElementLmsInformationCommand
+        var learningElementModules = await _mediator.Send(new GetAllElementsFromLmsCommand
         {
             WorldId = request.lerningWorldId,
-            ElementId = request.ElementId,
             WebServiceToken = request.WebServiceToken
         }, cancellationToken);
 
+        // Get LearningElement Activity Id
+        var learningElementModule = learningElementModules.ModulesWithAdLerId
+            .FirstOrDefault(x => x.AdLerId == request.ElementId);
+
+        if (learningElementModule == null || learningElementModule!.IsLocked)
+            return new ElementScoreResponse
+            {
+                ElementId = request.ElementId,
+                Success = false
+            };
+
         var result =
-            await _lms.GetElementScoreFromPlugin(request.WebServiceToken, learningElementModule.ElementData.Id);
+            await _lms.GetElementScoreFromPlugin(request.WebServiceToken, learningElementModule.LmsModule.Id);
 
         return new ElementScoreResponse
         {

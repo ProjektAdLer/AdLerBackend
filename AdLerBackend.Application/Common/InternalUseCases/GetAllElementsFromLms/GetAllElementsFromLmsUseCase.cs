@@ -45,7 +45,7 @@ public class
                 .FirstOrDefault(m => m.Name == x.LmsElementIdentifier.Value);
 
             // If no Module is found just return nothing
-            if (module == null) return new ModuleWithId {IsLocked = true};
+            if (module == null) return new ModuleWithId {IsLocked = true, AdLerId = x.ElementId};
 
             return new ModuleWithId {AdLerId = x.ElementId!, LmsModule = module, IsLocked = false};
         }).ToList();

@@ -38,13 +38,27 @@ public class
             Elements = new List<ElementScoreResponse>()
         };
 
-        foreach (var elementScore in courseStatus.ElementScores)
+        foreach (var adlerModule in courseWithAdLerIds.ModulesWithAdLerId)
+        {
+            // If module is Locked
+            if (adlerModule.IsLocked)
+            {
+                response.Elements.Add(new ElementScoreResponse
+                {
+                    ElementId = adlerModule.AdLerId,
+                    Success = false
+                });
+                continue;
+            }
+
+            // If Module is not locked
+            var elementScore = courseStatus.ElementScores.FirstOrDefault(x => x.ModuleId == adlerModule.LmsModule.Id);
             response.Elements.Add(new ElementScoreResponse
             {
-                ElementId = courseWithAdLerIds.ModulesWithAdLerId.Select(x => x)
-                    .FirstOrDefault(x => x.LmsModule.Id == elementScore.ModuleId)!.AdLerId,
-                Success = elementScore.HasScored
+                ElementId = adlerModule.AdLerId,
+                Success = elementScore?.HasScored ?? false
             });
+        }
 
         return response;
     }

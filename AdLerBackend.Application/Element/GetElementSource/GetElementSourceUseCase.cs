@@ -1,4 +1,5 @@
-using AdLerBackend.Application.Common.InternalUseCases.GetElementLmsInformation;
+using AdLerBackend.Application.Common.Exceptions;
+using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
 using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Element.GetElementSource.GetH5PFilePath;
 using MediatR;
@@ -18,21 +19,27 @@ public class
     public async Task<GetElementSourceResponse> Handle(GetElementSourceCommand request,
         CancellationToken cancellationToken)
     {
-        var module = await _mediator.Send(new GetElementLmsInformationCommand
+        var learningElementModules = await _mediator.Send(new GetAllElementsFromLmsCommand
         {
             WorldId = request.WorldId,
-            ElementId = request.ElementId,
             WebServiceToken = request.WebServiceToken
         }, cancellationToken);
 
-        switch (module.ElementData.ModName)
+        // Get LearningElement Activity Id
+        var learningElementModule = learningElementModules.ModulesWithAdLerId
+            .FirstOrDefault(x => x.AdLerId == request.ElementId);
+
+        if (learningElementModule == null || learningElementModule!.IsLocked)
+            throw new NotFoundException("Element not found or locked");
+
+        switch (learningElementModule.LmsModule.ModName)
         {
             case "resource":
             case "url":
                 return new GetElementSourceResponse
                 {
                     // At this point, we assume, that the moodle resource has a file attached to it.
-                    FilePath = module.ElementData.Contents![0].fileUrl + "&token=" +
+                    FilePath = learningElementModule.LmsModule.Contents![0].fileUrl + "&token=" +
                                request.WebServiceToken
                 };
             case "h5pactivity":
@@ -47,7 +54,7 @@ public class
                 {
                     FilePath = data.FilePath
                 };
-            default: throw new NotImplementedException("Unknown module type" + module.ElementData.ModName);
+            default: throw new NotImplementedException("Unknown module type" + learningElementModule.LmsModule.ModName);
         }
     }
 }

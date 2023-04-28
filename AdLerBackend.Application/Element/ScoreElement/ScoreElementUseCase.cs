@@ -2,7 +2,8 @@ using AdLerBackend.Application.Common;
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.ScoreGenericLearningElementStrategy;
 using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.ScoreH5PStrategy;
-using AdLerBackend.Application.Common.InternalUseCases.GetElementLmsInformation;
+using AdLerBackend.Application.Common.Exceptions;
+using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
 using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using MediatR;
@@ -21,18 +22,23 @@ public class ScoreElementUseCase : IRequestHandler<ScoreElementCommand, ScoreEle
     public async Task<ScoreElementResponse> Handle(ScoreElementCommand request,
         CancellationToken cancellationToken)
     {
-        // Get LearningElement Activity Id
-        var learningElementModule = await _mediator.Send(new GetElementLmsInformationCommand
+        var learningElementModules = await _mediator.Send(new GetAllElementsFromLmsCommand
         {
             WorldId = request.WorldId,
-            ElementId = request.ElementId,
             WebServiceToken = request.WebServiceToken
         }, cancellationToken);
 
-        var elementScoreResponse = await _mediator.Send(GetStrategy(learningElementModule.ElementData.ModName,
+        // Get LearningElement Activity Id
+        var learningElementModule = learningElementModules.ModulesWithAdLerId
+            .FirstOrDefault(x => x.AdLerId == request.ElementId);
+
+        if (learningElementModule == null || learningElementModule!.IsLocked)
+            throw new NotFoundException("Element not found or locked");
+
+        var elementScoreResponse = await _mediator.Send(GetStrategy(learningElementModule.LmsModule.ModName,
             new GetStrategyParams
             {
-                LearningElementMoule = learningElementModule.ElementData,
+                LearningElementMoule = learningElementModule.LmsModule,
                 WebServiceToken = request.WebServiceToken,
                 ScoreElementParams = request.ScoreElementParams ?? new ScoreElementParams()
             }), cancellationToken);

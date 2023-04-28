@@ -2,6 +2,7 @@
 using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
+using AdLerBackend.Infrastructure.Moodle.ApiResponses;
 using Microsoft.Extensions.Configuration;
 
 // ReSharper disable InconsistentNaming
@@ -312,66 +313,5 @@ public class MoodleWebApi : ILMS
         {
             throw new LmsException("Die Moodle Web Api ist nicht erreichbar: URL: " + url, e);
         }
-    }
-#pragma warning disable CS8618 // Disabled for Response Parsing Classes
-
-    internal class PluginElementScoreData
-    {
-        public int Module_id { get; set; }
-        public int? Score { get; set; }
-    }
-
-    internal class UserTokenResponse
-    {
-        public string Token { get; set; }
-    }
-
-    internal class GeneralUserDataResponse
-    {
-        public string Username { get; set; }
-        public bool UserIsSiteAdmin { get; set; }
-        public int Userid { get; set; }
-    }
-
-    internal class DetailedUserDataResponse
-    {
-        public string Email { get; set; }
-    }
-
-    internal class CourseData
-    {
-        public int Course_Id { get; set; }
-    }
-
-    internal class MoodleWsErrorResponse
-    {
-        public string ErrorCode { get; set; }
-    }
-
-    internal class PostToMoodleOptions
-    {
-        public enum Endpoints
-        {
-            Webservice,
-            Login
-        }
-
-        public Endpoints Endpoint { get; set; } = Endpoints.Webservice;
-    }
-
-
-    internal class ScoreGenericLearningElementResponse
-    {
-        public bool Status { get; set; }
-    }
-
-    internal class ResponseWithData<T>
-    {
-        public T Data { get; set; }
-    }
-
-    internal class ResponseWithDataArray<T>
-    {
-        public IList<T> Data { get; set; }
     }
 }

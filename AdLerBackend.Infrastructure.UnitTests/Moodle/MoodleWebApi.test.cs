@@ -1,6 +1,7 @@
 ﻿using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Infrastructure.Moodle;
+using AdLerBackend.Infrastructure.Moodle.ApiResponses;
 using AutoBogus;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
@@ -265,7 +266,7 @@ public class MoodleWebApiTest
     public async Task ScoreGenericLoearningElement_Valid_CallsMoodle()
     {
         // Arrange
-        var obj = AutoFaker.Generate<MoodleWebApi.ScoreGenericLearningElementResponse>();
+        var obj = AutoFaker.Generate<ScoreGenericLearningElementResponse>();
         obj.Status = true;
         _mockHttp.When("*").Respond("application/json", JsonSerializer.Serialize(obj));
 
@@ -280,9 +281,9 @@ public class MoodleWebApiTest
     public async Task GetElementScoreFromPlugin_ReturnsFalse_WhenScoreIsZero()
     {
         // Arrange
-        var expectedResponse = new MoodleWebApi.ResponseWithDataArray<MoodleWebApi.PluginElementScoreData>
+        var expectedResponse = new ResponseWithDataArray<PluginElementScoreData>
         {
-            Data = new List<MoodleWebApi.PluginElementScoreData>
+            Data = new List<PluginElementScoreData>
             {
                 new()
                 {
@@ -305,9 +306,9 @@ public class MoodleWebApiTest
     [Test]
     public async Task ScoreGenericElementViaPlugin_ReturnsTrue_WhenScoreIsGreaterThanZero()
     {
-        var expectedResponse = new MoodleWebApi.ResponseWithDataArray<MoodleWebApi.PluginElementScoreData>
+        var expectedResponse = new ResponseWithDataArray<PluginElementScoreData>
         {
-            Data = new List<MoodleWebApi.PluginElementScoreData>
+            Data = new List<PluginElementScoreData>
             {
                 new()
                 {
@@ -330,9 +331,9 @@ public class MoodleWebApiTest
     [Test]
     public async Task GetCourseStatusViaPlugin_ReturnsValidResponse_WhenResponseIsValid()
     {
-        var webResponse = new MoodleWebApi.ResponseWithDataArray<MoodleWebApi.PluginElementScoreData>
+        var webResponse = new ResponseWithDataArray<PluginElementScoreData>
         {
-            Data = new List<MoodleWebApi.PluginElementScoreData>
+            Data = new List<PluginElementScoreData>
             {
                 new()
                 {

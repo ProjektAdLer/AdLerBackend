@@ -50,7 +50,7 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
 
         // Upload the Backup File to the LMS
         // disabled until LMS is ready - PG
-        //await _lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
+        await _lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
 
         var atfLocation = _fileAccess.StoreAtfFileForWorld(new StoreWorldAtfDto
         {

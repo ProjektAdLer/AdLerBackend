@@ -10,7 +10,6 @@ using AdLerBackend.Infrastructure.Repositories.Player;
 using AdLerBackend.Infrastructure.Repositories.Worlds;
 using AdLerBackend.Infrastructure.Services;
 using AdLerBackend.Infrastructure.Storage;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AdLerBackend.Infrastructure;
@@ -18,8 +17,7 @@ namespace AdLerBackend.Infrastructure;
 [ExcludeFromCodeCoverage]
 public static class ConfigureServices
 {
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
-        IConfiguration configuration, bool isDevelopment)
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, bool isDevelopment)
     {
         // Add Moodle to DI
         services.AddSingleton<ILMS, MoodleWebApi>();

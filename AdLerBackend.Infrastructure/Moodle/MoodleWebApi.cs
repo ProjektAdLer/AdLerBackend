@@ -163,6 +163,11 @@ public class MoodleWebApi : ILMS
         return courseStatus;
     }
 
+    public Task<IList<LmsUuidResponse>> GetLmsIdsByUuidsAsync(string token, IList<string> uuids)
+    {
+        throw new NotImplementedException();
+    }
+
 
     public virtual async Task<LMSUserDataResponse> GetLMSUserDataAsync(string token)
     {

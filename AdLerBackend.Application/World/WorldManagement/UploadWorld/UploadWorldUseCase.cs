@@ -44,7 +44,7 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
 
 
         var existsCourseForAuthor = await _worldRepository.ExistsForAuthor(userInformation.UserId,
-            courseInformation.World.LmsElementIdentifier.Value);
+            courseInformation.World.WorldName);
 
         if (existsCourseForAuthor) throw new WorldCreationException("World already exists in Database");
 
@@ -70,12 +70,12 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
 
         var h5PLocationEntities = (from h5PWithPath in h5PNamesWithPaths
                 let h5PName = h5PWithPath.Key
-                let h5PInDsl = dslFile.World.Elements.FirstOrDefault(x => x.LmsElementIdentifier?.Value == h5PName)
+                let h5PInDsl = dslFile.World.Elements.FirstOrDefault(x => x.ElementName == h5PName)
                 select new H5PLocationEntity(h5PWithPath.Value, h5PInDsl.ElementId))
             .ToList();
 
         var courseEntity = new WorldEntity(
-            courseInformation.World.LmsElementIdentifier.Value,
+            courseInformation.World.WorldName,
             h5PLocationEntities,
             atfLocation,
             userInformation.UserId

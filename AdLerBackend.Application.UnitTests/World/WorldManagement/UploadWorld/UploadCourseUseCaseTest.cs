@@ -43,19 +43,13 @@ public class UploadWorldUseCaseTest
             {
                 ElementId = 1,
                 ElementCategory = "h5p",
-                LmsElementIdentifier = new LmsElementIdentifier
-                {
-                    Value = "path1"
-                }
+                ElementName = "path1"
             },
             new()
             {
                 ElementId = 2,
                 ElementCategory = "h5p",
-                LmsElementIdentifier = new LmsElementIdentifier
-                {
-                    Value = "path2"
-                }
+                ElementName = "path2"
             }
         };
 
@@ -118,7 +112,7 @@ public class UploadWorldUseCaseTest
 
         // Assert that AddAsync has been called with the correct entity
         await _worldRepository.Received(1)
-            .AddAsync(Arg.Is<WorldEntity>(x => x.Name == fakedDsl.World.LmsElementIdentifier.Value));
+            .AddAsync(Arg.Is<WorldEntity>(x => x.Name == fakedDsl.World.WorldName));
     }
 
     [Test]
@@ -224,6 +218,6 @@ public class UploadWorldUseCaseTest
 
         // Assert that AddAsync has been called with the correct entity
         await _worldRepository.Received(1)
-            .AddAsync(Arg.Is<WorldEntity>(x => x.Name == fakedDsl.World.LmsElementIdentifier.Value));
+            .AddAsync(Arg.Is<WorldEntity>(x => x.Name == fakedDsl.World.WorldName));
     }
 }

@@ -42,7 +42,7 @@ public class
         var modulesWithId = dslObject.World.Elements.Select(x =>
         {
             var module = courseContent.SelectMany(c => c.Modules)
-                .FirstOrDefault(m => m.Name == x.LmsElementIdentifier.Value);
+                .FirstOrDefault(m => m.Name == x.ElementName);
 
             // If no Module is found just return nothing
             if (module == null) return new ModuleWithId {IsLocked = true, AdLerId = x.ElementId};

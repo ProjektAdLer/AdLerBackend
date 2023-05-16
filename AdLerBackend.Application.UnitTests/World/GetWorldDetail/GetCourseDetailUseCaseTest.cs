@@ -55,19 +55,13 @@ public class GetWorldDetailUseCaseTest
             {
                 ElementId = 1,
                 ElementCategory = "h5p",
-                LmsElementIdentifier = new LmsElementIdentifier
-                {
-                    Value = "path1"
-                }
+                ElementName = "path1"
             },
             new()
             {
                 ElementId = 2,
                 ElementCategory = "h5p",
-                LmsElementIdentifier = new LmsElementIdentifier
-                {
-                    Value = "path2"
-                }
+                ElementName = "path2"
             }
         };
 

@@ -63,10 +63,6 @@ public class GetAllElementsFromLmsUseCaseTest
                         new()
                         {
                             ElementId = 1337,
-                            LmsElementIdentifier = new LmsElementIdentifier
-                            {
-                                Value = "searchedFileName"
-                            },
                             ElementName = "searchedFileName"
                         }
                     }
@@ -135,10 +131,7 @@ public class GetAllElementsFromLmsUseCaseTest
                         new()
                         {
                             ElementId = 1337,
-                            LmsElementIdentifier = new LmsElementIdentifier
-                            {
-                                Value = "searchedFileName"
-                            }
+                            ElementName = "searchedFileName"
                         }
                     }
                 }

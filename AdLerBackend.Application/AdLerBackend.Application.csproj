@@ -18,35 +18,18 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Microsoft.AspNetCore.Http.Features">
-        <HintPath>..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.7\Microsoft.AspNetCore.Http.Features.dll</HintPath>
-      </Reference>
+        <Reference Include="Microsoft.AspNetCore.Http.Features">
+            <HintPath>..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.7\Microsoft.AspNetCore.Http.Features.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AdLerBackend.Domain\AdLerBackend.Domain.csproj" />
+        <ProjectReference Include="..\AdLerBackend.Domain\AdLerBackend.Domain.csproj" />
     </ItemGroup>
+    
 
     <ItemGroup>
-      <Compile Remove="Common\Responses\Internal\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Remove="Common\Responses\Internal\**" />
-      <None Remove="Common\Schemas\schema0_3.json" />
-      <EmbeddedResource Include="Common\Schemas\schema0_3.json" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Common\Responses\Internal\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Update="Common\Schemas\schema0_3.json">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
+        <EmbeddedResource Include="Common\Schemas\schema0_4.json" />
     </ItemGroup>
 
 </Project>

@@ -13,8 +13,7 @@ public class ValidateAtfFileUseCase : IRequestHandler<ValidateATFFileCommand, Un
     static ValidateAtfFileUseCase()
     {
         var assembly = Assembly.GetExecutingAssembly();
-        var resourceName = "AdLerBackend.Application.Common.Schemas.schema0_3.json";
-
+        var resourceName = "AdLerBackend.Application.Common.Schemas.schema0_4.json";
 
         using var stream = assembly.GetManifestResourceStream(resourceName);
         using var reader = new StreamReader(stream);
@@ -27,9 +26,6 @@ public class ValidateAtfFileUseCase : IRequestHandler<ValidateATFFileCommand, Un
 
     public async Task<Unit> Handle(ValidateATFFileCommand request, CancellationToken cancellationToken)
     {
-        // var schemaJson = File.ReadAllText("./config/schema0_3.json");
-        // var schema = JSchema.Parse(schemaJson);
-
         var streamReader = new StreamReader(request.ATFFileStream);
         var jsonReader = new JsonTextReader(streamReader);
         var json = await JToken.LoadAsync(jsonReader);

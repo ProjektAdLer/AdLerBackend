@@ -30,10 +30,9 @@ public class GenericRepositoryTest
         var testEntity = WorldEntityFactory.CreateWorldEntity();
 
         var repository = new GenericRepository<WorldEntity>(dbContext);
-
-        // Act
         await repository.AddAsync(testEntity);
 
+        // Act
         await repository.DeleteAsync(1);
 
         // Assert, that the entity was deleted from the database

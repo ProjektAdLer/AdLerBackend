@@ -21,24 +21,17 @@ public class LmsBackupProcessor : ILmsBackupProcessor
 
         var filesDescription = DeserializeToObject<Files>(filesDescriptionStream);
 
-        var h5PHashes = (from file in filesDescription.File
-            where file.Component == "mod_h5pactivity" && file.Filename != "."
-            select new H5PWorkingStorage
-                {H5PFileName = file.Filename, H5PContentHash = file.Contenthash, contextid = file.Contextid}).ToList();
+        var h5PWorkingStorages = GetH5PHashesFromFileIndex(filesDescription);
 
-        // remove duplicates from h5pHashes by Contenthash since files are represented twice in the backup
-        h5PHashes = h5PHashes.GroupBy(x => x.contextid).Select(x => x.First()).ToList();
-
-        if (h5PHashes.Count == 0)
+        if (h5PWorkingStorages.Count == 0)
             return new List<H5PDto>();
 
-        foreach (var h5PWorkingStorage in h5PHashes)
-            h5PWorkingStorage.H5PFile = GetFileFromTarStream(backupFile,
-                string.Concat("files/", h5PWorkingStorage.H5PContentHash!.AsSpan(0, 2), "/",
-                    h5PWorkingStorage.H5PContentHash));
+        // remove duplicates from h5pHashes by Contenthash since files are represented twice in the backup
+        h5PWorkingStorages = RemoveDuplicateH5pHashes(h5PWorkingStorages);
 
+        FillInH5PFileStreamsFromBackupIntoStorage(backupFile, h5PWorkingStorages);
 
-        return h5PHashes.Select(h5PFile => new H5PDto
+        return h5PWorkingStorages.Select(h5PFile => new H5PDto
         {
             H5PFile = h5PFile.H5PFile,
             H5PFileName = h5PFile.H5PFileName!.Split('.')[0]
@@ -54,6 +47,27 @@ public class LmsBackupProcessor : ILmsBackupProcessor
             PropertyNameCaseInsensitive = true
         }) ?? throw new LmsBackupProcessorException("Could not deserialize DSL file");
         return retVal;
+    }
+
+    private void FillInH5PFileStreamsFromBackupIntoStorage(Stream backupFile, List<H5PWorkingStorage> h5PHashes)
+    {
+        foreach (var h5PWorkingStorage in h5PHashes)
+            h5PWorkingStorage.H5PFile = GetFileFromTarStream(backupFile,
+                string.Concat("files/", h5PWorkingStorage.H5PContentHash!.AsSpan(0, 2), "/",
+                    h5PWorkingStorage.H5PContentHash));
+    }
+
+    private static List<H5PWorkingStorage> RemoveDuplicateH5pHashes(List<H5PWorkingStorage> h5PHashes)
+    {
+        return h5PHashes.GroupBy(x => x.contextid).Select(x => x.First()).ToList();
+    }
+
+    private static List<H5PWorkingStorage> GetH5PHashesFromFileIndex(Files filesDescription)
+    {
+        return (from file in filesDescription.File
+            where file.Component == "mod_h5pactivity" && file.Filename != "."
+            select new H5PWorkingStorage
+                {H5PFileName = file.Filename, H5PContentHash = file.Contenthash, contextid = file.Contextid}).ToList();
     }
 
 

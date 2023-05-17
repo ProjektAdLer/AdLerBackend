@@ -154,8 +154,7 @@ public class MoodleWebApi : ILMS
         throw new NotImplementedException();
     }
 
-
-    public virtual async Task<LMSUserDataResponse> GetLMSUserDataAsync(string token)
+    public async Task<LMSUserDataResponse> GetLMSUserDataAsync(string token)
     {
         var generalInformationResponse = await MoodleCallAsync<GeneralUserDataResponse>(new Dictionary<string, string>
         {

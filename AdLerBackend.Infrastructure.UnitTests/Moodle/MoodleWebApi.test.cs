@@ -7,7 +7,6 @@ using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using NSubstitute;
-using NSubstitute.Extensions;
 using RichardSzalay.MockHttp;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -50,16 +49,25 @@ public class MoodleWebApiTest
     public async Task UsUserAdmin_Valid_HeIs()
     {
         // Arrange
-        var test = Substitute.ForPartsOf<MoodleWebApi>(_mockHttp.ToHttpClient(), _configuration, _moodleUtils);
-        test.Configure().GetLMSUserDataAsync("token").Returns(new LMSUserDataResponse
-        {
-            IsAdmin = true,
-            UserId = 1,
-            LMSUserName = "testUser"
-        });
+        _mockHttp.When("*")
+            .WithFormData("wsfunction", "core_webservice_get_site_info")
+            .Respond(
+                "application/json", JsonSerializer.Serialize(new
+                {
+                    Userid = 1,
+                    Userissiteadmin = true,
+                    Username = "testUser"
+                }));
+
+        var list = new[] {new {email = "test"}}.ToList();
+
+        _mockHttp.When("*")
+            .WithFormData("wsfunction", "core_user_get_users_by_field")
+            .Respond(
+                "application/json", JsonSerializer.Serialize(list));
 
         // Act
-        var result = await test.IsLMSAdminAsync("token");
+        var result = await _systemUnderTest.IsLMSAdminAsync("token");
 
         // Assert
         Assert.IsTrue(result);

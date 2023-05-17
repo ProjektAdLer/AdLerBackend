@@ -5,7 +5,7 @@ using MediatR;
 
 namespace AdLerBackend.Application.World.GetWorldDetail;
 
-public class GetWorldDetailUseCase : IRequestHandler<GetWorldDetailCommand, WorldDtoResponse>
+public class GetWorldDetailUseCase : IRequestHandler<GetWorldDetailCommand, WorldAtfResponse>
 {
     private readonly IFileAccess _fileAccess;
     private readonly ISerialization _serialization;
@@ -24,7 +24,7 @@ public class GetWorldDetailUseCase : IRequestHandler<GetWorldDetailCommand, Worl
     /// </summary>
     /// <returns></returns>
     /// <exception cref="NotFoundException">Throws, if a course is not found either on the disc, the database or the moodle api</exception>
-    public async Task<WorldDtoResponse> Handle(GetWorldDetailCommand request,
+    public async Task<WorldAtfResponse> Handle(GetWorldDetailCommand request,
         CancellationToken cancellationToken)
     {
         // Get Course from Database
@@ -36,7 +36,7 @@ public class GetWorldDetailUseCase : IRequestHandler<GetWorldDetailCommand, Worl
         await using var fileStream = _fileAccess.GetReadFileStream(course.DslLocation);
 
         // Parse DSL File
-        var dslFile = await _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(fileStream);
+        var dslFile = await _serialization.GetObjectFromJsonStreamAsync<WorldAtfResponse>(fileStream);
 
         return dslFile;
     }

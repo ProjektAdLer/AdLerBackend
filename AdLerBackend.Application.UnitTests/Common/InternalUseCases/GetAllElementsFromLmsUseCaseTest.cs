@@ -41,6 +41,7 @@ public class GetAllElementsFromLmsUseCaseTest
             },
             "asd",
             1234,
+            "",
             2
         );
 
@@ -49,8 +50,8 @@ public class GetAllElementsFromLmsUseCaseTest
 
 
         _fileAccess.GetReadFileStream(Arg.Any<string>()).Returns(new MemoryStream());
-        _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
-            .Returns(new WorldDtoResponse
+        _serialization.GetObjectFromJsonStreamAsync<WorldAtfResponse>(Arg.Any<Stream>())
+            .Returns(new WorldAtfResponse
             {
                 FileVersion = "FileVersion",
                 AmgVersion = "000",
@@ -121,8 +122,8 @@ public class GetAllElementsFromLmsUseCaseTest
         _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity?) null);
 
         _fileAccess.GetReadFileStream(Arg.Any<string>()).Returns(new MemoryStream());
-        _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
-            .Returns(new WorldDtoResponse
+        _serialization.GetObjectFromJsonStreamAsync<WorldAtfResponse>(Arg.Any<Stream>())
+            .Returns(new WorldAtfResponse
             {
                 World = new Application.Common.Responses.World.World
                 {

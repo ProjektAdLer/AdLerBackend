@@ -38,11 +38,11 @@ public class LmsBackupProcessor : ILmsBackupProcessor
         }).ToList();
     }
 
-    public WorldDtoResponse GetWorldDescriptionFromBackup(Stream dslStream)
+    public WorldAtfResponse GetWorldDescriptionFromBackup(Stream dslStream)
     {
         dslStream.Position = 0;
 
-        var retVal = JsonSerializer.Deserialize<WorldDtoResponse>(dslStream, new JsonSerializerOptions
+        var retVal = JsonSerializer.Deserialize<WorldAtfResponse>(dslStream, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         }) ?? throw new LmsBackupProcessorException("Could not deserialize DSL file");

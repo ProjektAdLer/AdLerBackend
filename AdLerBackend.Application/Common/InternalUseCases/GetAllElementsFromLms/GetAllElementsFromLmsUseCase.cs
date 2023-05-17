@@ -32,7 +32,7 @@ public class
 
         // Get ATF File
         await using var fileStream = _fileAccess.GetReadFileStream(course.DslLocation);
-        var dslObject = await _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(fileStream);
+        var dslObject = await _serialization.GetObjectFromJsonStreamAsync<WorldAtfResponse>(fileStream);
 
 
         var searchedCourse = await _lms.SearchWorldsAsync(request.WebServiceToken, course.Name);

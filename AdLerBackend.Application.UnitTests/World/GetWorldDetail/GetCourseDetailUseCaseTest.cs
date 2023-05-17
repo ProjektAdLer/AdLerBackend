@@ -48,7 +48,7 @@ public class GetWorldDetailUseCaseTest
         var stream = new MemoryStream();
         _fileAccess.GetReadFileStream(Arg.Any<string>()).Returns(stream);
 
-        var mockedDsl = AutoFaker.Generate<WorldDtoResponse>();
+        var mockedDsl = AutoFaker.Generate<WorldAtfResponse>();
         mockedDsl.World.Elements = new List<Application.Common.Responses.World.Element>
         {
             new()
@@ -65,7 +65,7 @@ public class GetWorldDetailUseCaseTest
             }
         };
 
-        _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
+        _serialization.GetObjectFromJsonStreamAsync<WorldAtfResponse>(Arg.Any<Stream>())
             .Returns(mockedDsl);
 
         var systemUnderTest = new GetWorldDetailUseCase(_worldRepository, _fileAccess, _serialization);

@@ -36,7 +36,7 @@ public class UploadWorldUseCaseTest
         _serialization = Substitute.For<ISerialization>();
         _ilms = Substitute.For<ILMS>();
 
-        var mockedDsl = AutoFaker.Generate<WorldDtoResponse>();
+        var mockedDsl = AutoFaker.Generate<WorldAtfResponse>();
         mockedDsl.World.Elements = new List<Application.Common.Responses.World.Element>
         {
             new()
@@ -53,7 +53,7 @@ public class UploadWorldUseCaseTest
             }
         };
 
-        _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
+        _serialization.GetObjectFromJsonStreamAsync<WorldAtfResponse>(Arg.Any<Stream>())
             .Returns(mockedDsl);
     }
 
@@ -73,7 +73,7 @@ public class UploadWorldUseCaseTest
             IsAdmin = true
         });
 
-        var fakedDsl = AutoFaker.Generate<WorldDtoResponse>();
+        var fakedDsl = AutoFaker.Generate<WorldAtfResponse>();
         fakedDsl.World.Elements[0] = new Application.Common.Responses.World.Element
         {
             ElementId = 13337,
@@ -155,7 +155,7 @@ public class UploadWorldUseCaseTest
             IsAdmin = true
         });
 
-        var fakedDsl = AutoFaker.Generate<WorldDtoResponse>();
+        var fakedDsl = AutoFaker.Generate<WorldAtfResponse>();
         fakedDsl.World.Elements[0] = new Application.Common.Responses.World.Element
         {
             ElementId = 13337,
@@ -192,7 +192,7 @@ public class UploadWorldUseCaseTest
             IsAdmin = true
         });
 
-        var fakedDsl = AutoFaker.Generate<WorldDtoResponse>();
+        var fakedDsl = AutoFaker.Generate<WorldAtfResponse>();
 
         _lmsBackupProcessor.GetWorldDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedDsl);
 

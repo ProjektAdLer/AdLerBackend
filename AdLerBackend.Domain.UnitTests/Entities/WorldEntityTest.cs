@@ -16,8 +16,9 @@ public class WorldEntityTest
         const string dslLocation = "dslLocation";
         const int authorId = 8888;
         const int id = 666;
+        const string uuid = "uuid";
 
-        var world = new WorldEntity(name, h5PFilesInCourse, dslLocation, authorId, id);
+        var world = new WorldEntity(name, h5PFilesInCourse, dslLocation, authorId, uuid, id);
 
         Assert.Multiple(() =>
         {
@@ -25,6 +26,7 @@ public class WorldEntityTest
             Assert.That(world.H5PFilesInCourse, Is.EqualTo(h5PFilesInCourse));
             Assert.That(world.DslLocation, Is.EqualTo(dslLocation));
             Assert.That(world.Id, Is.EqualTo(id));
+            Assert.That(world.LmsInstanceUuidId, Is.EqualTo(uuid));
         });
     }
 

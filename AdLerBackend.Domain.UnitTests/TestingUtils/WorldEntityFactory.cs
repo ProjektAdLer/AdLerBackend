@@ -10,9 +10,11 @@ public class WorldEntityFactory
         [CanBeNull] List<H5PLocationEntity> h5PFilesInCourse = null,
         [CanBeNull] string dslLocation = "Test Location",
         int? authorId = 1,
+        [CanBeNull] string lmsInstanceUuidId = "",
         int? id = null)
     {
         return new
-            WorldEntity(name, h5PFilesInCourse ?? new List<H5PLocationEntity>(), dslLocation, (int) authorId!, id);
+            WorldEntity(name, h5PFilesInCourse ?? new List<H5PLocationEntity>(), dslLocation, (int) authorId!,
+                lmsInstanceUuidId, id);
     }
 }

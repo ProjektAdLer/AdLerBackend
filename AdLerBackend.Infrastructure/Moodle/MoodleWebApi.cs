@@ -5,13 +5,6 @@ using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Infrastructure.Moodle.ApiResponses;
 using Microsoft.Extensions.Configuration;
 
-// ReSharper disable InconsistentNaming
-// ReSharper disable ClassNeverInstantiated.Local
-// ReSharper disable ClassNeverInstantiated.Global
-
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Local
-
 namespace AdLerBackend.Infrastructure.Moodle;
 
 public class MoodleWebApi : ILMS
@@ -51,7 +44,6 @@ public class MoodleWebApi : ILMS
         var resp = await MoodleCallAsync<WorldContent[]>(new Dictionary<string, string>
         {
             {"wstoken", token},
-            {"moodlewsrestformat", "json"},
             {"wsfunction", "core_course_get_contents"},
             {"courseid", worldId.ToString()}
         });
@@ -63,7 +55,6 @@ public class MoodleWebApi : ILMS
         return await MoodleCallAsync<LMSWorldListResponse>(new Dictionary<string, string>
         {
             {"wstoken", token},
-            {"moodlewsrestformat", "json"},
             {"wsfunction", "core_course_search_courses"},
             {"criterianame", "search"},
             {"criteriavalue", ""},
@@ -85,7 +76,6 @@ public class MoodleWebApi : ILMS
         var response = await MoodleCallAsync<ResponseWithData<CourseData>>(new Dictionary<string, string>
         {
             {"wstoken", token},
-            {"moodlewsrestformat", "json"},
             {"wsfunction", "local_adler_upload_course"},
             {"mbz", base64String}
         });
@@ -99,7 +89,6 @@ public class MoodleWebApi : ILMS
             new Dictionary<string, string>
             {
                 {"wstoken", token},
-                {"moodlewsrestformat", "json"},
                 {"wsfunction", "local_adler_score_get_element_scores"},
                 {"module_ids[0]", elementId.ToString()}
             });
@@ -114,7 +103,6 @@ public class MoodleWebApi : ILMS
             new Dictionary<string, string>
             {
                 {"wstoken", token},
-                {"moodlewsrestformat", "json"},
                 {"wsfunction", "local_adler_score_primitive_learning_element"},
                 {"module_id", elementId.ToString()},
                 {"is_completed", "1"}
@@ -129,7 +117,6 @@ public class MoodleWebApi : ILMS
             new Dictionary<string, string>
             {
                 {"wstoken", token},
-                {"moodlewsrestformat", "json"},
                 {"wsfunction", "local_adler_score_h5p_learning_element"},
                 {"xapi", "[" + statement + "]"}
             });
@@ -143,7 +130,6 @@ public class MoodleWebApi : ILMS
             new Dictionary<string, string>
             {
                 {"wstoken", token},
-                {"moodlewsrestformat", "json"},
                 {"wsfunction", "local_adler_score_get_course_scores"},
                 {"course_id", courseId.ToString()}
             });
@@ -183,7 +169,6 @@ public class MoodleWebApi : ILMS
             {
                 {"wstoken", token},
                 {"wsfunction", "core_user_get_users_by_field"},
-                {"moodlewsrestformat", "json"},
                 {"field", "id"},
                 {"values[0]", generalInformationResponse.Userid.ToString()}
             });
@@ -203,7 +188,6 @@ public class MoodleWebApi : ILMS
         var resp = await MoodleCallAsync<LMSWorldListResponse>(new Dictionary<string, string>
         {
             {"wstoken", token},
-            {"moodlewsrestformat", "json"},
             {"wsfunction", "core_course_search_courses"},
             {"criterianame", "search"},
             {"criteriavalue", searchString},
@@ -218,7 +202,6 @@ public class MoodleWebApi : ILMS
         return await MoodleCallAsync<H5PAttempts>(new Dictionary<string, string>
         {
             {"wstoken", token},
-            {"moodlewsrestformat", "json"},
             {"wsfunction", "mod_h5pactivity_get_attempts"},
             {"h5pactivityid", h5PActivityId.ToString()}
         });
@@ -229,7 +212,6 @@ public class MoodleWebApi : ILMS
         var response = await MoodleCallAsync<ScoreGenericLearningElementResponse>(new Dictionary<string, string>
         {
             {"wstoken", token},
-            {"moodlewsrestformat", "json"},
             {"wsfunction", "format_tiles_update_activity_completion_status_manually"},
             {"cmid", elementId.ToString()},
             {"completed", "1"}
@@ -242,6 +224,7 @@ public class MoodleWebApi : ILMS
     private async Task<TDtoType> MoodleCallAsync<TDtoType>(Dictionary<string, string> wsParams,
         PostToMoodleOptions? options = null)
     {
+        wsParams.TryAdd("moodlewsrestformat", "json");
         var moodleApiResponse = await PostToMoodleAsync(wsParams, options);
         var responseString = await moodleApiResponse.Content.ReadAsStringAsync();
 
@@ -301,15 +284,12 @@ public class MoodleWebApi : ILMS
         try
         {
             options ??= new PostToMoodleOptions();
-            switch (options.Endpoint)
+            url = options.Endpoint switch
             {
-                case PostToMoodleOptions.Endpoints.Webservice:
-                    url = _configuration["moodleUrl"] + "/webservice/rest/server.php";
-                    break;
-                case PostToMoodleOptions.Endpoints.Login:
-                    url = _configuration["moodleUrl"] + "/login/token.php";
-                    break;
-            }
+                PostToMoodleOptions.Endpoints.Webservice => _configuration["moodleUrl"] + "/webservice/rest/server.php",
+                PostToMoodleOptions.Endpoints.Login => _configuration["moodleUrl"] + "/login/token.php",
+                _ => url
+            };
 
             return await _client.PostAsync(url,
                 new FormUrlEncodedContent(wsParams));

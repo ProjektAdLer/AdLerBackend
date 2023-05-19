@@ -44,6 +44,7 @@ public class DeleteWorldUseCaseTest
             },
             "asd",
             1,
+            "",
             1
         );
 
@@ -121,6 +122,7 @@ public class DeleteWorldUseCaseTest
             },
             "asd",
             1337,
+            "",
             1
         );
 

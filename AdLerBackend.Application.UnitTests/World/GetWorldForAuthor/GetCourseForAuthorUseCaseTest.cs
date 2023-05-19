@@ -69,7 +69,7 @@ public class GetWorldForAuthorUseCaserTest
 
         _worldRepository.GetAllForAuthor(1).Returns(new List<WorldEntity>
         {
-            WorldEntityFactory.CreateWorldEntity("Fullname", default, default, 1, 1)
+            WorldEntityFactory.CreateWorldEntity("Fullname", default, default, 1, "", 1)
         });
 
         var systemUnderTest = new GetWorldsForAuthorUseCase(_worldRepository, _mediator);

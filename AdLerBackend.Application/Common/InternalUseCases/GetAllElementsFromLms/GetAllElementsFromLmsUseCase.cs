@@ -30,10 +30,7 @@ public class
         var course = await _worldRepository.GetAsync(request.WorldId) ??
                      throw new NotFoundException($"Course with the Id {request.WorldId} not found");
 
-        // Get ATF File
-        await using var fileStream = _fileAccess.GetReadFileStream(course.DslLocation);
-        var dslObject = await _serialization.GetObjectFromJsonStreamAsync<WorldAtfResponse>(fileStream);
-
+        var dslObject = _serialization.GetObjectFromJsonString<WorldAtfResponse>(course.AtfJson);
 
         var searchedCourse = await _lms.SearchWorldsAsync(request.WebServiceToken, course.Name);
         var courseContent = await _lms.GetWorldContentAsync(request.WebServiceToken, searchedCourse.Courses[0].Id);

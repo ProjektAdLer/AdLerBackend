@@ -16,21 +16,19 @@ public class WorldEntity : IBaseEntity
         Id = null;
         Name = "";
         H5PFilesInCourse = new List<H5PLocationEntity>();
-        DslLocation = "";
         AuthorId = 0;
         LmsWorldId = 0;
         AtfJson = "";
     }
 
 
-    public WorldEntity(string name, List<H5PLocationEntity> h5PFilesInCourse, string dslLocation, int authorId,
+    public WorldEntity(string name, List<H5PLocationEntity> h5PFilesInCourse, int authorId,
         string atfJson,
         int lmsWorldId, int? id = null)
     {
         Id = id;
         Name = name;
         H5PFilesInCourse = h5PFilesInCourse;
-        DslLocation = dslLocation;
         AuthorId = authorId;
         LmsWorldId = lmsWorldId;
         AtfJson = atfJson;
@@ -39,7 +37,6 @@ public class WorldEntity : IBaseEntity
     public string Name { get; set; }
     public int LmsWorldId { get; set; }
     public List<H5PLocationEntity> H5PFilesInCourse { get; set; }
-    public string DslLocation { get; set; }
 
     public int AuthorId { get; set; }
 

@@ -48,18 +48,10 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
         var lmsCourseCreationResponse =
             await _lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
 
-        var atfLocation = _fileAccess.StoreAtfFileForWorld(new StoreWorldAtfDto
-        {
-            AuthorId = userInformation.UserId,
-            AtfFile = request.ATFFileStream,
-            WorldInformation = courseInformation
-        });
-
-        // Get Course DSL 
-        await using var fileStream = _fileAccess.GetReadFileStream(atfLocation);
 
         // Get String from Stream
-        var atfString = await new StreamReader(fileStream).ReadToEndAsync();
+        request.ATFFileStream.Position = 0;
+        var atfString = await new StreamReader(request.ATFFileStream).ReadToEndAsync();
 
         // Parse DSL File
         var atfObject = _serialization.GetObjectFromJsonString<WorldAtfResponse>(atfString);
@@ -76,7 +68,6 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
         var courseEntity = new WorldEntity(
             courseInformation.World.WorldName,
             h5PLocationEntities,
-            atfLocation,
             userInformation.UserId,
             atfString,
             lmsCourseCreationResponse.CourseLmsId

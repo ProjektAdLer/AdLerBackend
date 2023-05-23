@@ -32,12 +32,6 @@ public class GetWorldDetailUseCase : IRequestHandler<GetWorldDetailCommand, Worl
         if (course == null)
             throw new NotFoundException("Course with the Id " + request.WorldId + " not found");
 
-        // Get Course DSL 
-        await using var fileStream = _fileAccess.GetReadFileStream(course.DslLocation);
-
-        // Parse DSL File
-        var dslFile = await _serialization.GetObjectFromJsonStreamAsync<WorldAtfResponse>(fileStream);
-
-        return dslFile;
+        return _serialization.GetObjectFromJsonString<WorldAtfResponse>(course.AtfJson);
     }
 }

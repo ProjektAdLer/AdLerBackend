@@ -18,7 +18,7 @@ public class WorldEntityTest
         const int id = 666;
         const int lmsId = 0;
 
-        var world = new WorldEntity(name, h5PFilesInCourse, dslLocation, authorId, lmsId, id);
+        var world = new WorldEntity(name, h5PFilesInCourse, dslLocation, authorId, default!, lmsId, id);
 
         Assert.Multiple(() =>
         {

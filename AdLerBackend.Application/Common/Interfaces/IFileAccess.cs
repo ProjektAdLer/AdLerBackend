@@ -5,7 +5,5 @@ namespace AdLerBackend.Application.Common.Interfaces;
 public interface IFileAccess
 {
     public Dictionary<string, string>? StoreH5PFilesForWorld(WorldStoreH5PDto worldToStoreH5P);
-    public string StoreAtfFileForWorld(StoreWorldAtfDto worldToStoreH5P);
-    public Stream GetReadFileStream(string filePath);
     public bool DeleteWorld(WorldDeleteDto worldToDelete);
 }

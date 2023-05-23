@@ -68,7 +68,7 @@ public class MoodleWebApi : ILMS
         return userData.IsAdmin;
     }
 
-    public async Task<int> UploadCourseWorldToLMS(string token, Stream backupFileStream)
+    public async Task<LMSCourseCreationResponse> UploadCourseWorldToLMS(string token, Stream backupFileStream)
     {
         // Encode the Stream in Base64
         var base64String = _moodleUtils.ConvertFileStreamToBase64(backupFileStream);
@@ -81,7 +81,10 @@ public class MoodleWebApi : ILMS
                 {"mbz", base64String}
             });
 
-        return response.Data.Course_Id;
+        return new LMSCourseCreationResponse
+        {
+            CourseLmsId = response.Data.Course_Id
+        };
     }
 
     public async Task<bool> GetElementScoreFromPlugin(string token, int elementId)

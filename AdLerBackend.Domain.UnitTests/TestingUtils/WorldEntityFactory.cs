@@ -10,7 +10,7 @@ public class WorldEntityFactory
         [CanBeNull] List<H5PLocationEntity> h5PFilesInCourse = null,
         [CanBeNull] string dslLocation = "Test Location",
         int? authorId = 1,
-        [CanBeNull] string lmsInstanceUuidId = "",
+        [CanBeNull] int lmsInstanceUuidId = 0,
         int? id = null)
     {
         return new

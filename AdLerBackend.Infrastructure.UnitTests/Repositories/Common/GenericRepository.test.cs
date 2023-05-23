@@ -80,13 +80,13 @@ public class GenericRepositoryTest
         // Arrange
         var dbContext = ContextCreator.GetNewDbContextInstance();
         var testEntity =
-            WorldEntityFactory.CreateWorldEntity("Test World", null, "Test Location", 1, "", 1);
+            WorldEntityFactory.CreateWorldEntity("Test World", null, "Test Location", 1, 0, 1);
         var repository = new GenericRepository<WorldEntity, int>(dbContext);
 
         // Act
         await repository.AddAsync(testEntity);
 
-        testEntity = WorldEntityFactory.CreateWorldEntity("Test World", null, "Test Location", 1, "", 2);
+        testEntity = WorldEntityFactory.CreateWorldEntity("Test World", null, "Test Location", 1, 0, 2);
 
         await repository.AddAsync(testEntity);
 
@@ -101,7 +101,7 @@ public class GenericRepositoryTest
     {
         // Arrange
         var dbContext = ContextCreator.GetNewDbContextInstance();
-        var testEntity = WorldEntityFactory.CreateWorldEntity("Test World", null, "Test Location", 1, "", 1);
+        var testEntity = WorldEntityFactory.CreateWorldEntity("Test World", null, "Test Location", 1, 0, 1);
 
         var repository = new GenericRepository<WorldEntity, int>(dbContext);
 

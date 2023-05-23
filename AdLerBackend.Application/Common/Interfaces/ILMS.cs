@@ -55,7 +55,7 @@ public interface ILMS
      * @param token The LMS Webservice Token
      * @param backupFileStream The Stream of the Backup File
      */
-    Task<int> UploadCourseWorldToLMS(string token, Stream backupFileStream);
+    Task<LMSCourseCreationResponse> UploadCourseWorldToLMS(string token, Stream backupFileStream);
 
     /// <summary>
     ///     Gets the Score of an Element from the LMS via the Plugin

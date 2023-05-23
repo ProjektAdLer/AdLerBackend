@@ -42,7 +42,7 @@ public class MoodleWebApiTest
         var result = await _systemUnderTest.UploadCourseWorldToLMS("token", new MemoryStream());
 
         // Assert
-        Assert.That(result, Is.EqualTo(1337));
+        Assert.That(result.CourseLmsId, Is.EqualTo(1337));
     }
 
     [Test]

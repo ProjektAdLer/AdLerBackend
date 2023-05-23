@@ -34,14 +34,11 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
     public async Task<bool> Handle(UploadWorldCommand request, CancellationToken cancellationToken)
     {
         await ValidateAtfFile(request, cancellationToken);
-
         await ThrowIfUserIsNotAdmin(request, cancellationToken);
 
         var userInformation = await GetUserDataFromLms(request, cancellationToken);
 
-
         var courseInformation = _lmsBackupProcessor.GetWorldDescriptionFromBackup(request.ATFFileStream);
-
 
         var existsCourseForAuthor = await _worldRepository.ExistsForAuthor(userInformation.UserId,
             courseInformation.World.WorldName);
@@ -58,26 +55,30 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
             WorldInformation = courseInformation
         });
 
-
         // Get Course DSL 
         await using var fileStream = _fileAccess.GetReadFileStream(atfLocation);
 
+        // Get String from Stream
+        var atfString = await new StreamReader(fileStream).ReadToEndAsync();
+
         // Parse DSL File
-        var dslFile = await _serialization.GetObjectFromJsonStreamAsync<WorldAtfResponse>(fileStream);
+        var atfObject = _serialization.GetObjectFromJsonString<WorldAtfResponse>(atfString);
 
         var h5PNamesWithPaths = StoreH5PFiles(courseInformation, userInformation, request.BackupFileStream);
 
         var h5PLocationEntities = (from h5PWithPath in h5PNamesWithPaths
                 let h5PName = h5PWithPath.Key
-                let h5PInDsl = dslFile.World.Elements.FirstOrDefault(x => x.ElementName == h5PName)
+                let h5PInDsl = atfObject.World.Elements.FirstOrDefault(x => x.ElementName == h5PName)
                 select new H5PLocationEntity(h5PWithPath.Value, h5PInDsl.ElementId))
             .ToList();
+
 
         var courseEntity = new WorldEntity(
             courseInformation.World.WorldName,
             h5PLocationEntities,
             atfLocation,
             userInformation.UserId,
+            atfString,
             lmsCourseCreationResponse.CourseLmsId
         );
 

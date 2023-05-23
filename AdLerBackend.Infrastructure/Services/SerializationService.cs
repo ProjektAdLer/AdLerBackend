@@ -26,6 +26,11 @@ public class SerializationService : ISerialization
         return retVal;
     }
 
+    public string GetJsonStringFromObject<TClass>(TClass objectToSerialize)
+    {
+        return JsonSerializer.Serialize(objectToSerialize);
+    }
+
     public bool IsValidJsonString(string jsonString)
     {
         return jsonString.StartsWith("{") && jsonString.EndsWith("}");

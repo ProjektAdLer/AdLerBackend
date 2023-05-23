@@ -6,5 +6,7 @@ public interface ISerialization
 
     public TClass GetObjectFromJsonString<TClass>(string jsonString);
 
+    public string GetJsonStringFromObject<TClass>(TClass objectToSerialize);
+
     public bool IsValidJsonString(string jsonString);
 }

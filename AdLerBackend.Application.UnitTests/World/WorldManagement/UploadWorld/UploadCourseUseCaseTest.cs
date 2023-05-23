@@ -66,6 +66,11 @@ public class UploadWorldUseCaseTest
             new UploadWorldUseCase(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
                 _serialization, _ilms);
 
+        _ilms.UploadCourseWorldToLMS(Arg.Any<string>(), Arg.Any<Stream>()).Returns(new LMSCourseCreationResponse
+        {
+            CourseLmsId = 1337
+        });
+
         _mediator.Send(Arg.Any<CheckUserPrivilegesCommand>()).Returns(Unit.Task);
 
         _mediator.Send(Arg.Any<GetLMSUserDataCommand>()).Returns(new LMSUserDataResponse
@@ -193,6 +198,11 @@ public class UploadWorldUseCaseTest
         });
 
         var fakedDsl = AutoFaker.Generate<WorldAtfResponse>();
+
+        _ilms.UploadCourseWorldToLMS(Arg.Any<string>(), Arg.Any<Stream>()).Returns(new LMSCourseCreationResponse
+        {
+            CourseLmsId = 1337
+        });
 
         _lmsBackupProcessor.GetWorldDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedDsl);
 

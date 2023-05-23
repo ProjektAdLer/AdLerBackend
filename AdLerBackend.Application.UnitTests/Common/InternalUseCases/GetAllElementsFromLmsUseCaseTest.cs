@@ -41,7 +41,7 @@ public class GetAllElementsFromLmsUseCaseTest
             },
             "asd",
             1234,
-            "",
+            0,
             2
         );
 

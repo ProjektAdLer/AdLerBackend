@@ -1,4 +1,5 @@
-﻿using AdLerBackend.Application.Common.DTOs;
+﻿using System.Text.Json;
+using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
@@ -52,9 +53,6 @@ public class UploadWorldUseCaseTest
                 ElementName = "path2"
             }
         };
-
-        _serialization.GetObjectFromJsonStreamAsync<WorldAtfResponse>(Arg.Any<Stream>())
-            .Returns(mockedDsl);
     }
 
     [Test]
@@ -89,8 +87,6 @@ public class UploadWorldUseCaseTest
 
         _worldRepository.ExistsForAuthor(Arg.Any<int>(), Arg.Any<string>()).Returns(false);
 
-        _fileAccess.StoreAtfFileForWorld(Arg.Any<StoreWorldAtfDto>()).Returns("testDSlPath");
-
         _lmsBackupProcessor.GetH5PFilesFromBackup(Arg.Any<Stream>()).Returns(new List<H5PDto>
 
         {
@@ -106,12 +102,20 @@ public class UploadWorldUseCaseTest
             {"path1", "path1"}
         });
 
+        // mock memory stream with the fake atf file
+        var atfStream = new MemoryStream();
+        // serialize the fake atf file into a json string
+        var atfJson = JsonSerializer.Serialize(fakedDsl);
+        await using (var writer = new StreamWriter(atfStream, leaveOpen: true))
+        {
+            await writer.WriteAsync(atfJson);
+        }
 
         // Act
         await systemUnderTest.Handle(new UploadWorldCommand
         {
             BackupFileStream = new MemoryStream(),
-            ATFFileStream = new MemoryStream(),
+            ATFFileStream = atfStream,
             WebServiceToken = "testToken"
         }, CancellationToken.None);
 
@@ -208,7 +212,6 @@ public class UploadWorldUseCaseTest
 
         _worldRepository.ExistsForAuthor(Arg.Any<int>(), Arg.Any<string>()).Returns(false);
 
-        _fileAccess.StoreAtfFileForWorld(Arg.Any<StoreWorldAtfDto>()).Returns("testDSlPath");
 
         _lmsBackupProcessor.GetH5PFilesFromBackup(Arg.Any<Stream>()).Returns(new List<H5PDto>());
 

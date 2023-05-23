@@ -13,18 +13,16 @@ public class WorldEntityTest
         {
             H5PLocationEntityFactory.CreateH5PLocationEntity()
         };
-        const string dslLocation = "dslLocation";
         const int authorId = 8888;
         const int id = 666;
         const int lmsId = 0;
 
-        var world = new WorldEntity(name, h5PFilesInCourse, dslLocation, authorId, default!, lmsId, id);
+        var world = new WorldEntity(name, h5PFilesInCourse, authorId, default!, lmsId, id);
 
         Assert.Multiple(() =>
         {
             Assert.That(world.Name, Is.EqualTo(name));
             Assert.That(world.H5PFilesInCourse, Is.EqualTo(h5PFilesInCourse));
-            Assert.That(world.DslLocation, Is.EqualTo(dslLocation));
             Assert.That(world.Id, Is.EqualTo(id));
             Assert.That(world.LmsWorldId, Is.EqualTo(lmsId));
         });
@@ -39,7 +37,6 @@ public class WorldEntityTest
         {
             Assert.That(instance.Name, Is.EqualTo(string.Empty));
             Assert.That(instance.H5PFilesInCourse, Is.EqualTo(new List<H5PLocationEntity>()));
-            Assert.That(instance.DslLocation, Is.EqualTo(string.Empty));
             Assert.That(instance.Id, Is.EqualTo(null));
         });
     }
@@ -53,7 +50,6 @@ public class WorldEntityTest
         {
             Assert.That(instance.Name, Is.EqualTo(string.Empty));
             Assert.That(instance.H5PFilesInCourse, Is.EqualTo(new List<H5PLocationEntity>()));
-            Assert.That(instance.DslLocation, Is.EqualTo(string.Empty));
             Assert.That(instance.Id, Is.EqualTo(null));
         });
     }

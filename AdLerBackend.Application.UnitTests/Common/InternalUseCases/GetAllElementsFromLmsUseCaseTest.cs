@@ -5,6 +5,8 @@ using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.World;
 using AdLerBackend.Domain.Entities;
 using AdLerBackend.Domain.UnitTests.TestingUtils;
+using AdLerBackend.Infrastructure.Services;
+using Newtonsoft.Json;
 using NSubstitute;
 
 namespace AdLerBackend.Application.UnitTests.Common.InternalUseCases;
@@ -23,7 +25,7 @@ public class GetAllElementsFromLmsUseCaseTest
         _ilms = Substitute.For<ILMS>();
         _worldRepository = Substitute.For<IWorldRepository>();
         _fileAccess = Substitute.For<IFileAccess>();
-        _serialization = Substitute.For<ISerialization>();
+        _serialization = new SerializationService();
     }
 
     [Test]
@@ -33,14 +35,41 @@ public class GetAllElementsFromLmsUseCaseTest
         var systemUnderTest =
             new GetAllElementsFromLmsUseCase(_worldRepository, _fileAccess, _serialization, _ilms);
 
+        var fakeATF = new WorldAtfResponse
+        {
+            FileVersion = "FileVersion",
+            AmgVersion = "000",
+            Author = "Author",
+            Language = "Language",
+            World = new Application.Common.Responses.World.World
+            {
+                Spaces = new List<Space>
+                {
+                    new()
+                    {
+                        SpaceId = 1234,
+                        SpaceName = "spaceName"
+                    }
+                },
+                Elements = new List<Application.Common.Responses.World.Element>
+                {
+                    new()
+                    {
+                        ElementId = 1337,
+                        ElementName = "searchedFileName"
+                    }
+                }
+            }
+        };
+
         var worldEntity = new WorldEntity(
             "name",
             new List<H5PLocationEntity>
             {
                 H5PLocationEntityFactory.CreateH5PLocationEntity("path", 4, 3)
             },
-            "asd",
             1234,
+            JsonConvert.SerializeObject(fakeATF),
             0,
             2
         );
@@ -48,27 +77,6 @@ public class GetAllElementsFromLmsUseCaseTest
 
         _worldRepository.GetAsync(Arg.Any<int>()).Returns(worldEntity);
 
-
-        _fileAccess.GetReadFileStream(Arg.Any<string>()).Returns(new MemoryStream());
-        _serialization.GetObjectFromJsonStreamAsync<WorldAtfResponse>(Arg.Any<Stream>())
-            .Returns(new WorldAtfResponse
-            {
-                FileVersion = "FileVersion",
-                AmgVersion = "000",
-                Author = "Author",
-                Language = "Language",
-                World = new Application.Common.Responses.World.World
-                {
-                    Elements = new List<Application.Common.Responses.World.Element>
-                    {
-                        new()
-                        {
-                            ElementId = 1337,
-                            ElementName = "searchedFileName"
-                        }
-                    }
-                }
-            });
 
         _ilms.SearchWorldsAsync(Arg.Any<string>(), Arg.Any<string>()).Returns(new LMSWorldListResponse
         {
@@ -119,24 +127,23 @@ public class GetAllElementsFromLmsUseCaseTest
         var systemUnderTest =
             new GetAllElementsFromLmsUseCase(_worldRepository, _fileAccess, _serialization, _ilms);
 
-        _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity?) null);
-
-        _fileAccess.GetReadFileStream(Arg.Any<string>()).Returns(new MemoryStream());
-        _serialization.GetObjectFromJsonStreamAsync<WorldAtfResponse>(Arg.Any<Stream>())
-            .Returns(new WorldAtfResponse
+        var fakeATF = new WorldAtfResponse
+        {
+            World = new Application.Common.Responses.World.World
             {
-                World = new Application.Common.Responses.World.World
+                Elements = new List<Application.Common.Responses.World.Element>
                 {
-                    Elements = new List<Application.Common.Responses.World.Element>
+                    new()
                     {
-                        new()
-                        {
-                            ElementId = 1337,
-                            ElementName = "searchedFileName"
-                        }
+                        ElementId = 1337,
+                        ElementName = "searchedFileName"
                     }
                 }
-            });
+            }
+        };
+
+        _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity?) null);
+
 
         _ilms.SearchWorldsAsync(Arg.Any<string>(), Arg.Any<string>()).Returns(new LMSWorldListResponse
         {

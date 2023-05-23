@@ -2,7 +2,6 @@
 using System.IO.Abstractions.TestingHelpers;
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.DTOs.Storage;
-using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Responses.World;
 using AdLerBackend.Infrastructure.Storage;
 using AutoBogus;
@@ -58,64 +57,6 @@ public class StorageServiceTest
             "h5p", "H5PName.h5p")));
     }
 
-    [Test]
-    public void StoreDslFileForCourse_Valid_StoresFile()
-    {
-        // Arrange
-        var storageService = new StorageService(_fileSystem);
-        var dto = new StoreWorldAtfDto
-        {
-            AuthorId = 1,
-            WorldInformation = AutoFaker.Generate<WorldAtfResponse>(),
-            //DSL_Document.json contains data that is required for the test and should be loaded from disk
-            AtfFile = new FileStream("../../../Storage/TestFiles/DSL_Document.json", FileMode.Open)
-        };
-
-        dto.WorldInformation.World.WorldName = "LearningWorldIdentifier";
-
-        // Act
-        var dslLocation = storageService.StoreAtfFileForWorld(dto);
-
-        // Assert
-        var file = _fileSystem.Path.Combine("wwwroot", "courses", "1", "LearningWorldIdentifier",
-            "LearningWorldIdentifier.json");
-        Assert.IsTrue(_fileSystem.File.Exists(file));
-
-
-        Assert.That(dslLocation, Is.EqualTo(file));
-    }
-
-    [Test]
-    public void GetFileStream_Valid_ShoudGetFileStream()
-    {
-        // Arrange
-        var filePath = @"c:\myfile.txt";
-
-        _fileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
-        {
-            {@"c:\myfile.txt", new MockFileData("Testing is meh.")}
-        });
-        var storageService = new StorageService(_fileSystem);
-
-        // Act
-        var fileStream = storageService.GetReadFileStream(filePath);
-
-        // Assert
-        Assert.That(fileStream, Is.Not.Null);
-    }
-
-    [Test]
-    public void GetFileStream_Invalid_ShoudThrowException()
-    {
-        // Arrange
-        var filePath = @"c:\myfile.txt";
-
-        var storageService = new StorageService(_fileSystem);
-
-        // Act
-        // Assert
-        Assert.Throws<NotFoundException>(() => storageService.GetReadFileStream(filePath));
-    }
 
     [Test]
     public void DeleteCourse_Valid_DeletesCourse()

@@ -42,8 +42,8 @@ public class DeleteWorldUseCaseTest
             {
                 H5PLocationEntityFactory.CreateH5PLocationEntity("path", 4, 3)
             },
-            "asd",
             1,
+            "Test",
             0,
             1
         );
@@ -120,8 +120,8 @@ public class DeleteWorldUseCaseTest
             {
                 H5PLocationEntityFactory.CreateH5PLocationEntity("path", 3, 4)
             },
-            "asd",
             1337,
+            "Test",
             0,
             1
         );

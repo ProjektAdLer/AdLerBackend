@@ -73,12 +73,13 @@ public class MoodleWebApi : ILMS
         // Encode the Stream in Base64
         var base64String = _moodleUtils.ConvertFileStreamToBase64(backupFileStream);
 
-        var response = await MoodleCallAsync<ResponseWithData<CourseData>>(new Dictionary<string, string>
-        {
-            {"wstoken", token},
-            {"wsfunction", "local_adler_upload_course"},
-            {"mbz", base64String}
-        });
+        var response = await MoodleCallAsync<ResponseWithData<PluginCourseCreationResponse>>(
+            new Dictionary<string, string>
+            {
+                {"wstoken", token},
+                {"wsfunction", "local_adler_upload_course"},
+                {"mbz", base64String}
+            });
 
         return response.Data.Course_Id;
     }

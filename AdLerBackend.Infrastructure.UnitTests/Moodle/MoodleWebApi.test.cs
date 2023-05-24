@@ -271,21 +271,6 @@ public class MoodleWebApiTest
     }
 
     [Test]
-    public async Task ScoreGenericLoearningElement_Valid_CallsMoodle()
-    {
-        // Arrange
-        var obj = AutoFaker.Generate<ScoreGenericLearningElementResponse>();
-        obj.Status = true;
-        _mockHttp.When("*").Respond("application/json", JsonSerializer.Serialize(obj));
-
-        // Act
-        var result = await _systemUnderTest.ScoreGenericElement("token", 1);
-
-        // Assert with FluentAssertions
-        result.Should().BeTrue();
-    }
-
-    [Test]
     public async Task GetElementScoreFromPlugin_ReturnsFalse_WhenScoreIsZero()
     {
         // Arrange

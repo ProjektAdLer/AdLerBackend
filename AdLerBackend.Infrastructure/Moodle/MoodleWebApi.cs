@@ -210,19 +210,6 @@ public class MoodleWebApi : ILMS
         });
     }
 
-    public async Task<bool> ScoreGenericElement(string token, int elementId)
-    {
-        var response = await MoodleCallAsync<ScoreGenericLearningElementResponse>(new Dictionary<string, string>
-        {
-            {"wstoken", token},
-            {"wsfunction", "format_tiles_update_activity_completion_status_manually"},
-            {"cmid", elementId.ToString()},
-            {"completed", "1"}
-        });
-
-        return response.Status;
-    }
-
 
     private async Task<TDtoType> MoodleCallAsync<TDtoType>(Dictionary<string, string> wsParams,
         PostToMoodleOptions? options = null)

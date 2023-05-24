@@ -24,7 +24,7 @@ var app = builder.Build();
 var stringBuilder = new StringBuilder();
 
 // crash when the Moodle url is not set
-if (string.IsNullOrEmpty(app.Configuration["ASPNETCORE_ADLER_MOODLE_URL"]))
+if (string.IsNullOrEmpty(app.Configuration["ASPNETCORE_ADLER_MOODLEURL"]))
     throw new Exception("Moodle url is not set! \n please set it in appsettings.json or in environment variables");
 
 

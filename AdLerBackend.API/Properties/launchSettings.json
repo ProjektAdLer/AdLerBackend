@@ -13,7 +13,10 @@
       "applicationUrl": "https://localhost:3001;http://localhost:3000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DB_PASSWORD": "password"
+        "DB_PASSWORD": "password",
+        "ASPNETCORE_ADLER_MOODLEURL": "http://fakedomain.ccc",
+        "ASPNETCORE_ADLER_HTTPPORT": 80,
+        "ASPNETCORE_ADLER_USEHTTPS": false
       }
     },
     "AdLerBackendProduction": {

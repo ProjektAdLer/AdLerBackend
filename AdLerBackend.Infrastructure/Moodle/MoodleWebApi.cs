@@ -276,8 +276,10 @@ public class MoodleWebApi : ILMS
             options ??= new PostToMoodleOptions();
             url = options.Endpoint switch
             {
-                PostToMoodleOptions.Endpoints.Webservice => _configuration["moodleUrl"] + "/webservice/rest/server.php",
-                PostToMoodleOptions.Endpoints.Login => _configuration["moodleUrl"] + "/login/token.php",
+                PostToMoodleOptions.Endpoints.Webservice => _configuration["ASPNETCORE_ADLER_MOODLEURL"] +
+                                                            "/webservice/rest/server.php",
+                PostToMoodleOptions.Endpoints.Login =>
+                    _configuration["ASPNETCORE_ADLER_MOODLEURL"] + "/login/token.php",
                 _ => url
             };
 

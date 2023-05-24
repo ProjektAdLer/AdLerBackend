@@ -9,6 +9,7 @@ using AdLerBackend.Application.Common.Responses.World;
 using AdLerBackend.Application.LMS.GetUserData;
 using AdLerBackend.Application.World.WorldManagement.UploadWorld;
 using AdLerBackend.Domain.Entities;
+using AdLerBackend.Infrastructure.Services;
 using AutoBogus;
 using MediatR;
 using NSubstitute;
@@ -59,10 +60,9 @@ public class UploadWorldUseCaseTest
     public async Task Handle_Valid_TriggersUpload()
     {
         // Arrange
-
         var systemUnderTest =
             new UploadWorldUseCase(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
-                _serialization, _ilms);
+                new SerializationService(), _ilms);
 
         _ilms.UploadCourseWorldToLMS(Arg.Any<string>(), Arg.Any<Stream>()).Returns(new LMSCourseCreationResponse
         {
@@ -80,7 +80,8 @@ public class UploadWorldUseCaseTest
         fakedDsl.World.Elements[0] = new Application.Common.Responses.World.Element
         {
             ElementId = 13337,
-            ElementCategory = "h5p"
+            ElementCategory = "h5p",
+            ElementName = "path1"
         };
 
         _lmsBackupProcessor.GetWorldDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedDsl);
@@ -93,7 +94,7 @@ public class UploadWorldUseCaseTest
             new()
             {
                 H5PFile = new MemoryStream(),
-                H5PFileName = "FileName"
+                H5PFileName = "path1"
             }
         });
 
@@ -110,6 +111,8 @@ public class UploadWorldUseCaseTest
         {
             await writer.WriteAsync(atfJson);
         }
+
+        atfStream.Position = 0;
 
         // Act
         await systemUnderTest.Handle(new UploadWorldCommand

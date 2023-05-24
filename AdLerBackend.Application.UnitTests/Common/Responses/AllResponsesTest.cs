@@ -33,6 +33,6 @@ public class AllResponsesTest
         yield return new TestCaseData(new PlayerDataResponse());
         yield return new TestCaseData(new ScoreElementResponse());
         yield return new TestCaseData(new WorldContent());
-        yield return new TestCaseData(new WorldDtoResponse());
+        yield return new TestCaseData(new WorldAtfResponse());
     }
 }

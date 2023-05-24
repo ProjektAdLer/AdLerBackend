@@ -47,7 +47,7 @@ public class WorldsController : BaseApiController
     /// </summary>
     /// <returns></returns>
     [HttpGet("{worldId}")]
-    public async Task<ActionResult<WorldDtoResponse>> GetWorldAtf([FromHeader] string token,
+    public async Task<ActionResult<WorldAtfResponse>> GetWorldAtf([FromHeader] string token,
         [FromRoute] int worldId)
 
     {

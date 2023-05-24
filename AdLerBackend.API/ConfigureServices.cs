@@ -52,9 +52,6 @@ public static class ConfigureServices
     /// <returns></returns>
     public static WebApplication ConfigureApp(this WebApplication app)
     {
-        // This is needed, because wwwroot directory must be present in the beginning to serve files from it
-        Directory.CreateDirectory("wwwroot");
-
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();

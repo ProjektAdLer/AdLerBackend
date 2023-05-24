@@ -26,7 +26,7 @@ public static class ConfigureServices
         services.AddSingleton<ISerialization, SerializationService>();
         services.AddScoped<IWorldRepository, WorldRepository>();
         services.AddScoped<IPlayerRepository, PlayerRepository>();
-        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
         services.AddTransient<IFileSystem, FileSystem>();
         services.AddSingleton(new MoodleUtils());
         services.AddSingleton(new HttpClient());

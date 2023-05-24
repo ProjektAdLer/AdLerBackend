@@ -22,10 +22,13 @@ public class BaseAdLerBackendDbContext : DbContext
         modelBuilder.Entity<WorldEntity>()
             .HasMany(x => x.H5PFilesInCourse).WithOne().HasForeignKey("WorldEntityId")
             .OnDelete(DeleteBehavior.Cascade);
+
         modelBuilder.Entity<H5PLocationEntity>()
             .Property("Id").UseIdentityColumn();
+
         modelBuilder.Entity<H5PLocationEntity>()
             .HasKey("Id");
+
         // turn on identity insert for the PlayerData table
         modelBuilder.Entity<PlayerData>().Property(p => p.Id).ValueGeneratedNever();
     }

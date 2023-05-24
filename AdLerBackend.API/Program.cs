@@ -2,6 +2,9 @@ using AdLerBackend.API;
 using AdLerBackend.Application;
 using AdLerBackend.Infrastructure;
 
+// This is needed, because wwwroot directory must be present in the beginning to serve files from it
+Directory.CreateDirectory("wwwroot");
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Use Global AdLer Config File (Most likely coming from a docker volume)

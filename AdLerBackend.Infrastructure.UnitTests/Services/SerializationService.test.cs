@@ -1,51 +1,9 @@
-﻿using System.Text.Json;
-using AdLerBackend.Infrastructure.Services;
+﻿using AdLerBackend.Infrastructure.Services;
 
 namespace AdLerBackend.Infrastructure.UnitTests.Services;
 
 public class SerializationServiceTest
 {
-    [Test]
-    public async Task Deserialize_Valid_CanSerializeFromStream()
-    {
-        // Arrange
-        var service = new SerializationService();
-
-        var stream = new MemoryStream();
-        var writer = new StreamWriter(stream);
-        await writer.WriteAsync(
-            "{\"browsers\":{\"firefox\":{\"name\":\"Firefox\",\"pref_url\":\"about:config\",\"releases\":{\"1\":{\"release_date\":\"2004-11-09\",\"status\":\"retired\",\"engine\":\"Gecko\",\"engine_version\":\"1.7\"}}}}}");
-
-        await writer.FlushAsync();
-        stream.Position = 0;
-
-        // Act
-        var result = await service.GetObjectFromJsonStreamAsync<Root>(stream);
-
-        // Assert
-        Assert.NotNull(result);
-    }
-
-    [Test]
-    public async Task Deserialize_InvalidJSON_ThrowsException()
-    {
-        // Arrange
-        var service = new SerializationService();
-
-        var stream = new MemoryStream();
-        var writer = new StreamWriter(stream);
-        // broken json
-        await writer.WriteAsync(
-            "{\"browsers\":{\"firefox\":{\"name\":\"Firefox,\"pref_url\":\"about:config\",\"releases\":{\"1\":{\"release_date\":\"2004-11-09\",\"status\":\"retired\",\"engine\":\"Gecko\",\"engine_version\":\"1.7\"}}}}}");
-
-        await writer.FlushAsync();
-        stream.Position = 0;
-
-        // Act
-        // Assert
-        Assert.ThrowsAsync<JsonException>(async () => await service.GetObjectFromJsonStreamAsync<Root>(stream));
-    }
-
     [Test]
     public async Task Deserialize_Valid_CanSerializeFromString()
     {

@@ -5,7 +5,7 @@ using AdLerBackend.Infrastructure.Repositories.Common;
 
 namespace AdLerBackend.Infrastructure.Repositories.Player;
 
-public class PlayerRepository : GenericRepository<PlayerData>, IPlayerRepository
+public class PlayerRepository : GenericRepository<PlayerData, int>, IPlayerRepository
 {
     public PlayerRepository(BaseAdLerBackendDbContext dbContext) : base(dbContext)
     {

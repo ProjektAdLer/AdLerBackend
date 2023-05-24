@@ -4,7 +4,9 @@ using AdLerBackend.Application.Common.Responses.World;
 using AdLerBackend.Application.World.GetWorldDetail;
 using AdLerBackend.Domain.Entities;
 using AdLerBackend.Domain.UnitTests.TestingUtils;
+using AdLerBackend.Infrastructure.Services;
 using AutoBogus;
+using Newtonsoft.Json;
 using NSubstitute;
 
 #pragma warning disable CS8618
@@ -22,7 +24,7 @@ public class GetWorldDetailUseCaseTest
     {
         _worldRepository = Substitute.For<IWorldRepository>();
         _fileAccess = Substitute.For<IFileAccess>();
-        _serialization = Substitute.For<ISerialization>();
+        _serialization = new SerializationService();
     }
 
     [Test]
@@ -35,6 +37,23 @@ public class GetWorldDetailUseCaseTest
             WebServiceToken = "testToken"
         };
 
+        var mockedDsl = AutoFaker.Generate<WorldAtfResponse>();
+        mockedDsl.World.Elements = new List<Application.Common.Responses.World.Element>
+        {
+            new()
+            {
+                ElementId = 1,
+                ElementCategory = "h5p",
+                ElementName = "path1"
+            },
+            new()
+            {
+                ElementId = 2,
+                ElementCategory = "h5p",
+                ElementName = "path2"
+            }
+        };
+
         var worldEntity = WorldEntityFactory.CreateWorldEntity();
         worldEntity.Id = 1;
         worldEntity.H5PFilesInCourse = new List<H5PLocationEntity>
@@ -43,36 +62,10 @@ public class GetWorldDetailUseCaseTest
             H5PLocationEntityFactory.CreateH5PLocationEntity(Path.Combine("some", "path2"))
         };
 
+        worldEntity.AtfJson = JsonConvert.SerializeObject(mockedDsl);
+
         _worldRepository.GetAsync(Arg.Any<int>()).Returns(worldEntity);
 
-        var stream = new MemoryStream();
-        _fileAccess.GetReadFileStream(Arg.Any<string>()).Returns(stream);
-
-        var mockedDsl = AutoFaker.Generate<WorldDtoResponse>();
-        mockedDsl.World.Elements = new List<Application.Common.Responses.World.Element>
-        {
-            new()
-            {
-                ElementId = 1,
-                ElementCategory = "h5p",
-                LmsElementIdentifier = new LmsElementIdentifier
-                {
-                    Value = "path1"
-                }
-            },
-            new()
-            {
-                ElementId = 2,
-                ElementCategory = "h5p",
-                LmsElementIdentifier = new LmsElementIdentifier
-                {
-                    Value = "path2"
-                }
-            }
-        };
-
-        _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(Arg.Any<Stream>())
-            .Returns(mockedDsl);
 
         var systemUnderTest = new GetWorldDetailUseCase(_worldRepository, _fileAccess, _serialization);
 

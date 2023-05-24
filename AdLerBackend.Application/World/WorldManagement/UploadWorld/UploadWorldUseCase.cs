@@ -34,51 +34,43 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
     public async Task<bool> Handle(UploadWorldCommand request, CancellationToken cancellationToken)
     {
         await ValidateAtfFile(request, cancellationToken);
-
         await ThrowIfUserIsNotAdmin(request, cancellationToken);
 
         var userInformation = await GetUserDataFromLms(request, cancellationToken);
 
-
         var courseInformation = _lmsBackupProcessor.GetWorldDescriptionFromBackup(request.ATFFileStream);
 
-
         var existsCourseForAuthor = await _worldRepository.ExistsForAuthor(userInformation.UserId,
-            courseInformation.World.LmsElementIdentifier.Value);
+            courseInformation.World.WorldName);
 
         if (existsCourseForAuthor) throw new WorldCreationException("World already exists in Database");
 
-        // Upload the Backup File to the LMS
-        // disabled until LMS is ready - PG
-        await _lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
-
-        var atfLocation = _fileAccess.StoreAtfFileForWorld(new StoreWorldAtfDto
-        {
-            AuthorId = userInformation.UserId,
-            AtfFile = request.ATFFileStream,
-            WorldInforamtion = courseInformation
-        });
+        var lmsCourseCreationResponse =
+            await _lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
 
 
-        // Get Course DSL 
-        await using var fileStream = _fileAccess.GetReadFileStream(atfLocation);
+        // Get String from Stream
+        request.ATFFileStream.Position = 0;
+        var atfString = await new StreamReader(request.ATFFileStream).ReadToEndAsync();
 
         // Parse DSL File
-        var dslFile = await _serialization.GetObjectFromJsonStreamAsync<WorldDtoResponse>(fileStream);
+        var atfObject = _serialization.GetObjectFromJsonString<WorldAtfResponse>(atfString);
 
         var h5PNamesWithPaths = StoreH5PFiles(courseInformation, userInformation, request.BackupFileStream);
 
         var h5PLocationEntities = (from h5PWithPath in h5PNamesWithPaths
                 let h5PName = h5PWithPath.Key
-                let h5PInDsl = dslFile.World.Elements.FirstOrDefault(x => x.LmsElementIdentifier?.Value == h5PName)
+                let h5PInDsl = atfObject.World.Elements.FirstOrDefault(x => x.ElementName == h5PName)
                 select new H5PLocationEntity(h5PWithPath.Value, h5PInDsl.ElementId))
             .ToList();
 
+
         var courseEntity = new WorldEntity(
-            courseInformation.World.LmsElementIdentifier.Value,
+            courseInformation.World.WorldName,
             h5PLocationEntities,
-            atfLocation,
-            userInformation.UserId
+            userInformation.UserId,
+            atfString,
+            lmsCourseCreationResponse.CourseLmsId
         );
 
         await _worldRepository.AddAsync(courseEntity);
@@ -113,7 +105,7 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
         }, cancellationToken);
     }
 
-    private Dictionary<string, string> StoreH5PFiles(WorldDtoResponse courseInformation, LMSUserDataResponse userData,
+    private Dictionary<string, string> StoreH5PFiles(WorldAtfResponse courseInformation, LMSUserDataResponse userData,
         Stream backupFile)
     {
         if (courseInformation.World.Elements.All(x => x.ElementCategory != "h5p"))
@@ -124,7 +116,7 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
         return _fileAccess.StoreH5PFilesForWorld(new WorldStoreH5PDto
         {
             AuthorId = userData.UserId,
-            WorldInforamtion = courseInformation,
+            WorldInformation = courseInformation,
             H5PFiles = h5PFilesInBackup
         })!;
     }

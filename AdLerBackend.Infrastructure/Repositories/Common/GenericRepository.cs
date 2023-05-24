@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AdLerBackend.Infrastructure.Repositories.Common;
 
-public class GenericRepository<T> : IGenericRepository<T> where T : class
+public class GenericRepository<T, TId> : IGenericRepository<T, TId> where T : class
 {
     protected readonly BaseAdLerBackendDbContext Context;
 
@@ -20,14 +20,14 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         return entity;
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(TId id)
     {
         var entity = await GetAsync(id);
         Context.Remove(entity);
         await Context.SaveChangesAsync();
     }
 
-    public async Task<bool> Exists(int id)
+    public async Task<bool> Exists(TId id)
     {
         var entity = await GetAsync(id);
         return entity != null;
@@ -44,7 +44,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         await Context.SaveChangesAsync();
     }
 
-    public async Task<T?> GetAsync(int id)
+    public async Task<T?> GetAsync(TId id)
     {
         return await Context.Set<T>().FindAsync(id);
     }

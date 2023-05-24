@@ -7,7 +7,6 @@ using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using NSubstitute;
-using NSubstitute.Extensions;
 using RichardSzalay.MockHttp;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -43,23 +42,32 @@ public class MoodleWebApiTest
         var result = await _systemUnderTest.UploadCourseWorldToLMS("token", new MemoryStream());
 
         // Assert
-        Assert.That(result, Is.EqualTo(1337));
+        Assert.That(result.CourseLmsId, Is.EqualTo(1337));
     }
 
     [Test]
     public async Task UsUserAdmin_Valid_HeIs()
     {
         // Arrange
-        var test = Substitute.ForPartsOf<MoodleWebApi>(_mockHttp.ToHttpClient(), _configuration, _moodleUtils);
-        test.Configure().GetLMSUserDataAsync("token").Returns(new LMSUserDataResponse
-        {
-            IsAdmin = true,
-            UserId = 1,
-            LMSUserName = "testUser"
-        });
+        _mockHttp.When("*")
+            .WithFormData("wsfunction", "core_webservice_get_site_info")
+            .Respond(
+                "application/json", JsonSerializer.Serialize(new
+                {
+                    Userid = 1,
+                    Userissiteadmin = true,
+                    Username = "testUser"
+                }));
+
+        var list = new[] {new {email = "test"}}.ToList();
+
+        _mockHttp.When("*")
+            .WithFormData("wsfunction", "core_user_get_users_by_field")
+            .Respond(
+                "application/json", JsonSerializer.Serialize(list));
 
         // Act
-        var result = await test.IsLMSAdminAsync("token");
+        var result = await _systemUnderTest.IsLMSAdminAsync("token");
 
         // Assert
         Assert.IsTrue(result);
@@ -260,21 +268,6 @@ public class MoodleWebApiTest
 
         // Assert with FluentAssertions
         result.Should().BeEquivalentTo(obj);
-    }
-
-    [Test]
-    public async Task ScoreGenericLoearningElement_Valid_CallsMoodle()
-    {
-        // Arrange
-        var obj = AutoFaker.Generate<ScoreGenericLearningElementResponse>();
-        obj.Status = true;
-        _mockHttp.When("*").Respond("application/json", JsonSerializer.Serialize(obj));
-
-        // Act
-        var result = await _systemUnderTest.ScoreGenericElement("token", 1);
-
-        // Assert with FluentAssertions
-        result.Should().BeTrue();
     }
 
     [Test]

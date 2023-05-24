@@ -55,7 +55,7 @@ public interface ILMS
      * @param token The LMS Webservice Token
      * @param backupFileStream The Stream of the Backup File
      */
-    Task<int> UploadCourseWorldToLMS(string token, Stream backupFileStream);
+    Task<LMSCourseCreationResponse> UploadCourseWorldToLMS(string token, Stream backupFileStream);
 
     /// <summary>
     ///     Gets the Score of an Element from the LMS via the Plugin
@@ -81,5 +81,19 @@ public interface ILMS
     /// <returns></returns>
     Task<bool> ProcessXApiViaPlugin(string token, string statement);
 
+    /// <summary>
+    ///     Gets the Course Status via the Plugin
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="courseId"></param>
+    /// <returns></returns>
     Task<LmsCourseStatusResponse> GetCourseStatusViaPlugin(string token, int courseId);
+
+    /// <summary>
+    ///     Gets the LMS IDs for a given list of UUID
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="uuids"></param>
+    /// <returns></returns>
+    Task<IList<LmsUuidResponse>> GetLmsIdsByUuidsAsync(string token, IList<string> uuids);
 }

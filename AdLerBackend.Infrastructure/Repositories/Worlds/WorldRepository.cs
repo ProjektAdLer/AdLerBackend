@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AdLerBackend.Infrastructure.Repositories.Worlds;
 
-public class WorldRepository : GenericRepository<WorldEntity>, IWorldRepository
+public class WorldRepository : GenericRepository<WorldEntity, int>, IWorldRepository
 {
     public WorldRepository(BaseAdLerBackendDbContext dbContext) : base(dbContext)
     {

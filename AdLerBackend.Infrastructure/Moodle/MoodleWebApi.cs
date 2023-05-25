@@ -226,6 +226,7 @@ public class MoodleWebApi : ILMS
     {
         ThrowIfMoodleError(responseString);
 
+
         return TryRead<TResponseType>(responseString);
     }
 
@@ -243,7 +244,7 @@ public class MoodleWebApi : ILMS
         }
         catch (Exception e)
         {
-            throw new LmsException("Das Ergebnis der Moodle Web Api konnte nicht gelesen werden", e);
+            throw new LmsException("Das Ergebnis der Moodle Web Api konnte nicht gelesen werden " + responseString, e);
         }
     }
 
@@ -260,7 +261,7 @@ public class MoodleWebApi : ILMS
         }
 
         if (wsErrorData?.ErrorCode != null)
-            throw new LmsException
+            throw new LmsException("Response from LMS is: " + responseString)
             {
                 LmsErrorCode = wsErrorData.ErrorCode
             };

@@ -14,7 +14,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DB_PASSWORD": "password",
-        "ASPNETCORE_ADLER_MOODLEURL": "http://fakedomain.ccc",
+        "ASPNETCORE_ADLER_MOODLEURL": "http://localhost",
         "ASPNETCORE_ADLER_HTTPPORT": 80,
         "ASPNETCORE_ADLER_USEHTTPS": false
       }

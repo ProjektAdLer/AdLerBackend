@@ -33,8 +33,8 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
 
     public async Task<bool> Handle(UploadWorldCommand request, CancellationToken cancellationToken)
     {
-        await ValidateAtfFile(request, cancellationToken);
         await ThrowIfUserIsNotAdmin(request, cancellationToken);
+        await ValidateAtfFile(request, cancellationToken);
 
         var userInformation = await GetUserDataFromLms(request, cancellationToken);
 

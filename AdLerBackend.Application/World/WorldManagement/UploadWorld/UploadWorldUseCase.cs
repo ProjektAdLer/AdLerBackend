@@ -48,13 +48,13 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
         var lmsCourseCreationResponse =
             await _lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
 
-
-        var h5PNamesWithPaths = StoreH5PFiles(courseInformation, userInformation, request.BackupFileStream);
+        var h5PNamesWithPaths = StoreH5PFiles(courseInformation, lmsCourseCreationResponse.CourseLmsId,
+            request.BackupFileStream);
 
         var h5PLocationEntities = (from h5PWithPath in h5PNamesWithPaths
                 let h5PName = h5PWithPath.Key
-                let h5PInDsl = courseInformation.World.Elements.FirstOrDefault(x => x.ElementName == h5PName)
-                select new H5PLocationEntity(h5PWithPath.Value, h5PInDsl.ElementId))
+                let h5PInAtf = courseInformation.World.Elements.FirstOrDefault(x => x.ElementUuid == h5PName)
+                select new H5PLocationEntity(h5PWithPath.Value, h5PInAtf.ElementId))
             .ToList();
 
 
@@ -100,7 +100,7 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
         }, cancellationToken);
     }
 
-    private Dictionary<string, string> StoreH5PFiles(WorldAtfResponse courseInformation, LMSUserDataResponse userData,
+    private Dictionary<string, string> StoreH5PFiles(WorldAtfResponse courseInformation, int courseLmsId,
         Stream backupFile)
     {
         if (courseInformation.World.Elements.All(x => x.ElementCategory != "h5p"))
@@ -110,8 +110,7 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
 
         return _fileAccess.StoreH5PFilesForWorld(new WorldStoreH5PDto
         {
-            AuthorId = userData.UserId,
-            WorldInformation = courseInformation,
+            CourseInstanceId = courseLmsId,
             H5PFiles = h5PFilesInBackup
         })!;
     }

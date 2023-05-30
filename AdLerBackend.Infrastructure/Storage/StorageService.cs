@@ -15,8 +15,8 @@ public class StorageService : IFileAccess
 
     public Dictionary<string, string>? StoreH5PFilesForWorld(WorldStoreH5PDto worldToStoreH5P)
     {
-        var workingDir = _fileSystem.Path.Join("wwwroot", "courses", worldToStoreH5P.AuthorId.ToString(),
-            worldToStoreH5P.WorldInformation.World.WorldName, "h5p");
+        var workingDir = _fileSystem.Path.Join("wwwroot", "courses", worldToStoreH5P.CourseInstanceId.ToString(),
+            "h5p");
 
         // create directory if not exists
         if (!_fileSystem.Directory.Exists(workingDir))
@@ -26,13 +26,13 @@ public class StorageService : IFileAccess
 
         foreach (var h5PFile in worldToStoreH5P.H5PFiles)
         {
-            var h5PFilePath = _fileSystem.Path.Combine(workingDir, h5PFile.H5PFileName + ".h5p");
+            var h5PFilePath = _fileSystem.Path.Combine(workingDir, h5PFile.H5PUuid + ".h5p");
 
             var fileStream = _fileSystem.FileStream.Create(h5PFilePath, FileMode.Create);
             h5PFile.H5PFile!.CopyTo(fileStream);
             fileStream.Close();
 
-            h5PFilePaths.Add(h5PFile.H5PFileName!, h5PFilePath);
+            h5PFilePaths.Add(h5PFile.H5PUuid!, h5PFilePath);
         }
 
 

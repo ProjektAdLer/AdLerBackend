@@ -1,4 +1,5 @@
 ﻿using System.Xml.Serialization;
+
 #pragma warning disable CS8618
 
 namespace AdLerBackend.Infrastructure.LmsBackup;
@@ -14,8 +15,8 @@ public class File
 
     [XmlElement(ElementName = "filename")] public string Filename { get; set; }
 
-    [XmlElement(ElementName = "contextid")]
-    public int Contextid { get; set; }
+    [XmlElement(ElementName = "elementUUID")]
+    public string ElementUuid { get; set; }
 }
 
 [XmlRoot(ElementName = "files")]

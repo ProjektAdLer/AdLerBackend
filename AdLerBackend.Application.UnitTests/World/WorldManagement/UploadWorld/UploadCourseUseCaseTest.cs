@@ -38,6 +38,9 @@ public class UploadWorldUseCaseTest
         _serialization = Substitute.For<ISerialization>();
         _ilms = Substitute.For<ILMS>();
 
+        // _serialization.ClassToJsonString should have original implementation
+        _serialization.ClassToJsonString(Arg.Any<object>()).Returns(x => JsonSerializer.Serialize(x.Arg<object>()));
+
         var mockedDsl = AutoFaker.Generate<WorldAtfResponse>();
         mockedDsl.World.Elements = new List<Application.Common.Responses.World.Element>
         {
@@ -81,7 +84,7 @@ public class UploadWorldUseCaseTest
         {
             ElementId = 13337,
             ElementCategory = "h5p",
-            ElementName = "path1"
+            ElementUuid = "path1"
         };
 
         _lmsBackupProcessor.GetWorldDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedDsl);
@@ -94,7 +97,7 @@ public class UploadWorldUseCaseTest
             new()
             {
                 H5PFile = new MemoryStream(),
-                H5PFileName = "path1"
+                H5PUuid = "path1"
             }
         });
 
@@ -225,7 +228,7 @@ public class UploadWorldUseCaseTest
 
 
         // Act
-        var result = await systemUnderTest.Handle(new UploadWorldCommand
+        await systemUnderTest.Handle(new UploadWorldCommand
         {
             BackupFileStream = new MemoryStream(),
             ATFFileStream = new MemoryStream(),

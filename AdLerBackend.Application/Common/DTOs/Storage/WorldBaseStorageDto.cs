@@ -6,5 +6,4 @@ namespace AdLerBackend.Application.Common.DTOs.Storage;
 public class WorldBaseStorageDto
 {
     public WorldAtfResponse WorldInformation { get; set; }
-    public int AuthorId { get; set; }
 }

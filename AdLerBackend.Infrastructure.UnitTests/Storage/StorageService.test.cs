@@ -34,27 +34,25 @@ public class StorageServiceTest
         var storageService = new StorageService(_fileSystem);
         var courseDtoFake = new WorldStoreH5PDto
         {
-            AuthorId = 1,
+            CourseInstanceId = 1,
             WorldInformation = AutoFaker.Generate<WorldAtfResponse>(),
             H5PFiles = new List<H5PDto>
             {
                 new()
                 {
                     H5PFile = _backupFileStream,
-                    H5PFileName = "H5PName"
+                    H5PUuid = "H5PUUID"
                 }
             }
         };
-
-        courseDtoFake.WorldInformation.World.WorldName = "LearningWorldIdentifier";
 
         // Act
         var returnedValue = storageService.StoreH5PFilesForWorld(courseDtoFake);
 
         // Assert
-        Assert.That(returnedValue!.First().Key, Is.EqualTo("H5PName"));
-        Assert.IsTrue(_fileSystem.File.Exists(Path.Combine("wwwroot", "courses", "1", "LearningWorldIdentifier",
-            "h5p", "H5PName.h5p")));
+        Assert.That(returnedValue!.First().Key, Is.EqualTo("H5PUUID"));
+        Assert.IsTrue(_fileSystem.File.Exists(Path.Combine("wwwroot", "courses", "1",
+            "h5p", "H5PUUID.h5p")));
     }
 
 

@@ -18,11 +18,11 @@ public class LmsBackupProcessor : ILmsBackupProcessor
         var filesDescriptionStream = GetFileDescriptionFromTarStream(backupFile, "files.xml");
         var filesDescription = DeserializeToObject<Files>(filesDescriptionStream);
 
-        var h5PFiles = StoreH5PFiles(backupFile, filesDescription);
+        var h5PFiles = GetH5PFilesFromBackup(backupFile, filesDescription);
         return h5PFiles.Select(h5PFile => new H5PDto
         {
             H5PFile = h5PFile.FileStream,
-            H5PFileName = Path.GetFileNameWithoutExtension(h5PFile.FileName)
+            H5PUuid = h5PFile.Uuid
         }).ToList();
     }
 
@@ -38,7 +38,7 @@ public class LmsBackupProcessor : ILmsBackupProcessor
         return retVal;
     }
 
-    private List<H5PFile> StoreH5PFiles(Stream backupFile, Files filesDescription)
+    private List<H5PFile> GetH5PFilesFromBackup(Stream backupFile, Files filesDescription)
     {
         var h5PFiles = new List<H5PFile>();
         foreach (var file in filesDescription.File)
@@ -48,7 +48,7 @@ public class LmsBackupProcessor : ILmsBackupProcessor
                 if (h5PFiles.Any(x => x.ContentHash == file.Contenthash)) continue;
                 var h5PFile = new H5PFile
                 {
-                    FileName = file.Filename,
+                    Uuid = file.ElementUuid,
                     ContentHash = file.Contenthash,
                     FileStream = GetFileDescriptionFromTarStream(backupFile,
                         $"files/{file.Contenthash.AsSpan(0, 2)}/{file.Contenthash}")
@@ -102,7 +102,7 @@ public class LmsBackupProcessor : ILmsBackupProcessor
     private class H5PFile
     {
         public Stream FileStream { get; set; }
-        public string FileName { get; init; }
+        public string Uuid { get; init; }
         public string ContentHash { get; init; }
     }
 }

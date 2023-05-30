@@ -11,30 +11,18 @@ using ICSharpCode.SharpZipLib.Tar;
 
 namespace AdLerBackend.Infrastructure.LmsBackup;
 
-// TODO: Implement n Task-Queue for parallel processing of the backup files
 public class LmsBackupProcessor : ILmsBackupProcessor
 {
     public IList<H5PDto> GetH5PFilesFromBackup(Stream backupFile)
     {
-        backupFile.Position = 0;
-        var filesDescriptionStream = GetFileFromTarStream(backupFile, "files.xml");
-
+        var filesDescriptionStream = GetFileDescriptionFromTarStream(backupFile, "files.xml");
         var filesDescription = DeserializeToObject<Files>(filesDescriptionStream);
 
-        var h5PWorkingStorages = GetH5PHashesFromFileIndex(filesDescription);
-
-        if (h5PWorkingStorages.Count == 0)
-            return new List<H5PDto>();
-
-        // remove duplicates from h5pHashes by Contenthash since files are represented twice in the backup
-        h5PWorkingStorages = RemoveDuplicateH5pHashes(h5PWorkingStorages);
-
-        FillInH5PFileStreamsFromBackupIntoStorage(backupFile, h5PWorkingStorages);
-
-        return h5PWorkingStorages.Select(h5PFile => new H5PDto
+        var h5PFiles = StoreH5PFiles(backupFile, filesDescription);
+        return h5PFiles.Select(h5PFile => new H5PDto
         {
-            H5PFile = h5PFile.H5PFile,
-            H5PFileName = h5PFile.H5PFileName!.Split('.')[0]
+            H5PFile = h5PFile.FileStream,
+            H5PFileName = Path.GetFileNameWithoutExtension(h5PFile.FileName)
         }).ToList();
     }
 
@@ -46,35 +34,36 @@ public class LmsBackupProcessor : ILmsBackupProcessor
         {
             PropertyNameCaseInsensitive = true
         }) ?? throw new LmsBackupProcessorException("Could not deserialize DSL file");
+
         return retVal;
     }
 
-    private void FillInH5PFileStreamsFromBackupIntoStorage(Stream backupFile, List<H5PWorkingStorage> h5PHashes)
+    private List<H5PFile> StoreH5PFiles(Stream backupFile, Files filesDescription)
     {
-        foreach (var h5PWorkingStorage in h5PHashes)
-            h5PWorkingStorage.H5PFile = GetFileFromTarStream(backupFile,
-                string.Concat("files/", h5PWorkingStorage.H5PContentHash!.AsSpan(0, 2), "/",
-                    h5PWorkingStorage.H5PContentHash));
-    }
+        var h5PFiles = new List<H5PFile>();
+        foreach (var file in filesDescription.File)
+            if (file.Component == "mod_h5pactivity" && file.Filename != ".")
+            {
+                // Moodle Stores the H5P Files twice, so we remove one of them
+                if (h5PFiles.Any(x => x.ContentHash == file.Contenthash)) continue;
+                var h5PFile = new H5PFile
+                {
+                    FileName = file.Filename,
+                    ContentHash = file.Contenthash,
+                    FileStream = GetFileDescriptionFromTarStream(backupFile,
+                        $"files/{file.Contenthash.AsSpan(0, 2)}/{file.Contenthash}")
+                };
+                h5PFiles.Add(h5PFile);
+            }
 
-    private static List<H5PWorkingStorage> RemoveDuplicateH5pHashes(List<H5PWorkingStorage> h5PHashes)
-    {
-        return h5PHashes.GroupBy(x => x.contextid).Select(x => x.First()).ToList();
+        return h5PFiles;
     }
-
-    private static List<H5PWorkingStorage> GetH5PHashesFromFileIndex(Files filesDescription)
-    {
-        return (from file in filesDescription.File
-            where file.Component == "mod_h5pactivity" && file.Filename != "."
-            select new H5PWorkingStorage
-                {H5PFileName = file.Filename, H5PContentHash = file.Contenthash, contextid = file.Contextid}).ToList();
-    }
-
 
     private T DeserializeToObject<T>(Stream file) where T : class
     {
         try
         {
+            file.Position = 0;
             var xmlSerializer = new XmlSerializer(typeof(T));
 
             var obj = (T) xmlSerializer.Deserialize(file)! ?? throw new LmsBackupProcessorException();
@@ -87,8 +76,7 @@ public class LmsBackupProcessor : ILmsBackupProcessor
         }
     }
 
-
-    private Stream GetFileFromTarStream(Stream backupFile, string fileName)
+    private Stream GetFileDescriptionFromTarStream(Stream backupFile, string fileName)
     {
         var tarStream = GetTarInputStream(backupFile);
         while (tarStream.GetNextEntry() is { } te)
@@ -111,11 +99,10 @@ public class LmsBackupProcessor : ILmsBackupProcessor
         return new TarInputStream(source, Encoding.Default);
     }
 
-    private class H5PWorkingStorage
+    private class H5PFile
     {
-        public Stream? H5PFile { get; set; }
-        public string? H5PFileName { get; init; }
-        public string? H5PContentHash { get; init; }
-        public int? contextid { get; init; }
+        public Stream FileStream { get; set; }
+        public string FileName { get; init; }
+        public string ContentHash { get; init; }
     }
 }

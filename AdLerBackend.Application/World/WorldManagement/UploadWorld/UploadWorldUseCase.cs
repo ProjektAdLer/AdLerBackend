@@ -49,27 +49,22 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
             await _lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
 
 
-        // Get String from Stream
-        request.ATFFileStream.Position = 0;
-        var atfString = await new StreamReader(request.ATFFileStream).ReadToEndAsync();
-
-        // Parse DSL File
-        var atfObject = _serialization.GetObjectFromJsonString<WorldAtfResponse>(atfString);
-
         var h5PNamesWithPaths = StoreH5PFiles(courseInformation, userInformation, request.BackupFileStream);
 
         var h5PLocationEntities = (from h5PWithPath in h5PNamesWithPaths
                 let h5PName = h5PWithPath.Key
-                let h5PInDsl = atfObject.World.Elements.FirstOrDefault(x => x.ElementName == h5PName)
+                let h5PInDsl = courseInformation.World.Elements.FirstOrDefault(x => x.ElementName == h5PName)
                 select new H5PLocationEntity(h5PWithPath.Value, h5PInDsl.ElementId))
             .ToList();
 
+
+        var courseInformationJsonString = _serialization.ClassToJsonString(courseInformation);
 
         var courseEntity = new WorldEntity(
             courseInformation.World.WorldName,
             h5PLocationEntities,
             userInformation.UserId,
-            atfString,
+            courseInformationJsonString,
             lmsCourseCreationResponse.CourseLmsId
         );
 

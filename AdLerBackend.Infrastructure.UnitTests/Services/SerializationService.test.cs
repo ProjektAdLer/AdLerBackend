@@ -31,6 +31,19 @@ public class SerializationServiceTest
         // Assert
         Assert.AreEqual(expected, result);
     }
+    
+    [Test]
+    public async Task Serialize_Valid_CanSerializeToString()
+    {
+        // Arrange
+        var service = new SerializationService();
+
+        // Act
+        var result = service.ClassToJsonString(new BrokenClass {foo = 1});
+
+        // Assert
+        Assert.AreEqual("{\"foo\":1}", result);
+    }
 }
 
 public class BrokenClass

@@ -48,8 +48,7 @@ public class DeleteWorldUseCase : IRequestHandler<DeleteWorldCommand, bool>
         // Delete from file System
         _fileAccess.DeleteWorld(new WorldDeleteDto
         {
-            AuthorId = course.AuthorId,
-            WorldName = course.Name
+            WorldInstanceId = course.LmsWorldId
         });
 
         // Delete from db

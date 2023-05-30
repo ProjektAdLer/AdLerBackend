@@ -41,8 +41,7 @@ public class StorageService : IFileAccess
 
     public bool DeleteWorld(WorldDeleteDto worldToDelete)
     {
-        var workingDir = _fileSystem.Path.Join("wwwroot", "courses", worldToDelete.AuthorId.ToString(),
-            worldToDelete.WorldName);
+        var workingDir = _fileSystem.Path.Join("wwwroot", "courses", worldToDelete.WorldInstanceId.ToString());
 
         _fileSystem.Directory.Delete(workingDir, true);
         return true;

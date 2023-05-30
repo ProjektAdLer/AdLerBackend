@@ -62,10 +62,9 @@ public class StorageServiceTest
         // Arrange
         var dto = new WorldDeleteDto
         {
-            AuthorId = 1,
-            WorldName = "CourseName"
+            WorldInstanceId = 1337
         };
-        var folder = Path.Combine("wwwroot", "courses", "1", "CourseName");
+        var folder = Path.Combine("wwwroot", "courses", "1337");
         var file = Path.Combine(folder, "CourseName.json");
 
         _fileSystem = new MockFileSystem(new Dictionary<string, MockFileData>

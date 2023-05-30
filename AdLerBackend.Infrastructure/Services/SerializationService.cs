@@ -18,4 +18,9 @@ public class SerializationService : ISerialization
     {
         return jsonString.StartsWith("{") && jsonString.EndsWith("}");
     }
+
+    public string ClassToJsonString(object classToSerialize)
+    {
+        return JsonSerializer.Serialize(classToSerialize);
+    }
 }

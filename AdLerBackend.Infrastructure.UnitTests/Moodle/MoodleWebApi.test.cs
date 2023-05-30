@@ -25,7 +25,7 @@ public class MoodleWebApiTest
         _mockHttp = new MockHttpMessageHandler();
         _configuration = Substitute.For<IConfiguration>();
         _moodleUtils = Substitute.For<MoodleUtils>();
-        _configuration["moodleUrl"].Returns("http://whatever.com");
+        _configuration["ASPNETCORE_ADLER_MOODLEURL"].Returns("http://urlForUnitTest.com");
         _systemUnderTest = new MoodleWebApi(_mockHttp.ToHttpClient(), _configuration, _moodleUtils);
     }
 
@@ -174,7 +174,8 @@ public class MoodleWebApiTest
             await _systemUnderTest.GetLMSUserTokenAsync("moodleUser", "moodlePassword"));
 
         // check exception message
-        Assert.That(exception!.Message, Is.EqualTo("Das Ergebnis der Moodle Web Api konnte nicht gelesen werden"));
+        Assert.That(exception!.Message,
+            Contains.Substring("Das Ergebnis der Moodle Web Api konnte nicht gelesen werden"));
         return Task.CompletedTask;
     }
 

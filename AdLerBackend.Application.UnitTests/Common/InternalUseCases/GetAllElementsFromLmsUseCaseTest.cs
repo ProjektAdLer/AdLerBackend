@@ -18,7 +18,6 @@ public class GetAllElementsFromLmsUseCaseTest
     private ISerialization _serialization;
     private IWorldRepository _worldRepository;
 
-
     [SetUp]
     public void Setup()
     {
@@ -70,24 +69,13 @@ public class GetAllElementsFromLmsUseCaseTest
             },
             1234,
             JsonConvert.SerializeObject(fakeATF),
-            0,
+            1,
             2
         );
 
 
         _worldRepository.GetAsync(Arg.Any<int>()).Returns(worldEntity);
 
-
-        _ilms.SearchWorldsAsync(Arg.Any<string>(), Arg.Any<string>()).Returns(new LMSWorldListResponse
-        {
-            Courses = new List<MoodleCourse>
-            {
-                new()
-                {
-                    Id = 1
-                }
-            }
-        });
 
         _ilms.GetWorldContentAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new[]
         {
@@ -144,17 +132,6 @@ public class GetAllElementsFromLmsUseCaseTest
 
         _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity?) null);
 
-
-        _ilms.SearchWorldsAsync(Arg.Any<string>(), Arg.Any<string>()).Returns(new LMSWorldListResponse
-        {
-            Courses = new List<MoodleCourse>
-            {
-                new()
-                {
-                    Id = 1
-                }
-            }
-        });
 
         _ilms.GetWorldContentAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new[]
         {

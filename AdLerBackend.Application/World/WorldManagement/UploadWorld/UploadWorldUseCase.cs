@@ -1,5 +1,4 @@
 ﻿using AdLerBackend.Application.Common.DTOs.Storage;
-using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.InternalUseCases.CheckUserPrivileges;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
@@ -39,11 +38,6 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
         var userInformation = await GetUserDataFromLms(request, cancellationToken);
 
         var courseInformation = _lmsBackupProcessor.GetWorldDescriptionFromBackup(request.ATFFileStream);
-
-        var existsCourseForAuthor = await _worldRepository.ExistsForAuthor(userInformation.UserId,
-            courseInformation.World.WorldName);
-
-        if (existsCourseForAuthor) throw new WorldCreationException("World already exists in Database");
 
         var lmsCourseCreationResponse =
             await _lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);

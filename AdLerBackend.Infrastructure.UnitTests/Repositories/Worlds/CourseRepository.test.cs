@@ -28,28 +28,6 @@ public class WorldRepositoryTest
     }
 
     [Test]
-    public async Task ExistsCourseForAuthor_Valid_GetsResult()
-    {
-        // Arrange
-        var dbContext = ContextCreator.GetNewDbContextInstance();
-        var systemUnderTest = new WorldRepository(dbContext);
-
-        await systemUnderTest.AddAsync(WorldEntityFactory.CreateWorldEntity(authorId: 2, name: "Test Course"));
-
-        // Act
-        var result = await systemUnderTest.ExistsForAuthor(2, "Test Course");
-
-        // Assert
-        Assert.That(result, Is.True);
-
-        // Act
-        var result2 = await systemUnderTest.ExistsForAuthor(2, "Test CourseFOO");
-
-        // Assert
-        Assert.That(result2, Is.False);
-    }
-
-    [Test]
     public async Task GetAllCoursesByStrings_Valid_GetsResult()
     {
         // Arrange

@@ -20,12 +20,6 @@ public class WorldRepository : GenericRepository<WorldEntity, int>, IWorldReposi
         return allCoursesForAuthor;
     }
 
-    public async Task<bool> ExistsForAuthor(int authorId, string courseName)
-    {
-        var test = await Context.Worlds.AnyAsync(x => x.AuthorId == authorId && x.Name == courseName);
-        return test;
-    }
-
 
     public async Task<IList<WorldEntity>> GetAllByStrings(List<string> searchStrings)
     {

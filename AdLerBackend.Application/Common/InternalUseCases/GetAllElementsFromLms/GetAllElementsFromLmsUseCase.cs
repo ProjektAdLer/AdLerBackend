@@ -32,8 +32,7 @@ public class
 
         var dslObject = _serialization.GetObjectFromJsonString<WorldAtfResponse>(course.AtfJson);
 
-        var searchedCourse = await _lms.SearchWorldsAsync(request.WebServiceToken, course.Name);
-        var courseContent = await _lms.GetWorldContentAsync(request.WebServiceToken, searchedCourse.Courses[0].Id);
+        var courseContent = await _lms.GetWorldContentAsync(request.WebServiceToken, course.LmsWorldId);
 
         // Get the LMS-Modules by their name
         var modulesWithId = dslObject.World.Elements.Select(x =>
@@ -50,7 +49,7 @@ public class
         return new GetAllElementsFromLmsWithAdLerIdResponse
         {
             ModulesWithAdLerId = modulesWithId,
-            LmsCourseId = searchedCourse.Courses[0].Id
+            LmsCourseId = course.LmsWorldId
         };
     }
 }

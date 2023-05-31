@@ -187,21 +187,6 @@ public class MoodleWebApi : ILMS
         };
     }
 
-    public async Task<LMSWorldListResponse> SearchWorldsAsync(string token, string searchString,
-        bool limitToEnrolled = false)
-    {
-        var resp = await MoodleCallAsync<LMSWorldListResponse>(new Dictionary<string, HttpContent>
-        {
-            {"wstoken", new StringContent(token)},
-            {"wsfunction", new StringContent("core_course_search_courses")},
-            {"criterianame", new StringContent("search")},
-            {"criteriavalue", new StringContent(searchString)},
-            {"limittoenrolled", new StringContent(limitToEnrolled ? "1" : "0")}
-        });
-
-        return resp;
-    }
-
     public async Task<H5PAttempts> GetH5PAttemptsAsync(string token, int h5PActivityId)
     {
         return await MoodleCallAsync<H5PAttempts>(new Dictionary<string, HttpContent>

@@ -20,14 +20,6 @@ public interface ILMS
     Task<LMSUserTokenResponse> GetLMSUserTokenAsync(string userName, string password);
 
     /// <summary>
-    ///     Searches all Worlds, that are avalibale for the given LMS User
-    /// </summary>
-    /// <param name="token">Token of the LMS User</param>
-    /// <param name="searchString">The World to get Searched for</param>
-    /// <returns>A List of all found Coruses</returns>
-    Task<LMSWorldListResponse> SearchWorldsAsync(string token, string searchString, bool limitToEnrolled = false);
-
-    /// <summary>
     ///     Gets the Contents of a World
     /// </summary>
     /// <param name="token">Token of the LMS User</param>

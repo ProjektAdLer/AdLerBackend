@@ -119,23 +119,6 @@ public class MoodleWebApiTest
     }
 
     [Test]
-    public async Task SearchCoursesAsync_Valid()
-    {
-        // Arrange
-        _mockHttp.When("*")
-            .Respond(
-                "application/json",
-                "{\"total\":2,\"courses\":[{\"id\":49,\"fullname\":\"Lernpfad-Kurs-Customdata\",\"displayname\":\"Lernpfad-Kurs-Customdata\",\"shortname\":\"Lernpfad-Kurs-Customdata\",\"categoryid\":1,\"categoryname\":\"Miscellaneous\",\"sortorder\":10006,\"summary\":\"<pdir=\\\"ltr\\\"style=\\\"text-align:left;\\\">LernzieldiesesKursesistXXXX<\\/p>\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[{\"filename\":\"AddFileFlowChart.png\",\"filepath\":\"\\/\",\"filesize\":319760,\"fileurl\":\"https:\\/\\/moodle.cluuub.xyz\\/webservice\\/pluginfile.php\\/265\\/course\\/overviewfiles\\/Add%20File%20Flow%20Chart.png\",\"timemodified\":1654246976,\"mimetype\":\"image\\/png\"}],\"showactivitydates\":true,\"showcompletionconditions\":true,\"contacts\":[],\"enrollmentmethods\":[\"manual\"]},{\"id\":5,\"fullname\":\"SoftwareEngineering(Lernwelt)\",\"displayname\":\"SoftwareEngineering(Lernwelt)\",\"shortname\":\"SoftwareEngineering\",\"categoryid\":4,\"categoryname\":\"Nichtl\\u00f6schen\",\"sortorder\":30001,\"summary\":\"\",\"summaryformat\":1,\"summaryfiles\":[],\"overviewfiles\":[],\"showactivitydates\":false,\"showcompletionconditions\":true,\"contacts\":[],\"enrollmentmethods\":[\"manual\"]}],\"warnings\":[]}"
-            );
-
-        // Act
-        var result = await _systemUnderTest.SearchWorldsAsync("testToken", "testSearch");
-
-        // Assert
-        Assert.That(result.Total, Is.EqualTo(2));
-    }
-
-    [Test]
     public Task GetMoodleToken_InvalidResponse_ReturnsException()
     {
         // Arrange

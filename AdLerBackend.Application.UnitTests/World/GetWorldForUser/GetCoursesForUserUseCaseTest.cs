@@ -34,6 +34,11 @@ public class GetWorldsForUserUseCaseTest
             WebServiceToken = "testToken"
         };
 
+        _worldRepository.GetAllAsync().Returns(new List<WorldEntity>
+        {
+            WorldEntityFactory.CreateWorldEntity("name", new List<H5PLocationEntity>(), 1, "asdasdsd", 1, 111)
+        });
+
         _ilms.GetWorldsForUserAsync(Arg.Any<string>()).Returns(new LMSWorldListResponse
         {
             Total = 1,
@@ -41,15 +46,9 @@ public class GetWorldsForUserUseCaseTest
             {
                 new()
                 {
-                    Id = 1,
-                    Fullname = "FullName"
+                    Id = 1
                 }
             }
-        });
-
-        _worldRepository.GetAllByStrings(Arg.Any<List<string>>()).Returns(new List<WorldEntity>
-        {
-            WorldEntityFactory.CreateWorldEntity(id: 1, name: "FullName")
         });
 
         // Act

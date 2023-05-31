@@ -20,18 +20,21 @@ public class GetWorldsForUserUseCase : IRequestHandler<GetWorldsForUserCommand, 
     {
         var coursesFromApi = await _ilms.GetWorldsForUserAsync(request.WebServiceToken);
 
-        var courseStringList = coursesFromApi.Courses.Select(c => c.Fullname).ToList();
+        var lmsCoursesIds = coursesFromApi.Courses.Select(c => c.Id).ToList();
 
-        var coursesFromDb =
-            await _worldRepository.GetAllByStrings(courseStringList);
+        // Get all courses from the database                                                                                                     
+        var coursesFromDb = await _worldRepository.GetAllAsync();
+
+        // Get all courses that are in the Database and in the LMS
+        var coursesInDbAndInLms = coursesFromDb.Where(c => lmsCoursesIds.Contains(c.LmsWorldId));
 
         return new GetWorldOverviewResponse
         {
-            Worlds = coursesFromDb.Select(c => new WorldResponse
+            Worlds = coursesInDbAndInLms.Select(c => new WorldResponse
             {
                 WorldId = (int) c.Id!,
                 WorldName = c.Name
-            }).ToList()
+            }).ToList() ?? new List<WorldResponse>()
         };
     }
 }

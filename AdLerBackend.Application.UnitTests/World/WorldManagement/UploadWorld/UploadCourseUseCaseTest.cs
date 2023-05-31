@@ -90,8 +90,6 @@ public class UploadWorldUseCaseTest
 
         _lmsBackupProcessor.GetWorldDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedDsl);
 
-        _worldRepository.ExistsForAuthor(Arg.Any<int>(), Arg.Any<string>()).Returns(false);
-
         _lmsBackupProcessor.GetH5PFilesFromBackup(Arg.Any<Stream>()).Returns(new List<H5PDto>
 
         {
@@ -158,42 +156,6 @@ public class UploadWorldUseCaseTest
         return Task.CompletedTask;
     }
 
-    [Test]
-    public Task Handle_CourseExists_ThrowsException()
-    {
-        // Arrange
-        var systemUnderTest =
-            new UploadWorldUseCase(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
-                _serialization, _ilms);
-
-        _mediator.Send(Arg.Any<GetLMSUserDataCommand>()).Returns(new LMSUserDataResponse
-        {
-            IsAdmin = true
-        });
-
-        var fakedDsl = AutoFaker.Generate<WorldAtfResponse>();
-        fakedDsl.World.Elements[0] = new Application.Common.Responses.World.Element
-        {
-            ElementId = 13337,
-            ElementCategory = "h5p"
-        };
-
-        _lmsBackupProcessor.GetWorldDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedDsl);
-
-        _worldRepository.ExistsForAuthor(Arg.Any<int>(), Arg.Any<string>()).Returns(true);
-
-        // Act
-        // Assert
-        Assert.ThrowsAsync<WorldCreationException>(async () =>
-            await systemUnderTest.Handle(new UploadWorldCommand
-            {
-                BackupFileStream = new MemoryStream(),
-                ATFFileStream = new MemoryStream(),
-                WebServiceToken = "testToken"
-            }, CancellationToken.None));
-        return Task.CompletedTask;
-    }
-
 
     [Test]
     public async Task Handle_ValidNoH5p_TriggersUpload()
@@ -217,8 +179,6 @@ public class UploadWorldUseCaseTest
         });
 
         _lmsBackupProcessor.GetWorldDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedDsl);
-
-        _worldRepository.ExistsForAuthor(Arg.Any<int>(), Arg.Any<string>()).Returns(false);
 
 
         _lmsBackupProcessor.GetH5PFilesFromBackup(Arg.Any<Stream>()).Returns(new List<H5PDto>());

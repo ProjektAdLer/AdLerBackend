@@ -28,24 +28,6 @@ public class WorldRepositoryTest
     }
 
     [Test]
-    public async Task GetAllCoursesByStrings_Valid_GetsResult()
-    {
-        // Arrange
-        var dbContext = ContextCreator.GetNewDbContextInstance();
-        var systemUnderTest = new WorldRepository(dbContext);
-
-        await systemUnderTest.AddAsync(WorldEntityFactory.CreateWorldEntity("Test Course"));
-
-        await systemUnderTest.AddAsync(WorldEntityFactory.CreateWorldEntity("Test Course 2"));
-
-        // Act
-        var result = await systemUnderTest.GetAllByStrings(new List<string> {"Test Course", "Test Course 2"});
-
-        // Assert
-        Assert.That(result, Has.Count.EqualTo(2));
-    }
-
-    [Test]
     public async Task GetAsync_Valid_GetsResult()
     {
         // Arrange

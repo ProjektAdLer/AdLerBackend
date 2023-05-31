@@ -50,7 +50,7 @@ public class MoodleWebApiTest
     {
         // Arrange
         _mockHttp.When("*")
-            .WithFormData("wsfunction", "core_webservice_get_site_info")
+            .With(request => MatchesFormData(request, "core_webservice_get_site_info"))
             .Respond(
                 "application/json", JsonSerializer.Serialize(new
                 {
@@ -62,7 +62,7 @@ public class MoodleWebApiTest
         var list = new[] {new {email = "test"}}.ToList();
 
         _mockHttp.When("*")
-            .WithFormData("wsfunction", "core_user_get_users_by_field")
+            .With(request => MatchesFormData(request, "core_user_get_users_by_field"))
             .Respond(
                 "application/json", JsonSerializer.Serialize(list));
 
@@ -183,24 +183,21 @@ public class MoodleWebApiTest
     public async Task GetMoodleUserData_ValidResponse_ReturnsUserData()
     {
         // Arrange
-        _mockHttp.When("*")
-            .WithFormData("wsfunction", "core_webservice_get_site_info")
-            .Respond(
-                "application/json", JsonSerializer.Serialize(new
-                {
-                    Userid = 1,
-                    Userissiteadmin = true,
-                    Username = "testUser"
-                }));
-
-
-        var list = new[] {new {email = "test"}}.ToList();
-
+        var firstResponse = new
+        {
+            Userid = 1,
+            Userissiteadmin = true,
+            Username = "testUser"
+        };
+        var secondResponse = new[] {new {email = "test"}}.ToList();
 
         _mockHttp.When("*")
-            .WithFormData("wsfunction", "core_user_get_users_by_field")
-            .Respond(
-                "application/json", JsonSerializer.Serialize(list));
+            .With(request => MatchesFormData(request, "core_webservice_get_site_info"))
+            .Respond("application/json", JsonSerializer.Serialize(firstResponse));
+
+        _mockHttp.When("*")
+            .With(request => MatchesFormData(request, "core_user_get_users_by_field"))
+            .Respond("application/json", JsonSerializer.Serialize(secondResponse));
 
         // Act
         var result = await _systemUnderTest.GetLMSUserDataAsync("moodleToken");
@@ -347,5 +344,17 @@ public class MoodleWebApiTest
         Assert.That(result.ElementScores.Count, Is.EqualTo(1));
         Assert.That(result.ElementScores[0].HasScored, Is.EqualTo(true));
         Assert.That(result.ElementScores[0].ModuleId, Is.EqualTo(1));
+    }
+
+    private bool MatchesFormData(HttpRequestMessage request, string wsfunction)
+    {
+        if (request.Content is MultipartFormDataContent formContent)
+        {
+            var contentString = formContent.ReadAsStringAsync().Result;
+
+            return contentString.Contains(wsfunction);
+        }
+
+        return false;
     }
 }

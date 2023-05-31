@@ -61,7 +61,7 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
         var courseInformationJsonString = _serialization.ClassToJsonString(courseInformation);
 
         var courseEntity = new WorldEntity(
-            courseInformation.World.WorldName,
+            lmsCourseCreationResponse.CourseLmsName,
             h5PLocationEntities,
             userInformation.UserId,
             courseInformationJsonString,

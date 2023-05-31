@@ -30,7 +30,7 @@ public class ScoreH5PLearningElementUseCaseTest
 
         var inMemorySettings = new Dictionary<string, string>
         {
-            {"moodleUrl", url}
+            {"ASPNETCORE_ADLER_MOODLEURL", url}
         };
 
         IConfiguration configuration = new ConfigurationBuilder()
@@ -84,7 +84,7 @@ public class ScoreH5PLearningElementUseCaseTest
 
         var inMemorySettings = new Dictionary<string, string>
         {
-            {"moodleUrl", ""}
+            {"ASPNETCORE_ADLER_MOODLEURL", ""}
         };
 
         IConfiguration configuration = new ConfigurationBuilder()

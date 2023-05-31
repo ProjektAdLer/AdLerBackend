@@ -69,7 +69,8 @@ public class UploadWorldUseCaseTest
 
         _ilms.UploadCourseWorldToLMS(Arg.Any<string>(), Arg.Any<Stream>()).Returns(new LMSCourseCreationResponse
         {
-            CourseLmsId = 1337
+            CourseLmsId = 1337,
+            CourseLmsName = "TESTNAME"
         });
 
         _mediator.Send(Arg.Any<CheckUserPrivilegesCommand>()).Returns(Unit.Task);
@@ -127,7 +128,7 @@ public class UploadWorldUseCaseTest
 
         // Assert that AddAsync has been called with the correct entity
         await _worldRepository.Received(1)
-            .AddAsync(Arg.Is<WorldEntity>(x => x.Name == fakedDsl.World.WorldName));
+            .AddAsync(Arg.Is<WorldEntity>(x => x.Name == "TESTNAME"));
     }
 
     [Test]
@@ -211,7 +212,8 @@ public class UploadWorldUseCaseTest
 
         _ilms.UploadCourseWorldToLMS(Arg.Any<string>(), Arg.Any<Stream>()).Returns(new LMSCourseCreationResponse
         {
-            CourseLmsId = 1337
+            CourseLmsId = 1337,
+            CourseLmsName = "TESTNAME"
         });
 
         _lmsBackupProcessor.GetWorldDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedDsl);
@@ -237,6 +239,6 @@ public class UploadWorldUseCaseTest
 
         // Assert that AddAsync has been called with the correct entity
         await _worldRepository.Received(1)
-            .AddAsync(Arg.Is<WorldEntity>(x => x.Name == fakedDsl.World.WorldName));
+            .AddAsync(Arg.Is<WorldEntity>(x => x.Name == "TESTNAME"));
     }
 }

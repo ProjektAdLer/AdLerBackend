@@ -248,7 +248,7 @@ public class MoodleWebApi : ILMS
         }
         catch (Exception e)
         {
-            throw new LmsException("Das Ergebnis der Moodle Web Api konnte nicht gelesen werden " + responseString, e);
+            throw new LmsException("Das Ergebnis der Moodle Web Api konnte nicht gelesen werden. Response string is: " + responseString, e);
         }
     }
 

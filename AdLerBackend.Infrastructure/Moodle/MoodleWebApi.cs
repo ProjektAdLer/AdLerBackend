@@ -4,6 +4,8 @@ using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Infrastructure.Moodle.ApiResponses;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace AdLerBackend.Infrastructure.Moodle;
 
@@ -154,11 +156,6 @@ public class MoodleWebApi : ILMS
         return courseStatus;
     }
 
-    public Task<IList<LmsUuidResponse>> GetLmsIdsByUuidsAsync(string token, IList<string> uuids)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<LMSUserDataResponse> GetLMSUserDataAsync(string token)
     {
         var generalInformationResponse = await MoodleCallAsync<GeneralUserDataResponse>(
@@ -185,6 +182,32 @@ public class MoodleWebApi : ILMS
             UserId = generalInformationResponse.Userid,
             UserEmail = detailedUserInformaionResponse[0].Email
         };
+    }
+
+    public Task<IEnumerable<LmsUuidResponse>> GetLmsElementIdsByUuidsAsync(string token, int courseInstanceId,
+        IEnumerable<string> uuids)
+    {
+        // REST (POST parameters)
+        //
+        // elements[0][course_id]= string
+        // elements[0][element_type]= string
+        // elements[0][uuid]= string
+
+        var elements = uuids.Select(x => new Dictionary<string, HttpContent>
+        {
+            {"course_id", new StringContent(courseInstanceId.ToString())},
+            // cm = course module (Moodle's term for an learning element)
+            {"element_type", new StringContent("cm")},
+            {"uuid", new StringContent(x)}
+        }).ToList();
+
+        return MoodleCallAsync<IEnumerable<LmsUuidResponse>>(
+            new Dictionary<string, HttpContent>
+            {
+                {"wstoken", new StringContent(token)},
+                {"wsfunction", new StringContent("local_adler_get_element_ids_by_uuids")},
+                {"elements", new StringContent(JsonConvert.SerializeObject(elements))}
+            });
     }
 
     public async Task<H5PAttempts> GetH5PAttemptsAsync(string token, int h5PActivityId)
@@ -248,7 +271,9 @@ public class MoodleWebApi : ILMS
         }
         catch (Exception e)
         {
-            throw new LmsException("Das Ergebnis der Moodle Web Api konnte nicht gelesen werden. Response string is: " + responseString, e);
+            throw new LmsException(
+                "Das Ergebnis der Moodle Web Api konnte nicht gelesen werden. Response string is: " + responseString,
+                e);
         }
     }
 

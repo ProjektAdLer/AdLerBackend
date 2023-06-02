@@ -85,7 +85,9 @@ public interface ILMS
     ///     Gets the LMS IDs for a given list of UUID
     /// </summary>
     /// <param name="token"></param>
+    /// <param name="courseInstanceId"></param>
     /// <param name="uuids"></param>
     /// <returns></returns>
-    Task<IList<LmsUuidResponse>> GetLmsIdsByUuidsAsync(string token, IList<string> uuids);
+    Task<IEnumerable<LmsUuidResponse>> GetLmsElementIdsByUuidsAsync(string token, int courseInstanceId,
+        IEnumerable<string> uuids);
 }

@@ -25,7 +25,7 @@ services:
       ASPNETCORE_ADLER_MOODLEURL: "http://moodle:8080"
       ASPNETCORE_ADLER_HTTPPORT: 80
       ASPNETCORE_ADLER_USEHTTPS: false
-      ASPNETCORE_ADLER_MOODLEHOST: localhost
+      ASPNETCORE_ADLER_MOODLEHOST: http://localhost
     volumes:
       # - ./AdLerBackend.API/config:/app/config # Default location für config Datei
       - wwwroot:/app/wwwroot
@@ -52,7 +52,7 @@ services:
       - MOODLE_DATABASE_NAME=bitnami_moodle
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
       - ALLOW_EMPTY_PASSWORD=yes
-      - MOODLE_HOST=localhost
+      - MOODLE_HOST=http://localhost
     volumes:
       - 'moodle_data:/bitnami/moodle'
       - 'moodledata_data:/bitnami/moodledata'

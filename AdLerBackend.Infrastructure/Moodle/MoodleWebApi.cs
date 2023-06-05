@@ -129,6 +129,18 @@ public class MoodleWebApi : ILMS
             });
 
         return response.Data[0].Score > 0;
+
+
+        // var response = await MoodleCallAsync<respo>(
+        //     new Dictionary<string, HttpContent>
+        //     {
+        //         {"wstoken", new StringContent(token)},
+        //         {"wsfunction", new StringContent("core_xapi_statement_post")},
+        //         {"component", new StringContent("mod_h5pactivity")},
+        //         {"requestjson", new StringContent("[" + statement + "]")}
+        //     });
+        //
+        // var test = G
     }
 
     public async Task<LmsCourseStatusResponse> GetCourseStatusViaPlugin(string token, int courseId)
@@ -319,5 +331,10 @@ public class MoodleWebApi : ILMS
         {
             throw new LmsException("Die Moodle Web Api ist nicht erreichbar: URL: " + url, e);
         }
+    }
+
+    private class respo
+    {
+        private IList<bool> data { get; set; }
     }
 }

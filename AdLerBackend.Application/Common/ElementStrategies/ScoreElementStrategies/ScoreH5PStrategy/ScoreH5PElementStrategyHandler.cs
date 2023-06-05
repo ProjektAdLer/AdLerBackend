@@ -48,6 +48,9 @@ public class
 
         xapiEvent.@object.id = moodleUrl + "/xapi/activity/" + contextId;
 
+        // Write the xapi in console
+        Console.WriteLine(JsonSerializer.Serialize(xapiEvent));
+
         // serialize the XAPI Event again
         var inText = JsonSerializer.Serialize(xapiEvent);
 

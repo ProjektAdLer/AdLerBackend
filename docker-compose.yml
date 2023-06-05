@@ -11,11 +11,21 @@ services:
       - "3380:80"
       - "33443:443"
     environment:
+      # ASPNETCORE_ENVIRONMENT: "Production"
+      # ASPNETCORE_DBPASSWORD: "PASSWORDGOESHERE"
+      # ASPNETCORE_ADLER_MOODLEURL: "http://moodle:8080"
+      # ASPNETCORE_ADLER_HTTPPORT: 80
+      # ASPNETCORE_ADLER_USEHTTPS: false
       ASPNETCORE_ENVIRONMENT: "Production"
-      ASPNETCORE_DBPASSWORD: "PASSWORDGOESHERE"
+      ASPNETCORE_DBUSER: root
+      ASPNETCORE_DBPASSWORD: PASSWORDGOESHERE
+      ASPNETCORE_DBNAME: adlerbackend
+      ASPNETCORE_DBHOST: db
+      ASPNETCORE_DBPORT: 3306
       ASPNETCORE_ADLER_MOODLEURL: "http://moodle:8080"
       ASPNETCORE_ADLER_HTTPPORT: 80
       ASPNETCORE_ADLER_USEHTTPS: false
+      ASPNETCORE_ADLER_MOODLEHOST: localhost
     volumes:
       # - ./AdLerBackend.API/config:/app/config # Default location für config Datei
       - wwwroot:/app/wwwroot

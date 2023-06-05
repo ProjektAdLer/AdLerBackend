@@ -24,11 +24,11 @@ public class
     public async Task<ScoreElementResponse> Handle(ScoreH5PElementStrategyCommand request,
         CancellationToken cancellationToken)
     {
-        var moodleUrl = _config["ASPNETCORE_ADLER_MOODLEURL"];
+        var moodleUrl = _config["ASPNETCORE_ADLER_MOODLEHOST"];
 
         // if moodle url is not set, throw exception
         if (string.IsNullOrEmpty(moodleUrl))
-            throw new ArgumentException("Moodle URL is not set in the configuration file");
+            throw new ArgumentException("Moodle Host is not set in the configuration file");
 
         // if last character is a slash, remove it
         if (moodleUrl[^1] == '/') moodleUrl = moodleUrl[..^1];

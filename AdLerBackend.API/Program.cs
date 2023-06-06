@@ -12,6 +12,7 @@ builder.Services
     .AddApiServices()
     .AddApplicationServices()
     .AddInfrastructureServices(builder.Environment.IsDevelopment())
+    .AddCors()
     .AddLogging();
 
 

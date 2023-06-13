@@ -325,6 +325,11 @@ public class MoodleWebApi : ILMS
                 _ => url
             };
 
+            // get Current Time
+            var time = (int) DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+
+            Console.WriteLine(time + " Calling Moodle API: " + url);
+
             return await _client.PostAsync(url, content);
         }
         catch (Exception e)

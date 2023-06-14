@@ -82,12 +82,19 @@ public class WorldsController : BaseApiController
     [DisableRequestSizeLimit]
     public async Task<bool> CreateWorld(IFormFile backupFile, IFormFile atfFile, [FromHeader] string token)
     {
-        return await Mediator.Send(new UploadWorldCommand
+        // Log the Request to the console
+        Console.WriteLine("Uploading started at " + DateTime.Now);
+
+        var ret = await Mediator.Send(new UploadWorldCommand
         {
             BackupFileStream = backupFile.OpenReadStream(),
             ATFFileStream = atfFile.OpenReadStream(),
             WebServiceToken = token
         });
+
+        Console.WriteLine("Uploading finished at " + DateTime.Now);
+
+        return ret;
     }
 
     /// <summary>

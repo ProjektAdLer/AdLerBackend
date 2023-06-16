@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04, ubuntu-20.04, windows-latest, macos-latest]
+        os: [ubuntu-20.04, windows-latest, macos-latest]
     env:
       dotNetVersion: net7.0
       dotNetConfiguration: Release
@@ -34,11 +34,11 @@ jobs:
             ${{ runner.os }}-nuget
 
       - name: Run automated unit and integration tests
-        run: dotnet test 
+        run: dotnet test
   publish:
     needs: test
     runs-on: ubuntu-latest
-    permissions: 
+    permissions:
       contents: read
       packages: write
     env:
@@ -75,4 +75,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-

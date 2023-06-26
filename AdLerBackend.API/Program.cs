@@ -1,5 +1,6 @@
-using System.Text;
+using System.ComponentModel.DataAnnotations;
 using AdLerBackend.API;
+using AdLerBackend.API.Properties;
 using AdLerBackend.Application;
 using AdLerBackend.Infrastructure;
 
@@ -8,6 +9,27 @@ Directory.CreateDirectory("wwwroot");
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+var configuration = new ConfigurationBuilder()
+    .AddEnvironmentVariables()
+    .Build();
+
+builder.Services.Configure<BackendConfig>(configuration);
+
+// get the configuration object
+var myConfig = builder.Configuration.Get<BackendConfig>();
+
+
+// Validate the BackendConfig object
+var context = new ValidationContext(myConfig);
+var results = new List<ValidationResult>();
+
+var isValid = Validator.TryValidateObject(myConfig, context, results, true);
+
+
+if (!isValid)
+    throw new Exception("Configuration validation failed: " + string.Join(", ", results.Select(x => x.ErrorMessage)));
+
 builder.Services
     .AddApiServices()
     .AddApplicationServices()
@@ -15,39 +37,12 @@ builder.Services
     .AddCors()
     .AddLogging();
 
-
 if (!builder.Environment.IsDevelopment())
     builder.ConfigureWebserverForProduction();
 
 var app = builder.Build();
 
-
-var stringBuilder = new StringBuilder();
-
-// crash when the Moodle url is not set
-if (string.IsNullOrEmpty(app.Configuration["ASPNETCORE_ADLER_MOODLEURL"]))
-    throw new Exception("Moodle url is not set! \n please set it in appsettings.json or in environment variables");
-
-
-if (builder.Environment.IsDevelopment())
-    app.Logger.LogInformation("We are in development mode!");
-else
-    app.Logger.LogInformation("We are in production mode!");
-
-stringBuilder.AppendLine("Key".PadRight(40) + "Value");
-// add table rows
-foreach (var (key, value) in app.Configuration.AsEnumerable())
-    if (!string.IsNullOrEmpty(value) &&
-        key.StartsWith(
-            "ASPNETCORE_ADLER_")) // omit keys with null values and those that do not start with "ASPNETCORE_ADLER_"
-    {
-        // format row
-        var row = key.PadRight(40) + value;
-        stringBuilder.AppendLine(row);
-    }
-
-app.Logger.LogInformation("Configuration: \n" + stringBuilder);
-
+app.Logger.LogInformation("Configuration: \n" + myConfig);
 
 app
     .ConfigureApp()

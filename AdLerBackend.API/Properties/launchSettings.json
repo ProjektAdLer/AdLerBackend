@@ -17,7 +17,9 @@
         "ASPNETCORE_ADLER_MOODLEURL": "http://localhost",
         "ASPNETCORE_ADLER_HTTPPORT": 80,
         "ASPNETCORE_ADLER_USEHTTPS": false,
-        "ASPNETCORE_ADLER_MOODLEHOST": "http://localhost"
+        "ASPNETCORE_ADLER_MOODLEHOST": "http://localhost",
+        "ASPNETCORE_ADLER_TESTVARIABLE": 1337,
+        "NORMAL_TEST_VARIABLE": "test"
       }
     },
     "AdLerBackendProduction": {

@@ -12,14 +12,12 @@ public class MoodleWebApi : ILMS
 {
     private readonly HttpClient _client;
     private readonly BackendConfig _configuration;
-    private readonly MoodleUtils _moodleUtils;
 
 
-    public MoodleWebApi(HttpClient client, IOptions<BackendConfig> configuration, MoodleUtils moodleUtils)
+    public MoodleWebApi(HttpClient client, IOptions<BackendConfig> configuration)
     {
         _client = client;
         _configuration = configuration.Value;
-        _moodleUtils = moodleUtils;
 
         // set timeout to 600 seconds
         _client.Timeout = TimeSpan.FromSeconds(600);

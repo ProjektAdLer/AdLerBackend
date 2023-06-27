@@ -28,7 +28,6 @@ public static class ConfigureServices
         services.AddScoped<IPlayerRepository, PlayerRepository>();
         services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
         services.AddTransient<IFileSystem, FileSystem>();
-        services.AddSingleton(new MoodleUtils());
         services.AddSingleton(new HttpClient());
 
 

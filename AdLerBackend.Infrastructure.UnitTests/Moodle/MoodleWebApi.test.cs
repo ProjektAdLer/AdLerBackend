@@ -1,5 +1,4 @@
-﻿using AdLerBackend.API.Properties;
-using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
+﻿using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure.Moodle;
@@ -8,7 +7,6 @@ using AutoBogus;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using NSubstitute;
 using RichardSzalay.MockHttp;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -18,7 +16,6 @@ public class MoodleWebApiTest
 {
     private IOptions<BackendConfig> _configuration;
     private MockHttpMessageHandler _mockHttp = null!;
-    private MoodleUtils _moodleUtils;
     private MoodleWebApi _systemUnderTest = null!;
 
     [SetUp]
@@ -27,8 +24,7 @@ public class MoodleWebApiTest
         _mockHttp = new MockHttpMessageHandler();
         _configuration = Options.Create(new BackendConfig {MoodleUrl = "http://localhost"});
 
-        _moodleUtils = Substitute.For<MoodleUtils>();
-        _systemUnderTest = new MoodleWebApi(_mockHttp.ToHttpClient(), _configuration, _moodleUtils);
+        _systemUnderTest = new MoodleWebApi(_mockHttp.ToHttpClient(), _configuration);
     }
 
     [Test]

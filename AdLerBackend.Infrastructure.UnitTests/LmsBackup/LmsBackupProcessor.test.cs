@@ -23,7 +23,6 @@ public class LmsBackupProcessorTest
 
         // Assert
         Assert.That(result.Count, Is.EqualTo(1));
-        //Assert.That(result[0].H5PFileName, Is.EqualTo("a"));
     }
 
     [Test]

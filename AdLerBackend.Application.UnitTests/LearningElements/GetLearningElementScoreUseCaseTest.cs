@@ -48,7 +48,6 @@ public class GetLearningElementScoreUseCaseTest
                         {
                             contextid = 1,
                             Id = 1,
-                            Instance = 1,
                             Name = "name",
                             ModName = modname
                         }

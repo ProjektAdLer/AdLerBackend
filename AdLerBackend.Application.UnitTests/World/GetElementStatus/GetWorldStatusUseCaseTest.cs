@@ -39,7 +39,6 @@ public class GetWorldStatusUseCaseTest
                         {
                             contextid = 1,
                             Id = 1,
-                            Instance = 1,
                             Name = "Name",
                             ModName = "h5pactivity"
                         }

@@ -43,7 +43,6 @@ public class ScoreLearningElementUseCaseTest
                         {
                             contextid = 1,
                             Id = 1,
-                            Instance = 1,
                             Name = "name",
                             ModName = activityName
                         }
@@ -94,7 +93,6 @@ public class ScoreLearningElementUseCaseTest
                         {
                             contextid = 1,
                             Id = 1,
-                            Instance = 1,
                             Name = "name",
                             ModName = activityName
                         }

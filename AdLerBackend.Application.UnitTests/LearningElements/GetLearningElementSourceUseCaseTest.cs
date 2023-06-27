@@ -42,7 +42,6 @@ public class GetLearningElementSourceUseCaseTest
                         {
                             contextid = 1,
                             Id = 1,
-                            Instance = 1,
                             Name = "name",
                             ModName = resourceType,
                             Contents = new List<FileContents>
@@ -91,7 +90,6 @@ public class GetLearningElementSourceUseCaseTest
                         {
                             contextid = 1,
                             Id = 1,
-                            Instance = 1,
                             Name = "name",
                             ModName = "h5pactivity",
                             Contents = new List<FileContents>

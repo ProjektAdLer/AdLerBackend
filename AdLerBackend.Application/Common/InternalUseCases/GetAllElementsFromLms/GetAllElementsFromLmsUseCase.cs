@@ -32,7 +32,12 @@ public class
 
         var dslObject = _serialization.GetObjectFromJsonString<WorldAtfResponse>(course.AtfJson);
 
+
         var courseContent = await _lms.GetWorldContentAsync(request.WebServiceToken, course.LmsWorldId);
+
+        var modulesWithIDs =
+            await _lms.GetLmsElementIdsByUuidsAsync(request.WebServiceToken, course.LmsWorldId,
+                dslObject.World.Elements.Select(x => x.ElementUuid).ToList());
 
         // Get the LMS-Modules by their name
         var modulesWithId = dslObject.World.Elements.Select(x =>

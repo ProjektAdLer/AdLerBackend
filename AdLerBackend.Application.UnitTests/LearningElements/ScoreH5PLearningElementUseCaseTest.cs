@@ -62,7 +62,6 @@ public class ScoreH5PLearningElementUseCaseTest
             {
                 contextid = 123,
                 Id = 123,
-                Instance = 123,
                 Name = "name"
             },
 
@@ -95,7 +94,6 @@ public class ScoreH5PLearningElementUseCaseTest
                 {
                     contextid = 123,
                     Id = 123,
-                    Instance = 123,
                     Name = "name"
                 },
 

@@ -1,13 +1,10 @@
 ﻿using System.Text.Json;
-using AdLerBackend.API.Properties;
 using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure.Moodle.ApiResponses;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace AdLerBackend.Infrastructure.Moodle;
 
@@ -201,30 +198,30 @@ public class MoodleWebApi : ILMS
         };
     }
 
-    public Task<IEnumerable<LmsUuidResponse>> GetLmsElementIdsByUuidsAsync(string token, int courseInstanceId,
+    public async Task<IEnumerable<LmsUuidResponse>> GetLmsElementIdsByUuidsAsync(string token, int courseInstanceId,
         IEnumerable<string> uuids)
     {
-        // REST (POST parameters)
-        //
-        // elements[0][course_id]= string
-        // elements[0][element_type]= string
-        // elements[0][uuid]= string
-
-        var elements = uuids.Select(x => new Dictionary<string, HttpContent>
+        var wsParams = new Dictionary<string, HttpContent>
         {
-            {"course_id", new StringContent(courseInstanceId.ToString())},
-            // cm = course module (Moodle's term for an learning element)
-            {"element_type", new StringContent("cm")},
-            {"uuid", new StringContent(x)}
-        }).ToList();
+            {"wstoken", new StringContent(token)},
+            {"wsfunction", new StringContent("local_adler_get_element_ids_by_uuids")}
+        };
 
-        return MoodleCallAsync<IEnumerable<LmsUuidResponse>>(
-            new Dictionary<string, HttpContent>
-            {
-                {"wstoken", new StringContent(token)},
-                {"wsfunction", new StringContent("local_adler_get_element_ids_by_uuids")},
-                {"elements", new StringContent(JsonConvert.SerializeObject(elements))}
-            });
+        for (var i = 0; i < uuids.Count(); i++)
+        {
+            wsParams.Add($"elements[{i}][course_id]", new StringContent(courseInstanceId.ToString()));
+            wsParams.Add($"elements[{i}][element_type]", new StringContent("cm"));
+            wsParams.Add($"elements[{i}][uuid]", new StringContent(uuids.ElementAt(i)));
+        }
+
+        var ret = await MoodleCallAsync<ResponseWithDataArray<PluginUUIDResponse>>(wsParams);
+
+        return ret.Data.Select(x => new LmsUuidResponse
+        {
+            Uuid = x.Uuid,
+            LmsId = x.MoodleId,
+            LmsContextId = x.ContextId
+        });
     }
 
     public async Task<H5PAttempts> GetH5PAttemptsAsync(string token, int h5PActivityId)
@@ -339,10 +336,5 @@ public class MoodleWebApi : ILMS
         {
             throw new LmsException("Die Moodle Web Api ist nicht erreichbar: URL: " + url, e);
         }
-    }
-
-    private class respo
-    {
-        private IList<bool> data { get; set; }
     }
 }

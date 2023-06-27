@@ -9,9 +9,12 @@ namespace AdLerBackend.API.Properties;
 // Use Annotations to validate the configuration object
 public class BackendConfig
 {
-    [Required] public string ASPNETCORE_ADLER_MOODLEURL { get; set; } = null!;
+    [RequiredIfProduction] public string ASPNETCORE_ADLER_MOODLEURL { get; set; } = null!;
 
-    [Required] public string ASPNETCORE_ENVIRONMENT { get; set; } = null!;
+    // retquired and has to be either "Production" or "Development"
+    [Required]
+    [RegularExpression("Production|Development")]
+    public string ASPNETCORE_ENVIRONMENT { get; set; } = null!;
 
     /// <summary>
     ///     Override ToString() to get a formatted string with all properties using reflection

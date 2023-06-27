@@ -1,5 +1,4 @@
 using AdLerBackend.API;
-using AdLerBackend.API.Properties;
 using AdLerBackend.Application.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +20,8 @@ public class BackendConfigExtentionsTest
             {"ASPNETCORE_DBUSER", "test_user"},
             {"ASPNETCORE_DBNAME", "test_db_name"},
             {"ASPNETCORE_DBHOST", "localhost"},
-            {"ASPNETCORE_DBPORT", "5432"}
+            {"ASPNETCORE_DBPORT", "5432"},
+            {"ASPNETCORE_ADLER_MOODLEHOST", "https://moodle.example.com"}
         };
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(configData).Build();
 
@@ -42,6 +42,7 @@ public class BackendConfigExtentionsTest
             Assert.That(myConfig.DbName, Is.EqualTo("test_db_name"));
             Assert.That(myConfig.DbHost, Is.EqualTo("localhost"));
             Assert.That(myConfig.DbPort, Is.EqualTo("5432"));
+            Assert.That(myConfig.MoodleHost, Is.EqualTo("https://moodle.example.com"));
         });
     }
 }

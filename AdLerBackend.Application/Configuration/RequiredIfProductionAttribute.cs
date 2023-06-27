@@ -6,14 +6,9 @@ public class RequiredIfProductionAttribute : ValidationAttribute
 {
     protected override ValidationResult IsValid(object value, ValidationContext validationContext)
     {
-        var environmentProperty = validationContext.ObjectType.GetProperty("ASPNETCORE_ENVIRONMENT");
-        if (environmentProperty == null)
-            return new ValidationResult(
-                $"Cannot find property named 'ASPNETCORE_ENVIRONMENT' in {validationContext.ObjectType.FullName}");
+        var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
 
-        var environment = (string) environmentProperty.GetValue(validationContext.ObjectInstance);
-
-        if (environment == "Production" && value == null)
+        if (!isDevelopment && value == null)
             return new ValidationResult(
                 $"The {validationContext.MemberName} field is required when ASPNETCORE_ENVIRONMENT is 'Production'.");
 

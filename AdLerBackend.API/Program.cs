@@ -17,6 +17,7 @@ builder.Services
     .AddCors()
     .AddLogging();
 
+
 if (!builder.Environment.IsDevelopment())
     builder.ConfigureWebserverForProduction();
 

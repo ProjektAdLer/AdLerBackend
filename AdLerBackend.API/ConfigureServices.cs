@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using AdLerBackend.API.Filters;
 using AdLerBackend.API.Middleware;
+using AdLerBackend.API.Properties;
 using Microsoft.AspNetCore.Http.Features;
 using Newtonsoft.Json.Converters;
 
@@ -83,19 +84,9 @@ public static class ConfigureServices
     public static WebApplicationBuilder ConfigureWebserverForProduction(
         this WebApplicationBuilder webApplicationBuilder)
     {
-        webApplicationBuilder.WebHost.ConfigureKestrel(options =>
-        {
-            if (webApplicationBuilder.Configuration["useHttps"]?.ToLower() == "true")
-                options.ListenAnyIP(int.Parse(webApplicationBuilder.Configuration["httpsPort"] ?? "433"),
-                    listenOptions =>
-                    {
-                        listenOptions.UseHttps("./config/cert/AdLerBackend.pfx",
-                            webApplicationBuilder.Configuration["httpsCertificatePassword"]);
-                    });
-            else
-                // if builder.Configuration["httpPort"] is not set, use default port 80
-                options.ListenAnyIP(int.Parse(webApplicationBuilder.Configuration["httpPort"] ?? "80"));
-        });
+        var config = webApplicationBuilder.Configuration.Get<BackendConfig>();
+
+        webApplicationBuilder.WebHost.ConfigureKestrel(options => { options.ListenAnyIP(config!.HttpPort); });
 
         return webApplicationBuilder;
     }

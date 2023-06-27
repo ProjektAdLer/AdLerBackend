@@ -1,8 +1,9 @@
+using AdLerBackend.API;
 using AdLerBackend.API.Properties;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AdLerBackend.API.UnitTests;
+namespace AdLerBackend.Application.UnitTests.Configuration;
 
 public class BackendConfigExtentionsTest
 {
@@ -14,7 +15,12 @@ public class BackendConfigExtentionsTest
         var configData = new Dictionary<string, string>
         {
             {"ASPNETCORE_ADLER_MOODLEURL", "https://moodle.example.com"},
-            {"ASPNETCORE_ENVIRONMENT", "Development"}
+            {"ASPNETCORE_ENVIRONMENT", "Development"},
+            {"ASPNETCORE_DBPASSWORD", "test_password"},
+            {"ASPNETCORE_DBUSER", "test_user"},
+            {"ASPNETCORE_DBNAME", "test_db_name"},
+            {"ASPNETCORE_DBHOST", "localhost"},
+            {"ASPNETCORE_DBPORT", "5432"}
         };
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(configData).Build();
 
@@ -27,6 +33,14 @@ public class BackendConfigExtentionsTest
         // Assert that the configuration is added to the service collection and is accessible
         var serviceProvider = services.BuildServiceProvider();
         var myConfig = serviceProvider.GetRequiredService<BackendConfig>();
-        Assert.That(myConfig.ASPNETCORE_ADLER_MOODLEURL, Is.EqualTo("https://moodle.example.com"));
+        Assert.Multiple(() =>
+        {
+            Assert.That(myConfig.MoodleUrl, Is.EqualTo("https://moodle.example.com"));
+            Assert.That(myConfig.DBPassword, Is.EqualTo("test_password"));
+            Assert.That(myConfig.DBUser, Is.EqualTo("test_user"));
+            Assert.That(myConfig.DBName, Is.EqualTo("test_db_name"));
+            Assert.That(myConfig.DBHost, Is.EqualTo("localhost"));
+            Assert.That(myConfig.DBPort, Is.EqualTo("5432"));
+        });
     }
 }

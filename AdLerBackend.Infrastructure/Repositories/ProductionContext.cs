@@ -1,28 +1,27 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using AdLerBackend.API.Properties;
 using AdLerBackend.Infrastructure.Repositories.BaseContext;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace AdLerBackend.Infrastructure.Repositories;
 
-[ExcludeFromCodeCoverage]
 public sealed class ProductionContext : BaseAdLerBackendDbContext
 {
-    private readonly IConfiguration _configuration;
+    private readonly BackendConfig _backendConfig;
 
-    public ProductionContext(DbContextOptions options, IConfiguration configuration) : base(options)
+    public ProductionContext(DbContextOptions options, IOptions<BackendConfig> confguration) : base(options)
     {
-        _configuration = configuration;
+        _backendConfig = confguration.Value;
         Database.EnsureCreated();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-        var password = _configuration["ASPNETCORE_DBPASSWORD"];
-        var username = _configuration["ASPNETCORE_DBUSER"];
-        var name = _configuration["ASPNETCORE_DBNAME"];
-        var dbhost = _configuration["ASPNETCORE_DBHOST"];
-        var dbPort = _configuration["ASPNETCORE_DBPORT"];
+        var password = _backendConfig.DBPassword;
+        var username = _backendConfig.DBUser;
+        var name = _backendConfig.DBName;
+        var dbhost = _backendConfig.DBHost;
+        var dbPort = _backendConfig.DBPort;
 
         // connection string for mariaDB
         var connectionString = $"server={dbhost};port={dbPort};user={username};database={name};password={password}";

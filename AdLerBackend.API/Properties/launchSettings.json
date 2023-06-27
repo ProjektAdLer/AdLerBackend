@@ -1,9 +1,5 @@
 ﻿{
   "$schema": "https://json.schemastore.org/launchsettings.json",
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true
-  },
   "profiles": {
     "AdLerBackendDevelopment": {
       "commandName": "Project",
@@ -14,8 +10,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_ADLER_MOODLEURL": "http://localhost",
-        "ASPNETCORE_ADLER_HTTPPORT": 80,
-        "ASPNETCORE_ADLER_USEHTTPS": false,
+        "ASPNETCORE_ADLER_HTTPPORT": 3000,
         "ASPNETCORE_ADLER_MOODLEHOST": "http://localhost"
       }
     },
@@ -26,7 +21,15 @@
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:443;http://localhost:80",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "ASPNETCORE_ADLER_MOODLEURL": "placeholder",
+        "ASPNETCORE_ADLER_HTTPPORT": 8081,
+        "ASPNETCORE_ADLER_MOODLEHOST": "placeholder",
+        "ASPNETCORE_DBPASSWORD": "placeholder",
+        "ASPNETCORE_DBUSER": "placeholder",
+        "ASPNETCORE_DBNAME": "placeholder",
+        "ASPNETCORE_DBHOST": "placeholder",
+        "ASPNETCORE_DBPORT": "placeholder"
       }
     }
   }

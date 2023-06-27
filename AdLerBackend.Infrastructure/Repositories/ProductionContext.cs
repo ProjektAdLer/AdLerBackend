@@ -1,4 +1,5 @@
 ﻿using AdLerBackend.API.Properties;
+using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure.Repositories.BaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;

@@ -1,6 +1,7 @@
 using AdLerBackend.API;
 using AdLerBackend.API.Properties;
 using AdLerBackend.Application;
+using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure;
 
 // This is needed, because wwwroot directory must be present in the beginning to serve files from it

@@ -1,5 +1,6 @@
 using AdLerBackend.API;
 using AdLerBackend.API.Properties;
+using AdLerBackend.Application.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -36,11 +37,11 @@ public class BackendConfigExtentionsTest
         Assert.Multiple(() =>
         {
             Assert.That(myConfig.MoodleUrl, Is.EqualTo("https://moodle.example.com"));
-            Assert.That(myConfig.DBPassword, Is.EqualTo("test_password"));
-            Assert.That(myConfig.DBUser, Is.EqualTo("test_user"));
-            Assert.That(myConfig.DBName, Is.EqualTo("test_db_name"));
-            Assert.That(myConfig.DBHost, Is.EqualTo("localhost"));
-            Assert.That(myConfig.DBPort, Is.EqualTo("5432"));
+            Assert.That(myConfig.DbPassword, Is.EqualTo("test_password"));
+            Assert.That(myConfig.DbUser, Is.EqualTo("test_user"));
+            Assert.That(myConfig.DbName, Is.EqualTo("test_db_name"));
+            Assert.That(myConfig.DbHost, Is.EqualTo("localhost"));
+            Assert.That(myConfig.DbPort, Is.EqualTo("5432"));
         });
     }
 }

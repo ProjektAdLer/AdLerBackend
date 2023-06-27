@@ -10,7 +10,6 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_ADLER_MOODLEURL": "http://localhost",
-        "ASPNETCORE_ADLER_HTTPPORT": 3000,
         "ASPNETCORE_ADLER_MOODLEHOST": "http://localhost"
       }
     },

@@ -1,30 +1,32 @@
 using System.Text.Json;
+using AdLerBackend.API.Properties;
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.Elements;
+using AdLerBackend.Application.Configuration;
 using MediatR;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.ScoreH5PStrategy;
 
 public class
     ScoreH5PElementStrategyHandler : IRequestHandler<ScoreH5PElementStrategyCommand, ScoreElementResponse>
 {
-    private readonly IConfiguration _config;
+    private readonly BackendConfig _config;
     private readonly ILMS _ilms;
     private readonly ISerialization _serialization;
 
-    public ScoreH5PElementStrategyHandler(ISerialization serialization, ILMS ilms, IConfiguration config)
+    public ScoreH5PElementStrategyHandler(ISerialization serialization, ILMS ilms, IOptions<BackendConfig> config)
     {
         _serialization = serialization;
         _ilms = ilms;
-        _config = config;
+        _config = config.Value;
     }
 
     public async Task<ScoreElementResponse> Handle(ScoreH5PElementStrategyCommand request,
         CancellationToken cancellationToken)
     {
-        var moodleUrl = _config["ASPNETCORE_ADLER_MOODLEHOST"];
+        var moodleUrl = _config.MoodleHost;
 
         // if moodle url is not set, throw exception
         if (string.IsNullOrEmpty(moodleUrl))

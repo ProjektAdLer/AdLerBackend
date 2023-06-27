@@ -1,12 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using AdLerBackend.API.Properties;
 using Microsoft.Extensions.Configuration;
 
 // Nullability warnings are disabled because the configuration object will be validated using the Annotations
 #pragma warning disable CS8618
 #pragma warning disable CS1591
 
-namespace AdLerBackend.API.Properties;
+namespace AdLerBackend.Application.Configuration;
 
 public class BackendConfig
 {
@@ -42,6 +43,9 @@ public class BackendConfig
     // Not Required
     [ConfigurationKeyName("ASPNETCORE_ADLER_HTTPPORT")]
     public int HttpPort { get; set; } = 80;
+
+    [ConfigurationKeyName("ASPNETCORE_ADLER_MOODLEHOST")]
+    public string MoodleHost { get; set; }
 
 
     /// <summary>

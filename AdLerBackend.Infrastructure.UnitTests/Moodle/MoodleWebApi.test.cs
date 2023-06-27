@@ -1,10 +1,12 @@
-﻿using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
+﻿using AdLerBackend.API.Properties;
+using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
+using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure.Moodle;
 using AdLerBackend.Infrastructure.Moodle.ApiResponses;
 using AutoBogus;
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NSubstitute;
 using RichardSzalay.MockHttp;
@@ -14,7 +16,7 @@ namespace AdLerBackend.Infrastructure.UnitTests.Moodle;
 
 public class MoodleWebApiTest
 {
-    private IConfiguration _configuration;
+    private IOptions<BackendConfig> _configuration;
     private MockHttpMessageHandler _mockHttp = null!;
     private MoodleUtils _moodleUtils;
     private MoodleWebApi _systemUnderTest = null!;
@@ -23,9 +25,9 @@ public class MoodleWebApiTest
     public void SetUp()
     {
         _mockHttp = new MockHttpMessageHandler();
-        _configuration = Substitute.For<IConfiguration>();
+        _configuration = Options.Create(new BackendConfig {MoodleUrl = "http://localhost"});
+
         _moodleUtils = Substitute.For<MoodleUtils>();
-        _configuration["ASPNETCORE_ADLER_MOODLEURL"].Returns("http://urlForUnitTest.com");
         _systemUnderTest = new MoodleWebApi(_mockHttp.ToHttpClient(), _configuration, _moodleUtils);
     }
 
@@ -35,8 +37,6 @@ public class MoodleWebApiTest
         // Arrange
         _mockHttp.When("*").Respond("application/json",
             "{\"data\":{\"course_id\":1337}}");
-
-        //_moodleUtils.ConvertFileStreamToBase64(Arg.Any<Stream>()).Returns("base64");
 
         // Act
         var result = await _systemUnderTest.UploadCourseWorldToLMS("token", new MemoryStream());

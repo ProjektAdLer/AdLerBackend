@@ -1,9 +1,11 @@
 ﻿using System.Text.Json;
+using AdLerBackend.API.Properties;
 using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
+using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure.Moodle.ApiResponses;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -12,14 +14,14 @@ namespace AdLerBackend.Infrastructure.Moodle;
 public class MoodleWebApi : ILMS
 {
     private readonly HttpClient _client;
-    private readonly IConfiguration _configuration;
+    private readonly BackendConfig _configuration;
     private readonly MoodleUtils _moodleUtils;
 
 
-    public MoodleWebApi(HttpClient client, IConfiguration configuration, MoodleUtils moodleUtils)
+    public MoodleWebApi(HttpClient client, IOptions<BackendConfig> configuration, MoodleUtils moodleUtils)
     {
         _client = client;
-        _configuration = configuration;
+        _configuration = configuration.Value;
         _moodleUtils = moodleUtils;
 
         // set timeout to 600 seconds
@@ -321,10 +323,8 @@ public class MoodleWebApi : ILMS
             options ??= new PostToMoodleOptions();
             url = options.Endpoint switch
             {
-                PostToMoodleOptions.Endpoints.Webservice => _configuration["ASPNETCORE_ADLER_MOODLEURL"] +
-                                                            "/webservice/rest/server.php",
-                PostToMoodleOptions.Endpoints.Login =>
-                    _configuration["ASPNETCORE_ADLER_MOODLEURL"] + "/login/token.php",
+                PostToMoodleOptions.Endpoints.Webservice => _configuration.MoodleUrl + "/webservice/rest/server.php",
+                PostToMoodleOptions.Endpoints.Login => _configuration.MoodleUrl + "/login/token.php",
                 _ => url
             };
 

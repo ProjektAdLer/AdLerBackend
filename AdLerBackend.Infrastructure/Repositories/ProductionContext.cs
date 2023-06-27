@@ -17,11 +17,11 @@ public sealed class ProductionContext : BaseAdLerBackendDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-        var password = _backendConfig.DBPassword;
-        var username = _backendConfig.DBUser;
-        var name = _backendConfig.DBName;
-        var dbhost = _backendConfig.DBHost;
-        var dbPort = _backendConfig.DBPort;
+        var password = _backendConfig.DbPassword;
+        var username = _backendConfig.DbUser;
+        var name = _backendConfig.DbName;
+        var dbhost = _backendConfig.DbHost;
+        var dbPort = _backendConfig.DbPort;
 
         // connection string for mariaDB
         var connectionString = $"server={dbhost};port={dbPort};user={username};database={name};password={password}";

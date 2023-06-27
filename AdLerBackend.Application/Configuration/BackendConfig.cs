@@ -21,23 +21,23 @@ public class BackendConfig
 
     [RequiredIfProduction]
     [ConfigurationKeyName("ASPNETCORE_DBPASSWORD")]
-    public string DBPassword { get; set; }
+    public string DbPassword { get; set; }
 
     [RequiredIfProduction]
     [ConfigurationKeyName("ASPNETCORE_DBUSER")]
-    public string DBUser { get; set; }
+    public string DbUser { get; set; }
 
     [RequiredIfProduction]
     [ConfigurationKeyName("ASPNETCORE_DBNAME")]
-    public string DBName { get; set; }
+    public string DbName { get; set; }
 
     [RequiredIfProduction]
     [ConfigurationKeyName("ASPNETCORE_DBHOST")]
-    public string DBHost { get; set; }
+    public string DbHost { get; set; }
 
     [RequiredIfProduction]
     [ConfigurationKeyName("ASPNETCORE_DBPORT")]
-    public string DBPort { get; set; }
+    public string DbPort { get; set; }
 
     // Not Required
     [ConfigurationKeyName("ASPNETCORE_ADLER_HTTPPORT")]

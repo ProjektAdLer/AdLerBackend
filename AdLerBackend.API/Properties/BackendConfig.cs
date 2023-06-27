@@ -1,10 +1,18 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text;
+
+// ReSharper disable InconsistentNaming
+#pragma warning disable CS1591
 
 namespace AdLerBackend.API.Properties;
 
 // Use Annotations to validate the configuration object
 public class BackendConfig
 {
+    [Required] public string ASPNETCORE_ADLER_MOODLEURL { get; set; } = null!;
+
+    [Required] public string ASPNETCORE_ENVIRONMENT { get; set; } = null!;
+
     /// <summary>
     ///     Override ToString() to get a formatted string with all properties using reflection
     /// </summary>

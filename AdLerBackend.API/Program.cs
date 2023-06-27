@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using AdLerBackend.API;
 using AdLerBackend.API.Properties;
 using AdLerBackend.Application;
@@ -9,26 +8,7 @@ Directory.CreateDirectory("wwwroot");
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-var configuration = new ConfigurationBuilder()
-    .AddEnvironmentVariables()
-    .Build();
-
-builder.Services.Configure<BackendConfig>(configuration);
-
-// get the configuration object
-var myConfig = builder.Configuration.Get<BackendConfig>();
-
-
-// Validate the BackendConfig object
-var context = new ValidationContext(myConfig);
-var results = new List<ValidationResult>();
-
-var isValid = Validator.TryValidateObject(myConfig, context, results, true);
-
-
-if (!isValid)
-    throw new Exception("Configuration validation failed: " + string.Join(", ", results.Select(x => x.ErrorMessage)));
+builder.Services.AddAndValidateBackendConfig(builder.Configuration);
 
 builder.Services
     .AddApiServices()
@@ -42,7 +22,9 @@ if (!builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 
-app.Logger.LogInformation("Configuration: \n" + myConfig);
+var myConfig = app.Services.GetRequiredService<BackendConfig>();
+
+app.Logger.LogInformation("Configuration: \n {MyConfig}", myConfig);
 
 app
     .ConfigureApp()

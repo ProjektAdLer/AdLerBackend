@@ -42,6 +42,11 @@ public class GetWorldStatusUseCaseTest
                             Name = "Name",
                             ModName = "h5pactivity"
                         }
+                    },
+                    new()
+                    {
+                        AdLerId = 2,
+                        IsLocked = true
                     }
                 }
             });
@@ -55,6 +60,11 @@ public class GetWorldStatusUseCaseTest
                     {
                         HasScored = true,
                         ModuleId = 1
+                    },
+                    new()
+                    {
+                        HasScored = false,
+                        ModuleId = 20
                     }
                 }
             });
@@ -67,7 +77,7 @@ public class GetWorldStatusUseCaseTest
         }, CancellationToken.None);
 
         // Assert
-        Assert.That(result.Elements, Has.Count.EqualTo(1));
+        Assert.That(result.Elements, Has.Count.EqualTo(2));
         Assert.That(result.Elements[0].ElementId, Is.EqualTo(1));
         Assert.That(result.WorldId, Is.EqualTo(1337));
     }

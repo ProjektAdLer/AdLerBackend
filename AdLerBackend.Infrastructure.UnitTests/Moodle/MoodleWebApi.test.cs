@@ -336,4 +336,44 @@ public class MoodleWebApiTest
 
         return false;
     }
+
+
+    [Test]
+    public async Task GetLmsElementIdsByUuidsAsync_ReturnsExpectedElements()
+    {
+        // Arrange
+        var webResponse = new ResponseWithDataArray<PluginUUIDResponse>
+        {
+            Data = new List<PluginUUIDResponse>
+            {
+                new()
+                {
+                    ContextId = 1,
+                    Uuid = "UUID1",
+                    CourseId = "eins",
+                    MoodleId = 1,
+                    ElementType = "cm"
+                },
+                new()
+                {
+                    ContextId = 2,
+                    Uuid = "UUID2",
+                    CourseId = "zwei",
+                    MoodleId = 2,
+                    ElementType = "cm"
+                }
+            }
+        };
+
+        _mockHttp.When("*").Respond("application/json",
+            JsonConvert.SerializeObject(webResponse));
+
+        // Act
+        var result =
+            await _systemUnderTest.GetLmsElementIdsByUuidsAsync("token", 1, new List<string> {"UUID1", "UUID2"});
+
+        // Assert
+        Assert.That(result.Count, Is.EqualTo(2));
+        Assert.That(result.First().Uuid, Is.EqualTo("UUID1"));
+    }
 }

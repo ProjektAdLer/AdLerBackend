@@ -2,6 +2,7 @@ using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.Player;
 using AdLerBackend.Application.Common.Responses.World;
+using AdLerBackend.Application.Configuration;
 using AutoBogus;
 using FluentAssertions;
 using Force.DeepCloner;
@@ -34,5 +35,6 @@ public class AllResponsesTest
         yield return new TestCaseData(new ScoreElementResponse());
         yield return new TestCaseData(new WorldContent());
         yield return new TestCaseData(new WorldAtfResponse());
+        yield return new TestCaseData(new BackendConfig());
     }
 }

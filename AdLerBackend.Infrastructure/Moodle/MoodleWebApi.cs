@@ -6,6 +6,8 @@ using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure.Moodle.ApiResponses;
 using Microsoft.Extensions.Options;
 
+#pragma warning disable CS8524
+
 namespace AdLerBackend.Infrastructure.Moodle;
 
 public class MoodleWebApi : ILMS
@@ -129,18 +131,6 @@ public class MoodleWebApi : ILMS
             });
 
         return response.Data[0].Score > 0;
-
-
-        // var response = await MoodleCallAsync<respo>(
-        //     new Dictionary<string, HttpContent>
-        //     {
-        //         {"wstoken", new StringContent(token)},
-        //         {"wsfunction", new StringContent("core_xapi_statement_post")},
-        //         {"component", new StringContent("mod_h5pactivity")},
-        //         {"requestjson", new StringContent("[" + statement + "]")}
-        //     });
-        //
-        // var test = G
     }
 
     public async Task<LmsCourseStatusResponse> GetCourseStatusViaPlugin(string token, int courseId)
@@ -319,8 +309,7 @@ public class MoodleWebApi : ILMS
             url = options.Endpoint switch
             {
                 PostToMoodleOptions.Endpoints.Webservice => _configuration.MoodleUrl + "/webservice/rest/server.php",
-                PostToMoodleOptions.Endpoints.Login => _configuration.MoodleUrl + "/login/token.php",
-                _ => url
+                PostToMoodleOptions.Endpoints.Login => _configuration.MoodleUrl + "/login/token.php"
             };
 
             // get Current Time

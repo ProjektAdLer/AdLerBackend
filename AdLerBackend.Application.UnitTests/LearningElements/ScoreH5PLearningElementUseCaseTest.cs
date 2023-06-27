@@ -2,8 +2,9 @@ using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.ScoreH5PStrategy;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
+using AdLerBackend.Application.Configuration;
 using AutoBogus;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 
 #pragma warning disable CS8618
@@ -27,15 +28,10 @@ public class ScoreH5PLearningElementUseCaseTest
     public async Task ScoreH5PElement_Valid_CallsWebservices(string url)
     {
         // Arrange
-
-        var inMemorySettings = new Dictionary<string, string>
+        var configuration = Options.Create(new BackendConfig
         {
-            {"ASPNETCORE_ADLER_MOODLEHOST", url}
-        };
-
-        IConfiguration configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection(inMemorySettings)
-            .Build();
+            MoodleHost = url
+        });
 
         _ilms.GetLMSUserDataAsync(Arg.Any<string>()).Returns(new LMSUserDataResponse
         {
@@ -81,15 +77,7 @@ public class ScoreH5PLearningElementUseCaseTest
     public async Task ScoreH5PElement_NoURLSet_ThrowsException()
     {
         // Arrange
-
-        var inMemorySettings = new Dictionary<string, string>
-        {
-            {"ASPNETCORE_ADLER_MOODLEHOST", ""}
-        };
-
-        IConfiguration configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection(inMemorySettings)
-            .Build();
+        var configuration = Options.Create(new BackendConfig());
 
         var systemUnderTest = new ScoreH5PElementStrategyHandler(_serialization, _ilms, configuration);
 

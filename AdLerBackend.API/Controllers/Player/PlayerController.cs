@@ -1,4 +1,3 @@
-using AdLerBackend.API.Properties;
 using AdLerBackend.Application.Common.Responses.Player;
 using AdLerBackend.Application.Player.DeletePlayerData;
 using AdLerBackend.Application.Player.GetPlayerData;
@@ -7,7 +6,6 @@ using AdLerBackend.Domain.Entities.PlayerData;
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace AdLerBackend.API.Controllers.Player;
 
@@ -17,15 +15,12 @@ namespace AdLerBackend.API.Controllers.Player;
 [Route("api/PlayerData")]
 public class PlayerController : BaseApiController
 {
-    private readonly BackendConfig _config;
-
     /// <summary>
     ///     Constructor
     /// </summary>
     /// <param name="mediator"></param>
-    public PlayerController(IMediator mediator, IOptions<BackendConfig> config) : base(mediator)
+    public PlayerController(IMediator mediator) : base(mediator)
     {
-        _config = config.Value;
     }
 
     /// <summary>
@@ -42,11 +37,6 @@ public class PlayerController : BaseApiController
         });
     }
 
-    [HttpGet("test")]
-    public async Task<ActionResult<string>> GetDbPassword()
-    {
-        return _config.ASPNETCORE_ADLER_TESTVARIABLE;
-    }
 
     /// <summary>
     ///     Update player data

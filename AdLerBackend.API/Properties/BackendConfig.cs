@@ -5,8 +5,6 @@ namespace AdLerBackend.API.Properties;
 // Use Annotations to validate the configuration object
 public class BackendConfig
 {
-    public string ASPNETCORE_ADLER_TESTVARIABLE { get; set; }
-
     /// <summary>
     ///     Override ToString() to get a formatted string with all properties using reflection
     /// </summary>

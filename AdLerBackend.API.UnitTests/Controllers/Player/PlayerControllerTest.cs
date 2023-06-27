@@ -26,6 +26,7 @@ public class PlayerControllerTest
     public async Task GetPlayerData_Valid_CallsMediator()
     {
         // Arrange
+
         var systemUnderTest = new PlayerController(_mediator);
 
         // Act

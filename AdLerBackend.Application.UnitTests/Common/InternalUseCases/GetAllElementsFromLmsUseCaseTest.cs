@@ -34,7 +34,7 @@ public class GetAllElementsFromLmsUseCaseTest
         var systemUnderTest =
             new GetAllElementsFromLmsUseCase(_worldRepository, _fileAccess, _serialization, _ilms);
 
-        var fakeATF = new WorldAtfResponse
+        var fakeAtf = new WorldAtfResponse
         {
             FileVersion = "FileVersion",
             AmgVersion = "000",
@@ -54,8 +54,7 @@ public class GetAllElementsFromLmsUseCaseTest
                 {
                     new()
                     {
-                        ElementId = 1337,
-                        ElementName = "searchedFileName"
+                        ElementId = 1337
                     }
                 }
             }
@@ -68,7 +67,7 @@ public class GetAllElementsFromLmsUseCaseTest
                 H5PLocationEntityFactory.CreateH5PLocationEntity("path", 4, 3)
             },
             1234,
-            JsonConvert.SerializeObject(fakeATF),
+            JsonConvert.SerializeObject(fakeAtf),
             1,
             2
         );
@@ -123,8 +122,7 @@ public class GetAllElementsFromLmsUseCaseTest
                 {
                     new()
                     {
-                        ElementId = 1337,
-                        ElementName = "searchedFileName"
+                        ElementId = 1337
                     }
                 }
             }
@@ -141,7 +139,6 @@ public class GetAllElementsFromLmsUseCaseTest
                 {
                     new()
                     {
-                        Name = "searchedFileName",
                         contextid = 123
                     }
                 }

@@ -1,6 +1,8 @@
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
+using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.World;
+using AdLerBackend.Domain.Entities;
 using MediatR;
 
 namespace AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
@@ -26,35 +28,47 @@ public class
     public async Task<GetAllElementsFromLmsWithAdLerIdResponse> Handle(GetAllElementsFromLmsCommand request,
         CancellationToken cancellationToken)
     {
-        // Get Course from DB
-        var course = await _worldRepository.GetAsync(request.WorldId) ??
-                     throw new NotFoundException($"Course with the Id {request.WorldId} not found");
-
-        var dslObject = _serialization.GetObjectFromJsonString<WorldAtfResponse>(course.AtfJson);
-
-
-        var courseContent = await _lms.GetWorldContentAsync(request.WebServiceToken, course.LmsWorldId);
-
-        var modulesWithIDs =
-            await _lms.GetLmsElementIdsByUuidsAsync(request.WebServiceToken, course.LmsWorldId,
-                dslObject.World.Elements.Select(x => x.ElementUuid).ToList());
-
-        // Get the LMS-Modules by their name
-        var modulesWithId = dslObject.World.Elements.Select(x =>
-        {
-            var module = courseContent.SelectMany(c => c.Modules)
-                .FirstOrDefault(m => m.Name == x.ElementName);
-
-            // If no Module is found just return nothing
-            if (module == null) return new ModuleWithId {IsLocked = true, AdLerId = x.ElementId};
-
-            return new ModuleWithId {AdLerId = x.ElementId!, LmsModule = module, IsLocked = false};
-        }).ToList();
+        var worldEntity = await GetWorldEntity(request.WorldId);
+        var dslObject = _serialization.GetObjectFromJsonString<WorldAtfResponse>(worldEntity.AtfJson);
+        var worldContent = await _lms.GetWorldContentAsync(request.WebServiceToken, worldEntity.LmsWorldId);
+        var modulesWithUuid = await GetModulesWithUuid(request.WebServiceToken, worldEntity.LmsWorldId,
+            dslObject.World.Elements.Select(x => x.ElementUuid).ToList());
+        var modulesWithId = MapModulesWithAdLerId(dslObject, worldContent, modulesWithUuid);
 
         return new GetAllElementsFromLmsWithAdLerIdResponse
         {
-            ModulesWithAdLerId = modulesWithId,
-            LmsCourseId = course.LmsWorldId
+            ModulesWithAdLerId = modulesWithId.ToList(),
+            LmsCourseId = worldEntity.LmsWorldId
         };
+    }
+
+    private async Task<WorldEntity> GetWorldEntity(int worldId)
+    {
+        var worldEntity = await _worldRepository.GetAsync(worldId);
+        if (worldEntity == null) throw new NotFoundException($"WorldEntity with the Id {worldId} not found");
+        return worldEntity;
+    }
+
+    private async Task<IEnumerable<LmsUuidResponse>> GetModulesWithUuid(string webServiceToken, int lmsWorldId,
+        List<string> elementUuids)
+    {
+        return await _lms.GetLmsElementIdsByUuidsAsync(webServiceToken, lmsWorldId, elementUuids);
+    }
+
+    private IEnumerable<ModuleWithId> MapModulesWithAdLerId(WorldAtfResponse dslObject,
+        IEnumerable<WorldContent> worldContent, IEnumerable<LmsUuidResponse> modulesWithUuid)
+    {
+        return modulesWithUuid.Select(mu =>
+        {
+            var adLerId = dslObject.World.Elements.FirstOrDefault(x => x.ElementUuid == mu.Uuid)?.ElementId;
+            var module = worldContent.SelectMany(c => c.Modules).FirstOrDefault(m => m.Id == mu.LmsId);
+
+            return new ModuleWithId
+            {
+                AdLerId = adLerId!.Value,
+                LmsModule = module!,
+                IsLocked = module == null
+            };
+        });
     }
 }

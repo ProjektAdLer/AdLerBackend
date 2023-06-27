@@ -12,6 +12,7 @@ public class GetAllElementsFromLmsWithAdLerIdResponse
 public class ModuleWithId
 {
     public int AdLerId { get; set; }
+    public Guid LmsModuleUuid { get; set; }
     public Modules LmsModule { get; set; }
     public bool IsLocked { get; set; }
 }

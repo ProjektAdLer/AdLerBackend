@@ -43,14 +43,12 @@ public class GetWorldDetailUseCaseTest
             new()
             {
                 ElementId = 1,
-                ElementCategory = "h5p",
-                ElementName = "path1"
+                ElementCategory = "h5p"
             },
             new()
             {
                 ElementId = 2,
-                ElementCategory = "h5p",
-                ElementName = "path2"
+                ElementCategory = "h5p"
             }
         };
 

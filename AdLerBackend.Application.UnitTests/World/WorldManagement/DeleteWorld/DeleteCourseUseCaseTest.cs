@@ -20,6 +20,7 @@ public class DeleteWorldUseCaseTest
     private IFileAccess _fileAccess;
     private IMediator _mediator;
     private IWorldRepository _worldRepository;
+    private ILMS _ilms;
 
 
     [SetUp]
@@ -28,13 +29,14 @@ public class DeleteWorldUseCaseTest
         _worldRepository = Substitute.For<IWorldRepository>();
         _fileAccess = Substitute.For<IFileAccess>();
         _mediator = Substitute.For<IMediator>();
+        _ilms = Substitute.For<ILMS>();
     }
 
     [Test]
     public async Task Handle_Valid_ShouldCallDeletionOfCourse()
     {
         // Arrange
-        var systemUnderTest = new DeleteWorldUseCase(_worldRepository, _fileAccess, _mediator);
+        var systemUnderTest = new DeleteWorldUseCase(_worldRepository, _fileAccess, _mediator, _ilms);
 
         var worldEntity = new WorldEntity(
             "name",
@@ -68,6 +70,7 @@ public class DeleteWorldUseCaseTest
         Assert.IsTrue(result);
         // Expect DeleteCourse to be called once
         _fileAccess.Received(1).DeleteWorld(Arg.Any<WorldDeleteDto>());
+        _ilms.Received(1).DeleteCourseAsync(Arg.Any<string>(), Arg.Any<int>());
 
         // Assert that DeleteAsync was called
         await _worldRepository.Received(1).DeleteAsync(Arg.Any<int>());
@@ -77,7 +80,7 @@ public class DeleteWorldUseCaseTest
     public async Task Handle_UserNotAdmin_ShouldThorwException()
     {
         // Arrange
-        var systemUnderTest = new DeleteWorldUseCase(_worldRepository, _fileAccess, _mediator);
+        var systemUnderTest = new DeleteWorldUseCase(_worldRepository, _fileAccess, _mediator, _ilms);
         _mediator.Send(Arg.Any<CheckUserPrivilegesCommand>()).Throws(new ForbiddenAccessException(""));
 
         // Act
@@ -93,7 +96,7 @@ public class DeleteWorldUseCaseTest
     public async Task Handle_CourseNotExistent_ShouldThorwException()
     {
         // Arrange
-        var systemUnderTest = new DeleteWorldUseCase(_worldRepository, _fileAccess, _mediator);
+        var systemUnderTest = new DeleteWorldUseCase(_worldRepository, _fileAccess, _mediator, _ilms);
 
         _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity?) null);
 
@@ -112,7 +115,7 @@ public class DeleteWorldUseCaseTest
     public async Task Handle_CourseNotFromSameAuthor_ShouldThorwException()
     {
         // Arrange
-        var systemUnderTest = new DeleteWorldUseCase(_worldRepository, _fileAccess, _mediator);
+        var systemUnderTest = new DeleteWorldUseCase(_worldRepository, _fileAccess, _mediator, _ilms);
 
         var worldEntity = new WorldEntity(
             "name",
@@ -122,7 +125,7 @@ public class DeleteWorldUseCaseTest
             },
             1337,
             "Test",
-            0,
+            1,
             1
         );
 

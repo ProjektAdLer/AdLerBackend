@@ -28,22 +28,14 @@ public class ValidateAtfFileUseCase : IRequestHandler<ValidateATFFileCommand, Un
     {
         var streamReader = new StreamReader(request.ATFFileStream);
         var jsonReader = new JsonTextReader(streamReader);
-        var json = await JToken.LoadAsync(jsonReader);
+        var json = await JToken.LoadAsync(jsonReader, cancellationToken);
 
-        IList<string> errorMessages;
-        var isValid = json.IsValid(Schema, out errorMessages);
-        if (!isValid)
-        {
-            var validationFailures = new List<ValidationFailure>();
-            foreach (var errorMessage in errorMessages)
-            {
-                var validationFailure = new ValidationFailure(string.Empty, errorMessage);
-                validationFailures.Add(validationFailure);
-            }
+        var isValid = json.IsValid(Schema, out IList<string> errorMessages);
+        if (isValid) return Unit.Value;
+        var validationFailures 
+            = errorMessages.Select(errorMessage => new ValidationFailure(string.Empty, errorMessage)).ToList();
 
-            throw new ValidationException(validationFailures);
-        }
+        throw new ValidationException(validationFailures);
 
-        return Unit.Value;
     }
 }

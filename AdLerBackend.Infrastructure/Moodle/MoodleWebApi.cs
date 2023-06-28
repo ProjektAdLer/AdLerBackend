@@ -31,7 +31,7 @@ public class MoodleWebApi : ILMS
         {
             {"username", new StringContent(userName)},
             {"password", new StringContent(password)},
-            {"service", new StringContent("moodle_mobile_app")}
+            {"service", new StringContent("adler_services")}
         }, new PostToMoodleOptions
         {
             Endpoint = PostToMoodleOptions.Endpoints.Login
@@ -64,6 +64,21 @@ public class MoodleWebApi : ILMS
             {"criteriavalue", new StringContent("")},
             {"limittoenrolled", new StringContent("1")}
         });
+    }
+    
+    public async Task DeleteCourseAsync(string token, int courseId)
+    {
+        var warnings = await MoodleCallAsync<ResponseWithDataArray<CourseDeletionWarningsResponse>>(new Dictionary<string, HttpContent>
+        {
+            {"wstoken", new StringContent(token)},
+            {"wsfunction", new StringContent("core_course_delete_courses")},
+            {"courseids[0]", new StringContent(courseId.ToString())}
+        });
+        
+        // if any warnings are returned, throw an exception warnings can also be null
+        if (warnings?.Data?.Count > 0)
+            throw new LmsException("Course could not be deleted because of the following warnings: " +
+                                   JsonSerializer.Serialize(warnings.Data));
     }
 
     public async Task<bool> IsLMSAdminAsync(string token)

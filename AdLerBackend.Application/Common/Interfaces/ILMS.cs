@@ -90,4 +90,6 @@ public interface ILMS
     /// <returns></returns>
     Task<IEnumerable<LmsUuidResponse>> GetLmsElementIdsByUuidsAsync(string token, int courseInstanceId,
         IEnumerable<string> uuids);
+    
+    Task DeleteCourseAsync(string token, int worldId);
 }

@@ -12,13 +12,15 @@ public class DeleteWorldUseCase : IRequestHandler<DeleteWorldCommand, bool>
     private readonly IFileAccess _fileAccess;
     private readonly IMediator _mediator;
     private readonly IWorldRepository _worldRepository;
+    private readonly ILMS _lms;
 
     public DeleteWorldUseCase(IWorldRepository worldRepository, IFileAccess fileAccess,
-        IMediator mediator)
+        IMediator mediator, ILMS lms)
     {
         _worldRepository = worldRepository;
         _fileAccess = fileAccess;
         _mediator = mediator;
+        _lms = lms;
     }
 
     public async Task<bool> Handle(DeleteWorldCommand request, CancellationToken cancellationToken)
@@ -28,6 +30,7 @@ public class DeleteWorldUseCase : IRequestHandler<DeleteWorldCommand, bool>
         {
             WebServiceToken = request.WebServiceToken
         }, cancellationToken);
+        
 
         var authorData = await _mediator.Send(new GetLMSUserDataCommand
         {
@@ -44,14 +47,14 @@ public class DeleteWorldUseCase : IRequestHandler<DeleteWorldCommand, bool>
         if (course.AuthorId != authorData.UserId)
             throw new UnauthorizedAccessException("The Course does not belong to the User");
 
-
-        // Delete from file System
+        // Delete from Moodle
+        await _lms.DeleteCourseAsync(request.WebServiceToken, course.LmsWorldId);
+        //Delete from FileSystem
         _fileAccess.DeleteWorld(new WorldDeleteDto
         {
             WorldInstanceId = course.LmsWorldId
         });
-
-        // Delete from db
+        // Delete from DB
         await _worldRepository.DeleteAsync(request.WorldId);
 
         return true;

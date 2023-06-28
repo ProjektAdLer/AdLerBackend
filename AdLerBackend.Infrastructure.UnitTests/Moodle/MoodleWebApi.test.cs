@@ -7,6 +7,7 @@ using AutoBogus;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using NSubstitute.ExceptionExtensions;
 using RichardSzalay.MockHttp;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -375,5 +376,41 @@ public class MoodleWebApiTest
         // Assert
         Assert.That(result.Count, Is.EqualTo(2));
         Assert.That(result.First().Uuid, Is.EqualTo("UUID1"));
+    }
+    
+    // Course Deletion
+    [Test]
+    public async Task DeleteCourseAsync_DoesNotThrow_WhenResponseIsValid()
+    {
+        // Arrange
+        var webResponse = new ResponseWithDataArray<CourseDeletionWarningsResponse>();
+
+        _mockHttp.When("*").Respond("application/json",
+            JsonConvert.SerializeObject(webResponse));
+
+        // Act and assert that it does not throw
+        await _systemUnderTest.DeleteCourseAsync("token", 1);
+    }
+    
+    [Test]
+    public async Task DeleteCourseAsync_Throws_WhenResponseIsInvalid()
+    {
+        // Arrange
+        var webResponse = new ResponseWithDataArray<CourseDeletionWarningsResponse>
+        {
+            Data = new List<CourseDeletionWarningsResponse>
+            {
+                new CourseDeletionWarningsResponse()
+                {
+                    Warningcode = "xxxxx"
+                }
+            }
+        };
+
+        _mockHttp.When("*").Respond("application/json",
+            JsonConvert.SerializeObject(webResponse));
+
+        // Act and assert that it does not throw
+        Assert.ThrowsAsync<LmsException>(async () => await _systemUnderTest.DeleteCourseAsync("token", 1));
     }
 }

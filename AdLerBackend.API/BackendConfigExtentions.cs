@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
-using AdLerBackend.API.Properties;
 using AdLerBackend.Application.Configuration;
 using Microsoft.Extensions.Options;
 

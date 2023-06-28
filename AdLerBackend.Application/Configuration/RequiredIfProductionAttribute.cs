@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace AdLerBackend.API.Properties;
+namespace AdLerBackend.Application.Configuration;
 
 public class RequiredIfProductionAttribute : ValidationAttribute
 {

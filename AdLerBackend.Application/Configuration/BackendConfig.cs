@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text;
-using AdLerBackend.API.Properties;
 using Microsoft.Extensions.Configuration;
 
 // Nullability warnings are disabled because the configuration object will be validated using the Annotations

@@ -1,5 +1,4 @@
 using System.Text.Json;
-using AdLerBackend.API.Properties;
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.Elements;

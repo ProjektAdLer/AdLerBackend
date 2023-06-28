@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using AdLerBackend.API.Filters;
 using AdLerBackend.API.Middleware;
-using AdLerBackend.API.Properties;
 using AdLerBackend.Application.Configuration;
 using Microsoft.AspNetCore.Http.Features;
 using Newtonsoft.Json.Converters;
@@ -29,6 +28,7 @@ public static class ConfigureServices
 
 
         services.AddEndpointsApiExplorer();
+        services.AddHealthChecks();
         services.AddSwaggerGen(options =>
         {
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

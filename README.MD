@@ -45,3 +45,7 @@ Im Root-Verzeichnis des Projekts finden Sie eine Swagger-Konfigurationsdatei.
 Die Swagger-Konfigurationsdatei definiert die Struktur der API und enthält eine Liste aller verfügbaren Endpunkte, zusammen mit den unterstützten HTTP-Methoden und den erwarteten Strukturen für Anfragen und Antworten.
 
 Es ist wichtig zu beachten, dass jede Änderung an den Endpunkten oder ihrer Funktionalität in dieser Datei reflektiert werden sollte, um sicherzustellen, dass die API-Dokumentation stets aktuell und korrekt ist.
+
+## Health Endpoint
+
+Das AdLer-Backend bietet einen Health-Check-Endpoint an, der zur Überwachung des Systemzustands verwendet wird. Sie können eine GET-Anfrage an `/api/health` senden, um den Gesundheitsstatus des Servers zu überprüfen. Wenn der Server ordnungsgemäß funktioniert, wird das System die Nachricht "healthy" zurückgeben.

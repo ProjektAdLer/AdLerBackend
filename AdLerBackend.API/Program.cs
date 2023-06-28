@@ -1,5 +1,4 @@
 using AdLerBackend.API;
-using AdLerBackend.API.Properties;
 using AdLerBackend.Application;
 using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure;
@@ -23,6 +22,8 @@ if (!builder.Environment.IsDevelopment())
     builder.ConfigureWebserverForProduction();
 
 var app = builder.Build();
+
+app.MapHealthChecks("/api/health");
 
 var myConfig = app.Services.GetRequiredService<BackendConfig>();
 

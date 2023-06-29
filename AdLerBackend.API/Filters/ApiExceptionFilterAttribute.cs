@@ -38,9 +38,6 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
     /// <param name="context"></param>
     public override void OnException(ExceptionContext context)
     {
-        // Log the exception
-        // TODO: This logs every exception, even if it is an invalid Token for Example
-        _logger.LogError(context.Exception, "An unhandled exception occurred");
         HandleException(context);
         base.OnException(context);
     }
@@ -54,27 +51,28 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             HandleUnknownException(context);
     }
 
-    private static void SetResult(ExceptionContext context, ProblemDetails problemDetails)
+    private void SetResult(ExceptionContext context, ProblemDetails problemDetails)
     {
         context.Result = new ObjectResult(problemDetails);
         context.ExceptionHandled = true;
     }
 
-    private static void HandleGenericLmsException(ExceptionContext context)
+    private void HandleGenericLmsException(ExceptionContext context)
     {
         var exception = (LmsException) context.Exception;
         var problemDetails = new ProblemDetails
         {
             Detail = exception.Message,
             Status = StatusCodes.Status500InternalServerError,
-            Title = "The LMS adapter encountered an error",
             Type = ErrorCodes.LmsError
         };
+
+        _logger.LogError("The LMS adapter encountered an error {Message}", exception.Message);
 
         SetResult(context, problemDetails);
     }
 
-    private static void HandleWorldCreationException(ExceptionContext context)
+    private void HandleWorldCreationException(ExceptionContext context)
     {
         var exception = (WorldCreationException) context.Exception;
 
@@ -86,11 +84,13 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             Type = ErrorCodes.WorldCreationErrorDuplicate
         };
 
+        _logger.LogInformation("World creation failed", exception.Message);
+
         SetResult(context, problemDetails);
     }
 
 
-    private static void HandleForbiddenAccessException(ExceptionContext context)
+    private void HandleForbiddenAccessException(ExceptionContext context)
     {
         var exception = (ForbiddenAccessException) context.Exception;
         var problemDetails = new ProblemDetails
@@ -100,10 +100,13 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             Status = StatusCodes.Status403Forbidden,
             Type = ErrorCodes.Forbidden
         };
+
+        _logger.LogInformation("Forbidden Access", exception.Message);
+
         SetResult(context, problemDetails);
     }
 
-    private static void HandleNotFoundException(ExceptionContext context)
+    private void HandleNotFoundException(ExceptionContext context)
     {
         var exception = (NotFoundException) context.Exception;
         var problemDetails = new ProblemDetails
@@ -114,10 +117,12 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             Type = ErrorCodes.NotFound
         };
 
+        _logger.LogInformation("Resource not found", exception.Message);
+
         SetResult(context, problemDetails);
     }
 
-    private static void HandleInvalidTokenException(ExceptionContext context)
+    private void HandleInvalidTokenException(ExceptionContext context)
     {
         var problemDetails = new ProblemDetails
         {
@@ -127,24 +132,27 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             Detail = "The provided token is invalid"
         };
 
+        _logger.LogInformation("Invalid token provided");
+
         SetResult(context, problemDetails);
     }
 
-
-    private static void HandleUnknownException(ExceptionContext context)
+    private void HandleUnknownException(ExceptionContext context)
     {
         var problemDetails = new ProblemDetails
         {
-            Title = "An unknown error occurred while processing your request.",
+            Title = "An unknown error occurred while processing your request",
             Status = StatusCodes.Status500InternalServerError,
             Detail = context.Exception.Message,
             Type = ErrorCodes.UnknownError
         };
 
+        _logger.LogError(context.Exception, "An unknown error occurred while processing the request");
+
         SetResult(context, problemDetails);
     }
 
-    private static void HandleValidationException(ExceptionContext context)
+    private void HandleValidationException(ExceptionContext context)
     {
         var exception = (ValidationException) context.Exception;
 
@@ -155,10 +163,12 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             Title = "Validation Error"
         };
 
+        _logger.LogInformation("Validation Error: {message}", exception.Message);
+
         SetResult(context, problemDetails);
     }
 
-    private static void HandleLmsLoginException(ExceptionContext context)
+    private void HandleLmsLoginException(ExceptionContext context)
     {
         var problemDetails = new ProblemDetails
         {
@@ -167,6 +177,8 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             Type = ErrorCodes.InvalidLogin,
             Detail = "The Lms Login Data Provided is wrong"
         };
+
+        _logger.LogInformation("User entered the wrong LMS login data");
 
         SetResult(context, problemDetails);
     }

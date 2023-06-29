@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using AdLerBackend.API.Common;
+using AdLerBackend.Application.Common.Authorization;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,8 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             {typeof(NotFoundException), HandleNotFoundException},
             {typeof(ForbiddenAccessException), HandleForbiddenAccessException},
             {typeof(WorldCreationException), HandleWorldCreationException},
-            {typeof(LmsException), HandleGenericLmsException}
+            {typeof(LmsException), HandleGenericLmsException},
+            {typeof(UnauthorizedException), HandleUnauthorizedException}
         };
     }
 
@@ -179,6 +181,19 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         };
 
         _logger.LogInformation("User entered the wrong LMS login data");
+
+        SetResult(context, problemDetails);
+    }
+
+    private void HandleUnauthorizedException(ExceptionContext context)
+    {
+        var problemDetails = new ProblemDetails
+        {
+            Title = "New Unauthorized Error",
+            Status = StatusCodes.Status401Unauthorized
+        };
+
+        _logger.LogInformation("User is not authorized");
 
         SetResult(context, problemDetails);
     }

@@ -1,8 +1,9 @@
-﻿using AdLerBackend.Application.Common;
+﻿using MediatR;
 
 namespace AdLerBackend.Application.World.WorldManagement.DeleteWorld;
 
-public record DeleteWorldCommand : CommandWithToken<bool>
+public record DeleteWorldCommand : IRequest<bool>
 {
+    public string WebServiceToken { get; set; }
     public int WorldId { get; init; }
 }

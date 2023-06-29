@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using AdLerBackend.Application.Common.Authorization;
 using AdLerBackend.Application.Common.Behaviours;
 using FluentValidation;
 using MediatR;
@@ -13,11 +14,10 @@ public static class ConfigureServices
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddMediatR(Assembly.GetExecutingAssembly());
+        services.AddAuthorizersFromAssembly(Assembly.GetExecutingAssembly());
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LogExecutionBehavior<,>));
-        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-
         return services;
     }
 }

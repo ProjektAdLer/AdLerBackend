@@ -8,7 +8,7 @@ using Newtonsoft.Json.Schema;
 
 namespace AdLerBackend.Application.World.ValidateATFFile;
 
-public class ValidateAtfFileUseCase : IRequestHandler<ValidateATFFileCommand, Unit>
+public class ValidateAtfFileUseCase : IRequestHandler<ValidateATFFileCommand>
 {
     static ValidateAtfFileUseCase()
     {
@@ -24,18 +24,17 @@ public class ValidateAtfFileUseCase : IRequestHandler<ValidateATFFileCommand, Un
 
     private static JSchema Schema { get; }
 
-    public async Task<Unit> Handle(ValidateATFFileCommand request, CancellationToken cancellationToken)
+    public async Task Handle(ValidateATFFileCommand request, CancellationToken cancellationToken)
     {
         var streamReader = new StreamReader(request.ATFFileStream);
         var jsonReader = new JsonTextReader(streamReader);
         var json = await JToken.LoadAsync(jsonReader, cancellationToken);
 
         var isValid = json.IsValid(Schema, out IList<string> errorMessages);
-        if (isValid) return Unit.Value;
-        var validationFailures 
+        if (isValid) return;
+        var validationFailures
             = errorMessages.Select(errorMessage => new ValidationFailure(string.Empty, errorMessage)).ToList();
 
         throw new ValidationException(validationFailures);
-
     }
 }

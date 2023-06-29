@@ -40,8 +40,8 @@ public class ValidationBehaviourTest
             await systemUnderTest.Handle(new TestModel
                 {
                     Test2 = 2
-                }, new CancellationToken(),
-                Substitute.For<RequestHandlerDelegate<string>>()));
+                }, Substitute.For<RequestHandlerDelegate<string>>(),
+                new CancellationToken()));
         return Task.CompletedTask;
     }
 
@@ -61,7 +61,7 @@ public class ValidationBehaviourTest
             {
                 Test1 = "test",
                 Test2 = 6
-            }, new CancellationToken(),
-            Substitute.For<RequestHandlerDelegate<string>>());
+            }, Substitute.For<RequestHandlerDelegate<string>>(),
+            new CancellationToken());
     }
 }

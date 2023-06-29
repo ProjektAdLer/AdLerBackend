@@ -21,8 +21,7 @@ public class LogExecutionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequ
 
     public async Task<TResponse> Handle(
         TRequest request,
-        CancellationToken cancellationToken,
-        RequestHandlerDelegate<TResponse> next)
+        RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
         var guid = Guid.NewGuid();
         var timer = new Stopwatch();

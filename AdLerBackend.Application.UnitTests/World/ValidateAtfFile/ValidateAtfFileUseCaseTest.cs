@@ -1,8 +1,6 @@
 using System.Text;
 using AdLerBackend.Application.World.ValidateATFFile;
-using FluentAssertions;
 using FluentValidation;
-using MediatR;
 
 namespace AdLerBackend.Application.UnitTests.World.ValidateAtfFile;
 
@@ -30,10 +28,7 @@ public class ValidateAtfFileUseCaseTest
         };
 
         // Act
-        var result = await _systemUnderTest.Handle(command, CancellationToken.None);
-
-        // Assert
-        result.Should().Be(Unit.Value);
+        await _systemUnderTest.Handle(command, CancellationToken.None);
     }
 
     [Test]

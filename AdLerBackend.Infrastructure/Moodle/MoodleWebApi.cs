@@ -65,16 +65,17 @@ public class MoodleWebApi : ILMS
             {"limittoenrolled", new StringContent("1")}
         });
     }
-    
+
     public async Task DeleteCourseAsync(string token, int courseId)
     {
-        var warnings = await MoodleCallAsync<ResponseWithDataArray<CourseDeletionWarningsResponse>>(new Dictionary<string, HttpContent>
-        {
-            {"wstoken", new StringContent(token)},
-            {"wsfunction", new StringContent("core_course_delete_courses")},
-            {"courseids[0]", new StringContent(courseId.ToString())}
-        });
-        
+        var warnings = await MoodleCallAsync<ResponseWithDataArray<CourseDeletionWarningsResponse>>(
+            new Dictionary<string, HttpContent>
+            {
+                {"wstoken", new StringContent(token)},
+                {"wsfunction", new StringContent("core_course_delete_courses")},
+                {"courseids[0]", new StringContent(courseId.ToString())}
+            });
+
         // if any warnings are returned, throw an exception warnings can also be null
         if (warnings?.Data?.Count > 0)
             throw new LmsException("Course could not be deleted because of the following warnings: " +
@@ -224,16 +225,6 @@ public class MoodleWebApi : ILMS
             Uuid = x.Uuid,
             LmsId = x.MoodleId,
             LmsContextId = x.ContextId
-        });
-    }
-
-    public async Task<H5PAttempts> GetH5PAttemptsAsync(string token, int h5PActivityId)
-    {
-        return await MoodleCallAsync<H5PAttempts>(new Dictionary<string, HttpContent>
-        {
-            {"wstoken", new StringContent(token)},
-            {"wsfunction", new StringContent("mod_h5pactivity_get_attempts")},
-            {"h5pactivityid", new StringContent(h5PActivityId.ToString())}
         });
     }
 

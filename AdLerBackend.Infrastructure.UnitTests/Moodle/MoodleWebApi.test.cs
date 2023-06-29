@@ -1,13 +1,9 @@
 ﻿using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
-using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure.Moodle;
 using AdLerBackend.Infrastructure.Moodle.ApiResponses;
-using AutoBogus;
-using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using NSubstitute.ExceptionExtensions;
 using RichardSzalay.MockHttp;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -235,20 +231,6 @@ public class MoodleWebApiTest
     }
 
     [Test]
-    public async Task GetH5PAttemptsAsync_Valid_GetsAttempts()
-    {
-        // Arrange
-        var obj = AutoFaker.Generate<H5PAttempts>();
-        _mockHttp.When("*").Respond("application/json", JsonSerializer.Serialize(obj));
-
-        // Act
-        var result = await _systemUnderTest.GetH5PAttemptsAsync("moodleToken", 1);
-
-        // Assert with FluentAssertions
-        result.Should().BeEquivalentTo(obj);
-    }
-
-    [Test]
     public async Task GetElementScoreFromPlugin_ReturnsFalse_WhenScoreIsZero()
     {
         // Arrange
@@ -377,7 +359,7 @@ public class MoodleWebApiTest
         Assert.That(result.Count, Is.EqualTo(2));
         Assert.That(result.First().Uuid, Is.EqualTo("UUID1"));
     }
-    
+
     // Course Deletion
     [Test]
     public async Task DeleteCourseAsync_DoesNotThrow_WhenResponseIsValid()
@@ -391,7 +373,7 @@ public class MoodleWebApiTest
         // Act and assert that it does not throw
         await _systemUnderTest.DeleteCourseAsync("token", 1);
     }
-    
+
     [Test]
     public async Task DeleteCourseAsync_Throws_WhenResponseIsInvalid()
     {
@@ -400,7 +382,7 @@ public class MoodleWebApiTest
         {
             Data = new List<CourseDeletionWarningsResponse>
             {
-                new CourseDeletionWarningsResponse()
+                new()
                 {
                     Warningcode = "xxxxx"
                 }

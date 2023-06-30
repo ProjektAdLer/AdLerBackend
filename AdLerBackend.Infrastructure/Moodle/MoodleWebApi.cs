@@ -82,12 +82,6 @@ public class MoodleWebApi : ILMS
                                    JsonSerializer.Serialize(warnings.Data));
     }
 
-    public async Task<bool> IsLMSAdminAsync(string token)
-    {
-        var userData = await GetLMSUserDataAsync(token);
-        return userData.IsAdmin;
-    }
-
     public async Task<LMSCourseCreationResponse> UploadCourseWorldToLMS(string token, Stream backupFileStream)
     {
         var fileContent = new StreamContent(backupFileStream);
@@ -196,7 +190,6 @@ public class MoodleWebApi : ILMS
         return new LMSUserDataResponse
         {
             LMSUserName = generalInformationResponse.Username,
-            IsAdmin = generalInformationResponse.UserIsSiteAdmin,
             UserId = generalInformationResponse.Userid,
             UserEmail = detailedUserInformaionResponse[0].Email
         };

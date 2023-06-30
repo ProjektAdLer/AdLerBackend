@@ -29,7 +29,6 @@ public class GetMoodleUserDataHandlerTest
         };
         _ilmsMock.GetLMSUserDataAsync(request.WebServiceToken).Returns(new LMSUserDataResponse
         {
-            IsAdmin = true,
             LMSUserName = "TestNutzer"
         });
         // Act
@@ -37,7 +36,6 @@ public class GetMoodleUserDataHandlerTest
 
         // Assert
         await _ilmsMock.Received(1).GetLMSUserDataAsync(request.WebServiceToken);
-        Assert.That(result.IsAdmin, Is.True);
         Assert.That(result.LMSUserName, Is.EqualTo("TestNutzer"));
     }
 }

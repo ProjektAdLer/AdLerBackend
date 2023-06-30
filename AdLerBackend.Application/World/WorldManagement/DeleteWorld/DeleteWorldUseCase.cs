@@ -1,7 +1,6 @@
 ﻿using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.InternalUseCases.CheckUserPrivileges;
 using AdLerBackend.Application.LMS.GetUserData;
 using MediatR;
 
@@ -10,9 +9,9 @@ namespace AdLerBackend.Application.World.WorldManagement.DeleteWorld;
 public class DeleteWorldUseCase : IRequestHandler<DeleteWorldCommand, bool>
 {
     private readonly IFileAccess _fileAccess;
+    private readonly ILMS _lms;
     private readonly IMediator _mediator;
     private readonly IWorldRepository _worldRepository;
-    private readonly ILMS _lms;
 
     public DeleteWorldUseCase(IWorldRepository worldRepository, IFileAccess fileAccess,
         IMediator mediator, ILMS lms)
@@ -25,13 +24,6 @@ public class DeleteWorldUseCase : IRequestHandler<DeleteWorldCommand, bool>
 
     public async Task<bool> Handle(DeleteWorldCommand request, CancellationToken cancellationToken)
     {
-        // check if user is Admin
-        await _mediator.Send(new CheckUserPrivilegesCommand
-        {
-            WebServiceToken = request.WebServiceToken
-        }, cancellationToken);
-        
-
         var authorData = await _mediator.Send(new GetLMSUserDataCommand
         {
             WebServiceToken = request.WebServiceToken

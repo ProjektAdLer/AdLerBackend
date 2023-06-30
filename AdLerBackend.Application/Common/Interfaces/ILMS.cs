@@ -34,13 +34,6 @@ public interface ILMS
     /// <returns></returns>
     Task<LMSWorldListResponse> GetWorldsForUserAsync(string token);
 
-    /// <summary>
-    ///     Determines whether the given User is an admin in the LMS System
-    /// </summary>
-    /// <param name="token"></param>
-    /// <returns></returns>
-    Task<bool> IsLMSAdminAsync(string token);
-
     /**
      * Uploads a Course Backup to the LMS
      * The Course is being send as Base64 encoded String
@@ -90,6 +83,6 @@ public interface ILMS
     /// <returns></returns>
     Task<IEnumerable<LmsUuidResponse>> GetLmsElementIdsByUuidsAsync(string token, int courseInstanceId,
         IEnumerable<string> uuids);
-    
+
     Task DeleteCourseAsync(string token, int worldId);
 }

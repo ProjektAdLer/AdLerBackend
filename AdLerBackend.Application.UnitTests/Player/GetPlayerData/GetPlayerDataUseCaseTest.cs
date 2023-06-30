@@ -27,7 +27,6 @@ public class GetPlayerDataUseCaseTest
         // Arrange
         var lmsUserDataResponse = new LMSUserDataResponse
         {
-            IsAdmin = false,
             UserEmail = "foo@bar.de",
             UserId = 1,
             LMSUserName = "userName"
@@ -46,14 +45,14 @@ public class GetPlayerDataUseCaseTest
         {
             WebServiceToken = "testToken"
         }, CancellationToken.None);
-        
+
         // Assert
         Assert.Multiple(() =>
         {
-
             // Assert
             Assert.That(PlayerDataEntityFactory.CreatePlayerData().PlayerGender, Is.EqualTo(result.PlayerGender));
-            Assert.That(PlayerDataEntityFactory.CreatePlayerData().PlayerWorldColor, Is.EqualTo(result.PlayerWorldColor));
+            Assert.That(PlayerDataEntityFactory.CreatePlayerData().PlayerWorldColor,
+                Is.EqualTo(result.PlayerWorldColor));
         });
     }
 }

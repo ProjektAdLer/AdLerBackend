@@ -4,7 +4,6 @@ namespace AdLerBackend.Application.Common.Responses.LMSAdapter;
 public class LMSUserDataResponse
 {
     public string LMSUserName { get; set; }
-    public bool IsAdmin { get; set; }
     public int UserId { get; set; }
     public string UserEmail { get; set; }
 }

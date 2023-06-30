@@ -1,7 +1,6 @@
 ﻿using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.InternalUseCases.CheckUserPrivileges;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.LMS.GetUserData;
 using AdLerBackend.Application.World.WorldManagement.DeleteWorld;
@@ -9,7 +8,6 @@ using AdLerBackend.Domain.Entities;
 using AdLerBackend.Domain.UnitTests.TestingUtils;
 using MediatR;
 using NSubstitute;
-using NSubstitute.ExceptionExtensions;
 
 #pragma warning disable CS8618
 
@@ -18,9 +16,9 @@ namespace AdLerBackend.Application.UnitTests.World.WorldManagement.DeleteWorld;
 public class DeleteWorldUseCaseTest
 {
     private IFileAccess _fileAccess;
+    private ILMS _ilms;
     private IMediator _mediator;
     private IWorldRepository _worldRepository;
-    private ILMS _ilms;
 
 
     [SetUp]
@@ -76,21 +74,6 @@ public class DeleteWorldUseCaseTest
         await _worldRepository.Received(1).DeleteAsync(Arg.Any<int>());
     }
 
-    [Test]
-    public async Task Handle_UserNotAdmin_ShouldThorwException()
-    {
-        // Arrange
-        var systemUnderTest = new DeleteWorldUseCase(_worldRepository, _fileAccess, _mediator, _ilms);
-        _mediator.Send(Arg.Any<CheckUserPrivilegesCommand>()).Throws(new ForbiddenAccessException(""));
-
-        // Act
-        // Assert
-        Assert.ThrowsAsync<ForbiddenAccessException>(async () => await systemUnderTest.Handle(new DeleteWorldCommand
-        {
-            WorldId = 1,
-            WebServiceToken = "testToken"
-        }, CancellationToken.None));
-    }
 
     [Test]
     public async Task Handle_CourseNotExistent_ShouldThorwException()

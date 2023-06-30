@@ -35,7 +35,6 @@ public class ScoreH5PLearningElementUseCaseTest
 
         _ilms.GetLMSUserDataAsync(Arg.Any<string>()).Returns(new LMSUserDataResponse
         {
-            IsAdmin = false,
             UserEmail = "email",
             UserId = 1,
             LMSUserName = "moodleUserName"

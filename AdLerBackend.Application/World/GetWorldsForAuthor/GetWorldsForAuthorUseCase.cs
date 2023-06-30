@@ -1,5 +1,4 @@
 ﻿using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.InternalUseCases.CheckUserPrivileges;
 using AdLerBackend.Application.Common.Responses.World;
 using MediatR;
 
@@ -19,12 +18,6 @@ public class GetWorldsForAuthorUseCase : IRequestHandler<GetWorldsForAuthorComma
     public async Task<GetWorldOverviewResponse> Handle(GetWorldsForAuthorCommand request,
         CancellationToken cancellationToken)
     {
-        // check if user is Admin
-        await _mediator.Send(new CheckUserPrivilegesCommand
-        {
-            WebServiceToken = request.WebServiceToken
-        }, cancellationToken);
-
         var courses = await _worldRepository.GetAllForAuthor(request.AuthorId);
 
         return new GetWorldOverviewResponse

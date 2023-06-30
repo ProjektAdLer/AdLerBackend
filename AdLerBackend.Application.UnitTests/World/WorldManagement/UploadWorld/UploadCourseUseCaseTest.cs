@@ -1,9 +1,7 @@
 ﻿using System.Text.Json;
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.DTOs.Storage;
-using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.InternalUseCases.CheckUserPrivileges;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.World;
 using AdLerBackend.Application.LMS.GetUserData;
@@ -13,7 +11,6 @@ using AdLerBackend.Infrastructure.Services;
 using AutoBogus;
 using MediatR;
 using NSubstitute;
-using NSubstitute.ExceptionExtensions;
 
 #pragma warning disable CS8618
 
@@ -71,11 +68,12 @@ public class UploadWorldUseCaseTest
             CourseLmsName = "TESTNAME"
         });
 
-        _mediator.Send(Arg.Any<CheckUserPrivilegesCommand>()).Returns(Unit.Task);
 
         _mediator.Send(Arg.Any<GetLMSUserDataCommand>()).Returns(new LMSUserDataResponse
         {
-            IsAdmin = true
+            UserEmail = "TestEmail",
+            LMSUserName = "TestName",
+            UserId = 1337
         });
 
         var fakedDsl = AutoFaker.Generate<WorldAtfResponse>();
@@ -127,33 +125,6 @@ public class UploadWorldUseCaseTest
             .AddAsync(Arg.Is<WorldEntity>(x => x.Name == "TESTNAME"));
     }
 
-    [Test]
-    public Task Handle_UnauthorizedUser_Throws()
-    {
-        // Arrange
-        var systemUnderTest =
-            new UploadWorldUseCase(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
-                _serialization, _ilms);
-
-        _mediator.Send(Arg.Any<CheckUserPrivilegesCommand>()).Throws(new ForbiddenAccessException(""));
-
-        _mediator.Send(Arg.Any<GetLMSUserDataCommand>()).Returns(new LMSUserDataResponse
-        {
-            IsAdmin = false
-        });
-
-        // Act
-        // Assert
-        Assert.ThrowsAsync<ForbiddenAccessException>(async () =>
-            await systemUnderTest.Handle(new UploadWorldCommand
-            {
-                BackupFileStream = new MemoryStream(),
-                ATFFileStream = new MemoryStream(),
-                WebServiceToken = "testToken"
-            }, CancellationToken.None));
-        return Task.CompletedTask;
-    }
-
 
     [Test]
     public async Task Handle_ValidNoH5p_TriggersUpload()
@@ -165,7 +136,9 @@ public class UploadWorldUseCaseTest
 
         _mediator.Send(Arg.Any<GetLMSUserDataCommand>()).Returns(new LMSUserDataResponse
         {
-            IsAdmin = true
+            UserEmail = "TestEmail",
+            LMSUserName = "TestName",
+            UserId = 1337
         });
 
         var fakedDsl = AutoFaker.Generate<WorldAtfResponse>();

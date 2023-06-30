@@ -1,6 +1,4 @@
-﻿using AdLerBackend.Application.Common.Exceptions;
-using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.InternalUseCases.CheckUserPrivileges;
+﻿using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.World;
 using AdLerBackend.Application.LMS.GetUserData;
@@ -9,7 +7,6 @@ using AdLerBackend.Domain.Entities;
 using AdLerBackend.Domain.UnitTests.TestingUtils;
 using MediatR;
 using NSubstitute;
-using NSubstitute.ExceptionExtensions;
 
 #pragma warning disable CS8618
 
@@ -27,26 +24,6 @@ public class GetWorldForAuthorUseCaserTest
         _mediator = Substitute.For<IMediator>();
     }
 
-    [Test]
-    public async Task Handle_GiveUnauthorotisedUser_ShouldThrow()
-    {
-        // Arrange
-        var request = new GetWorldsForAuthorCommand
-        {
-            WebServiceToken = "testToken",
-            AuthorId = 1
-        };
-
-        _mediator.Send(Arg.Any<CheckUserPrivilegesCommand>()).Throws(new ForbiddenAccessException(""));
-
-        var systemUnderTest = new GetWorldsForAuthorUseCase(_worldRepository, _mediator);
-
-        // Act
-
-        var exception =
-            Assert.ThrowsAsync<ForbiddenAccessException>(async () =>
-                await systemUnderTest.Handle(request, CancellationToken.None));
-    }
 
     [Test]
     public async Task Handle_GiveAuthorId_ShouldReturnCourses()
@@ -61,7 +38,6 @@ public class GetWorldForAuthorUseCaserTest
         // Mock Mediatr Response for GetMoodleUserDataCommand
         var moodleUserData = new LMSUserDataResponse
         {
-            IsAdmin = true,
             UserId = 1,
             LMSUserName = "userName"
         };

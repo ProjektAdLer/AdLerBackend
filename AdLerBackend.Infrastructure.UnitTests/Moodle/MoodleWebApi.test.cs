@@ -39,34 +39,6 @@ public class MoodleWebApiTest
     }
 
     [Test]
-    public async Task UsUserAdmin_Valid_HeIs()
-    {
-        // Arrange
-        _mockHttp.When("*")
-            .With(request => MatchesFormData(request, "core_webservice_get_site_info"))
-            .Respond(
-                "application/json", JsonSerializer.Serialize(new
-                {
-                    Userid = 1,
-                    Userissiteadmin = true,
-                    Username = "testUser"
-                }));
-
-        var list = new[] {new {email = "test"}}.ToList();
-
-        _mockHttp.When("*")
-            .With(request => MatchesFormData(request, "core_user_get_users_by_field"))
-            .Respond(
-                "application/json", JsonSerializer.Serialize(list));
-
-        // Act
-        var result = await _systemUnderTest.IsLMSAdminAsync("token");
-
-        // Assert
-        Assert.IsTrue(result);
-    }
-
-    [Test]
     public async Task GetCourseForUser_Valid_GetCoursesForUser()
     {
         // Arrange
@@ -179,7 +151,6 @@ public class MoodleWebApiTest
         var result = await _systemUnderTest.GetLMSUserDataAsync("moodleToken");
 
         // Assert
-        Assert.That(result.IsAdmin, Is.EqualTo(true));
         Assert.That(result.UserId, Is.EqualTo(1));
     }
 

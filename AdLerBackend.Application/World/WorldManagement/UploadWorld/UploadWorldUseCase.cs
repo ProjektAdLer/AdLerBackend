@@ -1,6 +1,5 @@
 ﻿using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.InternalUseCases.CheckUserPrivileges;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.World;
 using AdLerBackend.Application.LMS.GetUserData;
@@ -32,7 +31,6 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
 
     public async Task<bool> Handle(UploadWorldCommand request, CancellationToken cancellationToken)
     {
-        await ThrowIfUserIsNotAdmin(request, cancellationToken);
         await ValidateAtfFile(request, cancellationToken);
 
         var userInformation = await GetUserDataFromLms(request, cancellationToken);
@@ -64,7 +62,6 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
 
         await _worldRepository.AddAsync(courseEntity);
 
-
         return true;
     }
 
@@ -76,14 +73,6 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
             WebServiceToken = request.WebServiceToken
         }, cancellationToken);
         return userInformation;
-    }
-
-    private async Task ThrowIfUserIsNotAdmin(UploadWorldCommand request, CancellationToken cancellationToken)
-    {
-        await _mediator.Send(new CheckUserPrivilegesCommand
-        {
-            WebServiceToken = request.WebServiceToken
-        }, cancellationToken);
     }
 
     private async Task ValidateAtfFile(UploadWorldCommand request, CancellationToken cancellationToken)

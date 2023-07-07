@@ -25,7 +25,7 @@ public class
     public async Task<ScoreElementResponse> Handle(ScoreH5PElementStrategyCommand request,
         CancellationToken cancellationToken)
     {
-        var moodleUrl = _config.MoodleHost;
+        var moodleUrl = _config.MoodleUrl;
 
         // if moodle url is not set, throw exception
         if (string.IsNullOrEmpty(moodleUrl))

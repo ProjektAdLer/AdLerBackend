@@ -19,10 +19,6 @@ public class BackendConfig
     [ConfigurationKeyName("ASPNETCORE_ADLER_MOODLEURL")]
     public string MoodleUrl { get; set; }
 
-    [Required]
-    [ConfigurationKeyName("ASPNETCORE_ADLER_MOODLEHOST")]
-    public string MoodleHost { get; set; }
-
     [RequiredIfProduction]
     [ConfigurationKeyName("ASPNETCORE_DBPASSWORD")]
     public string DbPassword { get; set; }

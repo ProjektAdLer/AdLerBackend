@@ -9,8 +9,7 @@
       "applicationUrl": "https://localhost:3001;http://localhost:3000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_ADLER_MOODLEURL": "http://localhost",
-        "ASPNETCORE_ADLER_MOODLEHOST": "http://localhost"
+        "ASPNETCORE_ADLER_MOODLEURL": "http://localhost"
       }
     },
     "AdLerBackendProduction": {
@@ -23,7 +22,6 @@
         "ASPNETCORE_ENVIRONMENT": "Production",
         "ASPNETCORE_ADLER_MOODLEURL": "placeholder",
         "ASPNETCORE_ADLER_HTTPPORT": 8081,
-        "ASPNETCORE_ADLER_MOODLEHOST": "placeholder",
         "ASPNETCORE_DBPASSWORD": "placeholder",
         "ASPNETCORE_DBUSER": "placeholder",
         "ASPNETCORE_DBNAME": "placeholder",

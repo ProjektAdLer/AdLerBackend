@@ -9,7 +9,6 @@ Die folgende Tabelle listet alle Umgebungsvariablen auf, die konfiguriert werden
 | Variablenname                | Beschreibung                                       | Erforderlich | Erforderlich in Produktion |
 |------------------------------|---------------------------------------------------|--------------|----------------------------|
 | ASPNETCORE_ENVIRONMENT       | Die Umgebung, in der die Anwendung läuft.           | Ja           | N/A                        |
-| ASPNETCORE_ADLER_MOODLEHOST  | Der Host des Moodle-Systems, mit dem AdLer interagiert. | ja           | Nein                       |
 | ASPNETCORE_ADLER_MOODLEURL   | Die URL des Moodle-Systems, mit dem AdLer interagiert. | Ja           | Ja                         |
 | ASPNETCORE_DBPASSWORD        | Passwort für die Datenbank.                        | Nein         | Ja                         |
 | ASPNETCORE_DBUSER            | Benutzername für die Datenbank.                     | Nein         | Ja                         |

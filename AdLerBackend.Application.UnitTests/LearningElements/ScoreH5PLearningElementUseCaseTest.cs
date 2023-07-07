@@ -30,7 +30,7 @@ public class ScoreH5PLearningElementUseCaseTest
         // Arrange
         var configuration = Options.Create(new BackendConfig
         {
-            MoodleHost = url
+            MoodleUrl = url
         });
 
         _ilms.GetLMSUserDataAsync(Arg.Any<string>()).Returns(new LMSUserDataResponse

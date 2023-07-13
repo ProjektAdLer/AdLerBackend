@@ -7,7 +7,7 @@
 #pragma warning disable CS8618
 namespace AdLerBackend.Application.Common.Responses.World;
 
-// This is Version 0.4 of the ATF File
+// This is Version 0.5 of the ATF File
 public class Element
 {
     public int ElementId { get; set; }
@@ -28,6 +28,7 @@ public class WorldAtfResponse
     public string Author { get; set; }
     public string Language { get; set; }
     public World World { get; set; }
+    public string? EvaluationLink { get; set; }
 }
 
 public class Space

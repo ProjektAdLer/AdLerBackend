@@ -13,7 +13,7 @@ public class ValidateAtfFileUseCase : IRequestHandler<ValidateATFFileCommand>
     static ValidateAtfFileUseCase()
     {
         var assembly = Assembly.GetExecutingAssembly();
-        var resourceName = "AdLerBackend.Application.Common.Schemas.schema0_4.json";
+        var resourceName = "AdLerBackend.Application.Common.Schemas.schema0_5.json";
 
         using var stream = assembly.GetManifestResourceStream(resourceName);
         using var reader = new StreamReader(stream);

@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "fileVersion": {
+      "type": "string",
+      "enum": ["0.5" ,"0.4"]
+    },
+    "amgVersion": { "type": "string" },
+    "author": { "type": "string" },
+    "language": { "type": "string", "enum": ["de", "en"] },
+    "world": {
+      "type": "object",
+      "properties": {
+        "worldName": { "type": "string" },
+        "worldUUID": { "type": "string" },
+        "worldDescription": { "type": "string" },
+        "worldGoals": { "type": "array", "items": { "type": "string" } },
+        "topics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "topicId": { "type": "integer" },
+              "topicName": { "type": "string" },
+              "topicContents": { "type": "array", "items": { "type": "integer" } }
+            },
+            "required": ["topicId", "topicName", "topicContents"]
+          }
+        },
+        "spaces": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "spaceId": { "type": "integer" },
+              "spaceUUID": { "type": "string" },
+              "spaceName": { "type": "string" },
+              "spaceDescription": { "type": "string" },
+              "spaceGoals": { "type": "array", "items": { "type": "string" } },
+              "spaceSlotContents": {
+                "type": "array",
+                "items": { "oneOf": [{ "type": "integer" }, { "type": "null" }] },
+                "minItems": 1
+              },
+              "requiredPointsToComplete": { "type": "integer" },
+              "requiredSpacesToEnter": { "type": "string" },
+              "spaceTemplate": { "type": "string" },
+              "spaceTemplateStyle": { "type": "string" }
+            },
+            "required": [
+              "spaceId",
+              "spaceDescription",
+              "spaceGoals",
+              "spaceSlotContents",
+              "requiredSpacesToEnter",
+              "spaceName",
+              "spaceTemplate",
+              "spaceTemplateStyle",
+              "spaceUUID"
+            ]
+          },
+          "minItems": 1
+        },
+        "elements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "elementId": { "type": "integer" },
+              "elementUUID": { "type": "string" },
+              "elementName": { "type": "string" },
+              "elementDescription": { "type": "string" },
+              "elementGoals": { "type": "array", "items": { "type": "string" } },
+              "elementCategory": { "type": "string" },
+              "elementFileType": { "type": "string" },
+              "elementMaxScore": { "type": "integer" },
+              "elementModel": { "type": "string" }
+            },
+            "required": [
+              "elementId",
+              "elementCategory",
+              "elementFileType",
+              "elementMaxScore",
+              "elementName",
+              "elementModel",
+              "elementUUID"
+            ],
+            "minItems": 1
+          }
+        },
+        "evaluationLink": { "type": "string" }
+      },
+      "required": ["spaces", "elements", "worldName", "worldUUID"]
+    }
+  },
+  "required": ["fileVersion", "world"]
+}

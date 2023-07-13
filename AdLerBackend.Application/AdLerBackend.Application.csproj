@@ -8,12 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="11.1.0" />
-        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.1.0" />
-        <PackageReference Include="MediatR" Version="12.0.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.9" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.6.22324.4" />
-        <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.14" />
+        <PackageReference Include="FluentValidation" Version="11.1.0"/>
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.1.0"/>
+        <PackageReference Include="MediatR" Version="12.0.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.9"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.6.22324.4"/>
+        <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.14"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -23,12 +23,14 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\AdLerBackend.Domain\AdLerBackend.Domain.csproj" />
+        <ProjectReference Include="..\AdLerBackend.Domain\AdLerBackend.Domain.csproj"/>
     </ItemGroup>
-    
+
 
     <ItemGroup>
-        <EmbeddedResource Include="Common\Schemas\schema0_4.json" />
+        <EmbeddedResource Include="Common\Schemas\schema0_4.json"/>
+        <None Remove="Common\Schemas\schema0_5.json"/>
+        <EmbeddedResource Include="Common\Schemas\schema0_5.json"/>
     </ItemGroup>
 
 </Project>

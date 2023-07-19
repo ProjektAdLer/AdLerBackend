@@ -16,4 +16,4 @@ EXPOSE 80
 EXPOSE 443
 
 COPY --from=build /app/publish .
-ENTRYPOINT ["dotnet", "AdLerBackend.API.dll"]
+CMD ["dotnet", "AdLerBackend.API.dll"]

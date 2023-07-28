@@ -65,13 +65,24 @@ jobs:
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v3
+        run: |
+          export RELEASEVERSION_MAJOR=${{major}}
+          export RELEASEVERSION_MINOR=${{minor}}
+          export RELEASEVERSION_PATCH=${{patch}}
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}_${{version}}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          flavor: |
+            latest=auto
+          
+          tags: |
+            type=semver,pattern={{RELEASEVERSION_MAJOR}}
+            type=semver,pattern={{RELEASEVERSION_MAJOR}}.{{RELEASEVERSION_MINOR}}
+            type=semver,pattern=v{{RELEASEVERSION_MAJOR}}.{{RELEASEVERSION_MINOR}}.{{RELEASEVERSION_PATCH}}
+          
           labels: ${{ steps.meta.outputs.labels }}

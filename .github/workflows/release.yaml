@@ -70,7 +70,7 @@ jobs:
           export RELEASEVERSION_MINOR=${{minor}}
           export RELEASEVERSION_PATCH=${{patch}}
         with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}_${{version}}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}_${{version}}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3

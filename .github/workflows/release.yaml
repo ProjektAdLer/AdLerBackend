@@ -62,15 +62,19 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
+      - name: Extract metadata (tags, labels) for Docker part 1
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}_${{version}}
+          
+      - name: Extract metadata (tags, labels) for Docker part 2
         id: meta
         uses: docker/metadata-action@v3
         run: |
           export RELEASEVERSION_MAJOR=${{major}}
           export RELEASEVERSION_MINOR=${{minor}}
           export RELEASEVERSION_PATCH=${{patch}}
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}_${{version}}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3

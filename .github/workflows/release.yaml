@@ -61,9 +61,6 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Determine version
-        uses: git
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta

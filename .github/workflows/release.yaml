@@ -61,12 +61,15 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Determine version
+        uses: git
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}_${{docker.version}}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}_${{steps.meta.outputs.version}}
           
 
       - name: Build and push Docker image

@@ -62,11 +62,17 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker part 1
+      - name: Determine Version
+        uses: gittools/actions/gitversion/execute@v0
+        with:
+          useConfigFile: true
+
+      - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v3
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}_${{version}}
+          
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
@@ -75,5 +81,7 @@ jobs:
           push: true
           flavor: |
             latest=auto
-          
           labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{version}}, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:v${{major}}, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{major}}.${{minor}}
+          
+      

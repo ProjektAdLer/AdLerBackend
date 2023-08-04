@@ -77,6 +77,6 @@ jobs:
           flavor: |
             latest=auto
           labels: ${{ steps.meta.outputs.labels }}
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{steps.meta.outputs.version}}, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:v${{steps.meta.outputs.major}}, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{steps.meta.outputs.major}}.${{steps.meta.outputs.minor}}
+          tags: ${{ env.IMAGE_NAME }}:${{steps.meta.outputs.version}}, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:v${{steps.meta.outputs.major}}, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{steps.meta.outputs.major}}.${{steps.meta.outputs.minor}}
           
       

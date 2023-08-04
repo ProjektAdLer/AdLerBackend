@@ -31,11 +31,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Determining Current Version
+        id: version
+        uses: codacy/git-version@2.7.1
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}_${{steps.meta.outputs.version}}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}_${{steps.version.outputs.version}}
 
 
       - name: Build and push Docker image
@@ -46,7 +50,7 @@ jobs:
           flavor: |
             latest=auto
           labels: ${{ steps.meta.outputs.labels }}
-          tags: ${{steps.meta.outputs.version}}, v${{steps.meta.outputs.major}}, ${{steps.meta.outputs.major}}.${{steps.meta.outputs.minor}}, killakatze
+          tags: ${{steps.version.outputs.version}}, v${{steps.version.outputs.major}}, ${{steps.version.outputs.major}}.${{steps.version.outputs.minor}}, killakatze
   
   
   

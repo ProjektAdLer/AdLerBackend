@@ -66,13 +66,17 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}_${{steps.meta.outputs.version}}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
+          tags: ${{ steps.meta.outputs.tags }}
           flavor: latest=auto
-          tags: v${{steps.meta.outputs.major}}, ${{steps.meta.outputs.major}}.${{steps.meta.outputs.minor}}, foo
           labels: ${{ steps.meta.outputs.labels }}

@@ -74,5 +74,5 @@ jobs:
           context: .
           push: true
           flavor: latest=auto
-          tags: v{{steps.meta.outputs.major}}, {{steps.meta.outputs.major}}.{{steps.meta.outputs.minor}}, foo
+          tags: v${{steps.meta.outputs.major}}, ${{steps.meta.outputs.major}}.${{steps.meta.outputs.minor}}, foo
           labels: ${{ steps.meta.outputs.labels }}

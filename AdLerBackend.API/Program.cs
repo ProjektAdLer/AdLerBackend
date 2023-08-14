@@ -21,6 +21,8 @@ if (!builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 
+app.MapHealthChecks("/api/health");
+
 
 var stringBuilder = new StringBuilder();
 

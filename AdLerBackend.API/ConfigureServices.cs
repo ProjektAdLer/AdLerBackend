@@ -27,6 +27,7 @@ public static class ConfigureServices
 
 
         services.AddEndpointsApiExplorer();
+        services.AddHealthChecks();
         services.AddSwaggerGen(options =>
         {
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

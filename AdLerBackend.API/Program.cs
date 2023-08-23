@@ -17,14 +17,6 @@ builder.Services
     .AddCors()
     .AddLogging();
 
-// Configure Kestrel for both development and production
-builder.WebHost.ConfigureKestrel(options =>
-{
-    // TODO: make configurable
-    options.Limits.MaxRequestBodySize = 1048576000; // 1 GB
-    // Additional Kestrel configuration here
-});
-
 
 if (!builder.Environment.IsDevelopment())
     builder.ConfigureWebserverForProduction();

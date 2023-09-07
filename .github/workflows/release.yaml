@@ -107,6 +107,13 @@ jobs:
             cp -r AdLerBackend_ActionsTesting buffer
             zip -r light_src.zip buffer
 
+        - name: update release
+          id: update_release
+          uses: tubone24/update_release@v1.0
+          env:
+            GITHUB_TOKEN: ${{ github.token }}
+          with:
+            body: test_body # new body text
 
         - name: Upload Release Asset
           id: upload-release-asset
@@ -114,7 +121,7 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
-            upload_url: ${{ github.event.release.upload_url }}
+            upload_url: ${{ steps.update_release.outputs.upload_url }}
             asset_path: ../light_src.zip
             asset_name: light_src.zip
             asset_content_type: application/zip

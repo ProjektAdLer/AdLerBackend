@@ -5,6 +5,7 @@
 #pragma warning disable CS8618
 
 using System.Text.Json.Serialization;
+using AdLerBackend.Application.Configuration;
 
 namespace AdLerBackend.Application.Common.Responses.World;
 
@@ -63,9 +64,9 @@ public class AdaptivityElement : Element
     public AdaptivityContent AdaptivityContent { get; set; }
 }
 
-[JsonDerivedType(typeof(BaseElement), "BaseLearningElement")]
-[JsonDerivedType(typeof(Element), "LearningElement")]
-[JsonDerivedType(typeof(AdaptivityElement), "AdaptivityLearningElement")]
+[JsonDerivedType(typeof(BaseElement), JsonTypes.BaseLearningElementType)]
+[JsonDerivedType(typeof(Element), JsonTypes.LearningElementType)]
+[JsonDerivedType(typeof(AdaptivityElement), JsonTypes.AdaptivityLearningElementType)]
 public class BaseElement
 {
     public int ElementId { get; set; }
@@ -105,9 +106,9 @@ public class AdaptivityQuestion
 }
 
 //[JsonDerivedType(typeof(AdaptivityActionBase), "base")]
-[JsonDerivedType(typeof(CommentAction), "AdaptivityCommentAction")]
-[JsonDerivedType(typeof(ElementReferenceAction), "AdaptivityElementReferenceAction")]
-[JsonDerivedType(typeof(ContentReferenceAction), "AdaptivityContentReferenceAction")]
+[JsonDerivedType(typeof(CommentAction), JsonTypes.AdaptivityCommentActionType)]
+[JsonDerivedType(typeof(ElementReferenceAction), JsonTypes.AdaptivityElementReferenceActionType)]
+[JsonDerivedType(typeof(ContentReferenceAction), JsonTypes.AdaptivityContentReferenceActionType)]
 public abstract class AdaptivityActionBase
 {
     public string AdaptivityActionType { get; set; }

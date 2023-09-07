@@ -83,7 +83,9 @@ jobs:
   
     Lightweight_Asset:
       runs-on: ubuntu-latest
-
+      permissions:
+        contents: read
+        packages: write
       steps:
         - name: Checkout Repository
           uses: actions/checkout@v2
@@ -102,7 +104,8 @@ jobs:
         - name: show files recursively
           run: |
             cd ..
-            zip -r light_src.zip AdLerBackend_ActionsTesting
+            cp -r AdLerBackend_ActionsTesting buffer
+            zip -r light_src.zip buffer
 
 
         - name: Upload Release Asset

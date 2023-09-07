@@ -105,8 +105,18 @@ jobs:
           
         - name: show files recursively
           run: |
+            echo "part 1"
+            ls -a
+            
+            echo "part 2"
             cd ..
+            ls -a
+            
+            echo "part 3"
             cd ..
+            ls -a
+            
+            echo "part 4"
             ls -R
 
         - name: Upload Release Asset

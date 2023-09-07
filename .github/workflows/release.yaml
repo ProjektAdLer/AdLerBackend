@@ -89,23 +89,18 @@ jobs:
       steps:
         - name: Checkout Repository
           uses: actions/checkout@v2
-
-        - name: Remove .github Folder
-          run: |
-            rm -rf .github
-
-        - name: Zip Repository
-          run: |
-            zip -r source_code.zip .
-
-        - name: Rename Zip File
-          run: mv source_code.zip new_name.zip
           
         - name: show files recursively
           run: |
             cd ..
             cp -r AdLerBackend_ActionsTesting buffer
+            echo "removing unnecessary files"
+            
+            
+            
+            echo "packing files for upload"
             zip -r light_src.zip buffer
+            tar -zcvf light_src.tar.gz buffer
 
         - name: update release
           id: update_release
@@ -115,7 +110,7 @@ jobs:
           with:
             body: test_body # new body text
 
-        - name: Upload Release Asset
+        - name: Upload lightweight zip Release Asset
           id: upload-release-asset
           uses: actions/upload-release-asset@v1
           env:
@@ -125,7 +120,17 @@ jobs:
             asset_path: ../light_src.zip
             asset_name: light_src.zip
             asset_content_type: application/zip
-            
+
+        - name: Upload lightweight gzip Release Asset
+          id: upload-release-asset
+          uses: actions/upload-release-asset@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            upload_url: ${{ steps.update_release.outputs.upload_url }}
+            asset_path: ../light_src.tar.gz
+            asset_name: light_src.tar.gz
+            asset_content_type: application/gzip
             
           
         

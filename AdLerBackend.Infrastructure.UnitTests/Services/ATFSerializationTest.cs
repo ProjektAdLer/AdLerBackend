@@ -3,10 +3,10 @@ using AdLerBackend.Infrastructure.Services;
 
 namespace AdLerBackend.Infrastructure.UnitTests.Services;
 
-public class ATFSerializationTest
+public class AtfSerializationTest
 {
     [Test]
-    public async Task CanSerializeATF()
+    public Task CanSerializeAtf()
     {
         // Arrange
         var systemUnderTest = new SerializationService();
@@ -22,5 +22,6 @@ public class ATFSerializationTest
 
         // Assert
         Assert.That(true);
+        return Task.CompletedTask;
     }
 }

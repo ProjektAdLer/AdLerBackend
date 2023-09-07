@@ -4,79 +4,133 @@ on:
     types: [created]
 
 jobs:
-  test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-20.04, windows-latest, macos-latest]
-    env:
-      dotNetVersion: net7.0
-      dotNetConfiguration: Release
-    steps:
-      # checkout the repo
-      - uses: actions/checkout@v2
-        with:
-          submodules: 'true'
-
-      # install dependencies, build, and test
-      - name: Setup Dotnet for use with actions
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '7.x'
-
-      - name: Cache Nuget Packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.nuget/packages
-          # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget
-
-      - name: Run automated unit and integration tests
-        run: dotnet test
-  publish:
-    needs: test
+#  test:
+#    runs-on: ${{ matrix.os }}
+#    strategy:
+#      matrix:
+#        os: [ubuntu-20.04, windows-latest, macos-latest]
+#    env:
+#      dotNetVersion: net7.0
+#      dotNetConfiguration: Release
+#    steps:
+#      # checkout the repo
+#      - uses: actions/checkout@v2
+#        with:
+#          submodules: 'true'
+#
+#      # install dependencies, build, and test
+#      - name: Setup Dotnet for use with actions
+#        uses: actions/setup-dotnet@v1
+#        with:
+#          dotnet-version: '7.x'
+#
+#      - name: Cache Nuget Packages
+#        uses: actions/cache@v2
+#        with:
+#          path: ~/.nuget/packages
+#          # Look to see if there is a cache hit for the corresponding requirements file
+#          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+#          restore-keys: |
+#            ${{ runner.os }}-nuget
+#
+#      - name: Run automated unit and integration tests
+#        run: dotnet test
+#  publish:
+#    needs: test
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: read
+#      packages: write
+#    env:
+#      dotNetVersion: net7.0
+#      dotNetConfiguration: Release
+#      REGISTRY: ghcr.io
+#      IMAGE_NAME: ${{ github.repository }}
+#    steps:
+#      - uses: actions/checkout@v2
+#        with:
+#          submodules: 'true'
+#
+#      - name: Set up Docker Buildx
+#        id: buildx
+#        uses: docker/setup-buildx-action@v1
+#
+#      - name: Log in to the Container registry
+#        uses: docker/login-action@v2
+#        with:
+#          registry: ${{ env.REGISTRY }}
+#          username: ${{ github.actor }}
+#          password: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Extract metadata (tags, labels) for Docker
+#        id: meta
+#        uses: docker/metadata-action@v3
+#        with:
+#          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+#          tags: |
+#            type=semver,pattern={{version}}
+#            type=semver,pattern={{major}}.{{minor}}
+#            type=semver,pattern={{major}}
+#
+#      - name: Build and push Docker image
+#        uses: docker/build-push-action@v3
+#        with:
+#          context: .
+#          push: true
+#          tags: ${{ steps.meta.outputs.tags }}
+#          flavor: latest=auto
+#          labels: ${{ steps.meta.outputs.labels }}
+          
+  Create_Asset:
+    #needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-    env:
-      dotNetVersion: net7.0
-      dotNetConfiguration: Release
-      REGISTRY: ghcr.io
-      IMAGE_NAME: ${{ github.repository }}
+#creates a source code asset without .gitignore
     steps:
-      - uses: actions/checkout@v2
+      - name: Create .zip lightweight Asset
+        uses: actions/create-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          submodules: 'true'
-
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@v2
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./src
+          asset_name: src.zip
+          asset_content_type: application/zip
+          
+      - name: Edits the new .zip lightweight and removes unnecessary files
+        run: |
+          unzip src.zip -d src
+          rm -rf src/.github
+          rm -f src/.dockerignore
+          rm -rf src/README.MD
+          rm -rf src/.github
+          zip -r src.zip src
+          rm -rf src
+          
+#does the same but for a tar.gz file
+      - name: Create .tar.gz lightweight Asset
+        uses: actions/create-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          flavor: latest=auto
-          labels: ${{ steps.meta.outputs.labels }}
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./src
+          asset_name: src.tar.gz
+          asset_content_type: application/gzip
+            
+      - name: Edits the new .tar.gz lightweight Asset and removes unnecessary files
+        run: |
+          tar -xvf src.tar.gz -C src
+          rm -rf src/.github
+          rm -f src/.dockerignore
+          rm -rf src/README.MD
+          rm -rf src/.github
+          tar -czvf src.tar.gz src
+          rm -rf src
+            
+            
+          
+        
+      

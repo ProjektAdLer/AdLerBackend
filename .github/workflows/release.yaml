@@ -94,13 +94,17 @@ jobs:
           run: |
             cd ..
             cp -r AdLerBackend_ActionsTesting buffer
-            echo "removing unnecessary files"
-            
-            
+            echo "removing unnecessary files"f
+            rm -rf buffer/.git
+            rm -rf buffer/.github
+            rm -rf buffer/.gitignore
+            rm -rf buffer/.dockerignore
+            rm -rf buffer/BackendDigramme.eapx
+            rm -rf buffer/README.MD
             
             echo "packing files for upload"
             zip -r light_src.zip buffer
-            tar -zcvf light_src.tar.gz buffer
+            tar -zcvf light_src.tar.gz bufferf
 
         - name: update release
           id: update_release
@@ -111,7 +115,6 @@ jobs:
             body: test_body # new body text
 
         - name: Upload lightweight zip Release Asset
-          id: upload-release-asset
           uses: actions/upload-release-asset@v1
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -122,7 +125,6 @@ jobs:
             asset_content_type: application/zip
 
         - name: Upload lightweight gzip Release Asset
-          id: upload-release-asset
           uses: actions/upload-release-asset@v1
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

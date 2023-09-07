@@ -28,7 +28,6 @@ public class WorldAtfResponse
     public string Author { get; set; }
     public string Language { get; set; }
     public World World { get; set; }
-    public string? EvaluationLink { get; set; }
 }
 
 public class Space
@@ -61,4 +60,5 @@ public class World
     public List<Topic> Topics { get; set; }
     public List<Space> Spaces { get; set; }
     public List<Element> Elements { get; set; }
+    public string? EvaluationLink { get; set; }
 }

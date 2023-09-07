@@ -87,10 +87,10 @@ jobs:
     permissions:
       contents: read
       packages: write
-#creates a source code asset without .gitignore
+#creates a source code asset without .gitignore using uploade-release-asset
     steps:
       - name: Create .zip lightweight Asset
-        uses: actions/create-release-asset@v1
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -111,7 +111,7 @@ jobs:
           
 #does the same but for a tar.gz file
       - name: Create .tar.gz lightweight Asset
-        uses: actions/create-release-asset@v1
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

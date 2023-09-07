@@ -104,7 +104,7 @@ jobs:
           run: mv source_code.zip new_name.zip
           
         - name: show files recursively
-          run: ls -R
+          run: ls .. -R
 
         - name: Upload Release Asset
           id: upload-release-asset

@@ -88,10 +88,6 @@ jobs:
         - name: Checkout Repository
           uses: actions/checkout@v2
 
-        - name: Create Source Code Asset
-          run: |
-            # Add your commands here to create the source code asset
-
         - name: Remove .github Folder
           run: |
             rm -rf .github
@@ -105,19 +101,9 @@ jobs:
           
         - name: show files recursively
           run: |
-            echo "part 1"
-            ls -a
-            
-            echo "part 2"
             cd ..
-            ls -a
-            
-            echo "part 3"
-            cd ..
-            ls -a
-            
-            echo "part 4"
-            ls -R
+            zip -r light_src.zip AdLerBackend_ActionsTesting
+
 
         - name: Upload Release Asset
           id: upload-release-asset
@@ -126,8 +112,8 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
             upload_url: ${{ github.event.release.upload_url }}
-            asset_path: ./new_name.zip
-            asset_name: new_name.zip
+            asset_path: ./light_src.zip
+            asset_name: light_src.zip
             asset_content_type: application/zip
             
             

@@ -50,9 +50,9 @@ public class GetAllElementsFromLmsUseCaseTest
                         SpaceName = "spaceName"
                     }
                 },
-                Elements = new List<Application.Common.Responses.World.Element>
+                Elements = new List<BaseElement>
                 {
-                    new()
+                    new Application.Common.Responses.World.Element
                     {
                         ElementId = 1337
                     }
@@ -118,9 +118,9 @@ public class GetAllElementsFromLmsUseCaseTest
         {
             World = new Application.Common.Responses.World.World
             {
-                Elements = new List<Application.Common.Responses.World.Element>
+                Elements = new List<BaseElement>
                 {
-                    new()
+                    new Application.Common.Responses.World.Element
                     {
                         ElementId = 1337
                     }

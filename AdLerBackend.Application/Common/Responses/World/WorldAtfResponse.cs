@@ -1,15 +1,14 @@
 ﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
-
 // ReSharper disable ClassNeverInstantiated.Global
+
+#pragma warning disable CS8618
 
 using System.Text.Json.Serialization;
 
-#pragma warning disable CS8618
 namespace AdLerBackend.Application.Common.Responses.World;
 
-// This is Version 0.5 of the ATF File
+// This is the ATF File format
 
 public class WorldAtfResponse
 {

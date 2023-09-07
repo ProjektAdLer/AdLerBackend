@@ -9,12 +9,15 @@ namespace AdLerBackend.Application.Configuration;
 public static class JsonTypes
 {
     public const string AtfType = "ATF";
+
     public const string LearningWorldType = "LearningWorld";
     public const string LearningTopicType = "LearningTopic";
     public const string LearningSpaceType = "LearningSpace";
+
     public const string LearningElementType = "LearningElement";
-    public const string AdaptivityLearningElementType = "AdaptivityLearningElement";
     public const string BaseLearningElementType = "BaseLearningElement";
+    public const string AdaptivityLearningElementType = "AdaptivityLearningElement";
+
     public const string AdaptivityContentType = "adaptivityContent";
     public const string AdaptivityTaskType = "adaptivityTask";
     public const string AdaptivityQuestionType = "adaptivityQuestion";

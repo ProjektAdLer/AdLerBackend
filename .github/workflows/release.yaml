@@ -104,7 +104,7 @@ jobs:
             
             echo "packing files for upload"
             zip -r light_src.zip buffer
-            tar -zcvf light_src.tar.gz bufferf
+            tar -zcvf light_src.tar.gz buffer
 
         - name: update release
           id: update_release

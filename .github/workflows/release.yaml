@@ -4,135 +4,136 @@ on:
     types: [created]
 
 jobs:
-#  test:
-#    runs-on: ${{ matrix.os }}
-#    strategy:
-#      matrix:
-#        os: [ubuntu-20.04, windows-latest, macos-latest]
-#    env:
-#      dotNetVersion: net7.0
-#      dotNetConfiguration: Release
-#    steps:
-#      # checkout the repo
-#      - uses: actions/checkout@v2
-#        with:
-#          submodules: 'true'
-#
-#      # install dependencies, build, and test
-#      - name: Setup Dotnet for use with actions
-#        uses: actions/setup-dotnet@v1
-#        with:
-#          dotnet-version: '7.x'
-#
-#      - name: Cache Nuget Packages
-#        uses: actions/cache@v2
-#        with:
-#          path: ~/.nuget/packages
-#          # Look to see if there is a cache hit for the corresponding requirements file
-#          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-#          restore-keys: |
-#            ${{ runner.os }}-nuget
-#
-#      - name: Run automated unit and integration tests
-#        run: dotnet test
-#  publish:
-#    needs: test
-#    runs-on: ubuntu-latest
-#    permissions:
-#      contents: read
-#      packages: write
-#    env:
-#      dotNetVersion: net7.0
-#      dotNetConfiguration: Release
-#      REGISTRY: ghcr.io
-#      IMAGE_NAME: ${{ github.repository }}
-#    steps:
-#      - uses: actions/checkout@v2
-#        with:
-#          submodules: 'true'
-#
-#      - name: Set up Docker Buildx
-#        id: buildx
-#        uses: docker/setup-buildx-action@v1
-#
-#      - name: Log in to the Container registry
-#        uses: docker/login-action@v2
-#        with:
-#          registry: ${{ env.REGISTRY }}
-#          username: ${{ github.actor }}
-#          password: ${{ secrets.GITHUB_TOKEN }}
-#
-#      - name: Extract metadata (tags, labels) for Docker
-#        id: meta
-#        uses: docker/metadata-action@v3
-#        with:
-#          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-#          tags: |
-#            type=semver,pattern={{version}}
-#            type=semver,pattern={{major}}.{{minor}}
-#            type=semver,pattern={{major}}
-#
-#      - name: Build and push Docker image
-#        uses: docker/build-push-action@v3
-#        with:
-#          context: .
-#          push: true
-#          tags: ${{ steps.meta.outputs.tags }}
-#          flavor: latest=auto
-#          labels: ${{ steps.meta.outputs.labels }}
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, windows-latest, macos-latest]
+    env:
+      dotNetVersion: net7.0
+      dotNetConfiguration: Release
+    steps:
+      # checkout the repo
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+
+      # install dependencies, build, and test
+      - name: Setup Dotnet for use with actions
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '7.x'
+
+      - name: Cache Nuget Packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.nuget/packages
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+
+      - name: Run automated unit and integration tests
+        run: dotnet test
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      dotNetVersion: net7.0
+      dotNetConfiguration: Release
+      REGISTRY: ghcr.io
+      IMAGE_NAME: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          flavor: latest=auto
+          labels: ${{ steps.meta.outputs.labels }}
   
-    Lightweight_Asset:
-      runs-on: ubuntu-latest
-      permissions:
-        contents: write
-        packages: write
-      steps:
-        - name: Checkout Repository
-          uses: actions/checkout@v2
+  Lightweight_Asset:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        
+      - name: show files recursively
+        run: |
+          cd ..
+          cp -r AdLerBackend_ActionsTesting buffer
+          echo "removing unnecessary files"f
+          rm -rf buffer/.git
+          rm -rf buffer/.github
+          rm -rf buffer/.gitignore
+          rm -rf buffer/.dockerignore
+          rm -rf buffer/BackendDigramme.eapx
+          rm -rf buffer/README.MD
           
-        - name: show files recursively
-          run: |
-            cd ..
-            cp -r AdLerBackend_ActionsTesting buffer
-            echo "removing unnecessary files"f
-            rm -rf buffer/.git
-            rm -rf buffer/.github
-            rm -rf buffer/.gitignore
-            rm -rf buffer/.dockerignore
-            rm -rf buffer/BackendDigramme.eapx
-            rm -rf buffer/README.MD
-            
-            echo "packing files for upload"
-            zip -r light_src.zip buffer
-            tar -zcvf light_src.tar.gz buffer
+          echo "packing files for upload"
+          zip -r light_src.zip buffer
+          tar -zcvf light_src.tar.gz buffer
 
-        - name: update release
-          id: update_release
-          uses: tubone24/update_release@v1.0
-          env:
-            GITHUB_TOKEN: ${{ github.token }}
-          with:
-            body: test_body # new body text
+      - name: update release
+        id: update_release
+        uses: tubone24/update_release@v1.0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          body: test_body # new body text
 
-        - name: Upload lightweight zip Release Asset
-          uses: actions/upload-release-asset@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            upload_url: ${{ steps.update_release.outputs.upload_url }}
-            asset_path: ../light_src.zip
-            asset_name: light_src.zip
-            asset_content_type: application/zip
+      - name: Upload lightweight zip Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.update_release.outputs.upload_url }}
+          asset_path: ../light_src.zip
+          asset_name: light_src.zip
+          asset_content_type: application/zip
 
-        - name: Upload lightweight gzip Release Asset
-          uses: actions/upload-release-asset@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            upload_url: ${{ steps.update_release.outputs.upload_url }}
-            asset_path: ../light_src.tar.gz
-            asset_name: light_src.tar.gz
-            asset_content_type: application/gzip
+      - name: Upload lightweight gzip Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.update_release.outputs.upload_url }}
+          asset_path: ../light_src.tar.gz
+          asset_name: light_src.tar.gz
+          asset_content_type: application/gzip
             
           
         

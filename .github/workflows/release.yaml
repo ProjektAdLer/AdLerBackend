@@ -80,55 +80,36 @@ jobs:
 #          tags: ${{ steps.meta.outputs.tags }}
 #          flavor: latest=auto
 #          labels: ${{ steps.meta.outputs.labels }}
-          
-  Create_Asset:
-    #needs: test
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-#creates a source code asset without .gitignore using uploade-release-asset
-    steps:
-      - name: Create .zip lightweight Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./src
-          asset_name: src.zip
-          asset_content_type: application/zip
-          
-      - name: Edits the new .zip lightweight and removes unnecessary files
-        run: |
-          unzip src.zip -d src
-          rm -rf src/.github
-          rm -f src/.dockerignore
-          rm -rf src/README.MD
-          rm -rf src/.github
-          zip -r src.zip src
-          rm -rf src
-          
-#does the same but for a tar.gz file
-      - name: Create .tar.gz lightweight Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./src
-          asset_name: src.tar.gz
-          asset_content_type: application/gzip
-            
-      - name: Edits the new .tar.gz lightweight Asset and removes unnecessary files
-        run: |
-          tar -xvf src.tar.gz -C src
-          rm -rf src/.github
-          rm -f src/.dockerignore
-          rm -rf src/README.MD
-          rm -rf src/.github
-          tar -czvf src.tar.gz src
-          rm -rf src
+  
+    Lightweight_Asset:
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v2
+
+        - name: Create Source Code Asset
+          run: |
+            # Add your commands here to create the source code asset
+
+        - name: Remove .github Folder
+          run: |
+            rm -rf .github
+
+        - name: Zip Repository
+          run: |
+            zip -r source_code.zip .
+
+        - name: Rename Zip File
+          run: mv source_code.zip new_name.zip
+
+        - name: Upload Release Asset
+          uses: actions/upload-release-asset@v1
+          with:
+            upload_url: ${{ github.event.repository.releases[0].upload_url }}
+            asset_path: ./new_name.zip
+            asset_name: new_name.zip
+            asset_content_type: application/zip
             
             
           

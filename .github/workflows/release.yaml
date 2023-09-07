@@ -112,7 +112,7 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
             upload_url: ${{ github.event.release.upload_url }}
-            asset_path: ./light_src.zip
+            asset_path: ../light_src.zip
             asset_name: light_src.zip
             asset_content_type: application/zip
             

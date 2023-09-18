@@ -1,4 +1,6 @@
-﻿using AdLerBackend.Application.Common.Responses.LMSAdapter;
+﻿using AdLerBackend.Application.Common.DTOs;
+using AdLerBackend.Application.Common.Responses.Adaptivity;
+using AdLerBackend.Application.Common.Responses.LMSAdapter;
 
 namespace AdLerBackend.Application.Common.Interfaces;
 
@@ -77,12 +79,26 @@ public interface ILMS
     /// <summary>
     ///     Gets the LMS IDs for a given list of UUID
     /// </summary>
-    /// <param name="token"></param>
-    /// <param name="courseInstanceId"></param>
-    /// <param name="uuids"></param>
+    /// <param name="uuids">List of UUIDs to be </param>
     /// <returns></returns>
     Task<IEnumerable<LmsUuidResponse>> GetLmsElementIdsByUuidsAsync(string token, int courseInstanceId,
         IEnumerable<string> uuids);
 
+    /// <summary>
+    ///     Deletes a Course from the LMS
+    /// </summary>
+    /// <returns></returns>
     Task DeleteCourseAsync(string token, int worldId);
+
+    /// <summary>
+    ///     Give an Answer for an Adaptivity Question to the LMS
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="worldId"></param>
+    /// <param name="elementId"></param>
+    /// <param name="answeredQuestions"></param>
+    /// <returns> A list of the given Answers and there State of correctnes</returns>
+    Task<IEnumerable<AdaptivityQuestionStateResponse>> AnswerAdaptivityQuestionsAsync(string token, int worldId,
+        int elementId,
+        IEnumerable<AdaptivityAnsweredQuestionTo> answeredQuestions);
 }

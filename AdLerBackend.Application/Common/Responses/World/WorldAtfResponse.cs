@@ -8,9 +8,9 @@ using System.Text.Json.Serialization;
 using AdLerBackend.Application.Configuration;
 
 namespace AdLerBackend.Application.Common.Responses.World;
-
 // This is the ATF File format
 
+[JsonDerivedType(typeof(WorldAtfResponse), JsonTypes.AtfType)]
 public class WorldAtfResponse
 {
     public string FileVersion { get; set; }
@@ -20,6 +20,7 @@ public class WorldAtfResponse
     public World World { get; set; }
 }
 
+[JsonDerivedType(typeof(Space), JsonTypes.LearningSpaceType)]
 public class Space
 {
     public int SpaceId { get; set; }
@@ -34,6 +35,7 @@ public class Space
     public string SpaceTemplateStyle { get; set; }
 }
 
+[JsonDerivedType(typeof(Topic), JsonTypes.LearningTopicType)]
 public class Topic
 {
     public int TopicId { get; set; }
@@ -41,6 +43,7 @@ public class Topic
     public List<int> TopicContents { get; set; }
 }
 
+[JsonDerivedType(typeof(World), JsonTypes.LearningWorldType)]
 public class World
 {
     public string WorldName { get; set; }
@@ -78,6 +81,7 @@ public class BaseElement
     public string ElementFileType { get; set; }
 }
 
+[JsonDerivedType(typeof(AdaptivityContent), JsonTypes.AdaptivityContentType)]
 public class AdaptivityContent
 {
     public string IntroText { get; set; }
@@ -85,6 +89,7 @@ public class AdaptivityContent
     public List<AdaptivityTask> AdaptivityTasks { get; set; }
 }
 
+[JsonDerivedType(typeof(AdaptivityTask), JsonTypes.AdaptivityTaskType)]
 public class AdaptivityTask
 {
     public int TaskId { get; set; }
@@ -95,6 +100,7 @@ public class AdaptivityTask
     public List<AdaptivityQuestion> AdaptivityQuestions { get; set; }
 }
 
+[JsonDerivedType(typeof(AdaptivityQuestion), JsonTypes.AdaptivityQuestionType)]
 public class AdaptivityQuestion
 {
     public string QuestionType { get; set; }
@@ -102,7 +108,8 @@ public class AdaptivityQuestion
     public Guid QuestionUuid { get; set; }
     public int QuestionDifficulty { get; set; }
     public string QuestionText { get; set; }
-    public List<AdaptivityRule> AdaptivityRules { get; set; }
+    public List<AdaptivityTrigger> AdaptivityRules { get; set; }
+    public List<AdaptivityQuestionAnswer> PossibleAnswers { get; set; }
 }
 
 //[JsonDerivedType(typeof(AdaptivityActionBase), "base")]
@@ -111,7 +118,6 @@ public class AdaptivityQuestion
 [JsonDerivedType(typeof(ContentReferenceAction), JsonTypes.AdaptivityContentReferenceActionType)]
 public abstract class AdaptivityActionBase
 {
-    public string AdaptivityActionType { get; set; }
 }
 
 public class CommentAction : AdaptivityActionBase
@@ -131,10 +137,20 @@ public class ContentReferenceAction : AdaptivityActionBase
     public int ElementId { get; set; } // ID of the Content to be referenced (which is also a learning element)
 }
 
-public class AdaptivityRule
+[JsonDerivedType(typeof(CorrectnessTrigger), JsonTypes.CorrectnessTriggerType)]
+public class AdaptivityTrigger
 {
     public int TriggerId { get; set; }
-    public string TriggerType { get; set; }
     public string TriggerCondition { get; set; }
-    public List<AdaptivityActionBase> AdaptivityActions { get; set; }
+    public AdaptivityActionBase AdaptivityAction { get; set; }
+}
+
+public class CorrectnessTrigger : AdaptivityTrigger
+{
+}
+
+[JsonDerivedType(typeof(AdaptivityQuestionAnswer), JsonTypes.AdaptivityQuestionAnswerType)]
+public class AdaptivityQuestionAnswer
+{
+    public string AnswerText { get; set; }
 }

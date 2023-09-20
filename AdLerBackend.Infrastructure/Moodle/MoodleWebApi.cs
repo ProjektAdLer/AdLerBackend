@@ -1,6 +1,8 @@
 ﻿using System.Text.Json;
+using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using AdLerBackend.Application.Common.Interfaces;
+using AdLerBackend.Application.Common.Responses.Adaptivity;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure.Moodle.ApiResponses;
@@ -80,6 +82,18 @@ public class MoodleWebApi : ILMS
         if (warnings?.Data?.Count > 0)
             throw new LmsException("Course could not be deleted because of the following warnings: " +
                                    JsonSerializer.Serialize(warnings.Data));
+    }
+
+    public Task<IEnumerable<AdaptivityQuestionStateResponse>> AnswerAdaptivityQuestionsAsync(string token,
+        int elementId, IEnumerable<AdaptivityAnsweredQuestionTo> answeredQuestions)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<AdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsAsync(string token,
+        int elementId)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<LMSCourseCreationResponse> UploadCourseWorldToLMS(string token, Stream backupFileStream)

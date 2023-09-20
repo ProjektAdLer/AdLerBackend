@@ -48,7 +48,7 @@ public interface ILMS
     ///     Gets the Score of an Element from the LMS via the Plugin
     /// </summary>
     /// <param name="token">Webservice Token</param>
-    /// <param name="elementId">The Module ID if the Element</param>
+    /// <param name="elementId">The Module ID of the Element</param>
     /// <returns></returns>
     Task<bool> GetElementScoreFromPlugin(string token, int elementId);
 
@@ -94,11 +94,17 @@ public interface ILMS
     ///     Give an Answer for an Adaptivity Question to the LMS
     /// </summary>
     /// <param name="token"></param>
-    /// <param name="worldId"></param>
-    /// <param name="elementId"></param>
+    /// <param name="elementId">The Module ID of the Element</param>
     /// <param name="answeredQuestions"></param>
-    /// <returns> A list of the given Answers and there State of correctnes</returns>
-    Task<IEnumerable<AdaptivityQuestionStateResponse>> AnswerAdaptivityQuestionsAsync(string token, int worldId,
-        int elementId,
+    /// <returns> A list of the given Answers and there State of correctness</returns>
+    Task<IEnumerable<AdaptivityQuestionStateResponse>> AnswerAdaptivityQuestionsAsync(string token, int elementId,
         IEnumerable<AdaptivityAnsweredQuestionTo> answeredQuestions);
+
+    /// <summary>
+    ///     Gets all Question in an Adaptivity Element with there State of correctness
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="elementId"></param>
+    /// <returns></returns>
+    Task<IEnumerable<AdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsAsync(string token, int elementId);
 }

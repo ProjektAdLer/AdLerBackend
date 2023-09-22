@@ -45,9 +45,9 @@ public class MoodleWebApi : ILMS
         };
     }
 
-    public async Task<WorldContent[]> GetWorldContentAsync(string token, int worldId)
+    public async Task<LMSWorldContentResponse[]> GetWorldContentAsync(string token, int worldId)
     {
-        var resp = await MoodleCallAsync<WorldContent[]>(new Dictionary<string, HttpContent>
+        var resp = await MoodleCallAsync<LMSWorldContentResponse[]>(new Dictionary<string, HttpContent>
         {
             {"wstoken", new StringContent(token)},
             {"wsfunction", new StringContent("core_course_get_contents")},
@@ -84,13 +84,13 @@ public class MoodleWebApi : ILMS
                                    JsonSerializer.Serialize(warnings.Data));
     }
 
-    public Task<IEnumerable<AdaptivityQuestionStateResponse>> AnswerAdaptivityQuestionsAsync(string token,
+    public Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> AnswerAdaptivityQuestionsAsync(string token,
         int elementId, IEnumerable<AdaptivityAnsweredQuestionTo> answeredQuestions)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<AdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsAsync(string token,
+    public Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsAsync(string token,
         int elementId)
     {
         throw new NotImplementedException();

@@ -33,7 +33,7 @@ public class AllResponsesTest
         yield return new TestCaseData(new Application.Common.Responses.World.World());
         yield return new TestCaseData(new PlayerDataResponse());
         yield return new TestCaseData(new ScoreElementResponse());
-        yield return new TestCaseData(new WorldContent());
+        yield return new TestCaseData(new LMSWorldContentResponse());
         yield return new TestCaseData(new WorldAtfResponse());
         yield return new TestCaseData(new BackendConfig());
     }

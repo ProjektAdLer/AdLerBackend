@@ -78,7 +78,7 @@ public class GetAllElementsFromLmsUseCaseTest
 
         _ilms.GetWorldContentAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new[]
         {
-            new WorldContent
+            new LMSWorldContentResponse
             {
                 Modules = new List<Modules>
                 {
@@ -133,7 +133,7 @@ public class GetAllElementsFromLmsUseCaseTest
 
         _ilms.GetWorldContentAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new[]
         {
-            new WorldContent
+            new LMSWorldContentResponse
             {
                 Modules = new List<Modules>
                 {

@@ -56,7 +56,7 @@ public class
     }
 
     private IEnumerable<ModuleWithId> MapModulesWithAdLerId(WorldAtfResponse dslObject,
-        IEnumerable<WorldContent> worldContent, IEnumerable<LmsUuidResponse> modulesWithUuid)
+        IEnumerable<LMSWorldContentResponse> worldContent, IEnumerable<LmsUuidResponse> modulesWithUuid)
     {
         return modulesWithUuid.Select(mu =>
         {

@@ -27,7 +27,7 @@ public interface ILMS
     /// <param name="token">Token of the LMS User</param>
     /// <param name="worldId">ID of the World</param>
     /// <returns>All User-Visible Contents of a World as Array</returns>
-    Task<WorldContent[]> GetWorldContentAsync(string token, int worldId);
+    Task<LMSWorldContentResponse[]> GetWorldContentAsync(string token, int worldId);
 
     /// <summary>
     ///     Gets all Worlds that the User is enrolled in
@@ -97,7 +97,7 @@ public interface ILMS
     /// <param name="elementId">The Module ID of the Element</param>
     /// <param name="answeredQuestions"></param>
     /// <returns> A list of the given Answers and there State of correctness</returns>
-    Task<IEnumerable<AdaptivityQuestionStateResponse>> AnswerAdaptivityQuestionsAsync(string token, int elementId,
+    Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> AnswerAdaptivityQuestionsAsync(string token, int elementId,
         IEnumerable<AdaptivityAnsweredQuestionTo> answeredQuestions);
 
     /// <summary>
@@ -106,5 +106,5 @@ public interface ILMS
     /// <param name="token"></param>
     /// <param name="elementId"></param>
     /// <returns></returns>
-    Task<IEnumerable<AdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsAsync(string token, int elementId);
+    Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsAsync(string token, int elementId);
 }

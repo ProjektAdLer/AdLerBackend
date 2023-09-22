@@ -2,8 +2,7 @@
 
 public record LMSAdaptivityQuestionStateResponse
 {
-    public string Uuid { get; init; }
+    public Guid Uuid { get; init; }
 
-    // TODO: Change to Type according to new Plugin Mock
-    public string State { get; init; }
+    public AdaptivityStates Status { get; init; } = AdaptivityStates.notAttempted;
 }

@@ -366,4 +366,21 @@ public class MoodleWebApiTest
         // Act and assert that it does not throw
         Assert.ThrowsAsync<LmsException>(async () => await _systemUnderTest.DeleteCourseAsync("token", 1));
     }
+
+    [Test]
+    public async Task GetAdaptivityTaskDetailsAsync_Valid_ReturnsTasks()
+    {
+        // Arrange
+        var webResponse =
+            "{\n    \"data\": {\n        \"Tasks\": [\n            {\n                \"uuid\": \"298a7c8b-f6a6-41a7-b54f-065c70dc47c0\",\n                \"status\": \"correct\"\n            },\n            {\n                \"uuid\": \"febcc2e5-c8b5-48c7-b1b7-e729e2bb12c3\",\n                \"status\": \"incorrect\"\n            },\n            {\n                \"uuid\": \"687d3191-dc59-4142-a7cb-957049e50fcf \",\n                \"status\": \"notAttempted\"\n            },\n            {\n                \"uuid\": \"8b2d1cc2-e567-4558-aae5-55239deb3494\",\n                \"status\": \"correct\"\n            }\n        ]\n    }\n}";
+
+
+        _mockHttp.When("*").Respond("application/json", webResponse);
+
+        // Act
+        var result = await _systemUnderTest.GetAdaptivityTaskDetailsAsync("token", 1);
+
+        // Assert
+        Assert.That(result.Count, Is.EqualTo(4));
+    }
 }

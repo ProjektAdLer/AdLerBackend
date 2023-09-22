@@ -96,9 +96,24 @@ public class MoodleWebApi : ILMS
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<LMSAdaptivityTaskStateResponse>> GetAdaptivityTaskDetailsAsync(string token, int elementId)
+    public async Task<IEnumerable<LMSAdaptivityTaskStateResponse>> GetAdaptivityTaskDetailsAsync(string token,
+        int elementId)
     {
-        throw new NotImplementedException();
+        var rawResponse = await MoodleCallAsync<ResponseWithData<PluginTasksResponse>>(
+            new Dictionary<string, HttpContent>
+            {
+                {"wstoken", new StringContent(token)},
+                {"wsfunction", new StringContent("local_adler_score_get_element_scores")},
+                {"module_ids[0]", new StringContent(elementId.ToString())}
+            });
+
+        var response = rawResponse.Data.Tasks.Select(x => new LMSAdaptivityTaskStateResponse
+        {
+            Uuid = Guid.Parse(x.uuid),
+            State = Enum.Parse<AdaptivityStates>(x.status)
+        }).ToList();
+
+        return response;
     }
 
     public async Task<LMSCourseCreationResponse> UploadCourseWorldToLMS(string token, Stream backupFileStream)

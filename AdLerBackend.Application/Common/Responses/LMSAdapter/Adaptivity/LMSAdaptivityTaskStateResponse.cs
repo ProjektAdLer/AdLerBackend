@@ -2,6 +2,6 @@
 
 public class LMSAdaptivityTaskStateResponse
 {
-    public string Uuid { get; init; }
-    public string State { get; init; }
+    public Guid Uuid { get; init; }
+    public AdaptivityStates State { get; init; } = AdaptivityStates.notAttempted;
 }

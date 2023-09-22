@@ -1,6 +1,6 @@
 ﻿using AdLerBackend.Application.Common.DTOs;
-using AdLerBackend.Application.Common.Responses.Adaptivity;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
+using AdLerBackend.Application.Common.Responses.LMSAdapter.Adaptivity;
 
 namespace AdLerBackend.Application.Common.Interfaces;
 

@@ -2,8 +2,8 @@
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.Responses.Adaptivity;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
+using AdLerBackend.Application.Common.Responses.LMSAdapter.Adaptivity;
 using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure.Moodle.ApiResponses;
 using Microsoft.Extensions.Options;

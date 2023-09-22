@@ -1,4 +1,4 @@
-﻿namespace AdLerBackend.Application.Common.Responses.Adaptivity;
+﻿namespace AdLerBackend.Application.Common.Responses.LMSAdapter.Adaptivity;
 
 public record LMSAdaptivityQuestionStateResponse
 {

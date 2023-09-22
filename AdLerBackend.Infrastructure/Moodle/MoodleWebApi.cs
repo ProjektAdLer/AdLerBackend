@@ -96,6 +96,11 @@ public class MoodleWebApi : ILMS
         throw new NotImplementedException();
     }
 
+    public Task<IEnumerable<LMSAdaptivityTaskStateResponse>> GetAdaptivityTaskDetailsAsync(string token, int elementId)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<LMSCourseCreationResponse> UploadCourseWorldToLMS(string token, Stream backupFileStream)
     {
         var fileContent = new StreamContent(backupFileStream);

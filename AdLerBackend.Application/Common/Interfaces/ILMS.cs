@@ -107,4 +107,12 @@ public interface ILMS
     /// <param name="elementId"></param>
     /// <returns></returns>
     Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsAsync(string token, int elementId);
+
+    /// <summary>
+    ///     Gets all Tasks in an Adaptivity Element with there State of correctness
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="elementId"></param>
+    /// <returns></returns>
+    Task<IEnumerable<LMSAdaptivityTaskStateResponse>> GetAdaptivityTaskDetailsAsync(string token, int elementId);
 }

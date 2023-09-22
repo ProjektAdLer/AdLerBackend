@@ -372,7 +372,7 @@ public class MoodleWebApiTest
     {
         // Arrange
         var webResponse =
-            "{\n    \"data\": {\n        \"Tasks\": [\n            {\n                \"uuid\": \"298a7c8b-f6a6-41a7-b54f-065c70dc47c0\",\n                \"status\": \"correct\"\n            },\n            {\n                \"uuid\": \"febcc2e5-c8b5-48c7-b1b7-e729e2bb12c3\",\n                \"status\": \"incorrect\"\n            },\n            {\n                \"uuid\": \"687d3191-dc59-4142-a7cb-957049e50fcf \",\n                \"status\": \"notAttempted\"\n            },\n            {\n                \"uuid\": \"8b2d1cc2-e567-4558-aae5-55239deb3494\",\n                \"status\": \"correct\"\n            }\n        ]\n    }\n}";
+            "{\n    \"data\": {\n        \"Tasks\": [\n            {\n                \"uuid\": \"298a7c8b-f6a6-41a7-b54f-065c70dc47c0\",\n                \"status\": \"Correct\"\n            },\n            {\n                \"uuid\": \"febcc2e5-c8b5-48c7-b1b7-e729e2bb12c3\",\n                \"status\": \"Incorrect\"\n            },\n            {\n                \"uuid\": \"687d3191-dc59-4142-a7cb-957049e50fcf \",\n                \"status\": \"NotAttempted\"\n            },\n            {\n                \"uuid\": \"8b2d1cc2-e567-4558-aae5-55239deb3494\",\n                \"status\": \"Correct\"\n            }\n        ]\n    }\n}";
 
 
         _mockHttp.When("*").Respond("application/json", webResponse);
@@ -382,5 +382,22 @@ public class MoodleWebApiTest
 
         // Assert
         Assert.That(result.Count, Is.EqualTo(4));
+    }
+
+    [Test]
+    public async Task GetAdaptivityElementDetailsAsync_Valid_ReturnsQuestionDetails()
+    {
+        // Arrange
+        var webResponse =
+            "{\n    \"data\": {\n        \"questions\": [\n            {\n                \"uuid\": \"298a7c8b-f6a6-41a7-b54f-065c70dc47c0\",\n                \"status\": \"correct\",\n                \"answers\": \"[{\\\"checked\\\":false,\\\"answer_correct\\\":true},{\\\"checked\\\":false,\\\"answer_correct\\\":true},{\\\"checked\\\":true,\\\"answer_correct\\\":true},{\\\"checked\\\":false,\\\"answer_correct\\\":true}]\"\n            },\n            {\n                \"uuid\": \"febcc2e5-c8b5-48c7-b1b7-e729e2bb12c3\",\n                \"status\": \"incorrect\",\n                \"answers\": \"[{\\\"checked\\\":false,\\\"answer_correct\\\":true},{\\\"checked\\\":false,\\\"answer_correct\\\":false},{\\\"checked\\\":true,\\\"answer_correct\\\":true},{\\\"checked\\\":false,\\\"answer_correct\\\":false}]\"\n            },\n            {\n                \"uuid\": \"687d3191-dc59-4142-a7cb-957049e50fcf \",\n                \"status\": \"notAttempted\",\n                \"answers\": null\n            },\n            {\n                \"uuid\": \"8b2d1cc2-e567-4558-aae5-55239deb3494\",\n                \"status\": \"correct\",\n                \"answers\": \"[{\\\"checked\\\":false,\\\"answer_correct\\\":true},{\\\"checked\\\":false,\\\"answer_correct\\\":true},{\\\"checked\\\":true,\\\"answer_correct\\\":true},{\\\"checked\\\":false,\\\"answer_correct\\\":true}]\"\n            }\n        ]\n    }\n}";
+
+        _mockHttp.When("*").Respond("application/json", webResponse);
+
+        // Act
+        var result = await _systemUnderTest.GetAdaptivityElementDetailsAsync("token", 1);
+
+        // Assert
+        Assert.That(result.Count, Is.EqualTo(4));
+        Assert.That(result.First().Answers.Count, Is.EqualTo(4));
     }
 }

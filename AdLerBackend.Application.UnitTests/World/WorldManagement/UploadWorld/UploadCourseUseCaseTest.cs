@@ -120,7 +120,7 @@ public class UploadWorldUseCaseTest
             WebServiceToken = "testToken"
         }, CancellationToken.None);
 
-        // Assert that AddAsync has been called with the correct entity
+        // Assert that AddAsync has been called with the Correct entity
         await _worldRepository.Received(1)
             .AddAsync(Arg.Is<WorldEntity>(x => x.Name == "TESTNAME"));
     }
@@ -168,7 +168,7 @@ public class UploadWorldUseCaseTest
             WebServiceToken = "testToken"
         }, CancellationToken.None);
 
-        // Assert that AddAsync has been called with the correct entity
+        // Assert that AddAsync has been called with the Correct entity
         await _worldRepository.Received(1)
             .AddAsync(Arg.Is<WorldEntity>(x => x.Name == "TESTNAME"));
     }

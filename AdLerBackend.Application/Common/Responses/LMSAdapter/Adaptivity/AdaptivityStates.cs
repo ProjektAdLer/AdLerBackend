@@ -2,7 +2,7 @@
 
 public enum AdaptivityStates
 {
-    correct,
-    incorrect,
-    notAttempted
+    Correct,
+    Incorrect,
+    NotAttempted
 }

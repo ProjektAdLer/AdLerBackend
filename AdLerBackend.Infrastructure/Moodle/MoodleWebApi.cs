@@ -90,10 +90,31 @@ public class MoodleWebApi : ILMS
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsAsync(string token,
+    public async Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsAsync(string token,
         int elementId)
     {
-        throw new NotImplementedException();
+        var rawResponse = await MoodleCallAsync<ResponseWithData<PluginQuestionsDetailResponse>>(
+            new Dictionary<string, HttpContent>
+            {
+                {"wstoken", new StringContent(token)},
+                {"wsfunction", new StringContent("mod_adleradaptivity_get_question_details")},
+                {"module_ids[0]", new StringContent(elementId.ToString())}
+            });
+
+        var response = rawResponse.Data.Questions.Select(x => new LMSAdaptivityQuestionStateResponse
+        {
+            Uuid = Guid.Parse(x.Uuid),
+            Status = Enum.Parse<AdaptivityStates>(x.Status, true),
+            Answers = x.Answers != null
+                ? JsonSerializer.Deserialize<IList<LMSAdaptivityQuestionStateResponse.LMSAdaptivityAnswers>>(
+                    x.Answers, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    })
+                : null
+        }).ToList();
+
+        return response;
     }
 
     public async Task<IEnumerable<LMSAdaptivityTaskStateResponse>> GetAdaptivityTaskDetailsAsync(string token,
@@ -110,7 +131,7 @@ public class MoodleWebApi : ILMS
         var response = rawResponse.Data.Tasks.Select(x => new LMSAdaptivityTaskStateResponse
         {
             Uuid = Guid.Parse(x.uuid),
-            State = Enum.Parse<AdaptivityStates>(x.status)
+            State = Enum.Parse<AdaptivityStates>(x.status, true)
         }).ToList();
 
         return response;

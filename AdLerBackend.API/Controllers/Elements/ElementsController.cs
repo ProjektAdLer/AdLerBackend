@@ -1,4 +1,6 @@
+using AdLerBackend.Application.Adaptivity.AnswerAdaptivityQuestion;
 using AdLerBackend.Application.Common.DTOs;
+using AdLerBackend.Application.Common.Responses.Adaptivity;
 using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Element.GetElementScore;
 using AdLerBackend.Application.Element.GetElementSource;
@@ -43,6 +45,26 @@ public class ElementsController : BaseApiController
             ElementId = elementId,
             WorldId = worldId,
             ScoreElementParams = scoreElementParams
+        });
+    }
+
+    /// <summary>
+    ///     Answer a Question in a an Adaptivity Learning Element
+    /// </summary>
+    /// <returns></returns>
+    [HttpPatch("World/{worldId}/Element/{elementId}/Question/{questionId}")]
+    public async Task<ActionResult<AnswerAdaptivityQuestionResponse>> AnswerAdaptivityQuestion(
+        [FromHeader] string token, int worldId,
+        int elementId, int questionId,
+        [FromBody] bool[] answers)
+    {
+        return await Mediator.Send(new AnswerAdaptivityQuestionCommand
+        {
+            ElementId = elementId,
+            WebServiceToken = token,
+            WorldId = worldId,
+            Answers = answers,
+            QuestionId = questionId
         });
     }
 

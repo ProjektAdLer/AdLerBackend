@@ -34,4 +34,10 @@
     </ItemGroup>
 
 
+    <ItemGroup>
+        <Folder Include="Adaptivity\GetAdaptivityModuleQuestionDetails\"/>
+        <Folder Include="Adaptivity\GetAdaptivityModuleTaskDetails\"/>
+    </ItemGroup>
+
+
 </Project>

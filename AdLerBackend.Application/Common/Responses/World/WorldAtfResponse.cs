@@ -109,7 +109,7 @@ public class AdaptivityQuestion
     public int QuestionDifficulty { get; set; }
     public string QuestionText { get; set; }
     public List<AdaptivityTrigger> AdaptivityRules { get; set; }
-    public List<AdaptivityQuestionAnswer> PossibleAnswers { get; set; }
+    public List<AdaptivityQuestionAnswer> Choices { get; set; }
 }
 
 //[JsonDerivedType(typeof(AdaptivityActionBase), "base")]

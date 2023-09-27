@@ -58,6 +58,8 @@ public class World
 
 public class Element : BaseElement
 {
+    public string ElementDescription { get; set; }
+    public List<string> ElementGoals { get; set; }
     public int ElementMaxScore { get; set; }
     public string ElementModel { get; set; }
 }
@@ -75,8 +77,6 @@ public class BaseElement
     public int ElementId { get; set; }
     public string ElementUuid { get; set; }
     public string ElementName { get; set; }
-    public string ElementDescription { get; set; }
-    public List<string> ElementGoals { get; set; }
     public string ElementCategory { get; set; }
     public string ElementFileType { get; set; }
 }

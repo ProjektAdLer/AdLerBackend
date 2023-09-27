@@ -19,29 +19,23 @@ public class
                 ElementId = 123,
                 Success = true
             },
-            GradedQuestions = new List<GradedQuestion>
+            GradedQuestion = new GradedQuestion
             {
-                new()
+                Status = AdaptivityStates.Correct.ToString(),
+                Id = 1234,
+                Answers = new List<GradedQuestion.GradedAnswer>
                 {
-                    Status = AdaptivityStates.Correct.ToString(),
-                    Id = 1234,
-                    Answers = new List<GradedQuestion.GradedAnswer>
+                    new()
                     {
-                        new()
-                        {
-                            Correct = true,
-                            Checked = true
-                        }
+                        Correct = true,
+                        Checked = true
                     }
                 }
             },
-            GradedTasks = new List<GradedTask>
+            GradedTask = new GradedTask
             {
-                new()
-                {
-                    TaskId = 1123,
-                    TaskStatus = AdaptivityStates.Correct.ToString()
-                }
+                TaskId = 1234,
+                TaskStatus = AdaptivityStates.Correct.ToString()
             }
         };
     }

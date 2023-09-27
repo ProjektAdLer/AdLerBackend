@@ -8,6 +8,6 @@ namespace AdLerBackend.Application.Common.Responses.Adaptivity;
 public record AnswerAdaptivityQuestionResponse
 {
     public required ElementScoreResponse ElementScore { get; set; }
-    public required IList<GradedTask> GradedTasks { get; set; } = new List<GradedTask>();
-    public required IList<GradedQuestion> GradedQuestions { get; set; } = new List<GradedQuestion>();
+    public required GradedTask GradedTask { get; set; }
+    public required GradedQuestion GradedQuestion { get; set; }
 }

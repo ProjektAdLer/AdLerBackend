@@ -25,7 +25,7 @@ public class
     {
         var learningElementModules = await _mediator.Send(new GetAllElementsFromLmsCommand
         {
-            WorldId = request.lerningWorldId,
+            WorldId = request.LearningWorldId,
             WebServiceToken = request.WebServiceToken
         }, cancellationToken);
 

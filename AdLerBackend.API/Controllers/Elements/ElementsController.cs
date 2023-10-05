@@ -83,7 +83,7 @@ public class ElementsController : BaseApiController
         {
             WebServiceToken = token,
             ElementId = elementId,
-            lerningWorldId = worldId
+            LearningWorldId = worldId
         });
     }
 

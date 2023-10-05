@@ -11,16 +11,14 @@ public class
     GetAllElementsFromLmsUseCase : IRequestHandler<GetAllElementsFromLmsCommand,
         GetAllElementsFromLmsWithAdLerIdResponse>
 {
-    private readonly IFileAccess _fileAccess;
     private readonly ILMS _lms;
     private readonly ISerialization _serialization;
     private readonly IWorldRepository _worldRepository;
 
-    public GetAllElementsFromLmsUseCase(IWorldRepository worldRepository, IFileAccess fileAccess,
+    public GetAllElementsFromLmsUseCase(IWorldRepository worldRepository,
         ISerialization serialization, ILMS lms)
     {
         _worldRepository = worldRepository;
-        _fileAccess = fileAccess;
         _serialization = serialization;
         _lms = lms;
     }
@@ -30,14 +28,14 @@ public class
     {
         var worldEntity = await GetWorldEntity(request.WorldId);
         var dslObject = _serialization.GetObjectFromJsonString<WorldAtfResponse>(worldEntity.AtfJson);
-        var worldContent = await _lms.GetWorldContentAsync(request.WebServiceToken, worldEntity.LmsWorldId);
+        var worldContentFromLms = await _lms.GetWorldContentAsync(request.WebServiceToken, worldEntity.LmsWorldId);
         var modulesWithUuid = await GetModulesWithUuid(request.WebServiceToken, worldEntity.LmsWorldId,
             dslObject.World.Elements.Select(x => x.ElementUuid).ToList());
-        var modulesWithId = MapModulesWithAdLerId(dslObject, worldContent, modulesWithUuid);
+        var modulesWithAdLerId = MapModulesWithAdLerId(dslObject, worldContentFromLms, modulesWithUuid);
 
         return new GetAllElementsFromLmsWithAdLerIdResponse
         {
-            ModulesWithAdLerId = modulesWithId.ToList(),
+            ModulesWithAdLerId = modulesWithAdLerId.ToList(),
             LmsCourseId = worldEntity.LmsWorldId
         };
     }

@@ -13,17 +13,15 @@ namespace AdLerBackend.Application.UnitTests.Common.InternalUseCases;
 
 public class GetAllElementsFromLmsUseCaseTest
 {
-    private IFileAccess _fileAccess;
-    private ILMS _ilms;
+    private ILMS _lms;
     private ISerialization _serialization;
     private IWorldRepository _worldRepository;
 
     [SetUp]
     public void Setup()
     {
-        _ilms = Substitute.For<ILMS>();
+        _lms = Substitute.For<ILMS>();
         _worldRepository = Substitute.For<IWorldRepository>();
-        _fileAccess = Substitute.For<IFileAccess>();
         _serialization = new SerializationService();
     }
 
@@ -32,7 +30,7 @@ public class GetAllElementsFromLmsUseCaseTest
     {
         // Arrange
         var systemUnderTest =
-            new GetAllElementsFromLmsUseCase(_worldRepository, _fileAccess, _serialization, _ilms);
+            new GetAllElementsFromLmsUseCase(_worldRepository, _serialization, _lms);
 
         var fakeAtf = new WorldAtfResponse
         {
@@ -76,7 +74,7 @@ public class GetAllElementsFromLmsUseCaseTest
         _worldRepository.GetAsync(Arg.Any<int>()).Returns(worldEntity);
 
 
-        _ilms.GetWorldContentAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new[]
+        _lms.GetWorldContentAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new[]
         {
             new LMSWorldContentResponse
             {
@@ -108,30 +106,16 @@ public class GetAllElementsFromLmsUseCaseTest
 
 
     [Test]
-    public async Task GetLearningElementLmsInformation_CourseNotFound_Throws()
+    public Task GetLearningElementLmsInformation_CourseNotFound_Throws()
     {
         // Arrange
         var systemUnderTest =
-            new GetAllElementsFromLmsUseCase(_worldRepository, _fileAccess, _serialization, _ilms);
+            new GetAllElementsFromLmsUseCase(_worldRepository, _serialization, _lms);
 
-        var fakeATF = new WorldAtfResponse
-        {
-            World = new Application.Common.Responses.World.World
-            {
-                Elements = new List<BaseElement>
-                {
-                    new Application.Common.Responses.World.Element
-                    {
-                        ElementId = 1337
-                    }
-                }
-            }
-        };
-
-        _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity?) null);
+        _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity?)null);
 
 
-        _ilms.GetWorldContentAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new[]
+        _lms.GetWorldContentAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new[]
         {
             new LMSWorldContentResponse
             {
@@ -153,5 +137,6 @@ public class GetAllElementsFromLmsUseCaseTest
                 WorldId = 1,
                 WebServiceToken = "token"
             }, CancellationToken.None));
+        return Task.CompletedTask;
     }
 }

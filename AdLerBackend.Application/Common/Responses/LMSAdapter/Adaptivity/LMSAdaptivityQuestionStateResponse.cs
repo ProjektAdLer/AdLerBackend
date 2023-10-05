@@ -11,6 +11,6 @@ public record LMSAdaptivityQuestionStateResponse
     public class LMSAdaptivityAnswers
     {
         public bool Checked { get; set; }
-        public bool Answer_correct { get; set; }
+        public bool User_Answer_correct { get; set; }
     }
 }

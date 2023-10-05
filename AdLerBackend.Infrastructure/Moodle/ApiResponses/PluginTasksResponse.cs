@@ -2,11 +2,11 @@
 
 public class PluginTasksResponse
 {
-    public IList<MoodleTask> Tasks { get; set; }
+    public IList<MoodleTaskResponse> Tasks { get; set; }
 }
 
-public class MoodleTask
+public class MoodleTaskResponse
 {
-    public string uuid { get; set; }
-    public string status { get; set; }
+    public string Uuid { get; set; }
+    public string Status { get; set; }
 }

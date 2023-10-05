@@ -119,7 +119,7 @@ public class WorldsController : BaseApiController
     /// <param name="token"></param>
     /// <param name="worldId"></param>
     /// <returns></returns>
-    [HttpGet("{worldId}/status")]
+    [HttpGet("{worldId}/Status")]
     public async Task<ActionResult<WorldStatusResponse>> GetElementStatus([FromHeader] string token,
         [FromRoute] int worldId)
     {

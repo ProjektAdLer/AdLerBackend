@@ -63,7 +63,7 @@ public class ExceptionHandlingBehaviourTest
     }
 
     // [Test]
-    // public MoodleTask ExceptionBehaviour_NotLmsException_ForwardException()
+    // public MoodleTaskResponse ExceptionBehaviour_NotLmsException_ForwardException()
     // {
     //     // Arrange
     //     var systemUnderTest =
@@ -73,6 +73,6 @@ public class ExceptionHandlingBehaviourTest
     //     Assert.ThrowsAsync<LmsException>(() =>
     //         systemUnderTest.Handle(new GetMoodleTokenCommand(), new Exception("test"),
     //             new RequestExceptionHandlerState<MoodleUserTokenResponse>(), CancellationToken.None));
-    //     return MoodleTask.CompletedTask;
+    //     return MoodleTaskResponse.CompletedTask;
     // }
 }

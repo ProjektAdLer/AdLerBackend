@@ -84,10 +84,25 @@ public class MoodleWebApi : ILMS
                                    JsonSerializer.Serialize(warnings.Data));
     }
 
-    public Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> AnswerAdaptivityQuestionsAsync(string token,
+    public async Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> AnswerAdaptivityQuestionsAsync(string token,
         int elementId, IEnumerable<AdaptivityAnsweredQuestionTo> answeredQuestions)
     {
-        throw new NotImplementedException();
+        var wsParams = new Dictionary<string, HttpContent>
+        {
+            {"wstoken", new StringContent(token)},
+            {"wsfunction", new StringContent("mod_adleradaptivity_answer_questions")},
+            {"module[module_id]", new StringContent(elementId.ToString())}
+        };
+
+        for (var i = 0; i < answeredQuestions.Count(); i++)
+        {
+            wsParams.Add($"questions[{i}][uuid]", new StringContent(answeredQuestions.ElementAt(i).Uuid));
+            wsParams.Add($"questions[{i}][answer]", new StringContent(answeredQuestions.ElementAt(i).Answer));
+        }
+
+        var result = await MoodleCallAsync<ResponseWithData<AdaptivityModuleAnsweredResponse>>(wsParams);
+
+        return new List<LMSAdaptivityQuestionStateResponse>();
     }
 
     public async Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsAsync(string token,
@@ -98,7 +113,7 @@ public class MoodleWebApi : ILMS
             {
                 {"wstoken", new StringContent(token)},
                 {"wsfunction", new StringContent("mod_adleradaptivity_get_question_details")},
-                {"module_ids[0]", new StringContent(elementId.ToString())}
+                {"module[module_id]", new StringContent(elementId.ToString())}
             });
 
         var response = rawResponse.Data.Questions.Select(x => new LMSAdaptivityQuestionStateResponse
@@ -125,13 +140,13 @@ public class MoodleWebApi : ILMS
             {
                 {"wstoken", new StringContent(token)},
                 {"wsfunction", new StringContent("local_adler_score_get_element_scores")},
-                {"module_ids[0]", new StringContent(elementId.ToString())}
+                {"module[module_id]", new StringContent(elementId.ToString())}
             });
 
         var response = rawResponse.Data.Tasks.Select(x => new LMSAdaptivityTaskStateResponse
         {
-            Uuid = Guid.Parse(x.uuid),
-            State = Enum.Parse<AdaptivityStates>(x.status, true)
+            Uuid = Guid.Parse(x.Uuid),
+            State = Enum.Parse<AdaptivityStates>(x.Status, true)
         }).ToList();
 
         return response;
@@ -263,7 +278,7 @@ public class MoodleWebApi : ILMS
         {
             wsParams.Add($"elements[{i}][course_id]", new StringContent(courseInstanceId.ToString()));
             wsParams.Add($"elements[{i}][element_type]", new StringContent("cm"));
-            wsParams.Add($"elements[{i}][uuid]", new StringContent(uuids.ElementAt(i)));
+            wsParams.Add($"elements[{i}][Uuid]", new StringContent(uuids.ElementAt(i)));
         }
 
         var ret = await MoodleCallAsync<ResponseWithDataArray<PluginUUIDResponse>>(wsParams);

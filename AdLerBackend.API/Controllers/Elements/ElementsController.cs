@@ -69,6 +69,23 @@ public class ElementsController : BaseApiController
     }
 
     /// <summary>
+    ///     Get the Status of the Questions in a Adaptivity Module
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("World/{worldId}/Element/{elementId}/Adaptivity/Questions")]
+    public async Task<ActionResult<GetAdaptivityQuestionsResponse>> GetAdaptivityQuestions(
+        [FromHeader] string token, int worldId,
+        int elementId)
+    {
+        return await Mediator.Send(new GetAdaptivityQuestionsCommand
+        {
+            ElementId = elementId,
+            WebServiceToken = token,
+            WorldId = worldId
+        });
+    }
+
+    /// <summary>
     ///     Gets a Score for the Learning Element
     /// </summary>
     /// <param name="token">Lms Webservice Token</param>

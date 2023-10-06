@@ -861,9 +861,6 @@
             "type": "string",
             "nullable": true
           },
-          "isAdmin": {
-            "type": "boolean"
-          },
           "userId": {
             "type": "integer",
             "format": "int32"
@@ -1096,6 +1093,10 @@
             "items": {
               "$ref": "#/components/schemas/Element"
             },
+            "nullable": true
+          },
+          "evaluationLink": {
+            "type": "string",
             "nullable": true
           }
         },

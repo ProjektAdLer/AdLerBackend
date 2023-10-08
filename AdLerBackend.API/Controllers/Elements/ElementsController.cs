@@ -1,4 +1,5 @@
 using AdLerBackend.Application.Adaptivity.AnswerAdaptivityQuestion;
+using AdLerBackend.Application.Adaptivity.GetAdaptivityModuleQuestionDetails;
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.Responses.Adaptivity;
 using AdLerBackend.Application.Common.Responses.Elements;
@@ -69,19 +70,19 @@ public class ElementsController : BaseApiController
     }
 
     /// <summary>
-    ///     Get the Status of the Questions in a Adaptivity Module
+    ///     Get the Details of an Adaptivity Element
     /// </summary>
     /// <returns></returns>
-    [HttpGet("World/{worldId}/Element/{elementId}/Adaptivity/Questions")]
-    public async Task<ActionResult<GetAdaptivityQuestionsResponse>> GetAdaptivityQuestions(
+    [HttpGet("World/{worldId}/Element/{elementId}/Adaptivity")]
+    public async Task<GetAdaptivityElementDetailsResponse> GetAdaptivityQuestions(
         [FromHeader] string token, int worldId,
         int elementId)
     {
-        return await Mediator.Send(new GetAdaptivityQuestionsCommand
+        return await Mediator.Send(new GetAdaptivityElementDetailsCommand
         {
             ElementId = elementId,
             WebServiceToken = token,
-            WorldId = worldId
+            LearningWorldId = worldId
         });
     }
 

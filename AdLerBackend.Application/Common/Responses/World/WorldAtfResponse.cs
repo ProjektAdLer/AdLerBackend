@@ -127,14 +127,14 @@ public class CommentAction : AdaptivityActionBase
 
 public class ElementReferenceAction : AdaptivityActionBase
 {
-    public string CommentText { get; set; }
     public int ElementId { get; set; } // ID of the Learning Element to be referenced
+    public string? HintText { get; set; }
 }
 
 public class ContentReferenceAction : AdaptivityActionBase
 {
-    public string CommentText { get; set; }
     public int ElementId { get; set; } // ID of the Content to be referenced (which is also a learning element)
+    public string? HintText { get; set; }
 }
 
 [JsonDerivedType(typeof(CorrectnessTrigger), JsonTypes.CorrectnessTriggerType)]

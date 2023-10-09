@@ -3,7 +3,7 @@
 public class AtfSerializationTest
 {
     // [Test]
-    // public MoodleTaskResponse CanSerializeAtf()
+    // public void CanSerializeAtf()
     // {
     //     // Arrange
     //     var systemUnderTest = new SerializationService();
@@ -24,6 +24,5 @@ public class AtfSerializationTest
     //
     //     // Assert
     //     Assert.That(true);
-    //     return MoodleTaskResponse.CompletedTask;
     // }
 }

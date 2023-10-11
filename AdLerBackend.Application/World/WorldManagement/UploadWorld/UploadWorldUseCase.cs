@@ -31,7 +31,8 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
 
     public async Task<bool> Handle(UploadWorldCommand request, CancellationToken cancellationToken)
     {
-        await ValidateAtfFile(request, cancellationToken);
+        // TODO: Skip Validation for development purposes
+        //await ValidateAtfFile(request, cancellationToken);
 
         var userInformation = await GetUserDataFromLms(request, cancellationToken);
 

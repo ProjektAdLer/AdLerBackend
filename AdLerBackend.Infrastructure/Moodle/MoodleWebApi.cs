@@ -278,7 +278,7 @@ public class MoodleWebApi : ILMS
         {
             wsParams.Add($"elements[{i}][course_id]", new StringContent(courseInstanceId.ToString()));
             wsParams.Add($"elements[{i}][element_type]", new StringContent("cm"));
-            wsParams.Add($"elements[{i}][Uuid]", new StringContent(uuids.ElementAt(i)));
+            wsParams.Add($"elements[{i}][uuid]", new StringContent(uuids.ElementAt(i)));
         }
 
         var ret = await MoodleCallAsync<ResponseWithDataArray<PluginUUIDResponse>>(wsParams);

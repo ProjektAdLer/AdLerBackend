@@ -4,7 +4,6 @@ using AdLerBackend.API.Filters;
 using AdLerBackend.API.Middleware;
 using AdLerBackend.Application.Configuration;
 using Microsoft.AspNetCore.Http.Features;
-using Newtonsoft.Json.Converters;
 
 namespace AdLerBackend.API;
 
@@ -22,10 +21,12 @@ public static class ConfigureServices
     public static IServiceCollection AddApiServices(this IServiceCollection services)
     {
         services
-            .AddControllers(options => options.Filters.Add<ApiExceptionFilterAttribute>())
-            .AddNewtonsoftJson(opts =>
-                opts.SerializerSettings.Converters.Add(new StringEnumConverter()));
-
+            .AddControllers(options => options.Filters.Add<ApiExceptionFilterAttribute>());
+        // .AddNewtonsoftJson(opts =>
+        // {
+        //     opts.SerializerSettings.Converters.Add(new StringEnumConverter());
+        //     //opts.SerializerSettings.TypeNameHandling = TypeNameHandling.Objects;
+        // });
 
         services.AddEndpointsApiExplorer();
         services.AddHealthChecks();

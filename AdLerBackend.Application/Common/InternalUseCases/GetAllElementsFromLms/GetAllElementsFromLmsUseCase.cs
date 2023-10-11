@@ -27,11 +27,11 @@ public class
         CancellationToken cancellationToken)
     {
         var worldEntity = await GetWorldEntity(request.WorldId);
-        var dslObject = _serialization.GetObjectFromJsonString<WorldAtfResponse>(worldEntity.AtfJson);
+        var atfObject = _serialization.GetObjectFromJsonString<WorldAtfResponse>(worldEntity.AtfJson);
         var worldContentFromLms = await _lms.GetWorldContentAsync(request.WebServiceToken, worldEntity.LmsWorldId);
         var modulesWithUuid = await GetModulesWithUuid(request.WebServiceToken, worldEntity.LmsWorldId,
-            dslObject.World.Elements.Select(x => x.ElementUuid).ToList());
-        var modulesWithAdLerId = MapModulesWithAdLerId(dslObject, worldContentFromLms, modulesWithUuid);
+            atfObject.World.Elements.Select(x => x.ElementUuid).ToList());
+        var modulesWithAdLerId = MapModulesWithAdLerId(atfObject, worldContentFromLms, modulesWithUuid);
 
         return new GetAllElementsFromLmsWithAdLerIdResponse
         {
@@ -53,12 +53,12 @@ public class
         return await _lms.GetLmsElementIdsByUuidsAsync(webServiceToken, lmsWorldId, elementUuids);
     }
 
-    private IEnumerable<ModuleWithId> MapModulesWithAdLerId(WorldAtfResponse dslObject,
+    private IEnumerable<ModuleWithId> MapModulesWithAdLerId(WorldAtfResponse atfObject,
         IEnumerable<LMSWorldContentResponse> worldContent, IEnumerable<LmsUuidResponse> modulesWithUuid)
     {
         return modulesWithUuid.Select(mu =>
         {
-            var adLerId = dslObject.World.Elements.FirstOrDefault(x => x.ElementUuid == mu.Uuid)?.ElementId;
+            var adLerId = atfObject.World.Elements.FirstOrDefault(x => x.ElementUuid == mu.Uuid)?.ElementId;
             var module = worldContent.SelectMany(c => c.Modules).FirstOrDefault(m => m.Id == mu.LmsId);
 
             return new ModuleWithId

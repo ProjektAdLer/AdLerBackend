@@ -6,5 +6,5 @@ namespace AdLerBackend.Application.Common.Interfaces;
 public interface ILmsBackupProcessor
 {
     public IList<H5PDto> GetH5PFilesFromBackup(Stream backupFile);
-    public WorldAtfResponse GetWorldDescriptionFromBackup(Stream dslStream);
+    public WorldAtfResponse GetWorldDescriptionFromBackup(Stream atfStream);
 }

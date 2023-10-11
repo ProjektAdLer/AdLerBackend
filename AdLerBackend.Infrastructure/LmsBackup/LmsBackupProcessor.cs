@@ -26,14 +26,14 @@ public class LmsBackupProcessor : ILmsBackupProcessor
         }).ToList();
     }
 
-    public WorldAtfResponse GetWorldDescriptionFromBackup(Stream dslStream)
+    public WorldAtfResponse GetWorldDescriptionFromBackup(Stream atfStream)
     {
-        dslStream.Position = 0;
+        atfStream.Position = 0;
 
-        var retVal = JsonSerializer.Deserialize<WorldAtfResponse>(dslStream, new JsonSerializerOptions
+        var retVal = JsonSerializer.Deserialize<WorldAtfResponse>(atfStream, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
-        }) ?? throw new LmsBackupProcessorException("Could not deserialize DSL file");
+        }) ?? throw new LmsBackupProcessorException("Could not deserialize ATF file");
 
         return retVal;
     }

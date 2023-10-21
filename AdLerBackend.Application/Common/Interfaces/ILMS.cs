@@ -97,7 +97,7 @@ public interface ILMS
     /// <param name="elementId">The Module ID of the Element</param>
     /// <param name="answeredQuestions"></param>
     /// <returns> A list of the given Answers and there State of correctness</returns>
-    Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> AnswerAdaptivityQuestionsAsync(string token, int elementId,
+    Task<AdaptivityModuleStateResponseAfterAnswer> AnswerAdaptivityQuestionsAsync(string token, int elementId,
         IEnumerable<AdaptivityAnsweredQuestionTo> answeredQuestions);
 
     /// <summary>

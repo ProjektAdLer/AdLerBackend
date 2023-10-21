@@ -82,7 +82,8 @@ public class
         };
     }
 
-    private static int GetQuestionIdFromUuid(Guid uuid, AdaptivityElement adaptivityElement)
+
+    public static int GetQuestionIdFromUuid(Guid uuid, AdaptivityElement adaptivityElement)
     {
         foreach (var question in from task in adaptivityElement.AdaptivityContent.AdaptivityTasks
                  from question in task.AdaptivityQuestions
@@ -93,7 +94,7 @@ public class
         throw new Exception("No id for the Adaptivity Question found!");
     }
 
-    private static int GetTaskIdFromUuid(Guid uuid, AdaptivityElement adaptivityElement)
+    public static int GetTaskIdFromUuid(Guid uuid, AdaptivityElement adaptivityElement)
     {
         foreach (var task in from task in adaptivityElement.AdaptivityContent.AdaptivityTasks
                  where task.TaskUuid == uuid

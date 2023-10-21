@@ -84,27 +84,6 @@ public class MoodleWebApi : ILMS
                                    JsonSerializer.Serialize(warnings.Data));
     }
 
-    public async Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> AnswerAdaptivityQuestionsAsync(string token,
-        int elementId, IEnumerable<AdaptivityAnsweredQuestionTo> answeredQuestions)
-    {
-        var wsParams = new Dictionary<string, HttpContent>
-        {
-            {"wstoken", new StringContent(token)},
-            {"wsfunction", new StringContent("mod_adleradaptivity_answer_questions")},
-            {"module[module_id]", new StringContent(elementId.ToString())}
-        };
-
-        for (var i = 0; i < answeredQuestions.Count(); i++)
-        {
-            wsParams.Add($"questions[{i}][uuid]", new StringContent(answeredQuestions.ElementAt(i).Uuid));
-            wsParams.Add($"questions[{i}][answer]", new StringContent(answeredQuestions.ElementAt(i).Answer));
-        }
-
-        var result = await MoodleCallAsync<ResponseWithData<AdaptivityModuleAnsweredResponse>>(wsParams);
-
-        return new List<LMSAdaptivityQuestionStateResponse>();
-    }
-
     public async Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsAsync(string token,
         int elementId)
     {
@@ -289,6 +268,47 @@ public class MoodleWebApi : ILMS
             LmsId = x.MoodleId,
             LmsContextId = x.ContextId
         });
+    }
+
+    public async Task<AdaptivityModuleStateResponseAfterAnswer> AnswerAdaptivityQuestionsAsync(string token,
+        int elementId, IEnumerable<AdaptivityAnsweredQuestionTo> answeredQuestions)
+    {
+        var wsParams = new Dictionary<string, HttpContent>
+        {
+            {"wstoken", new StringContent(token)},
+            {"wsfunction", new StringContent("mod_adleradaptivity_answer_questions")},
+            {"module[module_id]", new StringContent(elementId.ToString())}
+        };
+
+        for (var i = 0; i < answeredQuestions.Count(); i++)
+        {
+            wsParams.Add($"questions[{i}][uuid]", new StringContent(answeredQuestions.ElementAt(i).Uuid));
+            wsParams.Add($"questions[{i}][answer]", new StringContent(answeredQuestions.ElementAt(i).Answer));
+        }
+
+        var result = await MoodleCallAsync<ResponseWithData<AdaptivityModuleAnsweredResponse>>(wsParams);
+
+        return new AdaptivityModuleStateResponseAfterAnswer
+        {
+            Questions = result.Data.Questions.Select(x => new LMSAdaptivityQuestionStateResponse
+            {
+                Uuid = Guid.Parse(x.Uuid),
+                Status = Enum.Parse<AdaptivityStates>(x.Status, true),
+                Answers = x.Answers != null
+                    ? JsonSerializer.Deserialize<IList<LMSAdaptivityQuestionStateResponse.LMSAdaptivityAnswers>>(
+                        x.Answers, new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        })
+                    : null
+            }).ToList(),
+            Tasks = result.Data.Tasks.Select(x => new LMSAdaptivityTaskStateResponse
+            {
+                Uuid = Guid.Parse(x.Uuid),
+                State = Enum.Parse<AdaptivityStates>(x.Status, true)
+            }).ToList(),
+            State = Enum.Parse<AdaptivityStates>(result.Data.Module.Status, true)
+        };
     }
 
 

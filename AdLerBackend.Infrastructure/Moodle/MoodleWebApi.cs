@@ -139,7 +139,7 @@ public class MoodleWebApi : ILMS
             new Dictionary<string, HttpContent>
             {
                 {"wstoken", new StringContent(token)},
-                {"wsfunction", new StringContent("local_adler_score_get_element_scores")},
+                {"wsfunction", new StringContent("mod_adleradaptivity_get_task_details")},
                 {"module[module_id]", new StringContent(elementId.ToString())}
             });
 

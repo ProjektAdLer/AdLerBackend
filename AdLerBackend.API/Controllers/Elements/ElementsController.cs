@@ -57,7 +57,8 @@ public class ElementsController : BaseApiController
     public async Task<ActionResult<AnswerAdaptivityQuestionResponse>> AnswerAdaptivityQuestion(
         [FromHeader] string token, int worldId,
         int elementId, int questionId,
-        [FromBody] bool[] answers)
+        [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)]
+        bool[] answers)
     {
         return await Mediator.Send(new AnswerAdaptivityQuestionCommand
         {

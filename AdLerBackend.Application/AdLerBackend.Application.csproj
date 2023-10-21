@@ -34,9 +34,4 @@
     </ItemGroup>
 
 
-    <ItemGroup>
-        <Folder Include="Adaptivity\GetAdaptivityModuleTaskDetails\"/>
-    </ItemGroup>
-
-
 </Project>

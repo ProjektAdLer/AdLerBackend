@@ -11,7 +11,7 @@ public class GradedQuestion
     /// <summary>
     ///     If the User did not give any answers yet, this will be null
     /// </summary>
-    public List<GradedAnswer>? Answers { get; set; }
+    public IEnumerable<GradedAnswer>? Answers { get; set; }
 
     /// <summary>
     ///     Represents the answer of the user for this question

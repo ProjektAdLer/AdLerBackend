@@ -1,4 +1,5 @@
-﻿using AdLerBackend.Application.Adaptivity.GetAdaptivityModuleQuestionDetails;
+﻿using System.Text.Json;
+using AdLerBackend.Application.Adaptivity.GetAdaptivityModuleQuestionDetails;
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
@@ -58,7 +59,7 @@ public class
                 new()
                 {
                     Uuid = questionUUID.ToString(),
-                    Answer = "[true]"
+                    Answer = JsonSerializer.Serialize(request.Answers)
                 }
             });
 

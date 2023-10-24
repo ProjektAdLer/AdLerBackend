@@ -14,6 +14,7 @@ Die folgende Tabelle listet alle Umgebungsvariablen auf, die konfiguriert werden
 | ASPNETCORE_DBHOST            | Host der Datenbank.                                | Nein         | Ja                         |
 | ASPNETCORE_DBPORT            | Port der Datenbank.                                | Nein         | Ja                         |
 | ASPNETCORE_ADLER_HTTPPORT    | Der HTTP-Port, auf dem AdLer lauscht. Standardwert ist 80. | Nein         | Nein                       |
+| ASPNETCORE_ADLER_ADLERENGINEURL | Die URL des AdLer-Engine-Systems, mit dem AdLer interagiert. | Nein         | Ja                         |
 
 
 ## MariaDB Datenbankanforderung

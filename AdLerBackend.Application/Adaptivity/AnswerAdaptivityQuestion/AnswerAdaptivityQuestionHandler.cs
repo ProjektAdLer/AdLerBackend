@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using AdLerBackend.Application.Adaptivity.GetAdaptivityModuleQuestionDetails;
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
@@ -8,6 +7,7 @@ using AdLerBackend.Application.Common.Responses.Adaptivity.Common;
 using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Common.Responses.LMSAdapter.Adaptivity;
 using AdLerBackend.Application.Common.Responses.World;
+using AdLerBackend.Application.Common.Utils;
 using MediatR;
 
 namespace AdLerBackend.Application.Adaptivity.AnswerAdaptivityQuestion;
@@ -49,7 +49,7 @@ public class
         var adaptivityElementInAtf = atfObject.World.Elements.FirstOrDefault(x =>
             x.ElementId == request.ElementId) as AdaptivityElement;
 
-        var questionUUID = GetUuidFromQuestionId(request.QuestionId, adaptivityElementInAtf);
+        var questionUUID = IdExtractor.GetUuidFromQuestionId(request.QuestionId, adaptivityElementInAtf);
 
 
         var resultFromLMS = await _lms.AnswerAdaptivityQuestionsAsync(request.WebServiceToken,
@@ -82,21 +82,10 @@ public class
             },
             GradedTask = new GradedTask
             {
-                TaskId = GetAdaptivityElementDetailsHandler.GetTaskIdFromUuid(resultFromLMS.Tasks.First().Uuid,
+                TaskId = IdExtractor.GetTaskIdFromUuid(resultFromLMS.Tasks.First().Uuid,
                     adaptivityElementInAtf!),
                 TaskStatus = resultFromLMS.Tasks.First().State.ToString()
             }
         };
-    }
-
-    public static Guid GetUuidFromQuestionId(int questionId, AdaptivityElement adaptivityElement)
-    {
-        foreach (var question in from task in adaptivityElement.AdaptivityContent.AdaptivityTasks
-                 from question in task.AdaptivityQuestions
-                 where question.QuestionId == questionId
-                 select question)
-            return question.QuestionUuid;
-
-        throw new Exception("No uuid for the Adaptivity Question found!");
     }
 }

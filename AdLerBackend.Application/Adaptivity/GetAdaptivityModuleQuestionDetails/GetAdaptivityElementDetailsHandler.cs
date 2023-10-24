@@ -4,6 +4,7 @@ using AdLerBackend.Application.Common.Responses.Adaptivity;
 using AdLerBackend.Application.Common.Responses.Adaptivity.Common;
 using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Common.Responses.World;
+using AdLerBackend.Application.Common.Utils;
 using MediatR;
 
 namespace AdLerBackend.Application.Adaptivity.GetAdaptivityModuleQuestionDetails;
@@ -71,36 +72,14 @@ public class
                     Checked = answer.Checked,
                     Correct = answer.User_Answer_correct
                 }) ?? null,
-                Id = GetQuestionIdFromUuid(question.Uuid, adaptivityElementInAtf!),
+                Id = IdExtractor.GetQuestionIdFromUuid(question.Uuid, adaptivityElementInAtf!),
                 Status = question.Status.ToString()
             }),
             Tasks = adaptivityTaskDetails.Select(task => new GradedTask
             {
-                TaskId = GetTaskIdFromUuid(task.Uuid, adaptivityElementInAtf!),
+                TaskId = IdExtractor.GetTaskIdFromUuid(task.Uuid, adaptivityElementInAtf!),
                 TaskStatus = task.State.ToString()
             })
         };
-    }
-
-
-    public static int GetQuestionIdFromUuid(Guid uuid, AdaptivityElement adaptivityElement)
-    {
-        foreach (var question in from task in adaptivityElement.AdaptivityContent.AdaptivityTasks
-                 from question in task.AdaptivityQuestions
-                 where question.QuestionUuid == uuid
-                 select question)
-            return question.QuestionId;
-
-        throw new Exception("No id for the Adaptivity Question found!");
-    }
-
-    public static int GetTaskIdFromUuid(Guid uuid, AdaptivityElement adaptivityElement)
-    {
-        foreach (var task in from task in adaptivityElement.AdaptivityContent.AdaptivityTasks
-                 where task.TaskUuid == uuid
-                 select task)
-            return task.TaskId;
-
-        throw new Exception("No id for the Adaptivity Task found!");
     }
 }

@@ -8,8 +8,6 @@ public class AdaptivityModuleAnsweredResponse
 
     public class AdaptivityModuleInfo
     {
-        public string Module_Id { get; set; }
-        public string Instance_Id { get; set; }
         public string Status { get; set; }
     }
 }

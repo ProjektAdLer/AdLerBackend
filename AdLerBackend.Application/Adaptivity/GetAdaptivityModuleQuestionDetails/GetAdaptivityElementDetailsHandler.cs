@@ -5,10 +5,12 @@ using AdLerBackend.Application.Common.Responses.Adaptivity.Common;
 using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Common.Responses.World;
 using AdLerBackend.Application.Common.Utils;
+using JetBrains.Annotations;
 using MediatR;
 
 namespace AdLerBackend.Application.Adaptivity.GetAdaptivityModuleQuestionDetails;
 
+[UsedImplicitly]
 public class
     GetAdaptivityElementDetailsHandler : IRequestHandler<GetAdaptivityElementDetailsCommand,
         GetAdaptivityElementDetailsResponse>

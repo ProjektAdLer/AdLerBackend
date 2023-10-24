@@ -20,7 +20,8 @@ public class BackendConfigExtentionsTest
             {"ASPNETCORE_DBUSER", "test_user"},
             {"ASPNETCORE_DBNAME", "test_db_name"},
             {"ASPNETCORE_DBHOST", "localhost"},
-            {"ASPNETCORE_DBPORT", "5432"}
+            {"ASPNETCORE_DBPORT", "5432"},
+            {"ASPNETCORE_ADLER_ADLERENGINEURL", "https://adlerengine.example.com"}
         };
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(configData).Build();
 
@@ -41,6 +42,7 @@ public class BackendConfigExtentionsTest
             Assert.That(myConfig.DbName, Is.EqualTo("test_db_name"));
             Assert.That(myConfig.DbHost, Is.EqualTo("localhost"));
             Assert.That(myConfig.DbPort, Is.EqualTo("5432"));
+            Assert.That(myConfig.AdLerEngineUrl, Is.EqualTo("https://adlerengine.example.com"));
         });
     }
 }

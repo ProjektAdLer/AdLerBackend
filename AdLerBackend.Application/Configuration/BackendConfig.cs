@@ -20,6 +20,10 @@ public class BackendConfig
     public string MoodleUrl { get; set; }
 
     [RequiredIfProduction]
+    [ConfigurationKeyName("ASPNETCORE_ADLER_ADLERENGINEURL")]
+    public string AdLerEngineUrl { get; set; }
+
+    [RequiredIfProduction]
     [ConfigurationKeyName("ASPNETCORE_DBPASSWORD")]
     public string DbPassword { get; set; }
 

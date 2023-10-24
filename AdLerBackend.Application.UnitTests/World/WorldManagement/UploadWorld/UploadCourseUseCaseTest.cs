@@ -4,12 +4,14 @@ using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.World;
+using AdLerBackend.Application.Configuration;
 using AdLerBackend.Application.LMS.GetUserData;
 using AdLerBackend.Application.World.WorldManagement.UploadWorld;
 using AdLerBackend.Domain.Entities;
 using AdLerBackend.Infrastructure.Services;
 using AutoBogus;
 using MediatR;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 
 #pragma warning disable CS8618
@@ -18,6 +20,7 @@ namespace AdLerBackend.Application.UnitTests.World.WorldManagement.UploadWorld;
 
 public class UploadWorldUseCaseTest
 {
+    private IOptions<BackendConfig> _configuration;
     private IFileAccess _fileAccess;
     private ILMS _ilms;
     private ILmsBackupProcessor _lmsBackupProcessor;
@@ -28,6 +31,8 @@ public class UploadWorldUseCaseTest
     [SetUp]
     public void Setup()
     {
+        _configuration = Options.Create(new BackendConfig {MoodleUrl = "http://localhost"});
+
         _lmsBackupProcessor = Substitute.For<ILmsBackupProcessor>();
         _mediator = Substitute.For<IMediator>();
         _fileAccess = Substitute.For<IFileAccess>();
@@ -60,7 +65,7 @@ public class UploadWorldUseCaseTest
         // Arrange
         var systemUnderTest =
             new UploadWorldUseCase(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
-                new SerializationService(), _ilms);
+                new SerializationService(), _ilms, _configuration);
 
         _ilms.UploadCourseWorldToLMS(Arg.Any<string>(), Arg.Any<Stream>()).Returns(new LMSCourseCreationResponse
         {
@@ -132,7 +137,7 @@ public class UploadWorldUseCaseTest
         // Arrange
         var systemUnderTest =
             new UploadWorldUseCase(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
-                _serialization, _ilms);
+                _serialization, _ilms, _configuration);
 
         _mediator.Send(Arg.Any<GetLMSUserDataCommand>()).Returns(new LMSUserDataResponse
         {

@@ -1,10 +1,10 @@
-﻿using AdLerBackend.Application.Common.DTOs.Storage;
+﻿using System.ComponentModel.DataAnnotations;
+using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.World;
 using AdLerBackend.Application.Configuration;
 using AdLerBackend.Application.LMS.GetUserData;
-using AdLerBackend.Application.World.ValidateATFFile;
 using AdLerBackend.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -37,12 +37,21 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, CreateWorl
 
     public async Task<CreateWorldResponse> Handle(UploadWorldCommand request, CancellationToken cancellationToken)
     {
-        // TODO: Skip Validation for development purposes
-        //await ValidateAtfFile(request, cancellationToken);
-
         var userInformation = await GetUserDataFromLms(request, cancellationToken);
 
         var courseInformation = _lmsBackupProcessor.GetWorldDescriptionFromBackup(request.ATFFileStream);
+
+
+        var errorList = new List<ValidationResult>();
+        var context = new ValidationContext(courseInformation);
+        var isValid = Validator.TryValidateObject(courseInformation, context, errorList, true);
+
+        if (!isValid)
+        {
+            var errorString = errorList.Aggregate("", (current, error) => current + error.ErrorMessage);
+            throw new ValidationException(errorString);
+        }
+
 
         var lmsCourseCreationResponse =
             await _lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
@@ -87,13 +96,6 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, CreateWorl
         return userInformation;
     }
 
-    private async Task ValidateAtfFile(UploadWorldCommand request, CancellationToken cancellationToken)
-    {
-        await _mediator.Send(new ValidateATFFileCommand
-        {
-            ATFFileStream = request.ATFFileStream
-        }, cancellationToken);
-    }
 
     private Dictionary<string, string> StoreH5PFiles(WorldAtfResponse courseInformation, int courseLmsId,
         Stream backupFile)

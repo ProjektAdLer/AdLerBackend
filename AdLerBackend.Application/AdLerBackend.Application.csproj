@@ -24,13 +24,6 @@
     <ItemGroup>
         <ProjectReference Include="..\AdLerBackend.Domain\AdLerBackend.Domain.csproj"/>
     </ItemGroup>
-
-
-    <ItemGroup>
-        <EmbeddedResource Include="Common\Schemas\schema0_4.json"/>
-        <None Remove="Common\Schemas\schema0_5.json"/>
-        <EmbeddedResource Include="Common\Schemas\schema0_5.json"/>
-    </ItemGroup>
-
+    
 
 </Project>

@@ -26,6 +26,9 @@ Die erforderlichen Umgebungsvariablen, die die Datenbank betreffen, müssen ents
 Stellen Sie sicher, dass diese Variablen korrekt eingestellt sind, um eine erfolgreiche Verbindung mit der MariaDB-Datenbank zu gewährleisten.
 
 
-## Health Endpoint
-
+## API Endpunkte
+Eine Swagger (OpenApi) Dokumentation sowie eine Postman Collection der API Endpunkte ist unter `/API Specification` verfügbar.
+Zusätzlich kann ein Zugang zu der, immer aktuellen, Postman-Collection für das Backend von Philipp Geirhos angefragt werden. Dazu wird eine aktuelle Postman Version benötigt.
+Auch muss dafür ein kostenloser Account angelegt werden. 
+### Health Endpoint
 Das AdLer-Backend bietet einen Health-Check-Endpoint an, der zur Überwachung des Systemzustands verwendet wird. Sie können eine GET-Anfrage an `/api/health` senden, um den Gesundheitsstatus des Servers zu überprüfen. Wenn der Server ordnungsgemäß funktioniert, wird das System die Nachricht "healthy" zurückgeben.

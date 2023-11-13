@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using AdLerBackend.API;
 using AdLerBackend.Application.Configuration;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
@@ -67,7 +68,6 @@ public class BackendConfigExtensionsTests
         {
             {"ASPNETCORE_ENVIRONMENT", "InvalidEnvironment"},
             {"ASPNETCORE_ADLER_MOODLEURL", "https://moodle.example.com"}
-            // Add more key-value pairs for other config settings as needed
         };
 
         var memoryConfigurationSource = new MemoryConfigurationSource {InitialData = invalidConfigData};
@@ -80,4 +80,5 @@ public class BackendConfigExtensionsTests
         // Assert
         Assert.Throws<ConfigurationErrorsException>(() => serviceProvider.GetRequiredService<BackendConfig>());
     }
+
 }

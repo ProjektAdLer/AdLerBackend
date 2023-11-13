@@ -16,16 +16,7 @@ public static class BackendConfigExtensions
         {
             var context = new ValidationContext(myConfig);
             var results = new List<ValidationResult>();
-            var isValid = false;
-            try
-            {
-                isValid = Validator.TryValidateObject(myConfig, context, results, true);
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-
+            var isValid = Validator.TryValidateObject(myConfig, context, results, true);
 
             if (!isValid)
                 throw new ConfigurationErrorsException("Configuration validation failed: " +

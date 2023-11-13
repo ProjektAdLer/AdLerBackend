@@ -1350,6 +1350,10 @@
           "evaluationLink": {
             "type": "string",
             "nullable": true
+          },
+          "evaluationLink": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

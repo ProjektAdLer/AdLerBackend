@@ -1,16 +1,19 @@
-﻿using AdLerBackend.Application.Common.DTOs.Storage;
+﻿using System.ComponentModel.DataAnnotations;
+using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.World;
+using AdLerBackend.Application.Configuration;
 using AdLerBackend.Application.LMS.GetUserData;
-using AdLerBackend.Application.World.ValidateATFFile;
 using AdLerBackend.Domain.Entities;
 using MediatR;
+using Microsoft.Extensions.Options;
 
 namespace AdLerBackend.Application.World.WorldManagement.UploadWorld;
 
-public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
+public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, CreateWorldResponse>
 {
+    private readonly BackendConfig _configuration;
     private readonly IFileAccess _fileAccess;
     private readonly ILMS _lms;
     private readonly ILmsBackupProcessor _lmsBackupProcessor;
@@ -19,7 +22,8 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
     private readonly IWorldRepository _worldRepository;
 
     public UploadWorldUseCase(ILmsBackupProcessor lmsBackupProcessor, IMediator mediator,
-        IFileAccess fileAccess, IWorldRepository worldRepository, ISerialization serialization, ILMS lms)
+        IFileAccess fileAccess, IWorldRepository worldRepository, ISerialization serialization, ILMS lms,
+        IOptions<BackendConfig> configuration)
     {
         _lmsBackupProcessor = lmsBackupProcessor;
         _mediator = mediator;
@@ -27,15 +31,27 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
         _worldRepository = worldRepository;
         _serialization = serialization;
         _lms = lms;
+
+        _configuration = configuration.Value;
     }
 
-    public async Task<bool> Handle(UploadWorldCommand request, CancellationToken cancellationToken)
+    public async Task<CreateWorldResponse> Handle(UploadWorldCommand request, CancellationToken cancellationToken)
     {
-        await ValidateAtfFile(request, cancellationToken);
-
         var userInformation = await GetUserDataFromLms(request, cancellationToken);
 
         var courseInformation = _lmsBackupProcessor.GetWorldDescriptionFromBackup(request.ATFFileStream);
+
+
+        var errorList = new List<ValidationResult>();
+        var context = new ValidationContext(courseInformation);
+        var isValid = Validator.TryValidateObject(courseInformation, context, errorList, true);
+
+        if (!isValid)
+        {
+            var errorString = errorList.Aggregate("", (current, error) => current + error.ErrorMessage);
+            throw new ValidationException(errorString);
+        }
+
 
         var lmsCourseCreationResponse =
             await _lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
@@ -62,7 +78,12 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
 
         await _worldRepository.AddAsync(courseEntity);
 
-        return true;
+        return new CreateWorldResponse
+        {
+            World3DUrl = _configuration.AdLerEngineUrl ?? "Adler Engine URL not set",
+            WorldLmsUrl = _configuration.MoodleUrl + "/course/view.php?id=" + lmsCourseCreationResponse.CourseLmsId,
+            WorldNameInLms = courseEntity.Name
+        };
     }
 
     private async Task<LMSUserDataResponse> GetUserDataFromLms(UploadWorldCommand request,
@@ -75,13 +96,6 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, bool>
         return userInformation;
     }
 
-    private async Task ValidateAtfFile(UploadWorldCommand request, CancellationToken cancellationToken)
-    {
-        await _mediator.Send(new ValidateATFFileCommand
-        {
-            ATFFileStream = request.ATFFileStream
-        }, cancellationToken);
-    }
 
     private Dictionary<string, string> StoreH5PFiles(WorldAtfResponse courseInformation, int courseLmsId,
         Stream backupFile)

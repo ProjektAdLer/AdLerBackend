@@ -1,3 +1,4 @@
+using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.Player;
@@ -33,8 +34,9 @@ public class AllResponsesTest
         yield return new TestCaseData(new Application.Common.Responses.World.World());
         yield return new TestCaseData(new PlayerDataResponse());
         yield return new TestCaseData(new ScoreElementResponse());
-        yield return new TestCaseData(new WorldContent());
+        yield return new TestCaseData(new LMSWorldContentResponse());
         yield return new TestCaseData(new WorldAtfResponse());
         yield return new TestCaseData(new BackendConfig());
+        yield return new TestCaseData(new WorldBaseStorageDto());
     }
 }

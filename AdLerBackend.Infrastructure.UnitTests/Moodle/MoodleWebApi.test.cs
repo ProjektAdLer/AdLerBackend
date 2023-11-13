@@ -1,4 +1,6 @@
-﻿using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
+﻿using AdLerBackend.Application.Common.DTOs;
+using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
+using AdLerBackend.Application.Common.Responses.LMSAdapter.Adaptivity;
 using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure.Moodle;
 using AdLerBackend.Infrastructure.Moodle.ApiResponses;
@@ -365,5 +367,63 @@ public class MoodleWebApiTest
 
         // Act and assert that it does not throw
         Assert.ThrowsAsync<LmsException>(async () => await _systemUnderTest.DeleteCourseAsync("token", 1));
+    }
+
+    [Test]
+    public async Task GetAdaptivityTaskDetailsAsync_Valid_ReturnsTasks()
+    {
+        // Arrange
+        var webResponse =
+            "{\n    \"data\": {\n        \"tasks\": [\n            {\n                \"uuid\": \"0e2ec6d0-e4cb-407d-8fcb-d57508529413\",\n                \"status\": \"correct\"\n            }\n        ]\n    }\n}";
+
+        _mockHttp.When("*").Respond("application/json", webResponse);
+
+        // Act
+        var result = await _systemUnderTest.GetAdaptivityTaskDetailsAsync("token", 1);
+
+        // Assert
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result.First().Uuid.ToString(), Is.EqualTo("0e2ec6d0-e4cb-407d-8fcb-d57508529413"));
+            Assert.That(result.First().State, Is.EqualTo(AdaptivityStates.Correct));
+        });
+    }
+
+    [Test]
+    public async Task GetAdaptivityElementDetailsAsync_Valid_ReturnsQuestionDetails()
+    {
+        // Arrange
+        var webResponse =
+            "{\n    \"data\": {\n        \"questions\": [\n            {\n                \"Uuid\": \"978c2fb5-a947-4d22-8481-5824187d4641\",\n                \"Status\": \"correct\",\n                \"answers\": \"[{\\\"checked\\\":true,\\\"user_answer_correct\\\":true},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false}]\"\n            },\n            {\n                \"Uuid\": \"dbf01034-97ab-4b4b-9029-7dac0f57ab51\",\n                \"Status\": \"incorrect\",\n                \"answers\": \"[{\\\"checked\\\":false,\\\"user_answer_correct\\\":false},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false}]\"\n            }\n        ]\n    }\n}";
+        _mockHttp.When("*").Respond("application/json", webResponse);
+
+        // Act
+        var result = await _systemUnderTest.GetAdaptivityElementDetailsAsync("token", 1);
+
+        // Assert
+        Assert.That(result.Count, Is.EqualTo(2));
+        Assert.That(result.First().Answers.Count, Is.EqualTo(2));
+    }
+
+    [Test]
+    public async Task AnswerAdaptivityElementQuestion_Valid_AnsweresQuestion()
+    {
+        // Arrange
+        var webResponse =
+            "{\n    \"data\": {\n        \"module\": {\n            \"module_id\": \"10\",\n            \"instance_id\": \"5\",\n            \"status\": \"correct\"\n        },\n        \"tasks\": [\n            {\n                \"uuid\": \"0e2ec6d0-e4cb-407d-8fcb-d57508529413\",\n                \"status\": \"correct\"\n            }\n        ],\n        \"questions\": [\n            {\n                \"uuid\": \"dbf01034-97ab-4b4b-9029-7dac0f57ab51\",\n                \"status\": \"incorrect\",\n                \"answers\": \"[{\\\"checked\\\":false,\\\"user_answer_correct\\\":false},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false},{\\\"checked\\\":true,\\\"user_answer_correct\\\":true}]\"\n            }\n        ]\n    }\n}";
+        _mockHttp.When("*").Respond("application/json", webResponse);
+
+        // Act
+
+        var result = await _systemUnderTest.AnswerAdaptivityQuestionsAsync("token", 1,
+            new List<AdaptivityAnsweredQuestionTo>
+            {
+                new()
+                {
+                    Uuid = "dbf01034-97ab-4b4b-9029-7dac0f57ab51",
+                    Answer = "[true, true, true, false, false]"
+                }
+            });
     }
 }

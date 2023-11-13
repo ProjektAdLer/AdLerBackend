@@ -1,7 +1,5 @@
 ﻿# Konfiguration des AdLer Backends
 
-Dieses Dokument enthält Informationen zur Konfiguration des AdLer Backends. Es ist wichtig, diese Einstellungen korrekt vorzunehmen, um die volle Funktionalität des AdLer-Systems zu gewährleisten.
-
 ## Umgebungsvariablen
 
 Die folgende Tabelle listet alle Umgebungsvariablen auf, die konfiguriert werden müssen, einschließlich ihrer Beschreibung und ob sie erforderlich sind oder nur in der Produktionsumgebung benötigt werden.
@@ -16,18 +14,8 @@ Die folgende Tabelle listet alle Umgebungsvariablen auf, die konfiguriert werden
 | ASPNETCORE_DBHOST            | Host der Datenbank.                                | Nein         | Ja                         |
 | ASPNETCORE_DBPORT            | Port der Datenbank.                                | Nein         | Ja                         |
 | ASPNETCORE_ADLER_HTTPPORT    | Der HTTP-Port, auf dem AdLer lauscht. Standardwert ist 80. | Nein         | Nein                       |
+| ASPNETCORE_ADLER_ADLERENGINEURL | Die URL des AdLer-Engine-Systems, mit dem AdLer interagiert. | Nein         | Ja                         |
 
-## Integration mit Moodle und Docker Compose
-
-Um ein voll funktionsfähiges AdLer-System zu haben, müssen das Moodle-System und andere Systeme in die Docker-Compose-Datei integriert werden. Weitere Informationen zur Einrichtung und Verwendung von Docker Compose finden Sie in der Docker Compose Dokumentation.
-
-Bitte beachten Sie, dass ein korrekter Docker Compose-Workflow und die Integration des Moodle-Systems entscheidend sind, um das AdLer-System zum Laufen zu bringen.
-
-## Bereitstellung des Backends
-
-Die vollständige Dokumentation zur Infrastruktur und zur Bereitstellung des Backends finden Sie in der entsprechenden Infrastruktur-Dokumentation. Bitte folgen Sie diesen Anweisungen genau, um das Backend korrekt zu bereitstellen.
-
-Beachten Sie, dass die obigen Umgebungsvariablen korrekt konfiguriert sein müssen, bevor das Backend bereitgestellt wird.
 
 ## MariaDB Datenbankanforderung
 
@@ -37,14 +25,10 @@ Die erforderlichen Umgebungsvariablen, die die Datenbank betreffen, müssen ents
 
 Stellen Sie sicher, dass diese Variablen korrekt eingestellt sind, um eine erfolgreiche Verbindung mit der MariaDB-Datenbank zu gewährleisten.
 
-## Swagger-Konfiguration im Projekt-Root
 
-Im Root-Verzeichnis des Projekts finden Sie eine Swagger-Konfigurationsdatei.
-
-Die Swagger-Konfigurationsdatei definiert die Struktur der API und enthält eine Liste aller verfügbaren Endpunkte, zusammen mit den unterstützten HTTP-Methoden und den erwarteten Strukturen für Anfragen und Antworten.
-
-Es ist wichtig zu beachten, dass jede Änderung an den Endpunkten oder ihrer Funktionalität in dieser Datei reflektiert werden sollte, um sicherzustellen, dass die API-Dokumentation stets aktuell und korrekt ist.
-
-## Health Endpoint
-
+## API Endpunkte
+Eine Swagger (OpenApi) Dokumentation sowie eine Postman Collection der API Endpunkte ist unter `/API Specification` verfügbar.
+Zusätzlich kann ein Zugang zu der, immer aktuellen, Postman-Collection für das Backend von Philipp Geirhos angefragt werden. Dazu wird eine aktuelle Postman Version benötigt.
+Auch muss dafür ein kostenloser Account angelegt werden. 
+### Health Endpoint
 Das AdLer-Backend bietet einen Health-Check-Endpoint an, der zur Überwachung des Systemzustands verwendet wird. Sie können eine GET-Anfrage an `/api/health` senden, um den Gesundheitsstatus des Servers zu überprüfen. Wenn der Server ordnungsgemäß funktioniert, wird das System die Nachricht "healthy" zurückgeben.

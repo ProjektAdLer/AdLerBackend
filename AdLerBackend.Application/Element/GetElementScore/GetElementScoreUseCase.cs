@@ -6,7 +6,7 @@ using MediatR;
 namespace AdLerBackend.Application.Element.GetElementScore;
 
 /// <summary>
-///     Gets the highes Scoring Attempt for a given Learning Element
+///     Gets a the Score of a Learning Element using the LMS Plugin
 /// </summary>
 public class
     GetElementScoreUseCase : IRequestHandler<GetElementScoreCommand, ElementScoreResponse>
@@ -25,7 +25,7 @@ public class
     {
         var learningElementModules = await _mediator.Send(new GetAllElementsFromLmsCommand
         {
-            WorldId = request.lerningWorldId,
+            WorldId = request.LearningWorldId,
             WebServiceToken = request.WebServiceToken
         }, cancellationToken);
 

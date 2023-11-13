@@ -12,7 +12,7 @@ public class SerializationServiceTest
 
         // Act
         var result = service.GetObjectFromJsonString<Root>(
-            "{\"browsers\":{\"firefox\":{\"name\":\"Firefox\",\"pref_url\":\"about:config\",\"releases\":{\"1\":{\"release_date\":\"2004-11-09\",\"status\":\"retired\",\"engine\":\"Gecko\",\"engine_version\":\"1.7\"}}}}}");
+            "{\"browsers\":{\"firefox\":{\"name\":\"Firefox\",\"pref_url\":\"about:config\",\"releases\":{\"1\":{\"release_date\":\"2004-11-09\",\"Status\":\"retired\",\"engine\":\"Gecko\",\"engine_version\":\"1.7\"}}}}}");
 
         // Assert
         Assert.NotNull(result);
@@ -31,7 +31,7 @@ public class SerializationServiceTest
         // Assert
         Assert.AreEqual(expected, result);
     }
-    
+
     [Test]
     public async Task Serialize_Valid_CanSerializeToString()
     {

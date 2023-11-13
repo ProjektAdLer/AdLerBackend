@@ -10,7 +10,7 @@ public class IdExtractorTests
     public void GetQuestionIdFromUuid_WithValidUuid_ReturnsCorrectQuestionId()
     {
         // Arrange
-        var expectedQuestionId = 1;
+        const int expectedQuestionId = 1;
         var uuid = Guid.NewGuid();
         var adaptivityElement = new AdaptivityElement
         {
@@ -33,7 +33,7 @@ public class IdExtractorTests
         var result = IdExtractor.GetQuestionIdFromUuid(uuid, adaptivityElement);
 
         // Assert
-        Assert.AreEqual(expectedQuestionId, result);
+        Assert.That(result, Is.EqualTo(expectedQuestionId));
     }
 
     [Test]
@@ -56,7 +56,7 @@ public class IdExtractorTests
     public void GetTaskIdFromUuid_WithValidUuid_ReturnsCorrectTaskId()
     {
         // Arrange
-        var expectedTaskId = 1;
+        const int expectedTaskId = 1;
         var uuid = Guid.NewGuid();
         var adaptivityElement = new AdaptivityElement
         {
@@ -73,7 +73,7 @@ public class IdExtractorTests
         var result = IdExtractor.GetTaskIdFromUuid(uuid, adaptivityElement);
 
         // Assert
-        Assert.AreEqual(expectedTaskId, result);
+        Assert.That(result, Is.EqualTo(expectedTaskId));
     }
 
     [Test]
@@ -118,7 +118,7 @@ public class IdExtractorTests
         var result = IdExtractor.GetUuidFromQuestionId(1, adaptivityElement);
 
         // Assert
-        Assert.AreEqual(expectedUuid, result);
+        Assert.That(result, Is.EqualTo(expectedUuid));
     }
 
     [Test]

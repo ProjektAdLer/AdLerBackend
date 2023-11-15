@@ -32,3 +32,11 @@ Zusätzlich kann ein Zugang zu der, immer aktuellen, Postman-Collection für das
 Auch muss dafür ein kostenloser Account angelegt werden. 
 ### Health Endpoint
 Das AdLer-Backend bietet einen Health-Check-Endpoint an, der zur Überwachung des Systemzustands verwendet wird. Sie können eine GET-Anfrage an `/api/health` senden, um den Gesundheitsstatus des Servers zu überprüfen. Wenn der Server ordnungsgemäß funktioniert, wird das System die Nachricht "healthy" zurückgeben.
+
+## Abhänigkeiten
+
+| Backend Version | [AMG Version](https://github.com/ProjektAdLer/Autorentool) | [Moodle-Plugin Version](https://github.com/Glutamat42/moodle-docker) |
+|-----------------|-----------------|---------------------------|
+| 2.0.0           | 2.x             | 2.x                       |
+
+Zu jeden neuen Release wird diese Tabelle Aktuallisiert.

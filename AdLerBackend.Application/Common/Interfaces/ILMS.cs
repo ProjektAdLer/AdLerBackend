@@ -1,4 +1,6 @@
-﻿using AdLerBackend.Application.Common.Responses.LMSAdapter;
+﻿using AdLerBackend.Application.Common.DTOs;
+using AdLerBackend.Application.Common.Responses.LMSAdapter;
+using AdLerBackend.Application.Common.Responses.LMSAdapter.Adaptivity;
 
 namespace AdLerBackend.Application.Common.Interfaces;
 
@@ -25,7 +27,7 @@ public interface ILMS
     /// <param name="token">Token of the LMS User</param>
     /// <param name="worldId">ID of the World</param>
     /// <returns>All User-Visible Contents of a World as Array</returns>
-    Task<WorldContent[]> GetWorldContentAsync(string token, int worldId);
+    Task<LMSWorldContentResponse[]> GetWorldContentAsync(string token, int worldId);
 
     /// <summary>
     ///     Gets all Worlds that the User is enrolled in
@@ -46,7 +48,7 @@ public interface ILMS
     ///     Gets the Score of an Element from the LMS via the Plugin
     /// </summary>
     /// <param name="token">Webservice Token</param>
-    /// <param name="elementId">The Module ID if the Element</param>
+    /// <param name="elementId">The Module ID of the Element</param>
     /// <returns></returns>
     Task<bool> GetElementScoreFromPlugin(string token, int elementId);
 
@@ -77,12 +79,40 @@ public interface ILMS
     /// <summary>
     ///     Gets the LMS IDs for a given list of UUID
     /// </summary>
-    /// <param name="token"></param>
-    /// <param name="courseInstanceId"></param>
-    /// <param name="uuids"></param>
+    /// <param name="uuids">List of UUIDs to be </param>
     /// <returns></returns>
     Task<IEnumerable<LmsUuidResponse>> GetLmsElementIdsByUuidsAsync(string token, int courseInstanceId,
         IEnumerable<string> uuids);
 
+    /// <summary>
+    ///     Deletes a Course from the LMS
+    /// </summary>
+    /// <returns></returns>
     Task DeleteCourseAsync(string token, int worldId);
+
+    /// <summary>
+    ///     Give an Answer for an Adaptivity Question to the LMS
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="elementId">The Module ID of the Element</param>
+    /// <param name="answeredQuestions"></param>
+    /// <returns> A list of the given Answers and there State of correctness</returns>
+    Task<AdaptivityModuleStateResponseAfterAnswer> AnswerAdaptivityQuestionsAsync(string token, int elementId,
+        IEnumerable<AdaptivityAnsweredQuestionTo> answeredQuestions);
+
+    /// <summary>
+    ///     Gets all Question in an Adaptivity Element with there State of correctness
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="elementId"></param>
+    /// <returns></returns>
+    Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsAsync(string token, int elementId);
+
+    /// <summary>
+    ///     Gets all Tasks in an Adaptivity Element with there State of correctness
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="elementId"></param>
+    /// <returns></returns>
+    Task<IEnumerable<LMSAdaptivityTaskStateResponse>> GetAdaptivityTaskDetailsAsync(string token, int elementId);
 }

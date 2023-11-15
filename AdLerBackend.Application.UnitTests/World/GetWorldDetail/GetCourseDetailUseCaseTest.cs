@@ -38,14 +38,14 @@ public class GetWorldDetailUseCaseTest
         };
 
         var mockedDsl = AutoFaker.Generate<WorldAtfResponse>();
-        mockedDsl.World.Elements = new List<Application.Common.Responses.World.Element>
+        mockedDsl.World.Elements = new List<BaseElement>
         {
-            new()
+            new Application.Common.Responses.World.Element
             {
                 ElementId = 1,
                 ElementCategory = "h5p"
             },
-            new()
+            new Application.Common.Responses.World.Element
             {
                 ElementId = 2,
                 ElementCategory = "h5p"

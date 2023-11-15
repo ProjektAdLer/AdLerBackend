@@ -61,7 +61,7 @@ public class GetLearningElementScoreUseCaseTest
         var result = await systemUnderTest.Handle(new GetElementScoreCommand
         {
             ElementId = 1,
-            lerningWorldId = 1,
+            LearningWorldId = 1,
             WebServiceToken = "token"
         }, CancellationToken.None);
 

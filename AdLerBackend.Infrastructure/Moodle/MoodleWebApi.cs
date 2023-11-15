@@ -1,7 +1,9 @@
 ﻿using System.Text.Json;
+using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.Exceptions.LMSAdapter;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
+using AdLerBackend.Application.Common.Responses.LMSAdapter.Adaptivity;
 using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure.Moodle.ApiResponses;
 using Microsoft.Extensions.Options;
@@ -43,9 +45,9 @@ public class MoodleWebApi : ILMS
         };
     }
 
-    public async Task<WorldContent[]> GetWorldContentAsync(string token, int worldId)
+    public async Task<LMSWorldContentResponse[]> GetWorldContentAsync(string token, int worldId)
     {
-        var resp = await MoodleCallAsync<WorldContent[]>(new Dictionary<string, HttpContent>
+        var resp = await MoodleCallAsync<LMSWorldContentResponse[]>(new Dictionary<string, HttpContent>
         {
             {"wstoken", new StringContent(token)},
             {"wsfunction", new StringContent("core_course_get_contents")},
@@ -80,6 +82,53 @@ public class MoodleWebApi : ILMS
         if (warnings?.Data?.Count > 0)
             throw new LmsException("Course could not be deleted because of the following warnings: " +
                                    JsonSerializer.Serialize(warnings.Data));
+    }
+
+    public async Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsAsync(string token,
+        int elementId)
+    {
+        var rawResponse = await MoodleCallAsync<ResponseWithData<PluginQuestionsDetailResponse>>(
+            new Dictionary<string, HttpContent>
+            {
+                {"wstoken", new StringContent(token)},
+                {"wsfunction", new StringContent("mod_adleradaptivity_get_question_details")},
+                {"module[module_id]", new StringContent(elementId.ToString())}
+            });
+
+        var response = rawResponse.Data.Questions.Select(x => new LMSAdaptivityQuestionStateResponse
+        {
+            Uuid = Guid.Parse(x.Uuid),
+            Status = Enum.Parse<AdaptivityStates>(x.Status, true),
+            Answers = x.Answers != null
+                ? JsonSerializer.Deserialize<IList<LMSAdaptivityQuestionStateResponse.LMSAdaptivityAnswers>>(
+                    x.Answers, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    })
+                : null
+        }).ToList();
+
+        return response;
+    }
+
+    public async Task<IEnumerable<LMSAdaptivityTaskStateResponse>> GetAdaptivityTaskDetailsAsync(string token,
+        int elementId)
+    {
+        var rawResponse = await MoodleCallAsync<ResponseWithData<PluginTasksResponse>>(
+            new Dictionary<string, HttpContent>
+            {
+                {"wstoken", new StringContent(token)},
+                {"wsfunction", new StringContent("mod_adleradaptivity_get_task_details")},
+                {"module[module_id]", new StringContent(elementId.ToString())}
+            });
+
+        var response = rawResponse.Data.Tasks.Select(x => new LMSAdaptivityTaskStateResponse
+        {
+            Uuid = Guid.Parse(x.Uuid),
+            State = Enum.Parse<AdaptivityStates>(x.Status, true)
+        }).ToList();
+
+        return response;
     }
 
     public async Task<LMSCourseCreationResponse> UploadCourseWorldToLMS(string token, Stream backupFileStream)
@@ -219,6 +268,47 @@ public class MoodleWebApi : ILMS
             LmsId = x.MoodleId,
             LmsContextId = x.ContextId
         });
+    }
+
+    public async Task<AdaptivityModuleStateResponseAfterAnswer> AnswerAdaptivityQuestionsAsync(string token,
+        int elementId, IEnumerable<AdaptivityAnsweredQuestionTo> answeredQuestions)
+    {
+        var wsParams = new Dictionary<string, HttpContent>
+        {
+            {"wstoken", new StringContent(token)},
+            {"wsfunction", new StringContent("mod_adleradaptivity_answer_questions")},
+            {"module[module_id]", new StringContent(elementId.ToString())}
+        };
+
+        for (var i = 0; i < answeredQuestions.Count(); i++)
+        {
+            wsParams.Add($"questions[{i}][uuid]", new StringContent(answeredQuestions.ElementAt(i).Uuid));
+            wsParams.Add($"questions[{i}][answer]", new StringContent(answeredQuestions.ElementAt(i).Answer));
+        }
+
+        var result = await MoodleCallAsync<ResponseWithData<AdaptivityModuleAnsweredResponse>>(wsParams);
+
+        return new AdaptivityModuleStateResponseAfterAnswer
+        {
+            Questions = result.Data.Questions.Select(x => new LMSAdaptivityQuestionStateResponse
+            {
+                Uuid = Guid.Parse(x.Uuid),
+                Status = Enum.Parse<AdaptivityStates>(x.Status, true),
+                Answers = x.Answers != null
+                    ? JsonSerializer.Deserialize<IList<LMSAdaptivityQuestionStateResponse.LMSAdaptivityAnswers>>(
+                        x.Answers, new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        })
+                    : null
+            }).ToList(),
+            Tasks = result.Data.Tasks.Select(x => new LMSAdaptivityTaskStateResponse
+            {
+                Uuid = Guid.Parse(x.Uuid),
+                State = Enum.Parse<AdaptivityStates>(x.Status, true)
+            }).ToList(),
+            State = Enum.Parse<AdaptivityStates>(result.Data.Module.Status, true)
+        };
     }
 
 

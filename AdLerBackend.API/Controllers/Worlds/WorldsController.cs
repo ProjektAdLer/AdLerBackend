@@ -80,7 +80,8 @@ public class WorldsController : BaseApiController
     /// <returns></returns>
     [HttpPost]
     [DisableRequestSizeLimit]
-    public async Task<bool> CreateWorld(IFormFile backupFile, IFormFile atfFile, [FromHeader] string token)
+    public async Task<CreateWorldResponse> CreateWorld(IFormFile backupFile, IFormFile atfFile,
+        [FromHeader] string token)
     {
         // Log the Request to the console
         Console.WriteLine("Uploading started at " + DateTime.Now);
@@ -119,7 +120,7 @@ public class WorldsController : BaseApiController
     /// <param name="token"></param>
     /// <param name="worldId"></param>
     /// <returns></returns>
-    [HttpGet("{worldId}/status")]
+    [HttpGet("{worldId}/Status")]
     public async Task<ActionResult<WorldStatusResponse>> GetElementStatus([FromHeader] string token,
         [FromRoute] int worldId)
     {

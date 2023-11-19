@@ -39,4 +39,4 @@ Das AdLer-Backend bietet einen Health-Check-Endpoint an, der zur Überwachung de
 |-----------------|-----------------|---------------------------|
 | 2.0.0           | 2.x             | 2.x                       |
 
-Zu jeden neuen Release wird diese Tabelle Aktuallisiert.
+Zu jeden neuen Release wird diese Tabelle aktualisiert.

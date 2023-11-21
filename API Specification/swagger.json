@@ -1,4 +1,4 @@
-﻿{
+{
   "openapi": "3.0.1",
   "info": {
     "title": "AdLerBackend.API",
@@ -1346,10 +1346,6 @@
             "items": {
               "$ref": "#/components/schemas/BaseElement"
             }
-          },
-          "evaluationLink": {
-            "type": "string",
-            "nullable": true
           },
           "evaluationLink": {
             "type": "string",

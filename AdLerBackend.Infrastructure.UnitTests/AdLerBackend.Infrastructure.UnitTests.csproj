@@ -6,7 +6,7 @@
         <Nullable>disable</Nullable>
         <ExcludeFromCodeCoverage>true</ExcludeFromCodeCoverage>
         <IsPackable>false</IsPackable>
-
+        <Exclude>[*microsoft.net.test.sdk*]*</Exclude>
         <LangVersion>11</LangVersion>
     </PropertyGroup>
 

@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>11</LangVersion>
+        <Exclude>[*microsoft.net.test.sdk*]*</Exclude>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,6 +25,6 @@
     <ItemGroup>
         <ProjectReference Include="..\AdLerBackend.Domain\AdLerBackend.Domain.csproj"/>
     </ItemGroup>
-    
+
 
 </Project>

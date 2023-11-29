@@ -1,5 +1,4 @@
 name: Coveralls Code Coverage
-
 on:
   push:
     branches:
@@ -13,8 +12,8 @@ jobs:
       dotNetVersion: net7.0
       dotNetConfiguration: Release
       runtimeTarget: win-x86
-      includeMask: "[AdLerBackend*]*"
-      excludeMask: "*[*UnitTests*],[*]AdLerBackend.Infrastructure.Migrations.*,C:\\\\*"
+      includeMask: \"[AdLerBackend*]*\"
+      excludeMask: \"*[*UnitTests*],[*]AdLerBackend.Infrastructure.Migrations.*\"
     steps:
       # checkout the repo
       - uses: actions/checkout@v2
@@ -31,24 +30,26 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.nuget/packages
+          # Look to see if there is a cache hit for the corresponding requirements file
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget
 
-      # This has to be the first Test run since it appends the first file and doesn't contain a merge
+      #This has to be the first Test run since it appends the first file and doesnt contain a merge
       - name: Run API automated unit and integration test
         run: dotnet test AdlerBackend.API.UnitTests/AdlerBackend.API.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ --% /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}
 
-      # This is a typical test for the middle which merges into the file created in first test
+      #this is a typical test for the middle which merges into the the file created in first test
       - name: Run Application automated unit and integration test
         run: dotnet test AdlerBackend.Application.UnitTests/AdlerBackend.Application.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:MergeWith=../TestResults/coverage.json --% /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}
 
       - name: Run Domain automated unit and integration test
         run: dotnet test AdlerBackend.Domain.UnitTests/AdlerBackend.Domain.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:MergeWith=../TestResults/coverage.json --% /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}
 
-      # This has to be the last test since it merges into the already merged reports and after that creates the file format we need to post to coveralls
+      #this has to be the last test since it merges into the already merged reports and after that creates the file format we need to post to coveralls
       - name: Run Infrastructure automated unit and integration test
         run: dotnet test AdlerBackend.Infrastructure.UnitTests/AdlerBackend.Infrastructure.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:MergeWith=../TestResults/coverage.json /p:CoverletOutput=../TestResults/coverlet.info /p:CoverletOutputFormat=lcov --% /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}
+
 
       - name: Publish coverage report to coveralls.io
         uses: coverallsapp/github-action@master

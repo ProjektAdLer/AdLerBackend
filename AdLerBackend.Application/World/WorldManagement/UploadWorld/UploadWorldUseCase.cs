@@ -76,10 +76,12 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, CreateWorl
             lmsCourseCreationResponse.CourseLmsId
         );
 
-        await _worldRepository.AddAsync(courseEntity);
+        var createdEntity = await _worldRepository.AddAsync(courseEntity);
 
         return new CreateWorldResponse
         {
+            // When the world is created, the id is set
+            WorldId = createdEntity.Id!.Value,
             World3DUrl = _configuration.AdLerEngineUrl ?? "Adler Engine URL not set",
             WorldLmsUrl = _configuration.MoodleUrl + "/course/view.php?id=" + lmsCourseCreationResponse.CourseLmsId,
             WorldNameInLms = courseEntity.Name

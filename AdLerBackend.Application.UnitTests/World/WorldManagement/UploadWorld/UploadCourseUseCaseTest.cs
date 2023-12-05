@@ -8,6 +8,7 @@ using AdLerBackend.Application.Configuration;
 using AdLerBackend.Application.LMS.GetUserData;
 using AdLerBackend.Application.World.WorldManagement.UploadWorld;
 using AdLerBackend.Domain.Entities;
+using AdLerBackend.Domain.UnitTests.TestingUtils;
 using AdLerBackend.Infrastructure.Services;
 using AutoBogus;
 using MediatR;
@@ -31,7 +32,8 @@ public class UploadWorldUseCaseTest
     [SetUp]
     public void Setup()
     {
-        _configuration = Options.Create(new BackendConfig {MoodleUrl = "http://localhost"});
+        _configuration = Options.Create(new BackendConfig
+            {MoodleUrl = "http://localhost", AdLerEngineUrl = "http://localhost"});
 
         _lmsBackupProcessor = Substitute.For<ILmsBackupProcessor>();
         _mediator = Substitute.For<IMediator>();
@@ -89,6 +91,9 @@ public class UploadWorldUseCaseTest
             ElementUuid = "path1"
         };
 
+        _worldRepository.AddAsync(Arg.Any<WorldEntity>())
+            .Returns(WorldEntityFactory.CreateWorldEntity(id: 1));
+
         _lmsBackupProcessor.GetWorldDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedDsl);
 
         _lmsBackupProcessor.GetH5PFilesFromBackup(Arg.Any<Stream>()).Returns(new List<H5PDto>
@@ -118,7 +123,7 @@ public class UploadWorldUseCaseTest
         atfStream.Position = 0;
 
         // Act
-        await systemUnderTest.Handle(new UploadWorldCommand
+        var result = await systemUnderTest.Handle(new UploadWorldCommand
         {
             BackupFileStream = new MemoryStream(),
             ATFFileStream = atfStream,
@@ -128,6 +133,11 @@ public class UploadWorldUseCaseTest
         // Assert that AddAsync has been called with the Correct entity
         await _worldRepository.Received(1)
             .AddAsync(Arg.Is<WorldEntity>(x => x.Name == "TESTNAME"));
+
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.WorldId, Is.EqualTo(1));
+        Assert.That(result.World3DUrl, Is.EqualTo("http://localhost"));
+        Assert.That(result.WorldLmsUrl, Is.EqualTo("http://localhost/course/view.php?id=1337"));
     }
 
 
@@ -145,6 +155,9 @@ public class UploadWorldUseCaseTest
             LMSUserName = "TestName",
             UserId = 1337
         });
+
+        _worldRepository.AddAsync(Arg.Any<WorldEntity>())
+            .Returns(WorldEntityFactory.CreateWorldEntity(id: 1));
 
         var fakedDsl = AutoFaker.Generate<WorldAtfResponse>();
 
@@ -166,7 +179,7 @@ public class UploadWorldUseCaseTest
 
 
         // Act
-        await systemUnderTest.Handle(new UploadWorldCommand
+        var result = await systemUnderTest.Handle(new UploadWorldCommand
         {
             BackupFileStream = new MemoryStream(),
             ATFFileStream = new MemoryStream(),
@@ -176,5 +189,10 @@ public class UploadWorldUseCaseTest
         // Assert that AddAsync has been called with the Correct entity
         await _worldRepository.Received(1)
             .AddAsync(Arg.Is<WorldEntity>(x => x.Name == "TESTNAME"));
+
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.WorldId, Is.EqualTo(1));
+        Assert.That(result.World3DUrl, Is.EqualTo("http://localhost"));
+        Assert.That(result.WorldLmsUrl, Is.EqualTo("http://localhost/course/view.php?id=1337"));
     }
 }

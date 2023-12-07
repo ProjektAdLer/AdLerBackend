@@ -43,6 +43,7 @@ public class StorageService : IFileAccess
     {
         var workingDir = _fileSystem.Path.Join("wwwroot", "courses", worldToDelete.WorldInstanceId.ToString());
 
+        if (!_fileSystem.Directory.Exists(workingDir)) return true;
         _fileSystem.Directory.Delete(workingDir, true);
         return true;
     }

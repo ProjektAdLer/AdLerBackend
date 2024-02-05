@@ -6,6 +6,7 @@ using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.LMSAdapter.Adaptivity;
 using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure.Moodle.ApiResponses;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 #pragma warning disable CS8524
@@ -16,6 +17,17 @@ public class MoodleWebApi : ILMS
 {
     private readonly HttpClient _client;
     private readonly BackendConfig _configuration;
+    private readonly ILogger<MoodleWebApi> _logger;
+
+    public MoodleWebApi(HttpClient client, IOptions<BackendConfig> configuration, ILogger<MoodleWebApi> logger)
+    {
+        _client = client;
+        _configuration = configuration.Value;
+        _logger = logger;
+
+        // set timeout to 600 seconds
+        _client.Timeout = TimeSpan.FromSeconds(600);
+    }
 
 
     public MoodleWebApi(HttpClient client, IOptions<BackendConfig> configuration)

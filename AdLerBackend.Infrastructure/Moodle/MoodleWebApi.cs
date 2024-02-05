@@ -413,10 +413,9 @@ public class MoodleWebApi : ILMS
                 PostToMoodleOptions.Endpoints.Login => _configuration.MoodleUrl + "/login/token.php"
             };
 
-            // get Current Time
-            var time = (int) DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
 
-            Console.WriteLine(time + " Calling Moodle API: " + url);
+            _logger.LogInformation("Request to Moodle: {url}", url);
+
 
             return await _client.PostAsync(url, content);
         }

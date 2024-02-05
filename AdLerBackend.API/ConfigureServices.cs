@@ -22,11 +22,6 @@ public static class ConfigureServices
     {
         services
             .AddControllers(options => options.Filters.Add<ApiExceptionFilterAttribute>());
-        // .AddNewtonsoftJson(opts =>
-        // {
-        //     opts.SerializerSettings.Converters.Add(new StringEnumConverter());
-        //     //opts.SerializerSettings.TypeNameHandling = TypeNameHandling.Objects;
-        // });
 
         services.AddEndpointsApiExplorer();
         services.AddHealthChecks();

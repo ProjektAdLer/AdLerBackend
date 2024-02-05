@@ -23,6 +23,8 @@ public static class ConfigureServices
         services
             .AddControllers(options => options.Filters.Add<ApiExceptionFilterAttribute>());
 
+        services.AddHttpContextAccessor();
+
         services.AddEndpointsApiExplorer();
         services.AddHealthChecks();
         services.AddSwaggerGen(options =>

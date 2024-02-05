@@ -4,32 +4,14 @@ using AdLerBackend.API;
 using AdLerBackend.Application;
 using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure;
-using Serilog;
-using Serilog.Settings.Configuration;
-using Serilog.Sinks.SystemConsole.Themes;
 
 Directory.CreateDirectory("wwwroot");
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-var options = new ConfigurationReaderOptions(typeof(ConsoleLoggerExtensions).Assembly);
-var loggerConfig = new LoggerConfiguration();
-loggerConfig.ReadFrom.Configuration(builder.Configuration, options)
-    .Enrich.FromLogContext()
-    .WriteTo.Console(
-        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
-        theme: AnsiConsoleTheme.Code
-    );
-
-Log.Logger = loggerConfig.CreateLogger();
-
-// clear providers and add Serilog
-builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(Log.Logger);
-
-
-builder.Services.AddAndValidateBackendConfig(builder.Configuration);
+builder
+    .AddLoggingViaSerilog()
+    .Services.AddAndValidateBackendConfig(builder.Configuration);
 
 builder.Services
     .AddApiServices()

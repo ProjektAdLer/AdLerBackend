@@ -414,7 +414,7 @@ public class MoodleWebApi : ILMS
             };
 
 
-            _logger.LogInformation("Request to Moodle: {url}", url);
+            _logger.LogInformation("Request to Moodle: {Url}", url);
 
 
             return await _client.PostAsync(url, content);

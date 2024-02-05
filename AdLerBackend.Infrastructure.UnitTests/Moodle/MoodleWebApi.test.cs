@@ -4,8 +4,10 @@ using AdLerBackend.Application.Common.Responses.LMSAdapter.Adaptivity;
 using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure.Moodle;
 using AdLerBackend.Infrastructure.Moodle.ApiResponses;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using NSubstitute;
 using RichardSzalay.MockHttp;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -23,7 +25,10 @@ public class MoodleWebApiTest
         _mockHttp = new MockHttpMessageHandler();
         _configuration = Options.Create(new BackendConfig {MoodleUrl = "http://localhost"});
 
-        _systemUnderTest = new MoodleWebApi(_mockHttp.ToHttpClient(), _configuration);
+        // Mock logging with NSubstitute
+        var logger = Substitute.For<ILogger<MoodleWebApi>>();
+
+        _systemUnderTest = new MoodleWebApi(_mockHttp.ToHttpClient(), _configuration, logger);
     }
 
     [Test]
@@ -426,4 +431,22 @@ public class MoodleWebApiTest
                 }
             });
     }
+
+    // [Test]
+    // public async Task LoggerIsCalled_WhenRequestIsMade()
+    // {
+    //     // Arrange
+    //     var logger = Substitute.For<ILogger<MoodleWebApi>>();
+    //     _systemUnderTest = new MoodleWebApi(_mockHttp.ToHttpClient(), _configuration, logger);
+    //     
+    //     var webResponse =
+    //         "{\n    \"data\": {\n        \"questions\": [\n            {\n                \"Uuid\": \"978c2fb5-a947-4d22-8481-5824187d4641\",\n                \"Status\": \"correct\",\n                \"answers\": \"[{\\\"checked\\\":true,\\\"user_answer_correct\\\":true},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false}]\"\n            },\n            {\n                \"Uuid\": \"dbf01034-97ab-4b4b-9029-7dac0f57ab51\",\n                \"Status\": \"incorrect\",\n                \"answers\": \"[{\\\"checked\\\":false,\\\"user_answer_correct\\\":false},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false}]\"\n            }\n        ]\n    }\n}";
+    //     _mockHttp.When("*").Respond("application/json", webResponse);
+    //
+    //     // Act
+    //     var result = await _systemUnderTest.GetAdaptivityElementDetailsAsync("token", 1);
+    //
+    //     // Assert
+    //     logger.Received().LogInformation(Arg.Any<string>());
+    // }
 }

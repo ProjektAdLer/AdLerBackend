@@ -65,6 +65,7 @@ public static class ConfigureServices
                 .AllowAnyHeader()
                 .AllowAnyMethod());
         app.UseMiddleware<UnzipMiddleware>();
+        app.UseMiddleware<LoggingMiddleware>();
         app.UseStaticFiles(new StaticFileOptions
         {
             ServeUnknownFileTypes = true

@@ -21,14 +21,11 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
         CancellationToken cancellationToken)
     {
         var requestName = request.GetType().Name;
-        var requestGuid = Guid.NewGuid().ToString();
 
-        var currentRequestTraceIdentifier = _httpContextAccessor.HttpContext?.TraceIdentifier;
+        var requestNameWithGuid = $"{requestName}";
 
-        var requestNameWithGuid = $"{requestName} [{requestGuid}]";
+        _logger.LogTrace("[START] {RequestNameWithGuid}", requestNameWithGuid);
 
-        _logger.LogTrace("[START] {RequestNameWithGuid} for httpRequest {CurrentRequestTraceIdentifier}",
-            requestNameWithGuid, currentRequestTraceIdentifier);
         TResponse response;
         var stopwatch = Stopwatch.StartNew();
 
@@ -40,8 +37,8 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
         {
             stopwatch.Stop();
             _logger.LogTrace(
-                "[END] {RequestNameWithGuid} for httpRequest {CurrentRequestTraceIdentifier}; Execution time={StopwatchElapsedMilliseconds}ms",
-                requestNameWithGuid, currentRequestTraceIdentifier, stopwatch.ElapsedMilliseconds);
+                "[END] {RequestNameWithGuid}; Execution time={StopwatchElapsedMilliseconds}ms",
+                requestNameWithGuid, stopwatch.ElapsedMilliseconds);
         }
 
         return response;

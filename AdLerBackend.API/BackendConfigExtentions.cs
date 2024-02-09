@@ -17,7 +17,8 @@ public static class BackendConfigExtensions
         loggerConfig.ReadFrom.Configuration(builder.Configuration, options)
             .Enrich.FromLogContext()
             .WriteTo.Console(
-                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
+                outputTemplate:
+                "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {TraceIdentifier}  {Message:lj}{NewLine}{Exception}",
                 theme: AnsiConsoleTheme.Code
             );
 

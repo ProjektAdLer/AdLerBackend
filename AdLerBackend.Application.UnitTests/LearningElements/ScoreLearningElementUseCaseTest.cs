@@ -22,9 +22,11 @@ public class ScoreLearningElementUseCaseTest
         _mediator = Substitute.For<IMediator>();
     }
 
-    [TestCase("h5pactivity", true)]
-    [TestCase("url", true)]
-    [TestCase("resource", false)]
+    [TestCase("h5p", true)]
+    [TestCase("video", true)]
+    [TestCase("text", false)]
+    [TestCase("image", false)]
+    [TestCase("text", false)]
     public async Task Handle_CallsStrategy(string activityName, bool expected)
     {
         var systemUnderTest = new ScoreElementUseCase(_mediator);
@@ -35,14 +37,14 @@ public class ScoreLearningElementUseCaseTest
                 IsLocked = false,
                 AdLerElement = new BaseElement
                 {
-                    ElementId = 1
+                    ElementId = 1,
+                    ElementCategory = activityName
                 },
                 LmsModule = new LmsModule
                 {
                     contextid = 1,
                     Id = 1,
                     Name = "name",
-                    ModName = activityName
                 }
             }
         );

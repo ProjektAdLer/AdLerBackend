@@ -69,6 +69,8 @@ public class UploadWorldUseCaseTest
             new UploadWorldUseCase(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
                 new SerializationService(), _ilms, _configuration);
 
+        var testGuid = Guid.NewGuid();
+
         _ilms.UploadCourseWorldToLMS(Arg.Any<string>(), Arg.Any<Stream>()).Returns(new LMSCourseCreationResponse
         {
             CourseLmsId = 1337,
@@ -88,7 +90,7 @@ public class UploadWorldUseCaseTest
         {
             ElementId = 13337,
             ElementCategory = "h5p",
-            ElementUuid = "path1"
+            ElementUuid = testGuid
         };
 
         _worldRepository.AddAsync(Arg.Any<WorldEntity>())
@@ -102,13 +104,13 @@ public class UploadWorldUseCaseTest
             new()
             {
                 H5PFile = new MemoryStream(),
-                H5PUuid = "path1"
+                H5PUuid = testGuid.ToString()
             }
         });
 
         _fileAccess.StoreH5PFilesForWorld(Arg.Any<WorldStoreH5PDto>()).Returns(new Dictionary<string, string>
         {
-            {"path1", "path1"}
+            {testGuid.ToString(), testGuid.ToString()}
         });
 
         // mock memory stream with the fake atf file

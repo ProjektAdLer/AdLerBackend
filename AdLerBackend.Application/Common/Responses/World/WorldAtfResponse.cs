@@ -93,7 +93,7 @@ public class AdaptivityElement : Element
 public class BaseElement
 {
     [Required] public int ElementId { get; set; }
-    [Required] public string ElementUuid { get; set; }
+    [Required] public Guid ElementUuid { get; set; }
     [Required] public string ElementName { get; set; }
     [Required] public string ElementCategory { get; set; }
     [Required] public string ElementFileType { get; set; }

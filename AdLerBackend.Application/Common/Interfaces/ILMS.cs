@@ -82,7 +82,7 @@ public interface ILMS
     /// <param name="uuids">List of UUIDs to be </param>
     /// <returns></returns>
     Task<IEnumerable<LmsUuidResponse>> GetLmsElementIdsByUuidsAsync(string token, int courseInstanceId,
-        IEnumerable<string> uuids);
+        IEnumerable<Guid> uuids);
 
     /// <summary>
     ///     Deletes a Course from the LMS

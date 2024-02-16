@@ -10,6 +10,11 @@ using MediatR;
 
 namespace AdLerBackend.Application.Element.ScoreElement;
 
+/// <summary>
+///     Use case for scoring an element
+///     It Gets the learning element from the LMS Corelates the element with the ATF and scores the element in the LMS via
+///     the Plugin
+/// </summary>
 public class ScoreElementUseCase : IRequestHandler<ScoreElementCommand, ScoreElementResponse>
 {
     private readonly IMediator _mediator;

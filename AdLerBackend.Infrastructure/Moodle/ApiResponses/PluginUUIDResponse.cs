@@ -8,7 +8,7 @@ public class PluginUUIDResponse
 
     [JsonPropertyName("element_type")] public string ElementType { get; set; }
 
-    [JsonPropertyName("Uuid")] public string Uuid { get; set; }
+    [JsonPropertyName("Uuid")] public Guid Uuid { get; set; }
 
     [JsonPropertyName("moodle_id")] public int MoodleId { get; set; }
 

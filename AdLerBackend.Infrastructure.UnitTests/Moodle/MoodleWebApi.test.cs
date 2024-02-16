@@ -302,6 +302,8 @@ public class MoodleWebApiTest
     [Test]
     public async Task GetLmsElementIdsByUuidsAsync_ReturnsExpectedElements()
     {
+        var uuid1 = Guid.NewGuid();
+        var uuid2 = Guid.NewGuid();
         // Arrange
         var webResponse = new ResponseWithDataArray<PluginUUIDResponse>
         {
@@ -310,7 +312,7 @@ public class MoodleWebApiTest
                 new()
                 {
                     ContextId = 1,
-                    Uuid = "UUID1",
+                    Uuid = uuid1,
                     CourseId = "eins",
                     MoodleId = 1,
                     ElementType = "cm"
@@ -318,7 +320,7 @@ public class MoodleWebApiTest
                 new()
                 {
                     ContextId = 2,
-                    Uuid = "UUID2",
+                    Uuid = uuid2,
                     CourseId = "zwei",
                     MoodleId = 2,
                     ElementType = "cm"
@@ -331,11 +333,11 @@ public class MoodleWebApiTest
 
         // Act
         var result =
-            await _systemUnderTest.GetLmsElementIdsByUuidsAsync("token", 1, new List<string> {"UUID1", "UUID2"});
+            await _systemUnderTest.GetLmsElementIdsByUuidsAsync("token", 1, new List<Guid> {uuid1, uuid2});
 
         // Assert
         Assert.That(result.Count, Is.EqualTo(2));
-        Assert.That(result.First().Uuid, Is.EqualTo("UUID1"));
+        Assert.That(result.First().Uuid, Is.EqualTo(uuid1));
     }
 
     // Course Deletion

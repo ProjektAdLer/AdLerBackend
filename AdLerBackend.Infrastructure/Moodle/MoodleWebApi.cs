@@ -80,6 +80,7 @@ public class MoodleWebApi : ILMS
         });
     }
 
+
     public async Task DeleteCourseAsync(string token, int courseId)
     {
         var warnings = await MoodleCallAsync<ResponseWithDataArray<CourseDeletionWarningsResponse>>(
@@ -257,7 +258,7 @@ public class MoodleWebApi : ILMS
     }
 
     public async Task<IEnumerable<LmsUuidResponse>> GetLmsElementIdsByUuidsAsync(string token, int courseInstanceId,
-        IEnumerable<string> uuids)
+        IEnumerable<Guid> uuids)
     {
         var wsParams = new Dictionary<string, HttpContent>
         {
@@ -269,7 +270,7 @@ public class MoodleWebApi : ILMS
         {
             wsParams.Add($"elements[{i}][course_id]", new StringContent(courseInstanceId.ToString()));
             wsParams.Add($"elements[{i}][element_type]", new StringContent("cm"));
-            wsParams.Add($"elements[{i}][uuid]", new StringContent(uuids.ElementAt(i)));
+            wsParams.Add($"elements[{i}][uuid]", new StringContent(uuids.ElementAt(i).ToString()));
         }
 
         var ret = await MoodleCallAsync<ResponseWithDataArray<PluginUUIDResponse>>(wsParams);

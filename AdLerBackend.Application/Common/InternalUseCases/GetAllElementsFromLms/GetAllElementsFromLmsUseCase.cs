@@ -9,7 +9,7 @@ namespace AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms
 
 public class
     GetAllElementsFromLmsUseCase : IRequestHandler<GetAllElementsFromLmsCommand,
-        GetAllElementsFromLmsWithAdLerIdResponse>
+    GetAllElementsFromLmsWithAdLerIdResponse>
 {
     private readonly ILMS _lms;
     private readonly ISerialization _serialization;
@@ -48,7 +48,7 @@ public class
     }
 
     private async Task<IEnumerable<LmsUuidResponse>> GetModulesWithUuid(string webServiceToken, int lmsWorldId,
-        List<string> elementUuids)
+        List<Guid> elementUuids)
     {
         return await _lms.GetLmsElementIdsByUuidsAsync(webServiceToken, lmsWorldId, elementUuids);
     }
@@ -65,7 +65,8 @@ public class
             {
                 AdLerId = adLerId!.Value,
                 LmsModule = module!,
-                IsLocked = module == null
+                IsLocked = module == null,
+                LmsModuleUuid = mu.Uuid
             };
         });
     }

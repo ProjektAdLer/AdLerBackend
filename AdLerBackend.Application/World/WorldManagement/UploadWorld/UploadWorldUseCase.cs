@@ -60,7 +60,7 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, CreateWorl
             request.BackupFileStream);
 
         var h5PLocationEntities = (from h5PWithPath in h5PNamesWithPaths
-                let h5PName = h5PWithPath.Key
+                let h5PName = Guid.Parse(h5PWithPath.Key)
                 let h5PInAtf = courseInformation.World.Elements.FirstOrDefault(x => x.ElementUuid == h5PName)
                 select new H5PLocationEntity(h5PWithPath.Value, h5PInAtf.ElementId))
             .ToList();

@@ -1,5 +1,6 @@
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
+using AdLerBackend.Application.Common.InternalUseCases.GetLearningElement;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.World;
 using AdLerBackend.Application.Element.GetElementScore;
@@ -33,25 +34,18 @@ public class GetLearningElementScoreUseCaseTest
             .Returns(
                 success
             );
-
-        _mediator.Send(Arg.Any<GetAllElementsFromLmsCommand>()).Returns(
-            new GetAllElementsFromLmsWithAdLerIdResponse
+        
+        _mediator.Send(Arg.Any<GetLearningElementCommand>()).Returns(
+            new ModuleWithId
             {
-                LmsCourseId = 1337,
-                ModulesWithAdLerId = new List<ModuleWithId>
+                IsLocked = false,
+                AdLerId = 1,
+                LmsModule = new Modules
                 {
-                    new()
-                    {
-                        IsLocked = false,
-                        AdLerId = 1,
-                        LmsModule = new Modules
-                        {
-                            contextid = 1,
-                            Id = 1,
-                            Name = "name",
-                            ModName = modname
-                        }
-                    }
+                    contextid = 1,
+                    Id = 1,
+                    Name = "name",
+                    ModName = modname
                 }
             }
         );

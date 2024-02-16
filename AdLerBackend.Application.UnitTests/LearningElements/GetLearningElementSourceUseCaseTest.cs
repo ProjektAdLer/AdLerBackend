@@ -1,4 +1,5 @@
 using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
+using AdLerBackend.Application.Common.InternalUseCases.GetLearningElement;
 using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.World;
@@ -26,31 +27,23 @@ public class GetLearningElementSourceUseCaseTest
     {
         // Arrange
         var systemUnderTest = new GetElementSourceUseCase(_mediator);
-
-
-        _mediator.Send(Arg.Any<GetAllElementsFromLmsCommand>()).Returns(
-            new GetAllElementsFromLmsWithAdLerIdResponse
+        
+        _mediator.Send(Arg.Any<GetLearningElementCommand>()).Returns(
+            new ModuleWithId
             {
-                LmsCourseId = 1337,
-                ModulesWithAdLerId = new List<ModuleWithId>
+                IsLocked = false,
+                AdLerId = 1,
+                LmsModule = new Modules
                 {
-                    new()
+                    contextid = 1,
+                    Id = 1,
+                    Name = "name",
+                    ModName = resourceType,
+                    Contents = new List<FileContents>
                     {
-                        IsLocked = false,
-                        AdLerId = 1,
-                        LmsModule = new Modules
+                        new()
                         {
-                            contextid = 1,
-                            Id = 1,
-                            Name = "name",
-                            ModName = resourceType,
-                            Contents = new List<FileContents>
-                            {
-                                new()
-                                {
-                                    fileUrl = "testURL"
-                                }
-                            }
+                            fileUrl = "testURL"
                         }
                     }
                 }
@@ -74,31 +67,23 @@ public class GetLearningElementSourceUseCaseTest
     {
         // Arrange
         var systemUnderTest = new GetElementSourceUseCase(_mediator);
-
-
-        _mediator.Send(Arg.Any<GetAllElementsFromLmsCommand>()).Returns(
-            new GetAllElementsFromLmsWithAdLerIdResponse
+        
+        _mediator.Send(Arg.Any<GetLearningElementCommand>()).Returns(
+            new ModuleWithId
             {
-                LmsCourseId = 1337,
-                ModulesWithAdLerId = new List<ModuleWithId>
+                IsLocked = false,
+                AdLerId = 1,
+                LmsModule = new Modules
                 {
-                    new()
+                    contextid = 1,
+                    Id = 1,
+                    Name = "name",
+                    ModName = "h5pactivity",
+                    Contents = new List<FileContents>
                     {
-                        IsLocked = false,
-                        AdLerId = 1,
-                        LmsModule = new Modules
+                        new()
                         {
-                            contextid = 1,
-                            Id = 1,
-                            Name = "name",
-                            ModName = "h5pactivity",
-                            Contents = new List<FileContents>
-                            {
-                                new()
-                                {
-                                    fileUrl = "testURL"
-                                }
-                            }
+                            fileUrl = "testURL"
                         }
                     }
                 }
@@ -128,29 +113,18 @@ public class GetLearningElementSourceUseCaseTest
     {
         // Arrange
         var systemUnderTest = new GetElementSourceUseCase(_mediator);
-
-        _mediator.Send(Arg.Any<GetAllElementsFromLmsCommand>()).Returns(
-            new GetAllElementsFromLmsWithAdLerIdResponse
+        
+        _mediator.Send(Arg.Any<GetLearningElementCommand>()).Returns(
+            new ModuleWithId
             {
-                LmsCourseId = 1337,
-                ModulesWithAdLerId = new List<ModuleWithId>
+                IsLocked = false,
+                AdLerId = 1,
+                LmsModule = new Modules
                 {
-                    new()
-                    {
-                        IsLocked = false,
-                        AdLerId = 1,
-                        LmsModule = new Modules
-                        {
-                            ModName = "h5pactivity123456789",
-                            Contents = new List<FileContents>
-                            {
-                                new()
-                                {
-                                    fileUrl = "testURL"
-                                }
-                            }
-                        }
-                    }
+                    contextid = 1,
+                    Id = 1,
+                    Name = "name",
+                    ModName = "h5pactivity123456789",
                 }
             }
         );

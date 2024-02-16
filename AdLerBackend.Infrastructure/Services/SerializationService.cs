@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
 using AdLerBackend.Application.Common.Interfaces;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace AdLerBackend.Infrastructure.Services;
 
@@ -14,9 +16,23 @@ public class SerializationService : ISerialization
         return retVal;
     }
 
-    public bool IsValidJsonString(string jsonString)
+    public bool IsValidJsonString(string potentialJsonString)
     {
-        return jsonString.StartsWith("{") && jsonString.EndsWith("}");
+        if (string.IsNullOrWhiteSpace(potentialJsonString)) return false;
+
+        try
+        {
+            var obj = JsonConvert.DeserializeObject(potentialJsonString);
+            return true;
+        }
+        catch (JsonReaderException)
+        {
+            return false;
+        }
+        catch (Exception) // Some other exception
+        {
+            return false;
+        }
     }
 
     public string ClassToJsonString(object classToSerialize)

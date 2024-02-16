@@ -2,8 +2,7 @@ using AdLerBackend.Application.Common;
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.ScoreGenericLearningElementStrategy;
 using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.ScoreH5PStrategy;
-using AdLerBackend.Application.Common.Exceptions;
-using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
+using AdLerBackend.Application.Common.InternalUseCases.GetLearningElement;
 using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using MediatR;
@@ -27,18 +26,12 @@ public class ScoreElementUseCase : IRequestHandler<ScoreElementCommand, ScoreEle
     public async Task<ScoreElementResponse> Handle(ScoreElementCommand request,
         CancellationToken cancellationToken)
     {
-        var learningElementModules = await _mediator.Send(new GetAllElementsFromLmsCommand
+        var learningElementModule = await _mediator.Send(new GetLearningElementCommand
         {
+            ElementId = request.ElementId,
             WorldId = request.WorldId,
             WebServiceToken = request.WebServiceToken
         }, cancellationToken);
-
-        // Get LearningElement Activity Id
-        var learningElementModule = learningElementModules.ModulesWithAdLerId
-            .FirstOrDefault(x => x.AdLerId == request.ElementId);
-
-        if (learningElementModule == null || learningElementModule!.IsLocked)
-            throw new NotFoundException("Element not found or locked");
 
         var elementScoreResponse = await _mediator.Send(GetStrategy(learningElementModule.LmsModule.ModName,
             new GetStrategyParams

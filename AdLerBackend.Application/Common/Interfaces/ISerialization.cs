@@ -6,5 +6,5 @@ public interface ISerialization
 
     public string ClassToJsonString(object classToSerialize);
 
-    public bool IsValidJsonString(string jsonString);
+    public bool IsValidJsonString(string potentialJsonString);
 }

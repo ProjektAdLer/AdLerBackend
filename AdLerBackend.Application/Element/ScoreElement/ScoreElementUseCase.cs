@@ -1,5 +1,6 @@
 using AdLerBackend.Application.Common;
 using AdLerBackend.Application.Common.DTOs;
+using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.MockPrimitiveH5PStrategy;
 using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.ScoreGenericLearningElementStrategy;
 using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.ScoreH5PStrategy;
 using AdLerBackend.Application.Common.InternalUseCases.GetLearningElement;
@@ -35,13 +36,13 @@ public class ScoreElementUseCase : IRequestHandler<ScoreElementCommand, ScoreEle
             WebServiceToken = request.WebServiceToken
         }, cancellationToken);
 
-        var elementScoreResponse = await _mediator.Send(GetStrategy(learningElementModule.LmsModule.ModName,
+        var elementScoreResponse = await _mediator.Send(GetStrategy(learningElementModule.AdLerElement.ElementCategory,
             new GetStrategyParams
             {
                 LearningElementMoule = learningElementModule.LmsModule,
                 WebServiceToken = request.WebServiceToken,
                 ScoreElementParams = request.ScoreElementParams ?? new ScoreElementParams()
-            }), cancellationToken);
+            }, request.ElementId), cancellationToken);
 
         return new ScoreElementResponse
         {
@@ -50,22 +51,29 @@ public class ScoreElementUseCase : IRequestHandler<ScoreElementCommand, ScoreEle
     }
 
     private static CommandWithToken<ScoreElementResponse> GetStrategy(string elementType,
-        GetStrategyParams commandWithParams)
+        GetStrategyParams commandWithParams, int mockId)
     {
         switch (elementType)
         {
-            case "h5pactivity":
+            case "h5p":
                 return new ScoreH5PElementStrategyCommand
                 {
                     LmsModule = commandWithParams.LearningElementMoule,
                     ScoreElementParams = commandWithParams.ScoreElementParams,
                     WebServiceToken = commandWithParams.WebServiceToken
                 };
-            case "url":
-            case "resource":
+            case "image":
+            case "text":
+            case "video":
                 return new ScoreGenericElementStrategyCommand
                 {
                     LmsModule = commandWithParams.LearningElementMoule,
+                    WebServiceToken = commandWithParams.WebServiceToken
+                };
+            case "primitiveH5P":
+                return new MockPrimitiveH5PStrategyCommand
+                {
+                    ElementId = mockId,
                     WebServiceToken = commandWithParams.WebServiceToken
                 };
             default:

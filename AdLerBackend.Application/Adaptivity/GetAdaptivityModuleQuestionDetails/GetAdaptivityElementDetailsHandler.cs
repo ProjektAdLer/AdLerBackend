@@ -1,5 +1,6 @@
 ﻿using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
+using AdLerBackend.Application.Common.InternalUseCases.GetLearningElement;
 using AdLerBackend.Application.Common.Responses.Adaptivity;
 using AdLerBackend.Application.Common.Responses.Adaptivity.Common;
 using AdLerBackend.Application.Common.Responses.Elements;
@@ -32,15 +33,12 @@ public class
     public async Task<GetAdaptivityElementDetailsResponse> Handle(GetAdaptivityElementDetailsCommand request,
         CancellationToken cancellationToken)
     {
-        var learningElementModules = await _mediator.Send(new GetAllElementsFromLmsCommand
+        var learningElementModule = await _mediator.Send(new GetLearningElementCommand
         {
+            WebServiceToken = request.WebServiceToken,
             WorldId = request.LearningWorldId,
-            WebServiceToken = request.WebServiceToken
+            ElementId = request.ElementId
         }, cancellationToken);
-
-        // Get LearningElement Activity Id
-        var learningElementModule = learningElementModules.ModulesWithAdLerId
-            .FirstOrDefault(x => x.AdLerId == request.ElementId);
 
         var learningWorld = await _worldRepository.GetAsync(request.LearningWorldId);
 

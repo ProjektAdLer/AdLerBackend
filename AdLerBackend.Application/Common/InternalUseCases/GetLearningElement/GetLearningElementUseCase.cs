@@ -26,8 +26,11 @@ public class GetLearningElementUseCase : IRequestHandler<GetLearningElementComma
         var learningElementModule = learningElementModules.ModulesWithAdLerId
             .FirstOrDefault(x => x.AdLerId == request.ElementId);
 
-        if (learningElementModule == null || learningElementModule!.IsLocked)
-            throw new NotFoundException("Element not found or locked");
+        if (learningElementModule == null)
+            throw new NotFoundException("Learning Element not found");
+
+        if (!request.CanBeLocked && learningElementModule.IsLocked)
+            throw new ForbiddenAccessException("Learning Element is locked and cant be accessed");
 
         return learningElementModule;
     }

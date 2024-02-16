@@ -5,6 +5,7 @@ using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.S
 using AdLerBackend.Application.Common.InternalUseCases.GetLearningElement;
 using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
+using JetBrains.Annotations;
 using MediatR;
 
 namespace AdLerBackend.Application.Element.ScoreElement;
@@ -14,6 +15,7 @@ namespace AdLerBackend.Application.Element.ScoreElement;
 ///     It Gets the learning element from the LMS Corelates the element with the ATF and scores the element in the LMS via
 ///     the Plugin
 /// </summary>
+[UsedImplicitly]
 public class ScoreElementUseCase : IRequestHandler<ScoreElementCommand, ScoreElementResponse>
 {
     private readonly IMediator _mediator;

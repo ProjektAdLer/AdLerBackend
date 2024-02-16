@@ -1,5 +1,6 @@
 using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
+using AdLerBackend.Application.Common.InternalUseCases.GetLearningElement;
 using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Element.GetElementSource.GetH5PFilePath;
 using MediatR;
@@ -19,18 +20,13 @@ public class
     public async Task<GetElementSourceResponse> Handle(GetElementSourceCommand request,
         CancellationToken cancellationToken)
     {
-        var learningElementModules = await _mediator.Send(new GetAllElementsFromLmsCommand
+        var learningElementModule = await _mediator.Send(new GetLearningElementCommand
         {
+            WebServiceToken = request.WebServiceToken,
             WorldId = request.WorldId,
-            WebServiceToken = request.WebServiceToken
+            ElementId = request.ElementId
         }, cancellationToken);
-
-        // Get LearningElement Activity Id
-        var learningElementModule = learningElementModules.ModulesWithAdLerId
-            .FirstOrDefault(x => x.AdLerId == request.ElementId);
-
-        if (learningElementModule == null || learningElementModule!.IsLocked)
-            throw new NotFoundException("Element not found or locked");
+        
 
         switch (learningElementModule.LmsModule.ModName)
         {

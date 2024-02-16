@@ -1,5 +1,4 @@
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
 using AdLerBackend.Application.Common.InternalUseCases.GetLearningElement;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.World;
@@ -34,13 +33,16 @@ public class GetLearningElementScoreUseCaseTest
             .Returns(
                 success
             );
-        
+
         _mediator.Send(Arg.Any<GetLearningElementCommand>()).Returns(
-            new ModuleWithId
+            new AdLerLmsElementAggregation
             {
                 IsLocked = false,
-                AdLerId = 1,
-                LmsModule = new Modules
+                AdLerElement = new BaseElement
+                {
+                    ElementId = 1
+                },
+                LmsModule = new LmsModule
                 {
                     contextid = 1,
                     Id = 1,

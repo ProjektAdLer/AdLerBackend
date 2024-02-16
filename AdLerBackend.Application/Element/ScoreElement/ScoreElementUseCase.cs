@@ -57,7 +57,7 @@ public class ScoreElementUseCase : IRequestHandler<ScoreElementCommand, ScoreEle
             case "h5pactivity":
                 return new ScoreH5PElementStrategyCommand
                 {
-                    Module = commandWithParams.LearningElementMoule,
+                    LmsModule = commandWithParams.LearningElementMoule,
                     ScoreElementParams = commandWithParams.ScoreElementParams,
                     WebServiceToken = commandWithParams.WebServiceToken
                 };
@@ -65,7 +65,7 @@ public class ScoreElementUseCase : IRequestHandler<ScoreElementCommand, ScoreEle
             case "resource":
                 return new ScoreGenericElementStrategyCommand
                 {
-                    Module = commandWithParams.LearningElementMoule,
+                    LmsModule = commandWithParams.LearningElementMoule,
                     WebServiceToken = commandWithParams.WebServiceToken
                 };
             default:
@@ -78,7 +78,7 @@ public class ScoreElementUseCase : IRequestHandler<ScoreElementCommand, ScoreEle
     {
         public string WebServiceToken { get; set; }
         public ScoreElementParams ScoreElementParams { get; init; }
-        public Modules LearningElementMoule { get; init; }
+        public LmsModule LearningElementMoule { get; init; }
     }
 #pragma warning restore CS8618
 }

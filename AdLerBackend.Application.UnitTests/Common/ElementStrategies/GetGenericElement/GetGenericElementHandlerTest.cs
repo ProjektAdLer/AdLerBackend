@@ -27,7 +27,7 @@ public class GetGenericElementHandlerTest
         // Act
         var result = await systemUnderTest.Handle(new ScoreGenericElementStrategyCommand
             {
-                Module = new Modules
+                LmsModule = new LmsModule
                 {
                     Id = 1
                 },

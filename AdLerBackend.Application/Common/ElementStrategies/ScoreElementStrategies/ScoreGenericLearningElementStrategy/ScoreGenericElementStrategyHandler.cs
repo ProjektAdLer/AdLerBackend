@@ -20,7 +20,7 @@ public class ScoreGenericElementStrategyHandler : IRequestHandler<ScoreGenericEl
     {
         return new ScoreElementResponse
         {
-            IsSuccess = await _ilms.ScoreGenericElementViaPlugin(request.WebServiceToken, request.Module.Id)
+            IsSuccess = await _ilms.ScoreGenericElementViaPlugin(request.WebServiceToken, request.LmsModule.Id)
         };
     }
 }

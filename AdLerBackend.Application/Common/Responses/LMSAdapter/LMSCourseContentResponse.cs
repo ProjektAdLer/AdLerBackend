@@ -3,10 +3,10 @@ namespace AdLerBackend.Application.Common.Responses.LMSAdapter;
 
 public class LMSWorldContentResponse
 {
-    public IList<Modules> Modules { get; set; }
+    public IList<LmsModule> Modules { get; set; }
 }
 
-public class Modules
+public class LmsModule
 {
     public int Id { get; set; }
     public string Name { get; set; }

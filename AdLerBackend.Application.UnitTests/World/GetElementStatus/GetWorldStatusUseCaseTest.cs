@@ -30,12 +30,15 @@ public class GetWorldStatusUseCaseTest
             new GetAllElementsFromLmsWithAdLerIdResponse
             {
                 LmsCourseId = 1337,
-                ModulesWithAdLerId = new List<ModuleWithId>
+                ElementAggregations = new List<AdLerLmsElementAggregation>
                 {
                     new()
                     {
-                        AdLerId = 1,
-                        LmsModule = new Modules
+                        AdLerElement = new Application.Common.Responses.World.Element
+                        {
+                            ElementId = 1
+                        },
+                        LmsModule = new LmsModule
                         {
                             contextid = 1,
                             Id = 1,
@@ -45,7 +48,10 @@ public class GetWorldStatusUseCaseTest
                     },
                     new()
                     {
-                        AdLerId = 2,
+                        AdLerElement = new BaseElement
+                        {
+                            ElementId = 2
+                        },
                         IsLocked = true
                     }
                 }

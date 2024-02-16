@@ -7,6 +7,6 @@ namespace AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategi
 
 public record ScoreH5PElementStrategyCommand : CommandWithToken<ScoreElementResponse>
 {
-    public Modules Module { get; init; }
+    public LmsModule LmsModule { get; init; }
     public ScoreElementParams ScoreElementParams { get; init; }
 }

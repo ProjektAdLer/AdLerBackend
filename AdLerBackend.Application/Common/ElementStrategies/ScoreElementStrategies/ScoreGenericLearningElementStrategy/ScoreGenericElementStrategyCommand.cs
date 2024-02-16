@@ -7,5 +7,5 @@ namespace AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategi
 
 public record ScoreGenericElementStrategyCommand : CommandWithToken<ScoreElementResponse>
 {
-    public Modules Module { get; init; }
+    public LmsModule LmsModule { get; init; }
 }

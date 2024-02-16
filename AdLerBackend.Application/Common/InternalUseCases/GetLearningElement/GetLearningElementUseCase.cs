@@ -5,7 +5,7 @@ using MediatR;
 
 namespace AdLerBackend.Application.Common.InternalUseCases.GetLearningElement;
 
-public class GetLearningElementUseCase : IRequestHandler<GetLearningElementCommand, ModuleWithId>
+public class GetLearningElementUseCase : IRequestHandler<GetLearningElementCommand, AdLerLmsElementAggregation>
 {
     private readonly IMediator _mediator;
 
@@ -14,7 +14,7 @@ public class GetLearningElementUseCase : IRequestHandler<GetLearningElementComma
         _mediator = mediator;
     }
 
-    public async Task<ModuleWithId> Handle(GetLearningElementCommand request, CancellationToken cancellationToken)
+    public async Task<AdLerLmsElementAggregation> Handle(GetLearningElementCommand request, CancellationToken cancellationToken)
     {
         var learningElementModules = await _mediator.Send(new GetAllElementsFromLmsCommand
         {
@@ -22,9 +22,8 @@ public class GetLearningElementUseCase : IRequestHandler<GetLearningElementComma
             WebServiceToken = request.WebServiceToken
         }, cancellationToken);
 
-        // Get LearningElement Activity Id
-        var learningElementModule = learningElementModules.ModulesWithAdLerId
-            .FirstOrDefault(x => x.AdLerId == request.ElementId);
+        var learningElementModule = learningElementModules.ElementAggregations
+            .FirstOrDefault(x => x.AdLerElement.ElementId == request.ElementId);
 
         if (learningElementModule == null)
             throw new NotFoundException("Learning Element not found");

@@ -36,7 +36,7 @@ public class
         // Get User Data
         var userData = await _ilms.GetLMSUserDataAsync(request.WebServiceToken);
 
-        var contextId = request.Module.contextid;
+        var contextId = request.LmsModule.contextid;
 
         // Deserialize the XAPI Event
         var xapiEvent =

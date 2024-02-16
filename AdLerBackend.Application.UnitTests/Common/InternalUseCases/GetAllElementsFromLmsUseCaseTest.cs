@@ -78,7 +78,7 @@ public class GetAllElementsFromLmsUseCaseTest
         {
             new LMSWorldContentResponse
             {
-                Modules = new List<Modules>
+                Modules = new List<LmsModule>
                 {
                     new()
                     {
@@ -119,7 +119,7 @@ public class GetAllElementsFromLmsUseCaseTest
         {
             new LMSWorldContentResponse
             {
-                Modules = new List<Modules>
+                Modules = new List<LmsModule>
                 {
                     new()
                     {

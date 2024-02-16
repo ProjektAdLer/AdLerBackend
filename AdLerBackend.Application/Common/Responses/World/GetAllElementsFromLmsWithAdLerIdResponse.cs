@@ -6,13 +6,13 @@ namespace AdLerBackend.Application.Common.Responses.World;
 public class GetAllElementsFromLmsWithAdLerIdResponse
 {
     public int LmsCourseId { get; set; }
-    public IList<ModuleWithId> ModulesWithAdLerId { get; set; }
+    public int AdLerWorldId { get; set; }
+    public IList<AdLerLmsElementAggregation> ElementAggregations { get; set; }
 }
 
-public class ModuleWithId
+public class AdLerLmsElementAggregation
 {
-    public int AdLerId { get; set; }
-    public Guid LmsModuleUuid { get; set; }
-    public Modules LmsModule { get; set; }
+    public BaseElement AdLerElement { get; set; }
+    public LmsModule LmsModule { get; set; }
     public bool IsLocked { get; set; }
 }

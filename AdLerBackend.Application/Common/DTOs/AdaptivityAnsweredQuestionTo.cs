@@ -11,7 +11,7 @@ public record AdaptivityAnsweredQuestionTo
     public string Uuid { get; init; }
 
     /// <summary>
-    ///     The Answer encoded in a String for Compatibility future versions of the Adaptivity Module
+    ///     The Answer encoded in a String for Compatibility future versions of the Adaptivity LmsModule
     /// </summary>
     public string Answer { get; init; }
 }

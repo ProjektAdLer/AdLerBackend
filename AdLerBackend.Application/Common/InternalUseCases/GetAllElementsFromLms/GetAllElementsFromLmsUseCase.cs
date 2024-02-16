@@ -35,8 +35,10 @@ public class
 
         return new GetAllElementsFromLmsWithAdLerIdResponse
         {
-            ModulesWithAdLerId = modulesWithAdLerId.ToList(),
-            LmsCourseId = worldEntity.LmsWorldId
+            ElementAggregations = modulesWithAdLerId.ToList(),
+            LmsCourseId = worldEntity.LmsWorldId,
+            // Since we got the World from the DB, we can safely assume that the Id is not null
+            AdLerWorldId = worldEntity.Id!.Value
         };
     }
 
@@ -53,20 +55,19 @@ public class
         return await _lms.GetLmsElementIdsByUuidsAsync(webServiceToken, lmsWorldId, elementUuids);
     }
 
-    private IEnumerable<ModuleWithId> MapModulesWithAdLerId(WorldAtfResponse atfObject,
+    private IEnumerable<AdLerLmsElementAggregation> MapModulesWithAdLerId(WorldAtfResponse atfObject,
         IEnumerable<LMSWorldContentResponse> worldContent, IEnumerable<LmsUuidResponse> modulesWithUuid)
     {
         return modulesWithUuid.Select(mu =>
         {
-            var adLerId = atfObject.World.Elements.FirstOrDefault(x => x.ElementUuid == mu.Uuid)?.ElementId;
+            var adlerElement = atfObject.World.Elements.FirstOrDefault(x => x.ElementUuid == mu.Uuid);
             var module = worldContent.SelectMany(c => c.Modules).FirstOrDefault(m => m.Id == mu.LmsId);
 
-            return new ModuleWithId
+            return new AdLerLmsElementAggregation
             {
-                AdLerId = adLerId!.Value,
                 LmsModule = module!,
                 IsLocked = module == null,
-                LmsModuleUuid = mu.Uuid
+                AdLerElement = adlerElement!
             };
         });
     }

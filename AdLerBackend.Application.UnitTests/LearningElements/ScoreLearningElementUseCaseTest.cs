@@ -30,11 +30,14 @@ public class ScoreLearningElementUseCaseTest
         var systemUnderTest = new ScoreElementUseCase(_mediator);
 
         _mediator.Send(Arg.Any<GetLearningElementCommand>()).Returns(
-            new ModuleWithId
+            new AdLerLmsElementAggregation
             {
                 IsLocked = false,
-                AdLerId = 1,
-                LmsModule = new Modules
+                AdLerElement = new BaseElement
+                {
+                    ElementId = 1
+                },
+                LmsModule = new LmsModule
                 {
                     contextid = 1,
                     Id = 1,
@@ -73,11 +76,14 @@ public class ScoreLearningElementUseCaseTest
         var systemUnderTest = new ScoreElementUseCase(_mediator);
 
         _mediator.Send(Arg.Any<GetLearningElementCommand>()).Returns(
-            new ModuleWithId
+            new AdLerLmsElementAggregation
             {
                 IsLocked = false,
-                AdLerId = 1,
-                LmsModule = new Modules
+                AdLerElement = new BaseElement
+                {
+                    ElementId = 1
+                },
+                LmsModule = new LmsModule
                 {
                     contextid = 1,
                     Id = 1,

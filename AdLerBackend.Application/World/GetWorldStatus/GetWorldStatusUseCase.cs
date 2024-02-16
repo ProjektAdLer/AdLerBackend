@@ -21,7 +21,7 @@ public class
     public async Task<WorldStatusResponse> Handle(GetWorldStatusCommand request,
         CancellationToken cancellationToken)
     {
-        var courseWithAdLerIds = await _mediator.Send(new GetAllElementsFromLmsCommand
+        var courseModules = await _mediator.Send(new GetAllElementsFromLmsCommand
         {
             WorldId = request.WorldId,
             WebServiceToken = request.WebServiceToken
@@ -30,7 +30,7 @@ public class
 
         // Get Course Status from LMS 
         var courseStatus =
-            await _ilms.GetCourseStatusViaPlugin(request.WebServiceToken, courseWithAdLerIds.LmsCourseId);
+            await _ilms.GetCourseStatusViaPlugin(request.WebServiceToken, courseModules.LmsCourseId);
 
         var response = new WorldStatusResponse
         {
@@ -38,24 +38,24 @@ public class
             Elements = new List<ElementScoreResponse>()
         };
 
-        foreach (var adlerModule in courseWithAdLerIds.ModulesWithAdLerId)
+        foreach (var module in courseModules.ElementAggregations)
         {
             // If module is Locked
-            if (adlerModule.IsLocked)
+            if (module.IsLocked)
             {
                 response.Elements.Add(new ElementScoreResponse
                 {
-                    ElementId = adlerModule.AdLerId,
+                    ElementId = module.AdLerElement.ElementId,
                     Success = false
                 });
                 continue;
             }
 
-            // If Module is not locked
-            var elementScore = courseStatus.ElementScores.FirstOrDefault(x => x.ModuleId == adlerModule.LmsModule.Id);
+            // If LmsModule is not locked
+            var elementScore = courseStatus.ElementScores.FirstOrDefault(x => x.ModuleId == module.LmsModule.Id);
             response.Elements.Add(new ElementScoreResponse
             {
-                ElementId = adlerModule.AdLerId,
+                ElementId = module.AdLerElement.ElementId,
                 Success = elementScore?.HasScored ?? false
             });
         }

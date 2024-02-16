@@ -57,7 +57,7 @@ public class ScoreH5PLearningElementUseCaseTest
             {
                 SerializedXapiEvent = "xapiEvent"
             },
-            Module = new Modules
+            LmsModule = new LmsModule
             {
                 contextid = 123,
                 Id = 123,
@@ -89,7 +89,7 @@ public class ScoreH5PLearningElementUseCaseTest
                 {
                     SerializedXapiEvent = "xapiEvent"
                 },
-                Module = new Modules
+                LmsModule = new LmsModule
                 {
                     contextid = 123,
                     Id = 123,

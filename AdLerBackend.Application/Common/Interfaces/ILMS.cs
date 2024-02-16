@@ -48,7 +48,7 @@ public interface ILMS
     ///     Gets the Score of an Element from the LMS via the Plugin
     /// </summary>
     /// <param name="token">Webservice Token</param>
-    /// <param name="elementId">The Module ID of the Element</param>
+    /// <param name="elementId">The LmsModule ID of the Element</param>
     /// <returns></returns>
     Task<bool> GetElementScoreFromPlugin(string token, int elementId);
 
@@ -56,7 +56,7 @@ public interface ILMS
     ///     Scores an Element via the Plugin
     /// </summary>
     /// <param name="token">Webservice Token</param>
-    /// <param name="elementId">The Module ID if the Element</param>
+    /// <param name="elementId">The LmsModule ID if the Element</param>
     /// <returns></returns>
     Task<bool> ScoreGenericElementViaPlugin(string token, int elementId);
 
@@ -94,7 +94,7 @@ public interface ILMS
     ///     Give an Answer for an Adaptivity Question to the LMS
     /// </summary>
     /// <param name="token"></param>
-    /// <param name="elementId">The Module ID of the Element</param>
+    /// <param name="elementId">The LmsModule ID of the Element</param>
     /// <param name="answeredQuestions"></param>
     /// <returns> A list of the given Answers and there State of correctness</returns>
     Task<AdaptivityModuleStateResponseAfterAnswer> AnswerAdaptivityQuestionsAsync(string token, int elementId,

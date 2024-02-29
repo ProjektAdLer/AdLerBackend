@@ -1,0 +1,3 @@
+{
+  "exclude": ["[Microsoft.NET.Test.Sdk]*"]
+}

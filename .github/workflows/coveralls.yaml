@@ -7,11 +7,11 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     env:
       dotNetVersion: net7.0
       dotNetConfiguration: Release
-      runtimeTarget: win-x86
+      runtimeTarget: linux-x64
       includeMask: \"[AdLerBackend*]*\"
       excludeMask: \"*[*UnitTests*],[*]AdLerBackend.Infrastructure.Migrations.*\"
     steps:

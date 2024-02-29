@@ -12,8 +12,8 @@ jobs:
       dotNetVersion: net7.0
       dotNetConfiguration: Release
       runtimeTarget: linux-x64
-      includeMask: "[AdLerBackend*]*"
-      excludeMask: "*[*UnitTests*],[*]AdLerBackend.Infrastructure.Migrations.*"
+      includeMask: \"[AdLerBackend*]*\"
+      excludeMask: \"*[*UnitTests*],[*]AdLerBackend.Infrastructure.Migrations.*\, [*]*.nuget.*"
     steps:
       # checkout the repo
       - uses: actions/checkout@v4

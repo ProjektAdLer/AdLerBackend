@@ -36,16 +36,16 @@ jobs:
             ${{ runner.os }}-nuget
 
       - name: Run API automated unit and integration test
-        run: dotnet test AdLerBackend.API.UnitTests --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:Exclude=\"[Microsoft.NET.Test.Sdk]*\"
+        run: dotnet test AdLerBackend.API.UnitTests --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ --% /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}"
 
       - name: Run Application automated unit and integration test
-        run: dotnet test AdLerBackend.Application.UnitTests --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:MergeWith=../TestResults/coverage.json /p:Exclude=\"[Microsoft.NET.Test.Sdk]*\"
+        run: dotnet test AdLerBackend.Application.UnitTests --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:MergeWith=../TestResults/coverage.json --% /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}"
 
       - name: Run Domain automated unit and integration test
-        run: dotnet test AdLerBackend.Domain.UnitTests --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:MergeWith=../TestResults/coverage.json /p:Exclude=\"[Microsoft.NET.Test.Sdk]*\"
+        run: dotnet test AdLerBackend.Domain.UnitTests --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:MergeWith=../TestResults/coverage.json --% /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}"
       
       - name: Run Infrastructure automated unit and integration test
-        run: dotnet test AdLerBackend.Infrastructure.UnitTests --configuration Release /p:CollectCoverage=true /p:MergeWith=../TestResults/coverage.json  /p:CoverletOutput=../TestResults/coverlet.info /p:CoverletOutputFormat=lcov /p:Exclude=\"[Microsoft.NET.Test.Sdk]*\"
+        run: dotnet test AdLerBackend.Infrastructure.UnitTests --configuration Release /p:CollectCoverage=true /p:MergeWith=../TestResults/coverage.json  /p:CoverletOutput=../TestResults/coverlet.info /p:CoverletOutputFormat=lcov --% /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}"
 
       - name: Publish coverage report to coveralls.io
         uses: coverallsapp/github-action@master

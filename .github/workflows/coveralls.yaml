@@ -38,6 +38,17 @@ jobs:
       - name: Test with coverage
         run: |
           dotnet test --verbosity m /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=../TestResults/
+          
+      - name: debugging
+        run: |
+          pwd
+          ls -lha ../
+          ls -la
+          ls -la TestResults
+          ls -la TestResults/*.opencover.xml
+          echo -----
+          echo ${{ github.workspace }}
+          tree ..
 
       - name: Publish coverage report to coveralls.io
         uses: coverallsapp/github-action@master

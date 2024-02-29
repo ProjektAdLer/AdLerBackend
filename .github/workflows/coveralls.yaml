@@ -45,7 +45,7 @@ jobs:
         run: dotnet test AdLerBackend.Domain.UnitTests/AdLerBackend.Domain.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:MergeWith=../TestResults/coverage.json /p:Exclude=\"[Microsoft.NET.Test.Sdk]*\"
       
       - name: Run Infrastructure automated unit and integration test
-        run: dotnet test AdLerBackend.Infrastructure.UnitTests/AdLerBackend.Infrastructure.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:MergeWith=../TestResults/coverage.json /p:CoverletOutput=../TestResults/coverage.json /p:CoverletOutputFormat /p:Exclude=\"[Microsoft.NET.Test.Sdk]*\"
+        run: dotnet test AdLerBackend.Infrastructure.UnitTests/AdLerBackend.Infrastructure.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:MergeWith=../TestResults/coverage.json  /p:CoverletOutput=../TestResults/coverlet.info /p:CoverletOutputFormat=lcov /p:Exclude=\"[Microsoft.NET.Test.Sdk]*\"
 
       - name: Publish coverage report to coveralls.io
         uses: coverallsapp/github-action@master

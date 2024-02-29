@@ -37,7 +37,7 @@ jobs:
 
       - name: Test with coverage
         run: |
-          dotnet test --verbosity m /p:CollectCoverage=true /p:CoverletOutput=../TestResults/coverlet.info /p:CoverletOutputFormat=lcov
+          dotnet test --verbosity m /p:CollectCoverage=true /p:CoverletOutput=../TestResults/coverlet.info /p:CoverletOutputFormat=lcov /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}
 
       - name: Publish coverage report to coveralls.io
         uses: coverallsapp/github-action@master

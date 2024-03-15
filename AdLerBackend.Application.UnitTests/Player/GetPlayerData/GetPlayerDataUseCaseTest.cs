@@ -22,6 +22,7 @@ public class GetPlayerDataUseCaseTest
 
 
     [Test]
+    // ANF-ID: [BPG1, BGH1337, BPG9, BGH1337]
     public async Task Handle_Valid_GetsPlayerData()
     {
         // Arrange

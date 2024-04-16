@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="windows-1252" standalone="no" ?>
+<Table name="t_taggedvalue" count="1"><Row><Column name="PropertyID" value="{0AE4D8A6-CFE5-431a-A58C-B7ADF0F00EB3}"/><Column name="ElementID" value="{EA8BDF52-F938-41d3-8A48-683F52DF881A}"/><Column name="BaseClass" value="PACKAGE"/><Column name="TagValue" value="LastImportFileDate"/></Row></Table>

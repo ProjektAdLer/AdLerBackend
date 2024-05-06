@@ -10,6 +10,12 @@ profile:
   name: qodana.starter
 include:
   - name: CheckDependencyLicenses
-licenseRules:
-  - keys:
-      - "Apache-2.0"
+  - name: NetCoverageInspection
+dotnet:
+  solution: AdLerBackend.sln
+
+bootstrap: dotnet build && \\
+  ((dotnet test /p:CollectCoverage=true /p:CoverletOutput=.qodana/code-coverage /p:CoverletOutputFormat=lcov))
+#licenseRules:
+#  - keys:
+#      - "Apache-2.0"

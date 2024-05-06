@@ -10,5 +10,6 @@ profile:
   name: qodana.starter
 include:
   - name: CheckDependencyLicenses
-license:
-  name: Apache-2.0
+licenseRules:
+  - keys:
+      - "Apache-2.0"

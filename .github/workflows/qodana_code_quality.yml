@@ -18,13 +18,13 @@ jobs:
         with:
           dotnet-version: '7.x'
       - name: Run Tests
-        run: dotnet build && dotnet test /p:CollectCoverage=true /p:CoverletOutput=../.qodana/code-coverage /p:CoverletOutputFormat=lcov
+        run: dotnet build && dotnet test /p:CollectCoverage=true /p:CoverletOutput=../.qodana/code-coverage/ /p:CoverletOutputFormat=lcov
       
-      - name: Archive coverage data
-        uses: actions/upload-artifact@v2
-        with:
-          name: code-coverage
-          path: .qodana/code-coverage.info
+#      - name: Archive coverage data
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: code-coverage
+#          path: .qodana/code-coverage.info
       
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2024.1

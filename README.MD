@@ -35,7 +35,7 @@ Das AdLer-Backend bietet einen Health-Check-Endpoint an, der zur Überwachung de
 
 ## Abhänigkeiten
 
-| Backend Version | [AMG Version](https://github.com/ProjektAdLer/Autorentool) | [Moodle-Plugin Version](https://github.com/Glutamat42/moodle-docker) |
+| Backend Version | [AMG Version](https://github.com/ProjektAdLer/Autorentool) | [Moodle-Plugin Version](https://github.com/ProjektAdLer/moodle-docker) |
 |-----------------|------------------------------------------------------------|----------------------------------------------------------------------|
 | 2.0.0           | 2.x                                                        | 2.x                                                                  |
 | 2.0.1           | 2.x                                                        | 2.x                                                                  |

@@ -8,6 +8,7 @@ using AdLerBackend.Infrastructure.Services;
 using AutoBogus;
 using Newtonsoft.Json;
 using NSubstitute;
+using NUnit.Framework.Legacy;
 
 #pragma warning disable CS8618
 
@@ -71,8 +72,8 @@ public class GetWorldDetailUseCaseTest
         var result = await systemUnderTest.Handle(request, CancellationToken.None);
 
         // Assert
-        Assert.NotNull(result);
-        Assert.That(result.World.Elements.Count, Is.EqualTo(2));
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.World.Elements, Has.Count.EqualTo(2));
     }
 
     [Test]

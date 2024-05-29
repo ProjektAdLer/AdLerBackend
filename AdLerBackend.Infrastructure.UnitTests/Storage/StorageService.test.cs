@@ -5,6 +5,7 @@ using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Responses.World;
 using AdLerBackend.Infrastructure.Storage;
 using AutoBogus;
+using NUnit.Framework.Legacy;
 
 #pragma warning disable CS8618
 
@@ -15,6 +16,12 @@ public class StorageServiceTest
     private FileStream _backupFileStream;
     private IFileSystem _fileSystem;
 
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
+    {
+        _backupFileStream?.Close();
+    }
+    
     [OneTimeSetUp]
     public void OneTimeSetup()
     {
@@ -49,10 +56,13 @@ public class StorageServiceTest
         // Act
         var returnedValue = storageService.StoreH5PFilesForWorld(courseDtoFake);
 
-        // Assert
-        Assert.That(returnedValue!.First().Key, Is.EqualTo("H5PUUID"));
-        Assert.IsTrue(_fileSystem.File.Exists(Path.Combine("wwwroot", "courses", "1",
-            "h5p", "H5PUUID.h5p")));
+        Assert.Multiple(() =>
+        {
+            // Assert
+            Assert.That(returnedValue!.First().Key, Is.EqualTo("H5PUUID"));
+            Assert.That(_fileSystem.File.Exists(Path.Combine("wwwroot", "courses", "1",
+                "h5p", "H5PUUID.h5p")), Is.True);
+        });
     }
 
 
@@ -77,6 +87,6 @@ public class StorageServiceTest
         storageService.DeleteWorld(dto);
 
         // Assert
-        Assert.IsFalse(_fileSystem.Directory.Exists(folder));
+        Assert.That(_fileSystem.Directory.Exists(folder), Is.False);
     }
 }

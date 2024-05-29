@@ -8,6 +8,7 @@ using AdLerBackend.Domain.Entities;
 using AdLerBackend.Domain.UnitTests.TestingUtils;
 using MediatR;
 using NSubstitute;
+using NUnit.Framework.Legacy;
 
 #pragma warning disable CS8618
 
@@ -65,7 +66,7 @@ public class DeleteWorldUseCaseTest
         }, CancellationToken.None);
 
         // Assert
-        Assert.IsTrue(result);
+        Assert.That(result, Is.True);
         // Expect DeleteCourse to be called once
         _fileAccess.Received(1).DeleteWorld(Arg.Any<WorldDeleteDto>());
         _ilms.Received(1).DeleteCourseAsync(Arg.Any<string>(), Arg.Any<int>());

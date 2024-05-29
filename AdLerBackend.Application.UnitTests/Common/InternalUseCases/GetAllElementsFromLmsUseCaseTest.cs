@@ -8,6 +8,7 @@ using AdLerBackend.Domain.UnitTests.TestingUtils;
 using AdLerBackend.Infrastructure.Services;
 using Newtonsoft.Json;
 using NSubstitute;
+using NUnit.Framework.Legacy;
 
 namespace AdLerBackend.Application.UnitTests.Common.InternalUseCases;
 
@@ -101,7 +102,7 @@ public class GetAllElementsFromLmsUseCaseTest
 
         // Assert
 
-        Assert.NotNull(result);
+        Assert.That(result, Is.Not.Null);
     }
 
 

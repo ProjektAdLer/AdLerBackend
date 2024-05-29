@@ -1,4 +1,5 @@
 using AdLerBackend.Infrastructure.Repositories.Player;
+using NUnit.Framework.Legacy;
 
 namespace AdLerBackend.Infrastructure.UnitTests.Repositories.Player;
 
@@ -13,7 +14,7 @@ public class PlayerRepositoryTest
         var systemUnderTest = new PlayerRepository(dbContext);
 
         // Assert
-        Assert.NotNull(systemUnderTest);
+        Assert.That(systemUnderTest, Is.Not.Null);
     }
 
     [Test]
@@ -27,7 +28,7 @@ public class PlayerRepositoryTest
         var result = await systemUnderTest.GetOrCreatePlayerAsync(1);
 
         // Assert
-        Assert.NotNull(result);
+        Assert.That(result, Is.Not.Null);
     }
 
     [Test]
@@ -41,7 +42,7 @@ public class PlayerRepositoryTest
         var result = await systemUnderTest.GetOrCreatePlayerAsync(1);
 
         // Assert
-        Assert.NotNull(result);
+        Assert.That(result, Is.Not.Null);
     }
 
     [Test]
@@ -55,9 +56,12 @@ public class PlayerRepositoryTest
         var result = await systemUnderTest.GetOrCreatePlayerAsync(1);
         var result2 = await systemUnderTest.GetOrCreatePlayerAsync(1);
 
-        // Assert
-        Assert.NotNull(result);
-        Assert.NotNull(result2);
-        Assert.AreEqual(result, result2);
+        Assert.Multiple(() =>
+        {
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result2, Is.Not.Null);
+        });
+        Assert.That(result2, Is.EqualTo(result));
     }
 }

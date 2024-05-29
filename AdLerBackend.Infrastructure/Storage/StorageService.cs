@@ -1,4 +1,6 @@
-﻿using System.IO.Abstractions;
+﻿
+
+using System.IO.Abstractions;
 using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Interfaces;
 
@@ -28,7 +30,7 @@ public class StorageService : IFileAccess
         {
             var h5PFilePath = _fileSystem.Path.Combine(workingDir, h5PFile.H5PUuid + ".h5p");
 
-            var fileStream = _fileSystem.FileStream.Create(h5PFilePath, FileMode.Create);
+            var fileStream = _fileSystem.File.Create(h5PFilePath);
             h5PFile.H5PFile!.CopyTo(fileStream);
             fileStream.Close();
 

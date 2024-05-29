@@ -1,6 +1,7 @@
 ﻿using AdLerBackend.Domain.Entities;
 using AdLerBackend.Domain.UnitTests.TestingUtils;
 using AdLerBackend.Infrastructure.Repositories.Common;
+using NUnit.Framework.Legacy;
 
 namespace AdLerBackend.Infrastructure.UnitTests.Repositories.Common;
 
@@ -19,7 +20,7 @@ public class GenericRepositoryTest
 
         // Assert, that the entity was added to the database
         var entity = dbContext.Worlds.FirstOrDefault();
-        Assert.NotNull(entity);
+        Assert.That(entity, Is.Not.Null);
     }
 
     [Test]
@@ -37,7 +38,7 @@ public class GenericRepositoryTest
 
         // Assert, that the entity was deleted from the database
         var entity = dbContext.Worlds.FirstOrDefault();
-        Assert.Null(entity);
+        Assert.That(entity, Is.Null);
     }
 
     [Test]
@@ -56,7 +57,7 @@ public class GenericRepositoryTest
         var exists = await repository.Exists(1);
 
         // Assert
-        Assert.True(exists);
+        Assert.That(exists, Is.True);
     }
 
     [Test]
@@ -71,7 +72,7 @@ public class GenericRepositoryTest
         var exists = await repository.Exists(1);
 
         // Assert
-        Assert.False(exists);
+        Assert.That(exists, Is.False);
     }
 
     [Test]

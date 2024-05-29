@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using NUnit.Framework.Legacy;
 
 namespace AdLerBackend.API.UnitTests.Filters;
 
@@ -45,7 +46,7 @@ public class ApiExceptionFilterAttributeTest
         // Assert
         var result = _context.Result as ObjectResult;
         var resultValue = result!.Value;
-        Assert.IsInstanceOf<ProblemDetails>(resultValue);
+        Assert.That(resultValue, Is.InstanceOf<ProblemDetails>());
     }
 
     [Test]
@@ -61,7 +62,7 @@ public class ApiExceptionFilterAttributeTest
         var result = _context.Result as ObjectResult;
         var resultValue = result!.Value;
 
-        Assert.IsInstanceOf<ProblemDetails>(resultValue);
+        ClassicAssert.IsInstanceOf<ProblemDetails>(resultValue);
     }
 
     [Test]
@@ -113,7 +114,7 @@ public class ApiExceptionFilterAttributeTest
         var result = _context.Result as ObjectResult;
         var resultValue = result!.Value as ProblemDetails;
 
-        Assert.IsInstanceOf<ProblemDetails>(resultValue);
+        ClassicAssert.IsInstanceOf<ProblemDetails>(resultValue);
         if (resultValue != null) resultValue.Type.Should().Be(ErrorCodes.LmsTokenInvalid);
     }
 
@@ -130,7 +131,7 @@ public class ApiExceptionFilterAttributeTest
         var result = _context.Result as ObjectResult;
         var resultValue = result!.Value;
 
-        Assert.IsInstanceOf<ProblemDetails>(resultValue);
+        ClassicAssert.IsInstanceOf<ProblemDetails>(resultValue);
     }
 
     [Test]
@@ -146,7 +147,7 @@ public class ApiExceptionFilterAttributeTest
         var result = _context.Result as ObjectResult;
         var resultValue = result!.Value;
 
-        Assert.IsInstanceOf<ProblemDetails>(resultValue);
+        Assert.That(resultValue, Is.InstanceOf<ProblemDetails>());
     }
 
     [Test]
@@ -162,7 +163,7 @@ public class ApiExceptionFilterAttributeTest
         var result = _context.Result as ObjectResult;
         var resultValue = result!.Value;
 
-        Assert.IsInstanceOf<ProblemDetails>(resultValue);
+        ClassicAssert.IsInstanceOf<ProblemDetails>(resultValue);
     }
 
 #pragma warning disable CS8618

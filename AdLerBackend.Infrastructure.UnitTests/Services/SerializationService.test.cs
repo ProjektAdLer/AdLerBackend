@@ -1,4 +1,5 @@
 ﻿using AdLerBackend.Infrastructure.Services;
+using NUnit.Framework.Legacy;
 
 namespace AdLerBackend.Infrastructure.UnitTests.Services;
 
@@ -15,7 +16,7 @@ public class SerializationServiceTest
             "{\"browsers\":{\"firefox\":{\"name\":\"Firefox\",\"pref_url\":\"about:config\",\"releases\":{\"1\":{\"release_date\":\"2004-11-09\",\"Status\":\"retired\",\"engine\":\"Gecko\",\"engine_version\":\"1.7\"}}}}}");
 
         // Assert
-        Assert.NotNull(result);
+        Assert.That(result, Is.Not.Null);
     }
 
     [TestCase("{}", true)]
@@ -29,7 +30,7 @@ public class SerializationServiceTest
         var result = service.IsValidJsonString(json);
 
         // Assert
-        Assert.AreEqual(expected, result);
+        Assert.That(result, Is.EqualTo(expected));
     }
 
     [Test]
@@ -42,7 +43,7 @@ public class SerializationServiceTest
         var result = service.ClassToJsonString(new BrokenClass {foo = 1});
 
         // Assert
-        Assert.AreEqual("{\"foo\":1}", result);
+        Assert.That(result, Is.EqualTo("{\"foo\":1}"));
     }
 }
 

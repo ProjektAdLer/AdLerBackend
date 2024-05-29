@@ -1,5 +1,6 @@
 ﻿using AdLerBackend.Application.LMS.GetLMSToken;
 using FluentValidation.TestHelper;
+using NUnit.Framework.Legacy;
 
 namespace AdLerBackend.Application.UnitTests.Moodle.GetMoodleToken;
 
@@ -24,8 +25,11 @@ public class MoodleLoginCommandValidatorTest
 
         var result = _validator.TestValidate(command);
 
-        Assert.IsFalse(result.IsValid);
-        Assert.That(result.Errors.Count, Is.EqualTo(1));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsValid, Is.False);
+            Assert.That(result.Errors, Has.Count.EqualTo(1));
+        });
         Assert.That(result.Errors[0].ErrorMessage, Is.EqualTo("Username is required"));
     }
 
@@ -40,8 +44,11 @@ public class MoodleLoginCommandValidatorTest
 
         var result = _validator.TestValidate(command);
 
-        Assert.IsFalse(result.IsValid);
-        Assert.That(result.Errors.Count, Is.EqualTo(1));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsValid, Is.False);
+            Assert.That(result.Errors, Has.Count.EqualTo(1));
+        });
         Assert.That(result.Errors[0].ErrorMessage, Is.EqualTo("Username is required"));
     }
 
@@ -56,8 +63,11 @@ public class MoodleLoginCommandValidatorTest
 
         var result = _validator.TestValidate(command);
 
-        Assert.IsFalse(result.IsValid);
-        Assert.That(result.Errors.Count, Is.EqualTo(1));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsValid, Is.False);
+            Assert.That(result.Errors, Has.Count.EqualTo(1));
+        });
         Assert.That(result.Errors[0].ErrorMessage, Is.EqualTo("Password is required"));
     }
 
@@ -72,8 +82,11 @@ public class MoodleLoginCommandValidatorTest
 
         var result = _validator.TestValidate(command);
 
-        Assert.IsFalse(result.IsValid);
-        Assert.That(result.Errors.Count, Is.EqualTo(1));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsValid, Is.False);
+            Assert.That(result.Errors, Has.Count.EqualTo(1));
+        });
         Assert.That(result.Errors[0].ErrorMessage, Is.EqualTo("Password is required"));
     }
 }

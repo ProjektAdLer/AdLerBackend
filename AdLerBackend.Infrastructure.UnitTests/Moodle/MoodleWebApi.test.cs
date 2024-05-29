@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NSubstitute;
+using NUnit.Framework.Legacy;
 using RichardSzalay.MockHttp;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -18,6 +19,12 @@ public class MoodleWebApiTest
     private IOptions<BackendConfig> _configuration;
     private MockHttpMessageHandler _mockHttp = null!;
     private MoodleWebApi _systemUnderTest = null!;
+    
+    [TearDown]
+    public void TearDown()
+    {
+        _mockHttp?.Dispose();
+    }
 
     [SetUp]
     public void SetUp()
@@ -231,7 +238,7 @@ public class MoodleWebApiTest
         var result = await _systemUnderTest.GetElementScoreFromPlugin("token", 123);
 
         // Assert
-        Assert.IsFalse(result);
+        Assert.That(result, Is.False);
     }
 
     [Test]
@@ -256,7 +263,7 @@ public class MoodleWebApiTest
         var result = await _systemUnderTest.ScoreGenericElementViaPlugin("token", 123);
 
         // Assert
-        Assert.IsTrue(result);
+        Assert.That(result, Is.True);
     }
 
     [Test]

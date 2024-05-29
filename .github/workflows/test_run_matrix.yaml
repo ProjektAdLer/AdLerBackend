@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -15,13 +13,10 @@ jobs:
       dotNetVersion: net8.0
       dotNetConfiguration: Release
     steps:
-      # checkout the repo
-      - uses: actions/checkout@v4
-        with:
-          submodules: 'true'
-
-      # install dependencies, build, and test
-      - name: Setup Dotnet for use with actions
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+        
+      - name: Setup Dotnet
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'

@@ -15,8 +15,6 @@ jobs:
     steps:
       # checkout the repo
       - uses: actions/checkout@v4
-        with:
-          submodules: 'true'
 
       # install dependencies, build, and test
       - name: Setup Dotnet for use with actions
@@ -86,7 +84,7 @@ jobs:
           echo "${{ github.event.release.body }}" > changes.md
 
       - name: Discord notification
-        uses: appleboy/discord-action@v2.0.0
+        uses: appleboy/discord-action@v1.0.0
         with:
           webhook_id: ${{ secrets.DISCORD_RELEASE_CHANNEL_WEBHOOK_ID }}
           webhook_token: ${{ secrets.DISCORD_RELEASE_CHANNEL_WEBHOOK_TOKEN }}

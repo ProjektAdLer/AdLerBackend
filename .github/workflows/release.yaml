@@ -25,7 +25,7 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Cache Nuget Packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.nuget/packages
           # Look to see if there is a cache hit for the corresponding requirements file
@@ -53,7 +53,7 @@ jobs:
 
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Log in to the Container registry
         uses: docker/login-action@v2
@@ -64,7 +64,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
@@ -73,7 +73,7 @@ jobs:
             type=semver,pattern={{major}}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         with:
           context: .
           push: true
@@ -86,7 +86,7 @@ jobs:
           echo "${{ github.event.release.body }}" > changes.md
 
       - name: Discord notification
-        uses: appleboy/discord-action@master
+        uses: appleboy/discord-action@v2.0.0
         with:
           webhook_id: ${{ secrets.DISCORD_RELEASE_CHANNEL_WEBHOOK_ID }}
           webhook_token: ${{ secrets.DISCORD_RELEASE_CHANNEL_WEBHOOK_TOKEN }}

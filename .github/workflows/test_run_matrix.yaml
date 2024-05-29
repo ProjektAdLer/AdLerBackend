@@ -2,8 +2,6 @@ name: Run tests
 on:
   push:
     branches:
-      # remove, if every branch is needed
-      # - staging
       - main
   pull_request:
 
@@ -29,7 +27,7 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Cache Nuget Packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.nuget/packages
           # Look to see if there is a cache hit for the corresponding requirements file
@@ -38,4 +36,4 @@ jobs:
             ${{ runner.os }}-nuget
 
       - name: Run automated unit and integration tests
-        run: dotnet test 
+        run: dotnet test

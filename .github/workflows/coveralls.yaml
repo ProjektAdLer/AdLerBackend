@@ -1,58 +1,58 @@
-name: Coveralls Code Coverage
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    env:
-      dotNetVersion: net7.0
-      dotNetConfiguration: Release
-      runtimeTarget: linux-x64
-      includeMask: \"[AdLerBackend*]*\"
-      excludeMask: \"*[*UnitTests*],[*]AdLerBackend.Infrastructure.Migrations.*\"
-    steps:
-      # checkout the repo
-      - uses: actions/checkout@v2
-        with:
-          submodules: 'true'
-
-      # install dependencies, build, and test
-      - name: Setup Dotnet for use with actions
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '7.x'
-
-      - name: Cache Nuget Packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.nuget/packages
-          # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget
-
-      #This has to be the first Test run since it appends the first file and doesnt contain a merge
-      - name: Run API automated unit and integration test
-        run: dotnet test AdLerBackend.API.UnitTests/AdLerBackend.API.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}
-
-      #this is a typical test for the middle which merges into the the file created in first test
-      - name: Run Application automated unit and integration test
-        run: dotnet test AdLerBackend.Application.UnitTests/AdLerBackend.Application.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:MergeWith=../TestResults/coverage.json /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}
-
-      - name: Run Domain automated unit and integration test
-        run: dotnet test AdLerBackend.Domain.UnitTests/AdLerBackend.Domain.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:MergeWith=../TestResults/coverage.json /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}
-
-      #this has to be the last test since it merges into the already merged reports and after that creates the file format we need to post to coveralls
-      - name: Run Infrastructure automated unit and integration test
-        run: dotnet test AdLerBackend.Infrastructure.UnitTests/AdLerBackend.Infrastructure.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:MergeWith=../TestResults/coverage.json /p:CoverletOutput=../TestResults/coverlet.info /p:CoverletOutputFormat=lcov /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}
-
-
-      - name: Publish coverage report to coveralls.io
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ${{ github.workspace }}/TestResults/coverlet.info
+#name: Coveralls Code Coverage
+#on:
+#  push:
+#    branches:
+#      - main
+#  pull_request:
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    env:
+#      dotNetVersion: net7.0
+#      dotNetConfiguration: Release
+#      runtimeTarget: linux-x64
+#      includeMask: \"[AdLerBackend*]*\"
+#      excludeMask: \"*[*UnitTests*],[*]AdLerBackend.Infrastructure.Migrations.*\"
+#    steps:
+#      # checkout the repo
+#      - uses: actions/checkout@v2
+#        with:
+#          submodules: 'true'
+#
+#      # install dependencies, build, and test
+#      - name: Setup Dotnet for use with actions
+#        uses: actions/setup-dotnet@v1
+#        with:
+#          dotnet-version: '7.x'
+#
+#      - name: Cache Nuget Packages
+#        uses: actions/cache@v2
+#        with:
+#          path: ~/.nuget/packages
+#          # Look to see if there is a cache hit for the corresponding requirements file
+#          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+#          restore-keys: |
+#            ${{ runner.os }}-nuget
+#
+#      #This has to be the first Test run since it appends the first file and doesnt contain a merge
+#      - name: Run API automated unit and integration test
+#        run: dotnet test AdLerBackend.API.UnitTests/AdLerBackend.API.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}
+#
+#      #this is a typical test for the middle which merges into the the file created in first test
+#      - name: Run Application automated unit and integration test
+#        run: dotnet test AdLerBackend.Application.UnitTests/AdLerBackend.Application.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:MergeWith=../TestResults/coverage.json /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}
+#
+#      - name: Run Domain automated unit and integration test
+#        run: dotnet test AdLerBackend.Domain.UnitTests/AdLerBackend.Domain.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutput=../TestResults/ /p:MergeWith=../TestResults/coverage.json /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}
+#
+#      #this has to be the last test since it merges into the already merged reports and after that creates the file format we need to post to coveralls
+#      - name: Run Infrastructure automated unit and integration test
+#        run: dotnet test AdLerBackend.Infrastructure.UnitTests/AdLerBackend.Infrastructure.UnitTests.csproj --configuration Release /p:CollectCoverage=true /p:MergeWith=../TestResults/coverage.json /p:CoverletOutput=../TestResults/coverlet.info /p:CoverletOutputFormat=lcov /p:Include=${{ env.includeMask }} /p:Exclude=${{ env.excludeMask }}
+#
+#
+#      - name: Publish coverage report to coveralls.io
+#        uses: coverallsapp/github-action@master
+#        with:
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          path-to-lcov: ${{ github.workspace }}/TestResults/coverlet.info

@@ -11,7 +11,7 @@ jobs:
       contents: read
       packages: write
     env:
-      dotNetVersion: net7.0
+      dotNetVersion: net8.0
       dotNetConfiguration: Release
       REGISTRY: ghcr.io
       IMAGE_NAME: ${{ github.repository }}

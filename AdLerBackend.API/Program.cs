@@ -30,7 +30,6 @@ app.MapHealthChecks("/api/health");
 var myConfig = app.Services.GetRequiredService<BackendConfig>();
 
 app.Logger.LogInformation("Application started with the following configuration: {@MyConfig:n}", myConfig);
-app.Logger.LogInformation("Application version: 2.2.0");
 
 app
     .ConfigureApp()

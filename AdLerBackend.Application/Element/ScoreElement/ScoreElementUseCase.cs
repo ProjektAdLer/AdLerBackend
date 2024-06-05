@@ -64,6 +64,7 @@ public class ScoreElementUseCase : IRequestHandler<ScoreElementCommand, ScoreEle
                 };
             case "image":
             case "text":
+            case "pdf":
             case "video":
                 return new ScoreGenericElementStrategyCommand
                 {

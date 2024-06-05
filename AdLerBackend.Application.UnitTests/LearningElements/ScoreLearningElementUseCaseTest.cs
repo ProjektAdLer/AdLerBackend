@@ -27,6 +27,7 @@ public class ScoreLearningElementUseCaseTest
     [TestCase("text", false)]
     [TestCase("image", false)]
     [TestCase("text", false)]
+    [TestCase("pdf", false)]
     public async Task Handle_CallsStrategy(string activityName, bool expected)
     {
         var systemUnderTest = new ScoreElementUseCase(_mediator);

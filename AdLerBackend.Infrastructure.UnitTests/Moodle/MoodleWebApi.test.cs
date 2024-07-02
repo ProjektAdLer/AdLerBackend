@@ -440,6 +440,21 @@ public class MoodleWebApiTest
                 }
             });
     }
+    
+    [Test]
+    public void Constructor_SetsHttpClientTimeout()
+    {
+        // Arrange
+        var logger = Substitute.For<ILogger<MoodleWebApi>>();
+        
+        var mockedHttpClient = Substitute.ForPartsOf<HttpClient>();
+
+        // Act
+        var moodleWebApi = new MoodleWebApi(mockedHttpClient, _configuration, logger);
+
+        // Assert
+        Assert.That(mockedHttpClient.Timeout, Is.EqualTo(TimeSpan.FromSeconds(600)));
+    }
 
     // [Test]
     // public async Task LoggerIsCalled_WhenRequestIsMade()

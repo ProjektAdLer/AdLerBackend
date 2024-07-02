@@ -1,5 +1,4 @@
 ﻿using AdLerBackend.Infrastructure.Services;
-using NUnit.Framework.Legacy;
 
 namespace AdLerBackend.Infrastructure.UnitTests.Services;
 
@@ -21,6 +20,8 @@ public class SerializationServiceTest
 
     [TestCase("{}", true)]
     [TestCase("string", false)]
+    [TestCase("", false)]
+    [TestCase(null, false)]
     public async Task IsValidJsonString(string json, bool expected)
     {
         // Arrange

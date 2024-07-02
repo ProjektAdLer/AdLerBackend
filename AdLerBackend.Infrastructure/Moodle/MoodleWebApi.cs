@@ -29,16 +29,6 @@ public class MoodleWebApi : ILMS
         _client.Timeout = TimeSpan.FromSeconds(600);
     }
 
-
-    public MoodleWebApi(HttpClient client, IOptions<BackendConfig> configuration)
-    {
-        _client = client;
-        _configuration = configuration.Value;
-
-        // set timeout to 600 seconds
-        _client.Timeout = TimeSpan.FromSeconds(600);
-    }
-
     public async Task<LMSUserTokenResponse> GetLMSUserTokenAsync(string userName, string password)
     {
         var resp = await MoodleCallAsync<UserTokenResponse>(new Dictionary<string, HttpContent>

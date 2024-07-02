@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Interfaces;
@@ -196,5 +197,29 @@ public class UploadWorldUseCaseTest
         Assert.That(result.WorldId, Is.EqualTo(1));
         Assert.That(result.World3DUrl, Is.EqualTo("http://localhost"));
         Assert.That(result.WorldLmsUrl, Is.EqualTo("http://localhost/course/view.php?id=1337"));
+    }
+    
+    [Test]
+    public async Task Handle_InvalidCourseInformation_ThrowsValidationException()
+    {
+        // Arrange
+        var systemUnderTest =
+            new UploadWorldUseCase(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
+                _serialization, _ilms, _configuration);
+
+        var fakedValidDsl = new WorldAtfResponse()
+        {
+
+        };
+
+        _lmsBackupProcessor.GetWorldDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedValidDsl);
+
+        // Act & Assert
+        var exception = Assert.ThrowsAsync<ValidationException>(async () => await systemUnderTest.Handle(new UploadWorldCommand
+        {
+            BackupFileStream = new MemoryStream(),
+            ATFFileStream = new MemoryStream(),
+            WebServiceToken = "testToken"
+        }, CancellationToken.None));
     }
 }

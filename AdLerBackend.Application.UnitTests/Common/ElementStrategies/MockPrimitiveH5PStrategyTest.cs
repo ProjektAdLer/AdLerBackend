@@ -1,8 +1,7 @@
-﻿
-using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.MockPrimitiveH5PStrategy;
+﻿using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.MockPrimitiveH5PStrategy;
 using FluentAssertions;
 
-namespace AdLerBackend.Application.UnitTests.Common.ElementStrategies.ScoreElementStrategies.MockPrimitiveH5PStrategy
+namespace AdLerBackend.Application.UnitTests.Common.ElementStrategies
 {
     public class MockPrimitiveH5PStrategyCommandHandlerTests
     {

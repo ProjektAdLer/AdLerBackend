@@ -1,42 +1,37 @@
 ﻿using System.Text.Json;
 using AdLerBackend.Application.Common.Interfaces;
-using Newtonsoft.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace AdLerBackend.Infrastructure.Services;
-
-public class SerializationService : ISerialization
+namespace AdLerBackend.Infrastructure.Services
 {
-    public TClass GetObjectFromJsonString<TClass>(string jsonString)
+    public class SerializationService : ISerialization
     {
-        var retVal = JsonSerializer.Deserialize<TClass>(jsonString, new JsonSerializerOptions
+        public TClass GetObjectFromJsonString<TClass>(string jsonString)
         {
-            PropertyNameCaseInsensitive = true
-        }) ?? throw new Exception("Could not deserialize String");
-        return retVal;
-    }
-
-    public bool IsValidJsonString(string potentialJsonString)
-    {
-        if (string.IsNullOrWhiteSpace(potentialJsonString)) return false;
-
-        try
-        {
-            var obj = JsonConvert.DeserializeObject(potentialJsonString);
-            return true;
+            var retVal = JsonSerializer.Deserialize<TClass>(jsonString, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            }) ?? throw new Exception("Could not deserialize String");
+            return retVal;
         }
-        catch (JsonReaderException)
-        {
-            return false;
-        }
-        catch (Exception) // Some other exception
-        {
-            return false;
-        }
-    }
 
-    public string ClassToJsonString(object classToSerialize)
-    {
-        return JsonSerializer.Serialize(classToSerialize);
+        public bool IsValidJsonString(string potentialJsonString)
+        {
+            if (string.IsNullOrWhiteSpace(potentialJsonString)) return false;
+
+            try
+            {
+                JsonDocument.Parse(potentialJsonString);
+                return true;
+            }
+            catch (JsonException)
+            {
+                return false;
+            }
+        }
+
+        public string ClassToJsonString(object classToSerialize)
+        {
+            return JsonSerializer.Serialize(classToSerialize);
+        }
     }
 }

@@ -51,7 +51,7 @@ public class
                     FilePath = data.FilePath
                 };
             case "adaptivity":
-                throw new Exception("The Content of the Adaptivity Element is accessible via ATF File");
+                throw new NotImplementedException("The Content of the Adaptivity Element is accessible via ATF File");
             default: throw new NotImplementedException("Unknown module type" + learningElementModule.LmsModule.ModName);
         }
     }

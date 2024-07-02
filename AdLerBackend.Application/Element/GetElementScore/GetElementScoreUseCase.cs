@@ -7,7 +7,7 @@ using MediatR;
 namespace AdLerBackend.Application.Element.GetElementScore;
 
 /// <summary>
-///     Gets a the Score of a Learning Element using the LMS Plugin
+///     Gets the Score of a Learning Element using the LMS Plugin
 /// </summary>
 public class
     GetElementScoreUseCase : IRequestHandler<GetElementScoreCommand, ElementScoreResponse>

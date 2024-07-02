@@ -64,4 +64,39 @@ public class GetLearningElementScoreUseCaseTest
         // Assert
         result.Success.Should().Be(success);
     }
+    
+    [Test]
+    public async Task GetLearningElementScore_ElementIsLocke_ReturnsFalse()
+    {
+        // Arrange
+        var systemUnderTest = new GetElementScoreUseCase(_mediator, _lms);
+        _mediator.Send(Arg.Any<GetLearningElementCommand>()).Returns(
+            new AdLerLmsElementAggregation
+            {
+                IsLocked = true,
+                AdLerElement = new BaseElement
+                {
+                    ElementId = 1
+                },
+                LmsModule = new LmsModule
+                {
+                    contextid = 1,
+                    Id = 1,
+                    Name = "name",
+                    ModName = "h5pactivity"
+                }
+            }
+        );
+
+        // Act
+        var result = await systemUnderTest.Handle(new GetElementScoreCommand
+        {
+            ElementId = 1,
+            LearningWorldId = 1,
+            WebServiceToken = "token"
+        }, CancellationToken.None);
+
+        // Assert
+        result.Success.Should().BeFalse();
+    }
 }

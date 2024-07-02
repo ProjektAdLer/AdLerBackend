@@ -3,16 +3,19 @@
 using System.IO.Abstractions;
 using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace AdLerBackend.Infrastructure.Storage;
 
 public class StorageService : IFileAccess
 {
     private readonly IFileSystem _fileSystem;
+    private readonly ILogger<StorageService> _logger;
 
-    public StorageService(IFileSystem fileSystem)
+    public StorageService(IFileSystem fileSystem, ILogger<StorageService> logger)
     {
         _fileSystem = fileSystem;
+        _logger = logger;
     }
 
     public Dictionary<string, string>? StoreH5PFilesForWorld(WorldStoreH5PDto worldToStoreH5P)
@@ -45,7 +48,11 @@ public class StorageService : IFileAccess
     {
         var workingDir = _fileSystem.Path.Join("wwwroot", "courses", worldToDelete.WorldInstanceId.ToString());
 
-        if (!_fileSystem.Directory.Exists(workingDir)) return true;
+        if (!_fileSystem.Directory.Exists(workingDir))
+        {
+            _logger.LogWarning($"World with ID {worldToDelete.WorldInstanceId} does not exist.");
+            return true;
+        }
         _fileSystem.Directory.Delete(workingDir, true);
         return true;
     }

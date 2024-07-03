@@ -10,6 +10,7 @@ namespace AdLerBackend.API.UnitTests.Controllers.LMSUserService;
 
 public class LMSLoginControllerTest
 {
+    // ANF-ID: [BPG20]
     [Test]
     public async Task GetUserData_ShouldForwardCallToMoodleLoginService()
     {
@@ -28,6 +29,7 @@ public class LMSLoginControllerTest
             Arg.Is<GetLMSUserDataCommand>(x => x.WebServiceToken == "TestToken"));
     }
 
+    // ANF-ID: [BPG20]
     [Test]
     public Task GetUserData_ReturnsBadRequest_WhenLoginFails()
     {
@@ -47,6 +49,8 @@ public class LMSLoginControllerTest
         return Task.CompletedTask;
     }
 
+    // ANF-ID: [BPG20]
+    // ANF-ID: [BPG7]
     [Test]
     public async Task Login_ShouldForwardCallToMoodleService()
     {

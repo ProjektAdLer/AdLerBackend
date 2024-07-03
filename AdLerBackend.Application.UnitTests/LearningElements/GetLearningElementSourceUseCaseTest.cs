@@ -15,12 +15,15 @@ public class GetLearningElementSourceUseCaseTest
 {
     private IMediator _mediator;
 
+    // ANF-ID: [BPG17, BPG18]
     [SetUp]
     public void Setup()
     {
         _mediator = Substitute.For<IMediator>();
     }
 
+    // ANF-ID: [BPG17, BPG18]
+    // ANF-ID: [BPG17, BPG18]
     [TestCase("resource")]
     [TestCase("url")]
     public async Task GetLearningElementSource_Valid_GenericElements(string resourceType)
@@ -66,6 +69,7 @@ public class GetLearningElementSourceUseCaseTest
     }
 
     [Test]
+    // ANF-ID: [BPG17, BPG18]
     public async Task GetLearningElementSource_Valid_H5PElements()
     {
         // Arrange
@@ -115,6 +119,7 @@ public class GetLearningElementSourceUseCaseTest
     }
 
     [TestCase("h5pactivity123456789")]
+    // ANF-ID: [BPG17, BPG18]
     public async Task GetLearningElementSource_InvalidRessourceName_Throws(string resourceName)
     {
         // Arrange
@@ -159,6 +164,7 @@ public class GetLearningElementSourceUseCaseTest
     }
     
     [TestCase("adaptivity")]
+    // ANF-ID: [BPG17, BPG18]
     public async Task GetLearningElementSource_AdaptivityRequested_Throws(string resourceName)
     {
         // Arrange

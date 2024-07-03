@@ -11,6 +11,7 @@ using NSubstitute;
 
 namespace AdLerBackend.Application.UnitTests.Adaptivity;
 
+// ANF-ID: [BPG15]
 public class GetAdaptivityQuestionDetailsHandlerTest
 {
         
@@ -29,6 +30,7 @@ public class GetAdaptivityQuestionDetailsHandlerTest
     }
     
     [Test]
+    // ANF-ID: [BPG15]
     public async Task Handle_Valid_ReturnsResponse()
     {
         // Arrange
@@ -157,6 +159,7 @@ public class GetAdaptivityQuestionDetailsHandlerTest
     }
 
     [Test]
+    // ANF-ID: [BPG15]
     public async Task Handle_NoAdaptivityElement_ReturnsEmptyResponse()
     {
         // Arrange

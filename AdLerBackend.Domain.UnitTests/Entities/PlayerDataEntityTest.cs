@@ -6,6 +6,7 @@ namespace AdLerBackend.Domain.UnitTests.Entities;
 public class PlayerDataEntityTest
 {
     [Test]
+    // ANF-ID: [BPG22]
     public void Constructor_SetsAllParameters()
     {
         var gender = PlayerAvatarGender.Male;
@@ -24,6 +25,7 @@ public class PlayerDataEntityTest
     }
 
     [Test]
+    // ANF-ID: [BPG22]
     public void PrivateConstructor_SetsAllParameters()
     {
         var instance = TestingHelpers.GetWithPrivateConstructor<PlayerData>();

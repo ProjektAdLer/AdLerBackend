@@ -18,12 +18,14 @@ public class UpdatePlayerDataUseCaseTest
     private IPlayerRepository _playerRepository;
 
     [SetUp]
+    // ANF-ID: [BPG8]
     public void Setup()
     {
         _playerRepository = Substitute.For<IPlayerRepository>();
         _ilms = Substitute.For<ILMS>();
     }
 
+    // ANF-ID: [BPG8]
     [Test]
     public async Task UpdatePlayerData_Valid()
     {

@@ -17,12 +17,14 @@ public class PlayerControllerTest
     private IMediator _mediator;
 
     [SetUp]
+    // ANF-ID: [BPG6]
     public void Setup()
     {
         _mediator = Substitute.For<IMediator>();
     }
 
     [Test]
+    // ANF-ID: [BPG6]
     public async Task GetPlayerData_Valid_CallsMediator()
     {
         // Arrange
@@ -37,6 +39,7 @@ public class PlayerControllerTest
     }
 
     [Test]
+    // ANF-ID: [BPG6]
     public async Task UpdatePlayer_CallsMediator()
     {
         // Arrange

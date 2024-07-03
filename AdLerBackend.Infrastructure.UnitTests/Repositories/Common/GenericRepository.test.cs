@@ -8,6 +8,7 @@ namespace AdLerBackend.Infrastructure.UnitTests.Repositories.Common;
 public class GenericRepositoryTest
 {
     [Test]
+    // ANF-ID: [BPG10, BPG9, BPG8]
     public async Task Add_Valid_AddsAEntityToDB()
     {
         // Arrange

@@ -11,8 +11,8 @@ namespace AdLerBackend.Application.UnitTests.Player.GetPlayerData;
 public class GetPlayerDataUseCaseTest
 {
     private ILMS _ilms;
-    private IPlayerRepository _playerRepository;
-
+    private IPlayerRepository _playerRepository; 
+    // ANF-ID: [BPG22, BPG8]
     [SetUp]
     public void Setup()
     {
@@ -22,7 +22,7 @@ public class GetPlayerDataUseCaseTest
 
 
     [Test]
-    // ANF-ID: [BPG1, BGH1337, BPG9, BGH1337]
+    // ANF-ID: [BPG22, BPG8]
     public async Task Handle_Valid_GetsPlayerData()
     {
         // Arrange

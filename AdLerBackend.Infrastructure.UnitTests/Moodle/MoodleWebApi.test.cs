@@ -27,6 +27,7 @@ public class MoodleWebApiTest
     }
 
     [SetUp]
+    // ANF-ID: [BPG18]
     public void SetUp()
     {
         _mockHttp = new MockHttpMessageHandler();
@@ -83,6 +84,7 @@ public class MoodleWebApiTest
     }
 
     [Test]
+    // ANF-ID: [BPG19]
     public async Task GetMoodleToken_ValidResponse_ReturnsToken()
     {
         // Arrange
@@ -98,6 +100,7 @@ public class MoodleWebApiTest
     }
 
     [Test]
+    // ANF-ID: [BPG19]
     public Task GetMoodleToken_InvalidResponse_ReturnsException()
     {
         // Arrange
@@ -456,21 +459,4 @@ public class MoodleWebApiTest
         Assert.That(mockedHttpClient.Timeout, Is.EqualTo(TimeSpan.FromSeconds(600)));
     }
 
-    // [Test]
-    // public async Task LoggerIsCalled_WhenRequestIsMade()
-    // {
-    //     // Arrange
-    //     var logger = Substitute.For<ILogger<MoodleWebApi>>();
-    //     _systemUnderTest = new MoodleWebApi(_mockHttp.ToHttpClient(), _configuration, logger);
-    //     
-    //     var webResponse =
-    //         "{\n    \"data\": {\n        \"questions\": [\n            {\n                \"Uuid\": \"978c2fb5-a947-4d22-8481-5824187d4641\",\n                \"Status\": \"correct\",\n                \"answers\": \"[{\\\"checked\\\":true,\\\"user_answer_correct\\\":true},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false}]\"\n            },\n            {\n                \"Uuid\": \"dbf01034-97ab-4b4b-9029-7dac0f57ab51\",\n                \"Status\": \"incorrect\",\n                \"answers\": \"[{\\\"checked\\\":false,\\\"user_answer_correct\\\":false},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false},{\\\"checked\\\":false,\\\"user_answer_correct\\\":false}]\"\n            }\n        ]\n    }\n}";
-    //     _mockHttp.When("*").Respond("application/json", webResponse);
-    //
-    //     // Act
-    //     var result = await _systemUnderTest.GetAdaptivityElementDetailsAsync("token", 1);
-    //
-    //     // Assert
-    //     logger.Received().LogInformation(Arg.Any<string>());
-    // }
 }

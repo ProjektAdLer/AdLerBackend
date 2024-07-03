@@ -6,6 +6,7 @@ namespace AdLerBackend.Infrastructure.UnitTests.Repositories.Player;
 public class PlayerRepositoryTest
 {
     [Test]
+    // ANF-ID: [BPG22]
     public async Task Initializes()
     {
         // Arrange
@@ -18,6 +19,7 @@ public class PlayerRepositoryTest
     }
 
     [Test]
+    // ANF-ID: [BPG22]
     public async Task EnsureGetAsync_ReturnsPlayer()
     {
         // Arrange
@@ -32,6 +34,7 @@ public class PlayerRepositoryTest
     }
 
     [Test]
+    // ANF-ID: [BPG22]
     public async Task EnsureGetAsync_Existing_ReturnsPlayer()
     {
         // Arrange
@@ -46,6 +49,7 @@ public class PlayerRepositoryTest
     }
 
     [Test]
+    // ANF-ID: [BPG22]
     public async Task EnsureGetAsync_PlayerAlreadyexisted_ExistingPlayerReturned()
     {
         // Arrange

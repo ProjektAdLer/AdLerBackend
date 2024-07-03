@@ -10,6 +10,7 @@ public class GerMoodleUserTokenHandlerTest
     private ILMS _ilmsMock;
     private GetLmsUserTokenUseCase _systemUnderTest;
 
+    // ANF-ID: [BPG7]
     [SetUp]
     public void SetUp()
     {
@@ -18,6 +19,7 @@ public class GerMoodleUserTokenHandlerTest
     }
 
     [Test]
+    // ANF-ID: [BPG7]
     public async Task Handle_Should_Return_Token()
     {
         // Arrange

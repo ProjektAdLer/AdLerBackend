@@ -13,6 +13,7 @@ namespace AdLerBackend.API.UnitTests.Controllers.Worlds;
 
 public class WorldsControllerTest
 {
+    // ANF-ID: [BPG11, BPG3]
     [Test]
     public async Task GetWorldsForAuthor_ShouldForwardCallToMediator()
     {
@@ -28,6 +29,9 @@ public class WorldsControllerTest
             Arg.Is<GetWorldsForAuthorCommand>(x => x.WebServiceToken == "token" && x.AuthorId == 1337));
     }
 
+    // ANF-ID: [BPG11]
+    // ANF-ID: [BPG5]
+    // ANF-ID: [BPG1]
     [Test]
     public async Task GetWorldsForUser_ShouldForwardCallToMediator()
     {
@@ -43,6 +47,9 @@ public class WorldsControllerTest
             Arg.Is<GetWorldsForUserCommand>(x => x.WebServiceToken == "token"));
     }
 
+    // ANF-ID: [BPG11]
+    // ANF-ID: [BPG2]
+    // ANF-ID: [BPG1]
     [Test]
     public async Task CreateWorld_ShouldForwardCallToMediator()
     {
@@ -61,6 +68,9 @@ public class WorldsControllerTest
     }
 
 
+    // ANF-ID: [BPG11]
+    // ANF-ID: [BPG2]
+    // ANF-ID: [BPG1]
     [Test]
     public async Task DeleteWorld_ShouldForwardCallToMediator()
     {
@@ -76,6 +86,8 @@ public class WorldsControllerTest
             Arg.Is<DeleteWorldCommand>(x => x.WebServiceToken == "token"));
     }
 
+    // ANF-ID: [BPG11]
+    // ANF-ID: [BPG5]
     [Test]
     public async Task GetWorldATF_ShouldForwardCallToMediator()
     {
@@ -91,6 +103,7 @@ public class WorldsControllerTest
             Arg.Is<GetWorldDetailCommand>(x => x.WebServiceToken == "token"));
     }
 
+    // ANF-ID: [BPG11]
     [Test]
     public async Task GetElementStatus_ShouldForwardCallToMediator()
     {

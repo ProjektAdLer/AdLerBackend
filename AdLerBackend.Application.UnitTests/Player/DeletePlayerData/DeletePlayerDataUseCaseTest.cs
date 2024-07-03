@@ -19,6 +19,7 @@ public class DeletePlayerDataUseCaseTest
 
     
     [Test]
+    // ANF-ID: [BPG10]
     public async Task Handler_DeletesPlayer()
     {
         // Arrange

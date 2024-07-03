@@ -13,6 +13,7 @@ public class GetWorldStatusUseCaseTest
     private ILMS _ilms;
     private IMediator _mediator;
 
+    // ANF-ID: [BPG11]
     [SetUp]
     public void Setup()
     {
@@ -21,6 +22,7 @@ public class GetWorldStatusUseCaseTest
     }
 
     [Test]
+    // ANF-ID: [BPG11]
     public async Task GetWorldStatusHandler_Valid_GivesAllScores()
     {
         // Arrange

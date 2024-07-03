@@ -7,7 +7,7 @@ using Serilog.Settings.Configuration;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace AdLerBackend.API;
-
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 public static class BackendConfigExtensions
 {
     public static WebApplicationBuilder AddLoggingViaSerilog(this WebApplicationBuilder builder)

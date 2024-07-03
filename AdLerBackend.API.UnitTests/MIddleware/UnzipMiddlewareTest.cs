@@ -25,7 +25,7 @@ public class UnzipMiddlewareTest
         }
 
         [Test]
-        // ANF-ID: [BPH21]
+        // ANF-ID: [BPG21]
         public async Task Invoke_WithNonH5pPath_CallsNextMiddleware()
         {
             // Arrange
@@ -39,7 +39,7 @@ public class UnzipMiddlewareTest
             await _nextDelegate.Received(1).Invoke(context);
         }
 
-        // ANF-ID: [BPH21]
+        // ANF-ID: [BPG21]
         [Test]
         public async Task Invoke_WithH5pPath_FileFound_ReturnsFileContent()
         {
@@ -73,7 +73,7 @@ public class UnzipMiddlewareTest
             Assert.That(responseContent, Is.EqualTo(expectedContent));
         }
 
-        // ANF-ID: [BPH21]
+        // ANF-ID: [BPG21]
         [Test]
         public async Task Invoke_WithH5pPath_FileNotFound_Returns404()
         {
@@ -99,7 +99,7 @@ public class UnzipMiddlewareTest
             Assert.That(context.Response.Body.Length, Is.EqualTo(0));
         }
         
-        // ANF-ID: [BPH21]
+        // ANF-ID: [BPG21]
         [Test]
         public async Task Invoke_PathNotContainingH5p_CallsNextMiddleware()
         {

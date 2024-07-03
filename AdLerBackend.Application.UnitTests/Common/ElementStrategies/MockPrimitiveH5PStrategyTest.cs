@@ -1,5 +1,7 @@
 ﻿using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.MockPrimitiveH5PStrategy;
+using AutoBogus;
 using FluentAssertions;
+using Force.DeepCloner;
 
 namespace AdLerBackend.Application.UnitTests.Common.ElementStrategies
 {
@@ -27,6 +29,25 @@ namespace AdLerBackend.Application.UnitTests.Common.ElementStrategies
             
             // Assert
             result.IsSuccess.Should().BeTrue();
+        }
+        
+        [TestCaseSource(nameof(GetTestCases))]
+        public void PlayerDataResponseGetterAndSetter<T>(T _)
+        {
+            // Arrange
+            var testClass = AutoFaker.Generate<T>();
+
+            // Recursively clone the object
+            var clone = testClass.DeepClone();
+
+            // Assert
+            clone.Should().BeEquivalentTo(testClass);
+        }
+        
+        private static IEnumerable<TestCaseData> GetTestCases()
+        {
+            yield return new TestCaseData(new MockPrimitiveH5PStrategyCommand());
+
         }
     }
 }

@@ -29,7 +29,7 @@
         </AssemblyAttribute>
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
         <PackageReference Include="SharpZipLib" Version="1.4.2" />
-        <PackageReference Include="System.IO.Abstractions" Version="21.0.2" />
+        <PackageReference Include="System.IO.Abstractions" Version="21.0.22" />
     </ItemGroup>
 
 

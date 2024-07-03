@@ -32,7 +32,7 @@ public class UploadWorldUseCaseTest
 
     [SetUp]
     // ANF-ID: [BPG20]
-    // ANF-ID: [BPG2]
+   
     public void Setup()
     {
         _configuration = Options.Create(new BackendConfig
@@ -65,7 +65,7 @@ public class UploadWorldUseCaseTest
     }
 
     // ANF-ID: [BPG20]
-    // ANF-ID: [BPG2]
+   
     [Test]
     public async Task Handle_Valid_TriggersUpload()
     {
@@ -149,7 +149,7 @@ public class UploadWorldUseCaseTest
 
 
     // ANF-ID: [BPG20]
-    // ANF-ID: [BPG2]
+   
     [Test]
     public async Task Handle_ValidNoH5p_TriggersUpload()
     {
@@ -206,7 +206,7 @@ public class UploadWorldUseCaseTest
     }
     
     // ANF-ID: [BPG20]
-    // ANF-ID: [BPG2]
+   
     [Test]
     public async Task Handle_InvalidCourseInformation_ThrowsValidationException()
     {

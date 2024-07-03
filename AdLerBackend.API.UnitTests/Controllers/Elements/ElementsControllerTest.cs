@@ -16,6 +16,7 @@ public class ElementsControllerTest
     private IMediator _mediatorMock;
 
     [SetUp]
+    // ANF-ID: [BPG16]
     public void SetUp()
     {
         _mediatorMock = Substitute.For<IMediator>();
@@ -45,6 +46,7 @@ public class ElementsControllerTest
     }
 
     [Test]
+    // ANF-ID: [BPG16]
     public async Task GetElementScore_ForwardsCall()
     {
         // Arrange

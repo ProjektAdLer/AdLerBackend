@@ -15,6 +15,7 @@ public class GetLearningElementScoreUseCaseTest
     private IMediator _mediator;
 
     [SetUp]
+    // ANF-ID: [BPG16]
     public void Setup()
     {
         _mediator = Substitute.For<IMediator>();
@@ -65,6 +66,7 @@ public class GetLearningElementScoreUseCaseTest
         result.Success.Should().Be(success);
     }
     
+    // ANF-ID: [BPG16]
     [Test]
     public async Task GetLearningElementScore_ElementIsLocke_ReturnsFalse()
     {

@@ -17,7 +17,7 @@ public class ScoreLearningElementUseCaseTest
 {
     private IMediator _mediator;
 
-    // ANF-ID: [BPG13]
+    // ANF-ID: [BPG13, BPG12]
     [SetUp]
     public void Setup()
     {
@@ -75,7 +75,7 @@ public class ScoreLearningElementUseCaseTest
         result.IsSuccess.Should().Be(expected);
     }
 
-    // ANF-ID: [BPG13]
+    // ANF-ID: [BPG13, BPG12]
     [TestCase("INVALID", false)]
     public async Task Handle_InvalidElementType_Throws(string activityName, bool expected)
     {
@@ -121,7 +121,7 @@ public class ScoreLearningElementUseCaseTest
     }
 
     [Test]
-    // ANF-ID: [BPG13]
+    // ANF-ID: [BPG13, BPG12]
     public async Task Handle_PrimitiveH5P_CallsMockStrategy()
     {
         var systemUnderTest = new ScoreElementUseCase(_mediator);

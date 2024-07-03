@@ -1,4 +1,5 @@
 ﻿using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.MockPrimitiveH5PStrategy;
+using AdLerBackend.Application.Common.InternalUseCases.GetLearningElement;
 using AdLerBackend.Application.Common.Responses.Adaptivity;
 using AdLerBackend.Application.Common.Responses.Adaptivity.Common;
 using AdLerBackend.Application.Common.Responses.Elements;
@@ -51,5 +52,10 @@ public class PocoTest
         yield return new TestCaseData(new AdaptivityTrigger());
         yield return new TestCaseData(new AdaptivityQuestionAnswer());
         yield return new TestCaseData(new ContentReferenceAction());
+        yield return new TestCaseData(new GetLearningElementCommand());
+        yield return new TestCaseData(new LmsUuidResponse()
+        {
+            LmsContextId = 1,
+        });
     }
 }

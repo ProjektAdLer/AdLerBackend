@@ -1,0 +1,16 @@
+﻿<RunSettings>
+    <DataCollectionRunSettings>
+        <DataCollector friendlyName="Code Coverage">
+            <Configuration>
+                <CodeCoverage>
+                    <Functions>
+                        <Exclude>
+                            <Function>.*get_.*</Function>
+                            <Function>.*set_.*</Function>
+                        </Exclude>
+                    </Functions>
+                </CodeCoverage>
+            </Configuration>
+        </DataCollector>
+    </DataCollectionRunSettings>
+</RunSettings>

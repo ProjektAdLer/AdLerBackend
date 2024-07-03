@@ -53,6 +53,8 @@ public class PocoTest
         yield return new TestCaseData(new AdaptivityQuestionAnswer());
         yield return new TestCaseData(new ContentReferenceAction());
         yield return new TestCaseData(new GetLearningElementCommand());
+        yield return new TestCaseData(new GradedQuestion.GradedAnswer());
+        yield return new TestCaseData(new LMSAdaptivityQuestionStateResponse.LMSAdaptivityAnswers());
         yield return new TestCaseData(new LmsUuidResponse()
         {
             LmsContextId = 1,

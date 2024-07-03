@@ -55,6 +55,7 @@ public class
         return await _lms.GetLmsElementIdsByUuidsAsync(webServiceToken, lmsWorldId, elementUuids);
     }
 
+    // Rider Coverage report provides a false positive for this method. So this is excluded in DotSettings
     private IEnumerable<AdLerLmsElementAggregation> MapModulesWithAdLerId(WorldAtfResponse atfObject,
         IEnumerable<LMSWorldContentResponse> worldContent, IEnumerable<LmsUuidResponse> modulesWithUuid)
     {

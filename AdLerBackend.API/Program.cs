@@ -1,5 +1,3 @@
-// This is needed, because wwwroot directory must be present in the beginning to serve files from it
-
 using AdLerBackend.API;
 using AdLerBackend.Application;
 using AdLerBackend.Application.Configuration;

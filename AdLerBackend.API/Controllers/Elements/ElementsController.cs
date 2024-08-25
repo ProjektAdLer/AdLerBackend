@@ -50,44 +50,6 @@ public class ElementsController : BaseApiController
     }
 
     /// <summary>
-    ///     Answer a Question in a an Adaptivity Learning Element
-    /// </summary>
-    /// <returns></returns>
-    [HttpPatch("World/{worldId}/Element/{elementId}/Question/{questionId}")]
-    public async Task<ActionResult<AnswerAdaptivityQuestionResponse>> AnswerAdaptivityQuestion(
-        [FromHeader] string token, int worldId,
-        int elementId, int questionId,
-        [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)]
-        bool[] answers)
-    {
-        return await Mediator.Send(new AnswerAdaptivityQuestionCommand
-        {
-            ElementId = elementId,
-            WebServiceToken = token,
-            WorldId = worldId,
-            Answers = answers,
-            QuestionId = questionId
-        });
-    }
-
-    /// <summary>
-    ///     Get the Details of an Adaptivity Element
-    /// </summary>
-    /// <returns></returns>
-    [HttpGet("World/{worldId}/Element/{elementId}/Adaptivity")]
-    public async Task<GetAdaptivityElementDetailsResponse> GetAdaptivityQuestions(
-        [FromHeader] string token, int worldId,
-        int elementId)
-    {
-        return await Mediator.Send(new GetAdaptivityElementDetailsCommand
-        {
-            ElementId = elementId,
-            WebServiceToken = token,
-            LearningWorldId = worldId
-        });
-    }
-
-    /// <summary>
     ///     Gets a Score for the Learning Element
     /// </summary>
     /// <param name="token">Lms Webservice Token</param>

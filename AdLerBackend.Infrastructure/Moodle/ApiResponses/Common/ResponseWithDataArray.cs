@@ -1,4 +1,4 @@
-namespace AdLerBackend.Infrastructure.Moodle.ApiResponses;
+namespace AdLerBackend.Infrastructure.Moodle.ApiResponses.Common;
 
 internal class ResponseWithDataArray<T>
 {

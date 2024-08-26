@@ -1,10 +1,10 @@
 ﻿using System.Configuration;
-using AdLerBackend.API;
 using AdLerBackend.Application.Configuration;
-using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
+
+namespace AdLerBackend.API.UnitTests;
 
 [TestFixture]
 public class BackendConfigExtensionsTests

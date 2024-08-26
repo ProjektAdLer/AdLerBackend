@@ -1,9 +1,10 @@
-﻿using JetBrains.Annotations;
+﻿using System.Text.Json.Serialization;
+using JetBrains.Annotations;
 
-namespace AdLerBackend.Infrastructure.Moodle.ApiResponses;
+namespace AdLerBackend.Infrastructure.Moodle.ApiResponses.PluginResponses;
 
 [UsedImplicitly]
-public class PluginQuestionsDetailResponse
+public class PluginAdaptivityQuestionsDetailResponse
 {
     public List<PluginAdaptivityQuestion> Questions { get; set; }
 
@@ -13,6 +14,8 @@ public class PluginQuestionsDetailResponse
         public string Uuid { get; set; }
 
         public string Status { get; set; }
+        [JsonPropertyName("status_best_try")]
+        public string StatusBestTry { get; set; }
         public string? Answers { get; set; }
     }
 }

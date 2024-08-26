@@ -1,4 +1,6 @@
 ﻿using AdLerBackend.Infrastructure.Moodle.ApiResponses;
+using AdLerBackend.Infrastructure.Moodle.ApiResponses.Common;
+using AdLerBackend.Infrastructure.Moodle.ApiResponses.PluginResponses;
 using AutoBogus;
 using FluentAssertions;
 using Force.DeepCloner;

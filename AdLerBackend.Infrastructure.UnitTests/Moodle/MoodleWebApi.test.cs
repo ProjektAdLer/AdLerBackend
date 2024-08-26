@@ -4,6 +4,8 @@ using AdLerBackend.Application.Common.Responses.LMSAdapter.Adaptivity;
 using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure.Moodle;
 using AdLerBackend.Infrastructure.Moodle.ApiResponses;
+using AdLerBackend.Infrastructure.Moodle.ApiResponses.Common;
+using AdLerBackend.Infrastructure.Moodle.ApiResponses.PluginResponses;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;

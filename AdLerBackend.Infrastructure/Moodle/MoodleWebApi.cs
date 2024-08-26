@@ -6,6 +6,8 @@ using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.LMSAdapter.Adaptivity;
 using AdLerBackend.Application.Configuration;
 using AdLerBackend.Infrastructure.Moodle.ApiResponses;
+using AdLerBackend.Infrastructure.Moodle.ApiResponses.Common;
+using AdLerBackend.Infrastructure.Moodle.ApiResponses.PluginResponses;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -90,7 +92,7 @@ public class MoodleWebApi : ILMS
     public async Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsAsync(string token,
         int elementId)
     {
-        var rawResponse = await MoodleCallAsync<ResponseWithData<PluginQuestionsDetailResponse>>(
+        var rawResponse = await MoodleCallAsync<ResponseWithData<PluginAdaptivityQuestionsDetailResponse>>(
             new Dictionary<string, HttpContent>
             {
                 {"wstoken", new StringContent(token)},
@@ -117,7 +119,7 @@ public class MoodleWebApi : ILMS
     public async Task<IEnumerable<LMSAdaptivityTaskStateResponse>> GetAdaptivityTaskDetailsAsync(string token,
         int elementId)
     {
-        var rawResponse = await MoodleCallAsync<ResponseWithData<PluginTasksResponse>>(
+        var rawResponse = await MoodleCallAsync<ResponseWithData<PluginAdaptivityTasksResponse>>(
             new Dictionary<string, HttpContent>
             {
                 {"wstoken", new StringContent(token)},
@@ -289,7 +291,7 @@ public class MoodleWebApi : ILMS
             wsParams.Add($"questions[{i}][answer]", new StringContent(answeredQuestions.ElementAt(i).Answer));
         }
 
-        var result = await MoodleCallAsync<ResponseWithData<AdaptivityModuleAnsweredResponse>>(wsParams);
+        var result = await MoodleCallAsync<ResponseWithData<PluginAdaptivityAnsweredQuestionResponse>>(wsParams);
 
         return new AdaptivityModuleStateResponseAfterAnswer
         {

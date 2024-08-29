@@ -8,7 +8,6 @@ using AdLerBackend.Infrastructure.Services;
 using AutoBogus;
 using Newtonsoft.Json;
 using NSubstitute;
-using NUnit.Framework.Legacy;
 
 #pragma warning disable CS8618
 

@@ -1,6 +1,4 @@
-﻿
-
-using System.IO.Abstractions;
+﻿using System.IO.Abstractions;
 using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -53,6 +51,7 @@ public class StorageService : IFileAccess
             _logger.LogWarning($"World with ID {worldToDelete.WorldInstanceId} does not exist.");
             return true;
         }
+
         _fileSystem.Directory.Delete(workingDir, true);
         return true;
     }

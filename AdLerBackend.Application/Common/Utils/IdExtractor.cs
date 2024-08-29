@@ -35,5 +35,4 @@ public static class IdExtractor
 
         throw new Exception("No id for the Adaptivity Task found!");
     }
-    
 }

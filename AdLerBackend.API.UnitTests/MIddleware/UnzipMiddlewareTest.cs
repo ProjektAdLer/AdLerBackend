@@ -12,10 +12,6 @@ public class UnzipMiddlewareTest
     [TestFixture]
     public class UnzipMiddlewareTests
     {
-        private MockFileSystem _mockFileSystem;
-        private UnzipMiddleware _middleware;
-        private RequestDelegate _nextDelegate;
-
         [SetUp]
         public void Setup()
         {
@@ -23,6 +19,10 @@ public class UnzipMiddlewareTest
             _nextDelegate = Substitute.For<RequestDelegate>();
             _middleware = new UnzipMiddleware(_nextDelegate, _mockFileSystem);
         }
+
+        private MockFileSystem _mockFileSystem;
+        private UnzipMiddleware _middleware;
+        private RequestDelegate _nextDelegate;
 
         [Test]
         // ANF-ID: [BPG21]
@@ -59,6 +59,7 @@ public class UnzipMiddlewareTest
                 var content = Encoding.UTF8.GetBytes(expectedContent);
                 entryStream.Write(content, 0, content.Length);
             }
+
             zipStream.Seek(0, SeekOrigin.Begin);
 
             _mockFileSystem.AddFile("/wwwroot/path/to/file.h5p", new MockFileData(zipStream.ToArray()));
@@ -80,25 +81,26 @@ public class UnzipMiddlewareTest
             // Arrange
             var context = new DefaultHttpContext();
             context.Request.Path = "/path/to/file.h5p/content/nonexistent.js";
-        
+
             // Create a mock ZIP file without the requested file
             var zipStream = new MemoryStream();
             using (var zipArchive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
             {
                 zipArchive.CreateEntry("content/other.js");
             }
+
             zipStream.Seek(0, SeekOrigin.Begin);
-        
+
             _mockFileSystem.AddFile("/wwwroot/path/to/file.h5p", new MockFileData(zipStream.ToArray()));
-        
+
             // Act
             await _middleware.Invoke(context);
-        
+
             // Assert
             Assert.That(context.Response.StatusCode, Is.EqualTo(404));
             Assert.That(context.Response.Body.Length, Is.EqualTo(0));
         }
-        
+
         // ANF-ID: [BPG21]
         [Test]
         public async Task Invoke_PathNotContainingH5p_CallsNextMiddleware()
@@ -106,10 +108,10 @@ public class UnzipMiddlewareTest
             // Arrange
             var context = new DefaultHttpContext();
             context.Request.Path = "/path/to/file.js";
-        
+
             // Act
             await _middleware.Invoke(context);
-        
+
             // Assert
             await _nextDelegate.Received(1).Invoke(context);
         }

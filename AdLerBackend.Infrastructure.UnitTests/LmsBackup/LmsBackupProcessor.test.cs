@@ -8,7 +8,6 @@ namespace AdLerBackend.Infrastructure.UnitTests.LmsBackup;
 
 public class LmsBackupProcessorTest
 {
-    
     private FileStream _backupFileStream;
     private FileStream _dslFileStream;
 
@@ -80,7 +79,7 @@ public class LmsBackupProcessorTest
         // Assert
         Assert.Throws<LmsBackupProcessorException>(() => systemUnderTest.GetH5PFilesFromBackup(_backupFileStream));
     }
-    
+
     [TearDown]
     public void TearDown()
     {

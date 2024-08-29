@@ -1,7 +1,5 @@
 using System.Text.Json;
 using AdLerBackend.API.Controllers.Elements;
-using AdLerBackend.Application.Adaptivity.AnswerAdaptivityQuestion;
-using AdLerBackend.Application.Adaptivity.GetAdaptivityModuleQuestionDetails;
 using AdLerBackend.Application.Common.DTOs;
 using AdLerBackend.Application.Element.GetElementScore;
 using AdLerBackend.Application.Element.ScoreElement;
@@ -33,7 +31,7 @@ public class ElementsControllerTest
         var paramsObj = new ScoreElementParams
         {
             //any serialized object
-            SerializedXapiEvent = JsonSerializer.Serialize(new {test = "test"})
+            SerializedXapiEvent = JsonSerializer.Serialize(new { test = "test" })
         };
 
         // Act

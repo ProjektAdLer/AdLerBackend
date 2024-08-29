@@ -35,9 +35,9 @@ public class MoodleWebApi : ILMS
     {
         var resp = await MoodleCallAsync<UserTokenResponse>(new Dictionary<string, HttpContent>
         {
-            {"username", new StringContent(userName)},
-            {"password", new StringContent(password)},
-            {"service", new StringContent("adler_services")}
+            { "username", new StringContent(userName) },
+            { "password", new StringContent(password) },
+            { "service", new StringContent("adler_services") }
         }, new PostToMoodleOptions
         {
             Endpoint = PostToMoodleOptions.Endpoints.Login
@@ -53,9 +53,9 @@ public class MoodleWebApi : ILMS
     {
         var resp = await MoodleCallAsync<LMSWorldContentResponse[]>(new Dictionary<string, HttpContent>
         {
-            {"wstoken", new StringContent(token)},
-            {"wsfunction", new StringContent("core_course_get_contents")},
-            {"courseid", new StringContent(worldId.ToString())}
+            { "wstoken", new StringContent(token) },
+            { "wsfunction", new StringContent("core_course_get_contents") },
+            { "courseid", new StringContent(worldId.ToString()) }
         });
         return resp;
     }
@@ -64,11 +64,11 @@ public class MoodleWebApi : ILMS
     {
         return await MoodleCallAsync<LMSWorldListResponse>(new Dictionary<string, HttpContent>
         {
-            {"wstoken", new StringContent(token)},
-            {"wsfunction", new StringContent("core_course_search_courses")},
-            {"criterianame", new StringContent("search")},
-            {"criteriavalue", new StringContent("")},
-            {"limittoenrolled", new StringContent("1")}
+            { "wstoken", new StringContent(token) },
+            { "wsfunction", new StringContent("core_course_search_courses") },
+            { "criterianame", new StringContent("search") },
+            { "criteriavalue", new StringContent("") },
+            { "limittoenrolled", new StringContent("1") }
         });
     }
 
@@ -78,9 +78,9 @@ public class MoodleWebApi : ILMS
         var warnings = await MoodleCallAsync<ResponseWithDataArray<CourseDeletionWarningsResponse>>(
             new Dictionary<string, HttpContent>
             {
-                {"wstoken", new StringContent(token)},
-                {"wsfunction", new StringContent("core_course_delete_courses")},
-                {"courseids[0]", new StringContent(courseId.ToString())}
+                { "wstoken", new StringContent(token) },
+                { "wsfunction", new StringContent("core_course_delete_courses") },
+                { "courseids[0]", new StringContent(courseId.ToString()) }
             });
 
         // if any warnings are returned, throw an exception warnings can also be null
@@ -95,9 +95,9 @@ public class MoodleWebApi : ILMS
         var rawResponse = await MoodleCallAsync<ResponseWithData<PluginAdaptivityQuestionsDetailResponse>>(
             new Dictionary<string, HttpContent>
             {
-                {"wstoken", new StringContent(token)},
-                {"wsfunction", new StringContent("mod_adleradaptivity_get_question_details")},
-                {"module[module_id]", new StringContent(elementId.ToString())}
+                { "wstoken", new StringContent(token) },
+                { "wsfunction", new StringContent("mod_adleradaptivity_get_question_details") },
+                { "module[module_id]", new StringContent(elementId.ToString()) }
             });
 
         var response = rawResponse.Data.Questions.Select(x => new LMSAdaptivityQuestionStateResponse
@@ -122,9 +122,9 @@ public class MoodleWebApi : ILMS
         var rawResponse = await MoodleCallAsync<ResponseWithData<PluginAdaptivityTasksResponse>>(
             new Dictionary<string, HttpContent>
             {
-                {"wstoken", new StringContent(token)},
-                {"wsfunction", new StringContent("mod_adleradaptivity_get_task_details")},
-                {"module[module_id]", new StringContent(elementId.ToString())}
+                { "wstoken", new StringContent(token) },
+                { "wsfunction", new StringContent("mod_adleradaptivity_get_task_details") },
+                { "module[module_id]", new StringContent(elementId.ToString()) }
             });
 
         var response = rawResponse.Data.Tasks.Select(x => new LMSAdaptivityTaskStateResponse
@@ -142,9 +142,9 @@ public class MoodleWebApi : ILMS
 
         var multiPartContent = new MultipartFormDataContent
         {
-            {new StringContent(token), "wstoken"},
-            {new StringContent("local_adler_upload_course"), "wsfunction"},
-            {fileContent, "mbz", "filename.mbz"} // Set filename.mbz as the name of the file
+            { new StringContent(token), "wstoken" },
+            { new StringContent("local_adler_upload_course"), "wsfunction" },
+            { fileContent, "mbz", "filename.mbz" } // Set filename.mbz as the name of the file
         };
 
         var response = await MoodleCallAsync<ResponseWithData<PluginCourseCreationResponse>>(multiPartContent);
@@ -161,9 +161,9 @@ public class MoodleWebApi : ILMS
         var response = await MoodleCallAsync<ResponseWithDataArray<PluginElementScoreData>>(
             new Dictionary<string, HttpContent>
             {
-                {"wstoken", new StringContent(token)},
-                {"wsfunction", new StringContent("local_adler_score_get_element_scores")},
-                {"module_ids[0]", new StringContent(elementId.ToString())}
+                { "wstoken", new StringContent(token) },
+                { "wsfunction", new StringContent("local_adler_score_get_element_scores") },
+                { "module_ids[0]", new StringContent(elementId.ToString()) }
             });
 
         // Todo replace with the actual score
@@ -175,10 +175,10 @@ public class MoodleWebApi : ILMS
         var response = await MoodleCallAsync<ResponseWithDataArray<PluginElementScoreData>>(
             new Dictionary<string, HttpContent>
             {
-                {"wstoken", new StringContent(token)},
-                {"wsfunction", new StringContent("local_adler_score_primitive_learning_element")},
-                {"module_id", new StringContent(elementId.ToString())},
-                {"is_completed", new StringContent("1")}
+                { "wstoken", new StringContent(token) },
+                { "wsfunction", new StringContent("local_adler_score_primitive_learning_element") },
+                { "module_id", new StringContent(elementId.ToString()) },
+                { "is_completed", new StringContent("1") }
             });
 
         return response.Data[0].Score > 0;
@@ -189,9 +189,9 @@ public class MoodleWebApi : ILMS
         var response = await MoodleCallAsync<ResponseWithDataArray<PluginElementScoreData>>(
             new Dictionary<string, HttpContent>
             {
-                {"wstoken", new StringContent(token)},
-                {"wsfunction", new StringContent("local_adler_score_h5p_learning_element")},
-                {"xapi", new StringContent("[" + statement + "]")}
+                { "wstoken", new StringContent(token) },
+                { "wsfunction", new StringContent("local_adler_score_h5p_learning_element") },
+                { "xapi", new StringContent("[" + statement + "]") }
             });
 
         return response.Data[0].Score > 0;
@@ -202,9 +202,9 @@ public class MoodleWebApi : ILMS
         var response = await MoodleCallAsync<ResponseWithDataArray<PluginElementScoreData>>(
             new Dictionary<string, HttpContent>
             {
-                {"wstoken", new StringContent(token)},
-                {"wsfunction", new StringContent("local_adler_score_get_course_scores")},
-                {"course_id", new StringContent(courseId.ToString())}
+                { "wstoken", new StringContent(token) },
+                { "wsfunction", new StringContent("local_adler_score_get_course_scores") },
+                { "course_id", new StringContent(courseId.ToString()) }
             });
 
         var courseStatus = new LmsCourseStatusResponse
@@ -227,18 +227,18 @@ public class MoodleWebApi : ILMS
         var generalInformationResponse = await MoodleCallAsync<GeneralUserDataResponse>(
             new Dictionary<string, HttpContent>
             {
-                {"wstoken", new StringContent(token)},
-                {"wsfunction", new StringContent("core_webservice_get_site_info")},
-                {"moodlewsrestformat", new StringContent("json")}
+                { "wstoken", new StringContent(token) },
+                { "wsfunction", new StringContent("core_webservice_get_site_info") },
+                { "moodlewsrestformat", new StringContent("json") }
             });
 
         var detailedUserInformaionResponse = await MoodleCallAsync<DetailedUserDataResponse[]>(
             new Dictionary<string, HttpContent>
             {
-                {"wstoken", new StringContent(token)},
-                {"wsfunction", new StringContent("core_user_get_users_by_field")},
-                {"field", new StringContent("id")},
-                {"values[0]", new StringContent(generalInformationResponse.Userid.ToString())}
+                { "wstoken", new StringContent(token) },
+                { "wsfunction", new StringContent("core_user_get_users_by_field") },
+                { "field", new StringContent("id") },
+                { "values[0]", new StringContent(generalInformationResponse.Userid.ToString()) }
             });
 
         return new LMSUserDataResponse
@@ -254,8 +254,8 @@ public class MoodleWebApi : ILMS
     {
         var wsParams = new Dictionary<string, HttpContent>
         {
-            {"wstoken", new StringContent(token)},
-            {"wsfunction", new StringContent("local_adler_get_element_ids_by_uuids")}
+            { "wstoken", new StringContent(token) },
+            { "wsfunction", new StringContent("local_adler_get_element_ids_by_uuids") }
         };
 
         for (var i = 0; i < uuids.Count(); i++)
@@ -280,9 +280,9 @@ public class MoodleWebApi : ILMS
     {
         var wsParams = new Dictionary<string, HttpContent>
         {
-            {"wstoken", new StringContent(token)},
-            {"wsfunction", new StringContent("mod_adleradaptivity_answer_questions")},
-            {"module[module_id]", new StringContent(elementId.ToString())}
+            { "wstoken", new StringContent(token) },
+            { "wsfunction", new StringContent("mod_adleradaptivity_answer_questions") },
+            { "module[module_id]", new StringContent(elementId.ToString()) }
         };
 
         for (var i = 0; i < answeredQuestions.Count(); i++)

@@ -8,7 +8,6 @@ using AdLerBackend.Domain.UnitTests.TestingUtils;
 using AdLerBackend.Infrastructure.Services;
 using Newtonsoft.Json;
 using NSubstitute;
-using NUnit.Framework.Legacy;
 
 namespace AdLerBackend.Application.UnitTests.Common.InternalUseCases;
 

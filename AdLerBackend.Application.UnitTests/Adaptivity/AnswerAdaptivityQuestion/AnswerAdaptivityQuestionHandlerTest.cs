@@ -5,7 +5,6 @@ using AdLerBackend.Application.Common.InternalUseCases.GetLearningElement;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
 using AdLerBackend.Application.Common.Responses.LMSAdapter.Adaptivity;
 using AdLerBackend.Application.Common.Responses.World;
-using AdLerBackend.Domain.Entities;
 using AdLerBackend.Domain.UnitTests.TestingUtils;
 using FluentAssertions;
 using MediatR;
@@ -15,11 +14,11 @@ namespace AdLerBackend.Application.UnitTests.Adaptivity.AnswerAdaptivityQuestion
 
 public class AnswerAdaptivityQuestionHandlerTest
 {
-    private  ILMS _lmsMock;
-    private  IMediator _mediatorMock;
-    private  ISerialization _serializationMock;
-    private  IWorldRepository _worldRepositoryMock;
-    
+    private ILMS _lmsMock;
+    private IMediator _mediatorMock;
+    private ISerialization _serializationMock;
+    private IWorldRepository _worldRepositoryMock;
+
     [SetUp]
     // ANF-ID: [BPG14]
     public void Setup()
@@ -29,13 +28,14 @@ public class AnswerAdaptivityQuestionHandlerTest
         _serializationMock = Substitute.For<ISerialization>();
         _worldRepositoryMock = Substitute.For<IWorldRepository>();
     }
-    
+
     [Test]
     // ANF-ID: [BPG14]
     public async Task Handle_Valid_ReturnsResponse()
     {
         // Arrange
-        var systemUnderTest = new AnswerAdaptivityQuestionHandler(_lmsMock, _mediatorMock,  _worldRepositoryMock, _serializationMock);
+        var systemUnderTest =
+            new AnswerAdaptivityQuestionHandler(_lmsMock, _mediatorMock, _worldRepositoryMock, _serializationMock);
         var QuestionUUID = Guid.NewGuid();
         _mediatorMock.Send(Arg.Any<GetLearningElementCommand>()).Returns(
             new AdLerLmsElementAggregation
@@ -54,11 +54,11 @@ public class AnswerAdaptivityQuestionHandlerTest
                 }
             }
         );
-        
+
         _worldRepositoryMock.GetAsync(Arg.Any<int>()).Returns(
             WorldEntityFactory.CreateWorldEntity()
         );
-        
+
         _serializationMock.GetObjectFromJsonString<WorldAtfResponse>(Arg.Any<string>()).Returns(
             new WorldAtfResponse
             {
@@ -66,44 +66,45 @@ public class AnswerAdaptivityQuestionHandlerTest
                 {
                     Elements = new List<BaseElement>
                     {
-                        new AdaptivityElement()
+                        new AdaptivityElement
                         {
                             ElementId = 1,
-                            AdaptivityContent = new AdaptivityContent()
+                            AdaptivityContent = new AdaptivityContent
                             {
-                                AdaptivityTasks = new List<AdaptivityTask>()
+                                AdaptivityTasks = new List<AdaptivityTask>
                                 {
-                                    new AdaptivityTask()
+                                    new()
                                     {
                                         TaskId = 1,
-                                        AdaptivityQuestions = new List<AdaptivityQuestion>()
+                                        AdaptivityQuestions = new List<AdaptivityQuestion>
                                         {
-                                            new AdaptivityQuestion()
+                                            new()
                                             {
                                                 QuestionId = 1,
                                                 QuestionUuid = QuestionUUID
                                             }
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
-        });             
-        
-        _lmsMock.AnswerAdaptivityQuestionsAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<List<AdaptivityAnsweredQuestionTo>>()).Returns(
-            new AdaptivityModuleStateResponseAfterAnswer()
+            });
+
+        _lmsMock.AnswerAdaptivityQuestionsAsync(Arg.Any<string>(), Arg.Any<int>(),
+            Arg.Any<List<AdaptivityAnsweredQuestionTo>>()).Returns(
+            new AdaptivityModuleStateResponseAfterAnswer
             {
                 State = AdaptivityStates.Correct,
-                Questions = new List<LMSAdaptivityQuestionStateResponse>()
+                Questions = new List<LMSAdaptivityQuestionStateResponse>
                 {
                     new()
                     {
                         Status = AdaptivityStates.Correct
                     }
                 },
-                Tasks = new List<LMSAdaptivityTaskStateResponse>()
+                Tasks = new List<LMSAdaptivityTaskStateResponse>
                 {
                     new()
                     {
@@ -112,19 +113,20 @@ public class AnswerAdaptivityQuestionHandlerTest
                 }
             }
         );
-        
-        _lmsMock.AnswerAdaptivityQuestionsAsync(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<List<AdaptivityAnsweredQuestionTo>>()).Returns(
-            new AdaptivityModuleStateResponseAfterAnswer()
+
+        _lmsMock.AnswerAdaptivityQuestionsAsync(Arg.Any<string>(), Arg.Any<int>(),
+            Arg.Any<List<AdaptivityAnsweredQuestionTo>>()).Returns(
+            new AdaptivityModuleStateResponseAfterAnswer
             {
                 State = AdaptivityStates.Correct,
-                Questions = new List<LMSAdaptivityQuestionStateResponse>()
+                Questions = new List<LMSAdaptivityQuestionStateResponse>
                 {
                     new()
                     {
                         Status = AdaptivityStates.Correct,
-                        Answers = new List<LMSAdaptivityQuestionStateResponse.LMSAdaptivityAnswers>()
+                        Answers = new List<LMSAdaptivityQuestionStateResponse.LMSAdaptivityAnswers>
                         {
-                            new LMSAdaptivityQuestionStateResponse.LMSAdaptivityAnswers()
+                            new()
                             {
                                 Checked = true,
                                 User_Answer_correct = true
@@ -132,28 +134,26 @@ public class AnswerAdaptivityQuestionHandlerTest
                         }
                     }
                 },
-                Tasks = new List<LMSAdaptivityTaskStateResponse>()
+                Tasks = new List<LMSAdaptivityTaskStateResponse>
                 {
                     new()
                     {
                         State = AdaptivityStates.Correct
-                    },
-                },
-                
+                    }
+                }
             }
         );
-        
+
         // Act
-        var result = await systemUnderTest.Handle(new AnswerAdaptivityQuestionCommand()
+        var result = await systemUnderTest.Handle(new AnswerAdaptivityQuestionCommand
         {
             ElementId = 1,
             Answers = new List<bool>(),
             WorldId = 1,
             QuestionId = 1
-        }, new System.Threading.CancellationToken());
-        
-        
-        
+        }, new CancellationToken());
+
+
         // Assert
         result.Should().NotBeNull();
     }

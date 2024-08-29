@@ -17,7 +17,7 @@ public class DeletePlayerDataUseCaseTest
         _ilms = Substitute.For<ILMS>();
     }
 
-    
+
     [Test]
     // ANF-ID: [BPG10]
     public async Task Handler_DeletesPlayer()

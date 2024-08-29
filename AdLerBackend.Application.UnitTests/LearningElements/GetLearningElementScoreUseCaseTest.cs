@@ -65,7 +65,7 @@ public class GetLearningElementScoreUseCaseTest
         // Assert
         result.Success.Should().Be(success);
     }
-    
+
     // ANF-ID: [BPG16]
     [Test]
     public async Task GetLearningElementScore_ElementIsLocke_ReturnsFalse()

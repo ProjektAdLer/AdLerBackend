@@ -7,7 +7,6 @@ using AdLerBackend.Application.Element.GetElementSource.GetH5PFilePath;
 using FluentAssertions;
 using MediatR;
 using NSubstitute;
-using NUnit.Framework.Internal;
 
 namespace AdLerBackend.Application.UnitTests.LearningElements;
 
@@ -158,11 +157,10 @@ public class GetLearningElementSourceUseCaseTest
                 ElementId = 1,
                 WebServiceToken = "token"
             }, CancellationToken.None));
-        
+
         exception.Message.Should().Be("Unknown module type" + resourceName);
-        
     }
-    
+
     [TestCase("adaptivity")]
     // ANF-ID: [BPG17, BPG18]
     public async Task GetLearningElementSource_AdaptivityRequested_Throws(string resourceName)
@@ -203,8 +201,7 @@ public class GetLearningElementSourceUseCaseTest
                 ElementId = 1,
                 WebServiceToken = "token"
             }, CancellationToken.None));
-        
+
         exception.Message.Should().Be("The Content of the Adaptivity Element is accessible via ATF File");
-        
     }
 }

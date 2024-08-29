@@ -7,15 +7,15 @@ namespace AdLerBackend.API.UnitTests.MIddleware;
 [TestFixture]
 public class LoggingMiddlewareTests
 {
-    private LoggingMiddleware _middleware;
-    private RequestDelegate _nextDelegate;
-
     [SetUp]
     public void Setup()
     {
         _nextDelegate = Substitute.For<RequestDelegate>();
         _middleware = new LoggingMiddleware(_nextDelegate);
     }
+
+    private LoggingMiddleware _middleware;
+    private RequestDelegate _nextDelegate;
 
     [Test]
     public async Task InvokeAsync_WithTraceIdentifier_AddsToLogContext()

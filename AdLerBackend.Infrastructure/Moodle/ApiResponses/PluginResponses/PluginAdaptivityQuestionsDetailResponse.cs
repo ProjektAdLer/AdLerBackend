@@ -14,8 +14,9 @@ public class PluginAdaptivityQuestionsDetailResponse
         public string Uuid { get; set; }
 
         public string Status { get; set; }
-        [JsonPropertyName("status_best_try")]
-        public string StatusBestTry { get; set; }
+
+        [JsonPropertyName("status_best_try")] public string StatusBestTry { get; set; }
+
         public string? Answers { get; set; }
     }
 }

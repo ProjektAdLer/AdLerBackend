@@ -32,7 +32,7 @@ public class GetWorldsForUserUseCase : IRequestHandler<GetWorldsForUserCommand, 
         {
             Worlds = coursesInDbAndInLms.Select(c => new WorldResponse
             {
-                WorldId = (int) c.Id!,
+                WorldId = (int)c.Id!,
                 WorldName = c.Name
             }).ToList() ?? new List<WorldResponse>()
         };

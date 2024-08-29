@@ -24,7 +24,7 @@ public class GetWorldsForAuthorUseCase : IRequestHandler<GetWorldsForAuthorComma
         {
             Worlds = courses.Select(c => new WorldResponse
             {
-                WorldId = (int) c.Id!,
+                WorldId = (int)c.Id!,
                 WorldName = c.Name
             }).ToList()
         };

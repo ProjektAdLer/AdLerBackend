@@ -47,7 +47,7 @@ public class ScoreLearningElementUseCaseTest
                 {
                     contextid = 1,
                     Id = 1,
-                    Name = "name",
+                    Name = "name"
                 }
             }
         );
@@ -139,7 +139,7 @@ public class ScoreLearningElementUseCaseTest
                 {
                     contextid = 1,
                     Id = 1,
-                    Name = "name",
+                    Name = "name"
                 }
             }
         );

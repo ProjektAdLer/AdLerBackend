@@ -7,7 +7,7 @@ public class PluginAdaptivityAnsweredQuestionResponse
     public IList<PluginAdaptivityQuestionsDetailResponse.PluginAdaptivityQuestion> Questions { get; set; }
 
     public class AdaptivityModuleInfo
-    { 
+    {
         public string Status { get; set; }
     }
 }

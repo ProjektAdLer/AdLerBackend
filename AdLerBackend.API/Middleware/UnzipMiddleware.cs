@@ -1,8 +1,5 @@
-using System;
 using System.IO.Abstractions;
 using System.IO.Compression;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using MimeKit;
 
 namespace AdLerBackend.API.Middleware;

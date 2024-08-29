@@ -1,5 +1,4 @@
 using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
 using AdLerBackend.Application.Common.InternalUseCases.GetLearningElement;
 using AdLerBackend.Application.Common.Responses.Elements;
 using MediatR;

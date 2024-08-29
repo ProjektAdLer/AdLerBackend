@@ -7,7 +7,6 @@ using AdLerBackend.Infrastructure.Storage;
 using AutoBogus;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-using NUnit.Framework.Legacy;
 
 #pragma warning disable CS8618
 
@@ -24,7 +23,7 @@ public class StorageServiceTest
     {
         _backupFileStream?.Close();
     }
-    
+
     [OneTimeSetUp]
     public void OneTimeSetup()
     {
@@ -83,7 +82,7 @@ public class StorageServiceTest
 
         _fileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
         {
-            {file, new MockFileData("Testing is meh.")}
+            { file, new MockFileData("Testing is meh.") }
         });
         var storageService = new StorageService(_fileSystem, _mockedLogger);
 
@@ -93,7 +92,7 @@ public class StorageServiceTest
         // Assert
         Assert.That(_fileSystem.Directory.Exists(folder), Is.False);
     }
-    
+
     [Test]
     public void DeleteWorld_NonexistentDirectory_ReturnsTrue()
     {
@@ -112,7 +111,7 @@ public class StorageServiceTest
         Assert.That(result, Is.True);
         Assert.That(_fileSystem.Directory.Exists(Path.Combine("wwwroot", "courses", "9999")), Is.False);
     }
-    
+
     [Test]
     public void DeleteWorld_NonExistentDirectory_LogsWarning()
     {

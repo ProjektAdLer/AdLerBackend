@@ -16,15 +16,11 @@ public class LoggingMiddleware
     public async Task InvokeAsync(HttpContext context)
     {
         if (!string.IsNullOrEmpty(context.TraceIdentifier))
-        {
             using (LogContext.PushProperty("TraceIdentifier", $"TraceIdentifier: {context.TraceIdentifier} "))
             {
                 await _next(context);
             }
-        }
         else
-        {
             await _next(context);
-        }
     }
 }

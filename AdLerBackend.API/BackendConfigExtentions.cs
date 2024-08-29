@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using AdLerBackend.Application.Configuration;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -7,7 +8,8 @@ using Serilog.Settings.Configuration;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace AdLerBackend.API;
-[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+
+[ExcludeFromCodeCoverage]
 public static class BackendConfigExtensions
 {
     public static WebApplicationBuilder AddLoggingViaSerilog(this WebApplicationBuilder builder)

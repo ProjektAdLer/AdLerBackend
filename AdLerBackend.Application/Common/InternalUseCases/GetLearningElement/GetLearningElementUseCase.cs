@@ -14,7 +14,8 @@ public class GetLearningElementUseCase : IRequestHandler<GetLearningElementComma
         _mediator = mediator;
     }
 
-    public async Task<AdLerLmsElementAggregation> Handle(GetLearningElementCommand request, CancellationToken cancellationToken)
+    public async Task<AdLerLmsElementAggregation> Handle(GetLearningElementCommand request,
+        CancellationToken cancellationToken)
     {
         var learningElementModules = await _mediator.Send(new GetAllElementsFromLmsCommand
         {

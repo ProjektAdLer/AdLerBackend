@@ -1,7 +1,6 @@
 ﻿using AdLerBackend.Domain.Entities;
 using AdLerBackend.Domain.UnitTests.TestingUtils;
 using AdLerBackend.Infrastructure.Repositories.Common;
-using NUnit.Framework.Legacy;
 
 namespace AdLerBackend.Infrastructure.UnitTests.Repositories.Common;
 

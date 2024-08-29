@@ -32,11 +32,10 @@ public class UploadWorldUseCaseTest
 
     [SetUp]
     // ANF-ID: [BPG20]
-   
     public void Setup()
     {
         _configuration = Options.Create(new BackendConfig
-            {MoodleUrl = "http://localhost", AdLerEngineUrl = "http://localhost"});
+            { MoodleUrl = "http://localhost", AdLerEngineUrl = "http://localhost" });
 
         _lmsBackupProcessor = Substitute.For<ILmsBackupProcessor>();
         _mediator = Substitute.For<IMediator>();
@@ -65,7 +64,7 @@ public class UploadWorldUseCaseTest
     }
 
     // ANF-ID: [BPG20]
-   
+
     [Test]
     public async Task Handle_Valid_TriggersUpload()
     {
@@ -115,7 +114,7 @@ public class UploadWorldUseCaseTest
 
         _fileAccess.StoreH5PFilesForWorld(Arg.Any<WorldStoreH5PDto>()).Returns(new Dictionary<string, string>
         {
-            {testGuid.ToString(), testGuid.ToString()}
+            { testGuid.ToString(), testGuid.ToString() }
         });
 
         // mock memory stream with the fake atf file
@@ -149,7 +148,7 @@ public class UploadWorldUseCaseTest
 
 
     // ANF-ID: [BPG20]
-   
+
     [Test]
     public async Task Handle_ValidNoH5p_TriggersUpload()
     {
@@ -183,7 +182,7 @@ public class UploadWorldUseCaseTest
 
         _fileAccess.StoreH5PFilesForWorld(Arg.Any<WorldStoreH5PDto>()).Returns(new Dictionary<string, string>
         {
-            {"path1", "path1"}
+            { "path1", "path1" }
         });
 
 
@@ -204,9 +203,9 @@ public class UploadWorldUseCaseTest
         Assert.That(result.World3DUrl, Is.EqualTo("http://localhost"));
         Assert.That(result.WorldLmsUrl, Is.EqualTo("http://localhost/course/view.php?id=1337"));
     }
-    
+
     // ANF-ID: [BPG20]
-   
+
     [Test]
     public async Task Handle_InvalidCourseInformation_ThrowsValidationException()
     {
@@ -215,19 +214,17 @@ public class UploadWorldUseCaseTest
             new UploadWorldUseCase(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
                 _serialization, _ilms, _configuration);
 
-        var fakedValidDsl = new WorldAtfResponse()
-        {
-
-        };
+        var fakedValidDsl = new WorldAtfResponse();
 
         _lmsBackupProcessor.GetWorldDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedValidDsl);
 
         // Act & Assert
-        var exception = Assert.ThrowsAsync<ValidationException>(async () => await systemUnderTest.Handle(new UploadWorldCommand
-        {
-            BackupFileStream = new MemoryStream(),
-            ATFFileStream = new MemoryStream(),
-            WebServiceToken = "testToken"
-        }, CancellationToken.None));
+        var exception = Assert.ThrowsAsync<ValidationException>(async () => await systemUnderTest.Handle(
+            new UploadWorldCommand
+            {
+                BackupFileStream = new MemoryStream(),
+                ATFFileStream = new MemoryStream(),
+                WebServiceToken = "testToken"
+            }, CancellationToken.None));
     }
 }

@@ -1,5 +1,3 @@
-using AdLerBackend.Application.Common.Exceptions;
-using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
 using AdLerBackend.Application.Common.InternalUseCases.GetLearningElement;
 using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Element.GetElementSource.GetH5PFilePath;
@@ -26,7 +24,7 @@ public class
             WorldId = request.WorldId,
             ElementId = request.ElementId
         }, cancellationToken);
-        
+
 
         switch (learningElementModule.LmsModule.ModName)
         {

@@ -22,7 +22,7 @@ public class IdExtractorTests
                     {
                         AdaptivityQuestions = new List<AdaptivityQuestion>
                         {
-                            new() {QuestionId = expectedQuestionId, QuestionUuid = uuid}
+                            new() { QuestionId = expectedQuestionId, QuestionUuid = uuid }
                         }
                     }
                 }
@@ -64,7 +64,7 @@ public class IdExtractorTests
             {
                 AdaptivityTasks = new List<AdaptivityTask>
                 {
-                    new() {TaskId = expectedTaskId, TaskUuid = uuid}
+                    new() { TaskId = expectedTaskId, TaskUuid = uuid }
                 }
             }
         };
@@ -107,7 +107,7 @@ public class IdExtractorTests
                     {
                         AdaptivityQuestions = new List<AdaptivityQuestion>
                         {
-                            new() {QuestionId = 1, QuestionUuid = expectedUuid}
+                            new() { QuestionId = 1, QuestionUuid = expectedUuid }
                         }
                     }
                 }

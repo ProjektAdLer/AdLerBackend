@@ -41,7 +41,7 @@ public class SerializationServiceTest
         var service = new SerializationService();
 
         // Act
-        var result = service.ClassToJsonString(new BrokenClass {foo = 1});
+        var result = service.ClassToJsonString(new BrokenClass { foo = 1 });
 
         // Assert
         Assert.That(result, Is.EqualTo("{\"foo\":1}"));

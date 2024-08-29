@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NSubstitute;
-using NUnit.Framework.Legacy;
 using RichardSzalay.MockHttp;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -21,7 +20,7 @@ public class MoodleWebApiTest
     private IOptions<BackendConfig> _configuration;
     private MockHttpMessageHandler _mockHttp = null!;
     private MoodleWebApi _systemUnderTest = null!;
-    
+
     [TearDown]
     public void TearDown()
     {
@@ -33,7 +32,7 @@ public class MoodleWebApiTest
     public void SetUp()
     {
         _mockHttp = new MockHttpMessageHandler();
-        _configuration = Options.Create(new BackendConfig {MoodleUrl = "http://localhost"});
+        _configuration = Options.Create(new BackendConfig { MoodleUrl = "http://localhost" });
 
         // Mock logging with NSubstitute
         var logger = Substitute.For<ILogger<MoodleWebApi>>();
@@ -156,7 +155,7 @@ public class MoodleWebApiTest
             Userissiteadmin = true,
             Username = "testUser"
         };
-        var secondResponse = new[] {new {email = "test"}}.ToList();
+        var secondResponse = new[] { new { email = "test" } }.ToList();
 
         _mockHttp.When("*")
             .With(request => MatchesFormData(request, "core_webservice_get_site_info"))
@@ -345,7 +344,7 @@ public class MoodleWebApiTest
 
         // Act
         var result =
-            await _systemUnderTest.GetLmsElementIdsByUuidsAsync("token", 1, new List<Guid> {uuid1, uuid2});
+            await _systemUnderTest.GetLmsElementIdsByUuidsAsync("token", 1, new List<Guid> { uuid1, uuid2 });
 
         // Assert
         Assert.That(result.Count, Is.EqualTo(2));
@@ -445,13 +444,13 @@ public class MoodleWebApiTest
                 }
             });
     }
-    
+
     [Test]
     public void Constructor_SetsHttpClientTimeout()
     {
         // Arrange
         var logger = Substitute.For<ILogger<MoodleWebApi>>();
-        
+
         var mockedHttpClient = Substitute.ForPartsOf<HttpClient>();
 
         // Act
@@ -460,5 +459,4 @@ public class MoodleWebApiTest
         // Assert
         Assert.That(mockedHttpClient.Timeout, Is.EqualTo(TimeSpan.FromSeconds(600)));
     }
-
 }

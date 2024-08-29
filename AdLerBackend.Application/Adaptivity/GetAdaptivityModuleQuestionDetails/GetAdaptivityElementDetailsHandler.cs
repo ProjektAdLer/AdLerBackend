@@ -1,5 +1,4 @@
 ﻿using AdLerBackend.Application.Common.Interfaces;
-using AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
 using AdLerBackend.Application.Common.InternalUseCases.GetLearningElement;
 using AdLerBackend.Application.Common.Responses.Adaptivity;
 using AdLerBackend.Application.Common.Responses.Adaptivity.Common;
@@ -14,7 +13,7 @@ namespace AdLerBackend.Application.Adaptivity.GetAdaptivityModuleQuestionDetails
 [UsedImplicitly]
 public class
     GetAdaptivityElementDetailsHandler : IRequestHandler<GetAdaptivityElementDetailsCommand,
-        GetAdaptivityElementDetailsResponse>
+    GetAdaptivityElementDetailsResponse>
 {
     private readonly ILMS _lms;
     private readonly IMediator _mediator;

@@ -3,51 +3,49 @@ using AutoBogus;
 using FluentAssertions;
 using Force.DeepCloner;
 
-namespace AdLerBackend.Application.UnitTests.Common.ElementStrategies
+namespace AdLerBackend.Application.UnitTests.Common.ElementStrategies;
+
+public class MockPrimitiveH5PStrategyCommandHandlerTests
 {
-    public class MockPrimitiveH5PStrategyCommandHandlerTests
+    private MockPrimitiveH5PStrategyCommandHandler _handler;
+
+    [SetUp]
+    public void Setup()
     {
-        private MockPrimitiveH5PStrategyCommandHandler _handler;
+        _handler = new MockPrimitiveH5PStrategyCommandHandler();
+    }
 
-        [SetUp]
-        public void Setup()
+    [Test]
+    public async Task Handle_ValidCommand_ReturnsSuccessResponse()
+    {
+        // Arrange
+        var command = new MockPrimitiveH5PStrategyCommand
         {
-            _handler = new MockPrimitiveH5PStrategyCommandHandler();
-        }
+            ElementId = 1
+        };
 
-        [Test]
-        public async Task Handle_ValidCommand_ReturnsSuccessResponse()
-        {
-            // Arrange
-            var command = new MockPrimitiveH5PStrategyCommand
-            {
-                ElementId = 1
-            };
+        // Act
+        var result = await _handler.Handle(command, CancellationToken.None);
 
-            // Act
-            var result = await _handler.Handle(command, CancellationToken.None);
-            
-            // Assert
-            result.IsSuccess.Should().BeTrue();
-        }
-        
-        [TestCaseSource(nameof(GetTestCases))]
-        public void PlayerDataResponseGetterAndSetter<T>(T _)
-        {
-            // Arrange
-            var testClass = AutoFaker.Generate<T>();
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+    }
 
-            // Recursively clone the object
-            var clone = testClass.DeepClone();
+    [TestCaseSource(nameof(GetTestCases))]
+    public void PlayerDataResponseGetterAndSetter<T>(T _)
+    {
+        // Arrange
+        var testClass = AutoFaker.Generate<T>();
 
-            // Assert
-            clone.Should().BeEquivalentTo(testClass);
-        }
-        
-        private static IEnumerable<TestCaseData> GetTestCases()
-        {
-            yield return new TestCaseData(new MockPrimitiveH5PStrategyCommand());
+        // Recursively clone the object
+        var clone = testClass.DeepClone();
 
-        }
+        // Assert
+        clone.Should().BeEquivalentTo(testClass);
+    }
+
+    private static IEnumerable<TestCaseData> GetTestCases()
+    {
+        yield return new TestCaseData(new MockPrimitiveH5PStrategyCommand());
     }
 }

@@ -1,5 +1,4 @@
 using AdLerBackend.Infrastructure.Repositories.Player;
-using NUnit.Framework.Legacy;
 
 namespace AdLerBackend.Infrastructure.UnitTests.Repositories.Player;
 

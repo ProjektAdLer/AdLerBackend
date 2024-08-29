@@ -55,7 +55,7 @@ public class GetH5PFilePathUseCaseTest
         var systemUnderTest = new GetH5PFilePathHandler(_worldRepository);
 
 
-        _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity) null);
+        _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity)null);
 
         // Act
         // Assert

@@ -8,7 +8,6 @@ using AdLerBackend.Domain.Entities;
 using AdLerBackend.Domain.UnitTests.TestingUtils;
 using MediatR;
 using NSubstitute;
-using NUnit.Framework.Legacy;
 
 #pragma warning disable CS8618
 
@@ -85,7 +84,7 @@ public class DeleteWorldUseCaseTest
         // Arrange
         var systemUnderTest = new DeleteWorldUseCase(_worldRepository, _fileAccess, _mediator, _ilms);
 
-        _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity?) null);
+        _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity?)null);
 
         _fileAccess.DeleteWorld(Arg.Any<WorldDeleteDto>()).Returns(true);
 

@@ -26,13 +26,13 @@ public class PocoTest
         // Assert
         clone.Should().BeEquivalentTo(testClass);
     }
-        
+
     private static IEnumerable<TestCaseData> GetTestCases()
     {
         yield return new TestCaseData(new MockPrimitiveH5PStrategyCommand());
         yield return new TestCaseData(new MoodleCourse());
         yield return new TestCaseData(new LmsUuidResponse());
-        yield return new TestCaseData(new AnswerAdaptivityQuestionResponse()
+        yield return new TestCaseData(new AnswerAdaptivityQuestionResponse
         {
             ElementScore = new ElementScoreResponse(),
             GradedTask = new GradedTask(),
@@ -55,9 +55,9 @@ public class PocoTest
         yield return new TestCaseData(new GetLearningElementCommand());
         yield return new TestCaseData(new GradedQuestion.GradedAnswer());
         yield return new TestCaseData(new LMSAdaptivityQuestionStateResponse.LMSAdaptivityAnswers());
-        yield return new TestCaseData(new LmsUuidResponse()
+        yield return new TestCaseData(new LmsUuidResponse
         {
-            LmsContextId = 1,
+            LmsContextId = 1
         });
     }
 }

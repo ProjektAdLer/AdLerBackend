@@ -1,7 +1,4 @@
-using AdLerBackend.Application.Adaptivity.AnswerAdaptivityQuestion;
-using AdLerBackend.Application.Adaptivity.GetAdaptivityModuleQuestionDetails;
 using AdLerBackend.Application.Common.DTOs;
-using AdLerBackend.Application.Common.Responses.Adaptivity;
 using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Element.GetElementScore;
 using AdLerBackend.Application.Element.GetElementSource;

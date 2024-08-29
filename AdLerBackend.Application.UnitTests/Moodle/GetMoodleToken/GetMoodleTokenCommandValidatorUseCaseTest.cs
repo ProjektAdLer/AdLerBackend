@@ -1,6 +1,5 @@
 ﻿using AdLerBackend.Application.LMS.GetLMSToken;
 using FluentValidation.TestHelper;
-using NUnit.Framework.Legacy;
 
 namespace AdLerBackend.Application.UnitTests.Moodle.GetMoodleToken;
 

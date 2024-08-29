@@ -14,7 +14,7 @@ public class WorldEntityFactory
         int? id = null)
     {
         return new
-            WorldEntity(name, h5PFilesInCourse ?? new List<H5PLocationEntity>(), (int) authorId!, atfJson!,
+            WorldEntity(name, h5PFilesInCourse ?? new List<H5PLocationEntity>(), (int)authorId!, atfJson!,
                 lmsInstanceUuidId, id);
     }
 }

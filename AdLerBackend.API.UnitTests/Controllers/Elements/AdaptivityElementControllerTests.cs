@@ -18,7 +18,7 @@ public class AdaptivityElementControllerTests
         _mediatorMock = Substitute.For<IMediator>();
         _controller = new AdaptivityElementController(_mediatorMock);
     }
-    
+
     [Test]
     public async Task AnswerAdaptivityQuestion_ForwardsCall()
     {
@@ -27,7 +27,7 @@ public class AdaptivityElementControllerTests
         const int learningWorldId = 1;
         const int elementId = 2;
         const int questionId = 3;
-        var answers = new[] {true, false};
+        var answers = new[] { true, false };
 
         // Act
         await _controller.AnswerAdaptivityQuestion(token, learningWorldId, elementId, questionId, answers);
@@ -52,5 +52,5 @@ public class AdaptivityElementControllerTests
         // Assert
         await _mediatorMock.Received(1).Send(Arg.Is<GetAdaptivityElementDetailsCommand>(x =>
             x.WebServiceToken == token && x.LearningWorldId == learningWorldId && x.ElementId == elementId));
-    }   
+    }
 }

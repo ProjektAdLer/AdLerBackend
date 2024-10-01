@@ -66,17 +66,13 @@ public class ScoreElementUseCase : IRequestHandler<ScoreElementCommand, ScoreEle
             case "text":
             case "pdf":
             case "video":
+            case "primitiveH5P":
                 return new ScoreGenericElementStrategyCommand
                 {
                     LmsModule = commandWithParams.LearningElementMoule,
                     WebServiceToken = commandWithParams.WebServiceToken
                 };
-            case "primitiveH5P":
-                return new MockPrimitiveH5PStrategyCommand
-                {
-                    ElementId = mockId,
-                    WebServiceToken = commandWithParams.WebServiceToken
-                };
+
             default:
                 throw new NotImplementedException("Strategy for this element type is not implemented " + elementType);
         }

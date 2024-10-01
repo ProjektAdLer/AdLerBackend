@@ -176,9 +176,8 @@ public class MoodleWebApi : ILMS
             new Dictionary<string, HttpContent>
             {
                 { "wstoken", new StringContent(token) },
-                { "wsfunction", new StringContent("local_adler_score_primitive_learning_element") },
-                { "module_id", new StringContent(elementId.ToString()) },
-                { "is_completed", new StringContent("1") }
+                { "wsfunction", new StringContent("local_adler_trigger_event_cm_viewed") },
+                { "module_id", new StringContent(elementId.ToString()) }
             });
 
         return response.Data[0].Score > 0;
@@ -186,6 +185,9 @@ public class MoodleWebApi : ILMS
 
     public async Task<bool> ProcessXApiViaPlugin(string token, string statement)
     {
+        // // First trigger the "viewed" event
+        // var score = await ScoreGenericElementViaPlugin(token, 0);
+        
         var response = await MoodleCallAsync<ResponseWithDataArray<PluginElementScoreData>>(
             new Dictionary<string, HttpContent>
             {

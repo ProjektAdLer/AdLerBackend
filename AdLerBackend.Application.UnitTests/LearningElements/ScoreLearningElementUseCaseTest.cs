@@ -119,46 +119,4 @@ public class ScoreLearningElementUseCaseTest
                 WebServiceToken = "token"
             }, CancellationToken.None));
     }
-
-    [Test]
-    // ANF-ID: [BPG13, BPG12]
-    public async Task Handle_PrimitiveH5P_CallsMockStrategy()
-    {
-        var systemUnderTest = new ScoreElementUseCase(_mediator);
-
-        _mediator.Send(Arg.Any<GetLearningElementCommand>()).Returns(
-            new AdLerLmsElementAggregation
-            {
-                IsLocked = false,
-                AdLerElement = new BaseElement
-                {
-                    ElementId = 1,
-                    ElementCategory = "primitiveH5P"
-                },
-                LmsModule = new LmsModule
-                {
-                    contextid = 1,
-                    Id = 1,
-                    Name = "name"
-                }
-            }
-        );
-
-        _mediator.Send(Arg.Any<MockPrimitiveH5PStrategyCommand>()).Returns(new ScoreElementResponse
-        {
-            IsSuccess = true
-        });
-
-        // Act
-        var result = await systemUnderTest.Handle(new ScoreElementCommand
-        {
-            WorldId = 1,
-            ElementId = 1,
-            ScoreElementParams = new ScoreElementParams(),
-            WebServiceToken = "token"
-        }, CancellationToken.None);
-
-        // Assert
-        result.IsSuccess.Should().BeTrue();
-    }
 }

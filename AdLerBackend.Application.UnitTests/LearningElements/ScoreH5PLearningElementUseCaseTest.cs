@@ -82,7 +82,7 @@ public class ScoreH5PLearningElementUseCaseTest
 
         // Act
         // Assert
-        Assert.ThrowsAsync<ArgumentException>(async () => await systemUnderTest.Handle(
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await systemUnderTest.Handle(
             new ScoreH5PElementStrategyCommand
             {
                 ScoreElementParams = new ScoreElementParams

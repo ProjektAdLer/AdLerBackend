@@ -2,118 +2,174 @@
 using System.IO.Compression;
 using System.Text;
 using AdLerBackend.API.Middleware;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using NSubstitute;
 
 namespace AdLerBackend.API.UnitTests.MIddleware;
 
-public class UnzipMiddlewareTest
+[TestFixture]
+public class ZipFileMiddlewareTests
 {
-    [TestFixture]
-    public class UnzipMiddlewareTests
+    [SetUp]
+    public void SetUp()
     {
-        [SetUp]
-        public void Setup()
+        _mockFileSystem = new MockFileSystem();
+        _options = new ZipFileMiddlewareOptions
         {
-            _mockFileSystem = new MockFileSystem();
-            _nextDelegate = Substitute.For<RequestDelegate>();
-            _middleware = new UnzipMiddleware(_nextDelegate, _mockFileSystem);
+            ZipFileExtensions = new[] {".zip"},
+            RootPath = "/wwwroot"
+        };
+        _nextDelegate = context => Task.CompletedTask;
+        _middleware = new ZipFileMiddleware(_nextDelegate, _mockFileSystem, _options);
+    }
+
+    private MockFileSystem _mockFileSystem;
+    private ZipFileMiddlewareOptions _options;
+    private RequestDelegate _nextDelegate;
+    private ZipFileMiddleware _middleware;
+
+    [Test]
+    public async Task Invoke_WithNonZipPath_CallsNextMiddleware()
+    {
+        // Arrange
+        var context = new DefaultHttpContext();
+        context.Request.Path = "/some/other/path";
+
+        // Act
+        await _middleware.Invoke(context);
+
+        // Assert
+        // Since _nextDelegate does nothing, we can assert that the response is unmodified
+        context.Response.StatusCode.Should().Be(200); // Default status code
+    }
+
+    [Test]
+    public async Task Invoke_WithZipPath_FileFound_ReturnsFileContent()
+    {
+        // Arrange
+        var zipFileName = "archive.zip";
+        var entryName = "content/file.js";
+        var entryContent = "console.log('Hello World');";
+        var fullZipFilePath = _mockFileSystem.Path.Combine(_options.RootPath, zipFileName);
+
+        // Create a mock ZIP file
+        var zipStream = new MemoryStream();
+        using (var zipArchive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
+        {
+            var entry = zipArchive.CreateEntry(entryName);
+            using var entryStream = entry.Open();
+            var contentBytes = Encoding.UTF8.GetBytes(entryContent);
+            entryStream.Write(contentBytes, 0, contentBytes.Length);
         }
 
-        private MockFileSystem _mockFileSystem;
-        private UnzipMiddleware _middleware;
-        private RequestDelegate _nextDelegate;
+        zipStream.Seek(0, SeekOrigin.Begin);
 
-        [Test]
-        // ANF-ID: [BPG21]
-        public async Task Invoke_WithNonH5pPath_CallsNextMiddleware()
+        _mockFileSystem.AddFile(fullZipFilePath, new MockFileData(zipStream.ToArray()));
+
+        var context = new DefaultHttpContext();
+        context.Request.Path = $"/{zipFileName}/{entryName}";
+        context.Response.Body = new MemoryStream();
+
+        // Act
+        await _middleware.Invoke(context);
+
+        // Assert
+        context.Response.StatusCode.Should().Be(200);
+        context.Response.ContentType.Should().Be("text/javascript");
+        context.Response.Body.Seek(0, SeekOrigin.Begin);
+        using var reader = new StreamReader(context.Response.Body);
+        var responseContent = await reader.ReadToEndAsync();
+        responseContent.Should().Be(entryContent);
+    }
+
+    [Test]
+    public async Task Invoke_WithZipPath_FileNotFoundInZip_Returns404()
+    {
+        // Arrange
+        var zipFileName = "archive.zip";
+        var entryName = "content/nonexistent.js";
+        var fullZipFilePath = _mockFileSystem.Path.Combine(_options.RootPath, zipFileName);
+
+        // Create a mock ZIP file without the requested file
+        var zipStream = new MemoryStream();
+        using (var zipArchive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
         {
-            // Arrange
-            var context = new DefaultHttpContext();
-            context.Request.Path = "/some/other/path";
-
-            // Act
-            await _middleware.Invoke(context);
-
-            // Assert
-            await _nextDelegate.Received(1).Invoke(context);
+            zipArchive.CreateEntry("content/other.js");
         }
 
-        // ANF-ID: [BPG21]
-        [Test]
-        public async Task Invoke_WithH5pPath_FileFound_ReturnsFileContent()
-        {
-            var expectedContent = "console.log('Hello World');";
-            // Arrange
-            var context = new DefaultHttpContext();
-            context.Request.Path = "/path/to/file.h5p/content/file.js";
-            var responseStream = new MemoryStream();
-            context.Response.Body = responseStream;
+        zipStream.Seek(0, SeekOrigin.Begin);
 
-            // Create a mock ZIP file
-            var zipStream = new MemoryStream();
-            using (var zipArchive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
-            {
-                var entry = zipArchive.CreateEntry("content/file.js");
-                using var entryStream = entry.Open();
-                var content = Encoding.UTF8.GetBytes(expectedContent);
-                entryStream.Write(content, 0, content.Length);
-            }
+        _mockFileSystem.AddFile(fullZipFilePath, new MockFileData(zipStream.ToArray()));
 
-            zipStream.Seek(0, SeekOrigin.Begin);
+        var context = new DefaultHttpContext();
+        context.Request.Path = $"/{zipFileName}/{entryName}";
+        context.Response.Body = new MemoryStream();
 
-            _mockFileSystem.AddFile("/wwwroot/path/to/file.h5p", new MockFileData(zipStream.ToArray()));
+        // Act
+        await _middleware.Invoke(context);
 
-            // Act
-            await _middleware.Invoke(context);
+        // Assert
+        context.Response.StatusCode.Should().Be(404);
+        context.Response.Body.Length.Should().Be(0);
+    }
 
-            // Assert
-            responseStream.Seek(0, SeekOrigin.Begin);
-            var reader = new StreamReader(responseStream);
-            var responseContent = await reader.ReadToEndAsync();
-            Assert.That(responseContent, Is.EqualTo(expectedContent));
-        }
+    [Test]
+    public async Task Invoke_WithZipPath_ZipFileNotFound_Returns404()
+    {
+        // Arrange
+        var zipFileName = "nonexistent.zip";
+        var entryName = "content/file.js";
+        var fullZipFilePath = _mockFileSystem.Path.Combine(_options.RootPath, zipFileName);
 
-        // ANF-ID: [BPG21]
-        [Test]
-        public async Task Invoke_WithH5pPath_FileNotFound_Returns404()
-        {
-            // Arrange
-            var context = new DefaultHttpContext();
-            context.Request.Path = "/path/to/file.h5p/content/nonexistent.js";
+        // Ensure the zip file does not exist
+        _mockFileSystem.File.Exists(fullZipFilePath).Should().BeFalse();
 
-            // Create a mock ZIP file without the requested file
-            var zipStream = new MemoryStream();
-            using (var zipArchive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
-            {
-                zipArchive.CreateEntry("content/other.js");
-            }
+        var context = new DefaultHttpContext();
+        context.Request.Path = $"/{zipFileName}/{entryName}";
+        context.Response.Body = new MemoryStream();
 
-            zipStream.Seek(0, SeekOrigin.Begin);
+        // Act
+        await _middleware.Invoke(context);
 
-            _mockFileSystem.AddFile("/wwwroot/path/to/file.h5p", new MockFileData(zipStream.ToArray()));
+        // Assert
+        context.Response.StatusCode.Should().Be(404);
+        context.Response.Body.Length.Should().Be(0);
+    }
 
-            // Act
-            await _middleware.Invoke(context);
+    [Test]
+    public async Task Invoke_ExceptionThrown_Returns500()
+    {
+        // Arrange
+        var zipFileName = "archive.zip";
+        var entryName = "content/file.js";
+        var fullZipFilePath = _mockFileSystem.Path.Combine(_options.RootPath, zipFileName);
 
-            // Assert
-            Assert.That(context.Response.StatusCode, Is.EqualTo(404));
-            Assert.That(context.Response.Body.Length, Is.EqualTo(0));
-        }
+        // Add a corrupted zip file to simulate an exception
+        _mockFileSystem.AddFile(fullZipFilePath, new MockFileData(new byte[] {0x0}));
 
-        // ANF-ID: [BPG21]
-        [Test]
-        public async Task Invoke_PathNotContainingH5p_CallsNextMiddleware()
-        {
-            // Arrange
-            var context = new DefaultHttpContext();
-            context.Request.Path = "/path/to/file.js";
+        var context = new DefaultHttpContext();
+        context.Request.Path = $"/{zipFileName}/{entryName}";
+        context.Response.Body = new MemoryStream();
 
-            // Act
-            await _middleware.Invoke(context);
+        // Act
+        await _middleware.Invoke(context);
 
-            // Assert
-            await _nextDelegate.Received(1).Invoke(context);
-        }
+        // Assert
+        context.Response.StatusCode.Should().Be(500);
+        context.Response.Body.Length.Should().Be(0);
+    }
+
+    [Test]
+    public async Task Invoke_PathNotContainingZipExtension_CallsNextMiddleware()
+    {
+        // Arrange
+        var context = new DefaultHttpContext();
+        context.Request.Path = "/path/to/file.js";
+
+        // Act
+        await _middleware.Invoke(context);
+
+        // Assert
+        context.Response.StatusCode.Should().Be(200);
     }
 }

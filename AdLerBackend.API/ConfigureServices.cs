@@ -1,4 +1,7 @@
+
+
 using System.Diagnostics.CodeAnalysis;
+using System.IO.Abstractions;
 using System.Reflection;
 using AdLerBackend.API.Filters;
 using AdLerBackend.API.Middleware;
@@ -58,14 +61,20 @@ public static class ConfigureServices
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+        
+        // Get the File System from File System abstraction
+        var fileSystem = app.Services.GetRequiredService<IFileSystem>();
 
         app.UseCors(corsPolicyBuilder =>
             corsPolicyBuilder
                 .AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod());
-        app.UseMiddleware<UnzipMiddleware>();
-        app.UseMiddleware<LoggingMiddleware>();
+        app.UseMiddleware<ZipFileMiddleware>(fileSystem , new ZipFileMiddlewareOptions()
+        {
+            RootPath = "wwwroot",
+            ZipFileExtensions = new[] {".h5p"}
+        });
         app.UseStaticFiles(new StaticFileOptions
         {
             ServeUnknownFileTypes = true

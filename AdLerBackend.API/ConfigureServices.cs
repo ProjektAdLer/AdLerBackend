@@ -1,12 +1,9 @@
-
-
 using System.Diagnostics.CodeAnalysis;
-using System.IO.Abstractions;
 using System.Reflection;
 using AdLerBackend.API.Filters;
-using AdLerBackend.API.Middleware;
 using AdLerBackend.Application.Configuration;
 using Microsoft.AspNetCore.Http.Features;
+using UnzipMiddleware;
 
 namespace AdLerBackend.API;
 
@@ -61,16 +58,16 @@ public static class ConfigureServices
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-        
-        // Get the File System from File System abstraction
-        var fileSystem = app.Services.GetRequiredService<IFileSystem>();
+
+        // // Get the File System from File System abstraction
+        // var fileSystem = app.Services.GetRequiredService<IFileSystem>();
 
         app.UseCors(corsPolicyBuilder =>
             corsPolicyBuilder
                 .AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod());
-        app.UseMiddleware<ZipFileMiddleware>(fileSystem , new ZipFileMiddlewareOptions()
+        app.UseMiddleware<ZipFileMiddleware>(new ZipFileMiddlewareOptions
         {
             RootPath = "wwwroot",
             ZipFileExtensions = new[] {".h5p"}

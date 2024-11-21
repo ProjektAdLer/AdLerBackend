@@ -74,7 +74,6 @@ public class WorldsController : BaseApiController
 
     /// <summary>
     ///     Uploads a World to the Backend
-    ///     Beware: The World also has to be imported into the LMS manually (for now)
     /// </summary>
     /// <param name="token"></param>
     /// <returns></returns>

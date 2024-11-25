@@ -10,6 +10,7 @@ namespace AdLerBackend.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            Console.WriteLine("Migration for removing PlayerData table");
             migrationBuilder.DropTable(
                 name: "PlayerData");
         }

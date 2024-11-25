@@ -36,7 +36,7 @@ public static class ConfigureServices
             services.AddDbContext<BaseAdLerBackendDbContext, ProductionContext>();
 
         // Migrate and log that to the console
-        services.BuildServiceProvider().GetService<BaseAdLerBackendDbContext>().Database.Migrate();
+        // services.BuildServiceProvider().GetService<BaseAdLerBackendDbContext>().Database.Migrate();
         
 
 

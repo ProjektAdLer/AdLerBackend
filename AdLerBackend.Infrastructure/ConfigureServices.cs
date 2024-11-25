@@ -9,6 +9,7 @@ using AdLerBackend.Infrastructure.Repositories.Common;
 using AdLerBackend.Infrastructure.Repositories.Worlds;
 using AdLerBackend.Infrastructure.Services;
 using AdLerBackend.Infrastructure.Storage;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AdLerBackend.Infrastructure;
@@ -33,6 +34,10 @@ public static class ConfigureServices
             services.AddDbContext<BaseAdLerBackendDbContext, DevelopmentContext>();
         else
             services.AddDbContext<BaseAdLerBackendDbContext, ProductionContext>();
+
+        // Migrate and log that to the console
+        services.BuildServiceProvider().GetService<BaseAdLerBackendDbContext>().Database.Migrate();
+        
 
 
         return services;

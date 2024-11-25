@@ -13,7 +13,7 @@ public sealed class DevelopmentContext : BaseAdLerBackendDbContext
     public DevelopmentContext(DbContextOptions options, IConfiguration configuration) : base(options)
     {
         _configuration = configuration;
-        Database.EnsureCreated();
+        Database.Migrate();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)

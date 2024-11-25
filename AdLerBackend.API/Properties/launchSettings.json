@@ -23,11 +23,11 @@
         "ASPNETCORE_ENVIRONMENT": "Production",
         "ASPNETCORE_ADLER_MOODLEURL": "http://localhost:8085",
         "ASPNETCORE_ADLER_HTTPPORT": 3000,
-        "ASPNETCORE_DBPASSWORD": "placeholder",
-        "ASPNETCORE_DBUSER": "placeholder",
-        "ASPNETCORE_DBNAME": "placeholder",
-        "ASPNETCORE_DBHOST": "placeholder",
-        "ASPNETCORE_DBPORT": "placeholder",
+        "ASPNETCORE_DBPASSWORD": "b",
+        "ASPNETCORE_DBUSER": "adler_backend",
+        "ASPNETCORE_DBNAME": "adler_backend",
+        "ASPNETCORE_DBHOST": "localhost",
+        "ASPNETCORE_DBPORT": "3306",
         "ASPNETCORE_ADLER_ADLERENGINEURL": "http://localhost:8087"
       }
     }

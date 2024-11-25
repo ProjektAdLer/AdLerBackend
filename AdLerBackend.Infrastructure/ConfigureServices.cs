@@ -6,7 +6,6 @@ using AdLerBackend.Infrastructure.Moodle;
 using AdLerBackend.Infrastructure.Repositories;
 using AdLerBackend.Infrastructure.Repositories.BaseContext;
 using AdLerBackend.Infrastructure.Repositories.Common;
-using AdLerBackend.Infrastructure.Repositories.Player;
 using AdLerBackend.Infrastructure.Repositories.Worlds;
 using AdLerBackend.Infrastructure.Services;
 using AdLerBackend.Infrastructure.Storage;
@@ -25,7 +24,6 @@ public static class ConfigureServices
         services.AddScoped<IFileAccess, StorageService>();
         services.AddSingleton<ISerialization, SerializationService>();
         services.AddScoped<IWorldRepository, WorldRepository>();
-        services.AddScoped<IPlayerRepository, PlayerRepository>();
         services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
         services.AddTransient<IFileSystem, FileSystem>();
         services.AddSingleton(new HttpClient());

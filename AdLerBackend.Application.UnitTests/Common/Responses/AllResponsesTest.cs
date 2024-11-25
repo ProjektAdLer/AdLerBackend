@@ -1,7 +1,6 @@
 using AdLerBackend.Application.Common.DTOs.Storage;
 using AdLerBackend.Application.Common.Responses.Elements;
 using AdLerBackend.Application.Common.Responses.LMSAdapter;
-using AdLerBackend.Application.Common.Responses.Player;
 using AdLerBackend.Application.Common.Responses.World;
 using AdLerBackend.Application.Configuration;
 using AutoBogus;
@@ -27,12 +26,10 @@ public class AllResponsesTest
 
     private static IEnumerable<TestCaseData> GetTestCases()
     {
-        yield return new TestCaseData(new PlayerDataResponse());
         yield return new TestCaseData(new WorldStatusResponse());
         yield return new TestCaseData(new ElementScoreResponse());
         yield return new TestCaseData(new WorldResponse());
         yield return new TestCaseData(new Application.Common.Responses.World.World());
-        yield return new TestCaseData(new PlayerDataResponse());
         yield return new TestCaseData(new ScoreElementResponse());
         yield return new TestCaseData(new LMSWorldContentResponse());
         yield return new TestCaseData(new WorldAtfResponse());

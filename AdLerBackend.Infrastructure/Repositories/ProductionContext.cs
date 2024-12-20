@@ -11,7 +11,8 @@ public sealed class ProductionContext : BaseAdLerBackendDbContext
 {
     private readonly BackendConfig _backendConfig;
 
-    public ProductionContext(DbContextOptions options, IOptions<BackendConfig> confguration) : base(options)
+    public ProductionContext(DbContextOptions<ProductionContext> options, IOptions<BackendConfig> confguration) :
+        base(options)
     {
         _backendConfig = confguration.Value;
         Database.Migrate();

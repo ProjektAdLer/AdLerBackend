@@ -13,8 +13,10 @@ using AdLerBackend.Domain.UnitTests.TestingUtils;
 using AdLerBackend.Infrastructure.Services;
 using AutoBogus;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 
 #pragma warning disable CS8618
 
@@ -26,6 +28,7 @@ public class UploadWorldUseCaseTest
     private IFileAccess _fileAccess;
     private ILMS _ilms;
     private ILmsBackupProcessor _lmsBackupProcessor;
+    private ILogger<UploadWorldUseCase> _logger;
     private IMediator _mediator;
     private ISerialization _serialization;
     private IWorldRepository _worldRepository;
@@ -35,7 +38,7 @@ public class UploadWorldUseCaseTest
     public void Setup()
     {
         _configuration = Options.Create(new BackendConfig
-            { MoodleUrl = "http://localhost", AdLerEngineUrl = "http://localhost" });
+            {MoodleUrl = "http://localhost", AdLerEngineUrl = "http://localhost"});
 
         _lmsBackupProcessor = Substitute.For<ILmsBackupProcessor>();
         _mediator = Substitute.For<IMediator>();
@@ -43,6 +46,7 @@ public class UploadWorldUseCaseTest
         _worldRepository = Substitute.For<IWorldRepository>();
         _serialization = Substitute.For<ISerialization>();
         _ilms = Substitute.For<ILMS>();
+        _logger = Substitute.For<ILogger<UploadWorldUseCase>>();
 
         // _serialization.ClassToJsonString should have original implementation
         _serialization.ClassToJsonString(Arg.Any<object>()).Returns(x => JsonSerializer.Serialize(x.Arg<object>()));
@@ -71,7 +75,7 @@ public class UploadWorldUseCaseTest
         // Arrange
         var systemUnderTest =
             new UploadWorldUseCase(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
-                new SerializationService(), _ilms, _configuration);
+                new SerializationService(), _ilms, _configuration, _logger);
 
         var testGuid = Guid.NewGuid();
 
@@ -114,7 +118,7 @@ public class UploadWorldUseCaseTest
 
         _fileAccess.StoreH5PFilesForWorld(Arg.Any<WorldStoreH5PDto>()).Returns(new Dictionary<string, string>
         {
-            { testGuid.ToString(), testGuid.ToString() }
+            {testGuid.ToString(), testGuid.ToString()}
         });
 
         // mock memory stream with the fake atf file
@@ -155,7 +159,7 @@ public class UploadWorldUseCaseTest
         // Arrange
         var systemUnderTest =
             new UploadWorldUseCase(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
-                _serialization, _ilms, _configuration);
+                _serialization, _ilms, _configuration, _logger);
 
         _mediator.Send(Arg.Any<GetLMSUserDataCommand>()).Returns(new LMSUserDataResponse
         {
@@ -182,7 +186,7 @@ public class UploadWorldUseCaseTest
 
         _fileAccess.StoreH5PFilesForWorld(Arg.Any<WorldStoreH5PDto>()).Returns(new Dictionary<string, string>
         {
-            { "path1", "path1" }
+            {"path1", "path1"}
         });
 
 
@@ -212,7 +216,7 @@ public class UploadWorldUseCaseTest
         // Arrange
         var systemUnderTest =
             new UploadWorldUseCase(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
-                _serialization, _ilms, _configuration);
+                _serialization, _ilms, _configuration, _logger);
 
         var fakedValidDsl = new WorldAtfResponse();
 
@@ -226,5 +230,90 @@ public class UploadWorldUseCaseTest
                 ATFFileStream = new MemoryStream(),
                 WebServiceToken = "testToken"
             }, CancellationToken.None));
+    }
+
+    [Test]
+    public async Task Handle_LmsUploadFails_TriggersCleanup()
+    {
+        // Arrange
+        var systemUnderTest = new UploadWorldUseCase(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
+            _serialization, _ilms, _configuration, _logger);
+
+        _mediator.Send(Arg.Any<GetLMSUserDataCommand>()).Returns(new LMSUserDataResponse {UserId = 1});
+
+        var fakedDsl = AutoFaker.Generate<WorldAtfResponse>();
+        _lmsBackupProcessor.GetWorldDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedDsl);
+
+        _ilms.UploadCourseWorldToLMS(Arg.Any<string>(), Arg.Any<Stream>())
+            .ThrowsAsync(new Exception("Upload failed"));
+
+        // Act & Assert
+        Assert.ThrowsAsync<Exception>(async () => await systemUnderTest.Handle(
+            new UploadWorldCommand
+            {
+                BackupFileStream = new MemoryStream(),
+                ATFFileStream = new MemoryStream(),
+                WebServiceToken = "token"
+            }, CancellationToken.None));
+
+        await _worldRepository.DidNotReceive().AddAsync(Arg.Any<WorldEntity>());
+    }
+
+    [Test]
+    public async Task Handle_FileStorageFails_TriggersCleanup()
+    {
+        // Arrange
+        var systemUnderTest = new UploadWorldUseCase(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
+            _serialization, _ilms, _configuration, _logger);
+
+        _mediator.Send(Arg.Any<GetLMSUserDataCommand>()).Returns(new LMSUserDataResponse {UserId = 1});
+
+        var fakedDsl = AutoFaker.Generate<WorldAtfResponse>();
+        fakedDsl.World.Elements = new List<BaseElement>
+        {
+            new Application.Common.Responses.World.Element {ElementCategory = "h5p", ElementId = 1}
+        };
+        _lmsBackupProcessor.GetWorldDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedDsl);
+
+        _ilms.UploadCourseWorldToLMS(Arg.Any<string>(), Arg.Any<Stream>())
+            .Returns(new LMSCourseCreationResponse {CourseLmsId = 1});
+
+        _fileAccess.StoreH5PFilesForWorld(Arg.Any<WorldStoreH5PDto>())
+            .Throws(new Exception("Storage failed"));
+
+        // Act & Assert
+        Assert.ThrowsAsync<Exception>(async () => await systemUnderTest.Handle(
+            new UploadWorldCommand
+            {
+                BackupFileStream = new MemoryStream(),
+                ATFFileStream = new MemoryStream(),
+                WebServiceToken = "token"
+            }, CancellationToken.None));
+
+        // Verify cleanup
+        await _ilms.Received(1).DeleteCourseAsync(Arg.Any<string>(), 1);
+    }
+
+    [Test]
+    public async Task Handle_UserDataRetrievalFails_NoCleanupNeeded()
+    {
+        // Arrange
+        var systemUnderTest = new UploadWorldUseCase(_lmsBackupProcessor, _mediator, _fileAccess, _worldRepository,
+            _serialization, _ilms, _configuration, _logger);
+
+        _mediator.Send(Arg.Any<GetLMSUserDataCommand>())
+            .ThrowsAsync(new Exception("User data retrieval failed"));
+
+        // Act & Assert
+        Assert.ThrowsAsync<Exception>(async () => await systemUnderTest.Handle(
+            new UploadWorldCommand
+            {
+                BackupFileStream = new MemoryStream(),
+                ATFFileStream = new MemoryStream(),
+                WebServiceToken = "token"
+            }, CancellationToken.None));
+
+        await _ilms.DidNotReceive().DeleteCourseAsync(Arg.Any<string>(), Arg.Any<int>());
+        _fileAccess.DidNotReceive().DeleteWorld(Arg.Any<WorldDeleteDto>());
     }
 }

@@ -5,19 +5,13 @@ using MediatR;
 
 namespace AdLerBackend.Application.World.GetWorldDetail;
 
-public class GetWorldDetailUseCase : IRequestHandler<GetWorldDetailCommand, WorldAtfResponse>
+public class GetWorldDetailUseCase(
+    IWorldRepository worldRepository,
+    IFileAccess fileAccess,
+    ISerialization serialization)
+    : IRequestHandler<GetWorldDetailCommand, WorldAtfResponse>
 {
-    private readonly IFileAccess _fileAccess;
-    private readonly ISerialization _serialization;
-    private readonly IWorldRepository _worldRepository;
-
-    public GetWorldDetailUseCase(IWorldRepository worldRepository, IFileAccess fileAccess,
-        ISerialization serialization)
-    {
-        _worldRepository = worldRepository;
-        _fileAccess = fileAccess;
-        _serialization = serialization;
-    }
+    private readonly IFileAccess _fileAccess = fileAccess;
 
     /// <summary>
     ///     Get the course detail for a given course id
@@ -28,10 +22,10 @@ public class GetWorldDetailUseCase : IRequestHandler<GetWorldDetailCommand, Worl
         CancellationToken cancellationToken)
     {
         // Get Course from Database
-        var course = await _worldRepository.GetAsync(request.WorldId);
+        var course = await worldRepository.GetAsync(request.WorldId);
         if (course == null)
             throw new NotFoundException("Course with the Id " + request.WorldId + " not found");
 
-        return _serialization.GetObjectFromJsonString<WorldAtfResponse>(course.AtfJson);
+        return serialization.GetObjectFromJsonString<WorldAtfResponse>(course.AtfJson);
     }
 }

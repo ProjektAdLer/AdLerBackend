@@ -12,18 +12,12 @@ using Microsoft.Extensions.Options;
 
 namespace AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.ScoreH5PStrategy
 {
-    public class ScoreH5PElementStrategyHandler : IRequestHandler<ScoreH5PElementStrategyCommand, ScoreElementResponse>
+    public class ScoreH5PElementStrategyHandler(ISerialization serialization, ILMS lms, IOptions<BackendConfig> config)
+        : IRequestHandler<ScoreH5PElementStrategyCommand, ScoreElementResponse>
     {
-        private readonly BackendConfig _config;
-        private readonly ILMS _lms;
-        private readonly ISerialization _serialization;
-
-        public ScoreH5PElementStrategyHandler(ISerialization serialization, ILMS lms, IOptions<BackendConfig> config)
-        {
-            _serialization = serialization ?? throw new ArgumentNullException(nameof(serialization));
-            _lms = lms ?? throw new ArgumentNullException(nameof(lms));
-            _config = config?.Value ?? throw new ArgumentNullException(nameof(config));
-        }
+        private readonly BackendConfig _config = config?.Value ?? throw new ArgumentNullException(nameof(config));
+        private readonly ILMS _lms = lms ?? throw new ArgumentNullException(nameof(lms));
+        private readonly ISerialization _serialization = serialization ?? throw new ArgumentNullException(nameof(serialization));
 
         public async Task<ScoreElementResponse> Handle(ScoreH5PElementStrategyCommand request, CancellationToken cancellationToken)
         {

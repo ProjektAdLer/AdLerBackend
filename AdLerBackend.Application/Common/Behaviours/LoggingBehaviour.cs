@@ -4,15 +4,10 @@ using Microsoft.Extensions.Logging;
 
 namespace AdLerBackend.Application.Common.Behaviours;
 
-public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
+public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TRequest, TResponse>> logger)
+    : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : notnull
 {
-    private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
-
-    public LoggingBehavior(ILogger<LoggingBehavior<TRequest, TResponse>> logger)
-    {
-        _logger = logger;
-    }
-
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
@@ -20,7 +15,7 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
 
         var requestNameWithGuid = $"{requestName}";
 
-        _logger.LogTrace("[START] {RequestNameWithGuid}", requestNameWithGuid);
+        logger.LogTrace("[START] {RequestNameWithGuid}", requestNameWithGuid);
 
         TResponse response;
         var stopwatch = Stopwatch.StartNew();
@@ -32,7 +27,7 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
         finally
         {
             stopwatch.Stop();
-            _logger.LogTrace(
+            logger.LogTrace(
                 "[END] {RequestNameWithGuid}; Execution time={StopwatchElapsedMilliseconds}ms",
                 requestNameWithGuid, stopwatch.ElapsedMilliseconds);
         }

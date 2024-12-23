@@ -5,19 +5,13 @@ using MediatR;
 
 namespace AdLerBackend.Application.Common.InternalUseCases.GetLearningElement;
 
-public class GetLearningElementUseCase : IRequestHandler<GetLearningElementCommand, AdLerLmsElementAggregation>
+public class GetLearningElementUseCase(IMediator mediator)
+    : IRequestHandler<GetLearningElementCommand, AdLerLmsElementAggregation>
 {
-    private readonly IMediator _mediator;
-
-    public GetLearningElementUseCase(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     public async Task<AdLerLmsElementAggregation> Handle(GetLearningElementCommand request,
         CancellationToken cancellationToken)
     {
-        var learningElementModules = await _mediator.Send(new GetAllElementsFromLmsCommand
+        var learningElementModules = await mediator.Send(new GetAllElementsFromLmsCommand
         {
             WorldId = request.WorldId,
             WebServiceToken = request.WebServiceToken

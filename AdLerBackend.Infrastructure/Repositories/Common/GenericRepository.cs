@@ -4,14 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AdLerBackend.Infrastructure.Repositories.Common;
 
-public class GenericRepository<T, TId> : IGenericRepository<T, TId> where T : class
+public class GenericRepository<T, TId>(BaseAdLerBackendDbContext dbContext) : IGenericRepository<T, TId>
+    where T : class
 {
-    protected readonly BaseAdLerBackendDbContext Context;
-
-    public GenericRepository(BaseAdLerBackendDbContext dbContext)
-    {
-        Context = dbContext;
-    }
+    protected readonly BaseAdLerBackendDbContext Context = dbContext;
 
     public async Task<T> AddAsync(T entity)
     {

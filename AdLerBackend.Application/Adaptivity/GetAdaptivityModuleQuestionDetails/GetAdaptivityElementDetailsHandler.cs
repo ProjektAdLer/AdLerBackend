@@ -12,48 +12,39 @@ namespace AdLerBackend.Application.Adaptivity.GetAdaptivityModuleQuestionDetails
 
 [UsedImplicitly]
 public class
-    GetAdaptivityElementDetailsHandler : IRequestHandler<GetAdaptivityElementDetailsCommand,
-    GetAdaptivityElementDetailsResponse>
-{
-    private readonly ILMS _lms;
-    private readonly IMediator _mediator;
-    private readonly ISerialization _serialization;
-    private readonly IWorldRepository _worldRepository;
-
-    public GetAdaptivityElementDetailsHandler(ILMS lms, IMediator mediator, IWorldRepository worldRepository,
+    GetAdaptivityElementDetailsHandler(
+        ILMS lms,
+        IMediator mediator,
+        IWorldRepository worldRepository,
         ISerialization serialization)
-    {
-        _lms = lms;
-        _mediator = mediator;
-        _worldRepository = worldRepository;
-        _serialization = serialization;
-    }
-
+    : IRequestHandler<GetAdaptivityElementDetailsCommand,
+        GetAdaptivityElementDetailsResponse>
+{
     public async Task<GetAdaptivityElementDetailsResponse> Handle(GetAdaptivityElementDetailsCommand request,
         CancellationToken cancellationToken)
     {
-        var learningElementModule = await _mediator.Send(new GetLearningElementCommand
+        var learningElementModule = await mediator.Send(new GetLearningElementCommand
         {
             WebServiceToken = request.WebServiceToken,
             WorldId = request.LearningWorldId,
             ElementId = request.ElementId
         }, cancellationToken);
 
-        var learningWorld = await _worldRepository.GetAsync(request.LearningWorldId);
+        var learningWorld = await worldRepository.GetAsync(request.LearningWorldId);
 
-        var atfObject = _serialization.GetObjectFromJsonString<WorldAtfResponse>(learningWorld.AtfJson);
+        var atfObject = serialization.GetObjectFromJsonString<WorldAtfResponse>(learningWorld.AtfJson);
 
         var adaptivityElementInAtf = atfObject.World.Elements.FirstOrDefault(x =>
             x.ElementId == request.ElementId) as AdaptivityElement;
 
         var adaptivityQuestionDetails =
-            await _lms.GetAdaptivityElementDetailsAsync(request.WebServiceToken,
+            await lms.GetAdaptivityElementDetailsAsync(request.WebServiceToken,
                 learningElementModule.LmsModule.Id);
 
-        var adaptivityTaskDetails = await _lms.GetAdaptivityTaskDetailsAsync(request.WebServiceToken,
+        var adaptivityTaskDetails = await lms.GetAdaptivityTaskDetailsAsync(request.WebServiceToken,
             learningElementModule.LmsModule.Id);
 
-        var adaptivityElementScore = await _lms.GetElementScoreFromPlugin(request.WebServiceToken,
+        var adaptivityElementScore = await lms.GetElementScoreFromPlugin(request.WebServiceToken,
             learningElementModule.LmsModule.Id);
 
 

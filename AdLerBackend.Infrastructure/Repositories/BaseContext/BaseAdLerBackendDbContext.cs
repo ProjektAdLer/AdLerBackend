@@ -6,12 +6,8 @@ namespace AdLerBackend.Infrastructure.Repositories.BaseContext;
 
 // Exclude this from code coverage as it is just a wrapper around the DbContext
 [ExcludeFromCodeCoverage]
-public class BaseAdLerBackendDbContext : DbContext
+public class BaseAdLerBackendDbContext(DbContextOptions options) : DbContext(options)
 {
-    public BaseAdLerBackendDbContext(DbContextOptions options) : base(options)
-    {
-    }
-
     public DbSet<WorldEntity> Worlds { get; set; } = null!;
 
     private DbSet<H5PLocationEntity> H5PLocations { get; set; } = null!;

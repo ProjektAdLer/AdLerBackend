@@ -5,33 +5,24 @@ using Microsoft.Extensions.Logging;
 
 namespace AdLerBackend.Infrastructure.Storage;
 
-public class StorageService : IFileAccess
+public class StorageService(IFileSystem fileSystem, ILogger<StorageService> logger) : IFileAccess
 {
-    private readonly IFileSystem _fileSystem;
-    private readonly ILogger<StorageService> _logger;
-
-    public StorageService(IFileSystem fileSystem, ILogger<StorageService> logger)
-    {
-        _fileSystem = fileSystem;
-        _logger = logger;
-    }
-
     public Dictionary<string, string>? StoreH5PFilesForWorld(WorldStoreH5PDto worldToStoreH5P)
     {
-        var workingDir = _fileSystem.Path.Join("wwwroot", "courses", worldToStoreH5P.CourseInstanceId.ToString(),
+        var workingDir = fileSystem.Path.Join("wwwroot", "courses", worldToStoreH5P.CourseInstanceId.ToString(),
             "h5p");
 
         // create directory if not exists
-        if (!_fileSystem.Directory.Exists(workingDir))
-            _fileSystem.Directory.CreateDirectory(workingDir);
+        if (!fileSystem.Directory.Exists(workingDir))
+            fileSystem.Directory.CreateDirectory(workingDir);
 
         var h5PFilePaths = new Dictionary<string, string>();
 
         foreach (var h5PFile in worldToStoreH5P.H5PFiles)
         {
-            var h5PFilePath = _fileSystem.Path.Combine(workingDir, h5PFile.H5PUuid + ".h5p");
+            var h5PFilePath = fileSystem.Path.Combine(workingDir, h5PFile.H5PUuid + ".h5p");
 
-            var fileStream = _fileSystem.File.Create(h5PFilePath);
+            var fileStream = fileSystem.File.Create(h5PFilePath);
             h5PFile.H5PFile!.CopyTo(fileStream);
             fileStream.Close();
 
@@ -44,15 +35,15 @@ public class StorageService : IFileAccess
 
     public bool DeleteWorld(WorldDeleteDto worldToDelete)
     {
-        var workingDir = _fileSystem.Path.Join("wwwroot", "courses", worldToDelete.WorldInstanceId.ToString());
+        var workingDir = fileSystem.Path.Join("wwwroot", "courses", worldToDelete.WorldInstanceId.ToString());
 
-        if (!_fileSystem.Directory.Exists(workingDir))
+        if (!fileSystem.Directory.Exists(workingDir))
         {
-            _logger.LogWarning($"World with ID {worldToDelete.WorldInstanceId} does not exist.");
+            logger.LogWarning($"World with ID {worldToDelete.WorldInstanceId} does not exist.");
             return true;
         }
 
-        _fileSystem.Directory.Delete(workingDir, true);
+        fileSystem.Directory.Delete(workingDir, true);
         return true;
     }
 }

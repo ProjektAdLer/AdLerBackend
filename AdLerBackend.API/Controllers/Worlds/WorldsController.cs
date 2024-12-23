@@ -18,13 +18,8 @@ namespace AdLerBackend.API.Controllers.Worlds;
 ///     Manages all the Worlds
 /// </summary>
 [Route("api/Worlds")]
-public class WorldsController : BaseApiController
+public class WorldsController(IMediator mediator) : BaseApiController(mediator)
 {
-    public WorldsController(IMediator mediator) : base(mediator)
-    {
-    }
-
-
     /// <summary>
     ///     Gets all Worlds that a Author has created
     /// </summary>

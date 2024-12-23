@@ -9,12 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace AdLerBackend.API.Controllers.LMSUserService;
 
 [Route("api/Users")]
-public class LmsLoginController : BaseApiController
+public class LmsLoginController(IMediator mediator) : BaseApiController(mediator)
 {
-    public LmsLoginController(IMediator mediator) : base(mediator)
-    {
-    }
-
     [HttpGet("UserData")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]

@@ -9,21 +9,12 @@ namespace AdLerBackend.Application.Element.GetElementScore;
 ///     Gets the Score of a Learning Element using the LMS Plugin
 /// </summary>
 public class
-    GetElementScoreUseCase : IRequestHandler<GetElementScoreCommand, ElementScoreResponse>
+    GetElementScoreUseCase(IMediator mediator, ILMS lms) : IRequestHandler<GetElementScoreCommand, ElementScoreResponse>
 {
-    private readonly ILMS _lms;
-    private readonly IMediator _mediator;
-
-    public GetElementScoreUseCase(IMediator mediator, ILMS lms)
-    {
-        _mediator = mediator;
-        _lms = lms;
-    }
-
     public async Task<ElementScoreResponse> Handle(GetElementScoreCommand request,
         CancellationToken cancellationToken)
     {
-        var learningElementModule = await _mediator.Send(new GetLearningElementCommand
+        var learningElementModule = await mediator.Send(new GetLearningElementCommand
         {
             WebServiceToken = request.WebServiceToken,
             WorldId = request.LearningWorldId,
@@ -39,7 +30,7 @@ public class
             };
 
         var result =
-            await _lms.GetElementScoreFromPlugin(request.WebServiceToken, learningElementModule.LmsModule.Id);
+            await lms.GetElementScoreFromPlugin(request.WebServiceToken, learningElementModule.LmsModule.Id);
 
         return new ElementScoreResponse
         {

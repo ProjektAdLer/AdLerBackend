@@ -8,27 +8,19 @@ using MediatR;
 namespace AdLerBackend.Application.Common.InternalUseCases.GetAllElementsFromLms;
 
 public class
-    GetAllElementsFromLmsUseCase : IRequestHandler<GetAllElementsFromLmsCommand,
-    GetAllElementsFromLmsWithAdLerIdResponse>
+    GetAllElementsFromLmsUseCase(
+        IWorldRepository worldRepository,
+        ISerialization serialization,
+        ILMS lms)
+    : IRequestHandler<GetAllElementsFromLmsCommand,
+        GetAllElementsFromLmsWithAdLerIdResponse>
 {
-    private readonly ILMS _lms;
-    private readonly ISerialization _serialization;
-    private readonly IWorldRepository _worldRepository;
-
-    public GetAllElementsFromLmsUseCase(IWorldRepository worldRepository,
-        ISerialization serialization, ILMS lms)
-    {
-        _worldRepository = worldRepository;
-        _serialization = serialization;
-        _lms = lms;
-    }
-
     public async Task<GetAllElementsFromLmsWithAdLerIdResponse> Handle(GetAllElementsFromLmsCommand request,
         CancellationToken cancellationToken)
     {
         var worldEntity = await GetWorldEntity(request.WorldId);
-        var atfObject = _serialization.GetObjectFromJsonString<WorldAtfResponse>(worldEntity.AtfJson);
-        var worldContentFromLms = await _lms.GetWorldContentAsync(request.WebServiceToken, worldEntity.LmsWorldId);
+        var atfObject = serialization.GetObjectFromJsonString<WorldAtfResponse>(worldEntity.AtfJson);
+        var worldContentFromLms = await lms.GetWorldContentAsync(request.WebServiceToken, worldEntity.LmsWorldId);
         var modulesWithUuid = await GetModulesWithUuid(request.WebServiceToken, worldEntity.LmsWorldId,
             atfObject.World.Elements.Select(x => x.ElementUuid).ToList());
         var modulesWithAdLerId = MapModulesWithAdLerId(atfObject, worldContentFromLms, modulesWithUuid);
@@ -44,7 +36,7 @@ public class
 
     private async Task<WorldEntity> GetWorldEntity(int worldId)
     {
-        var worldEntity = await _worldRepository.GetAsync(worldId);
+        var worldEntity = await worldRepository.GetAsync(worldId);
         if (worldEntity == null) throw new NotFoundException($"WorldEntity with the Id {worldId} not found");
         return worldEntity;
     }
@@ -52,7 +44,7 @@ public class
     private async Task<IEnumerable<LmsUuidResponse>> GetModulesWithUuid(string webServiceToken, int lmsWorldId,
         List<Guid> elementUuids)
     {
-        return await _lms.GetLmsElementIdsByUuidsAsync(webServiceToken, lmsWorldId, elementUuids);
+        return await lms.GetLmsElementIdsByUuidsAsync(webServiceToken, lmsWorldId, elementUuids);
     }
 
     // Rider Coverage report provides a false positive for this method. So this is excluded in DotSettings

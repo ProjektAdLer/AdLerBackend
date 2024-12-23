@@ -4,23 +4,16 @@
 
 namespace AdLerBackend.API.Middleware;
 
-public class LoggingMiddleware
+public class LoggingMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    public LoggingMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
-
     public async Task InvokeAsync(HttpContext context)
     {
         if (!string.IsNullOrEmpty(context.TraceIdentifier))
             using (LogContext.PushProperty("TraceIdentifier", $"TraceIdentifier: {context.TraceIdentifier} "))
             {
-                await _next(context);
+                await next(context);
             }
         else
-            await _next(context);
+            await next(context);
     }
 }

@@ -6,19 +6,12 @@ using MediatR;
 namespace AdLerBackend.Application.Element.GetElementSource;
 
 public class
-    GetElementSourceUseCase : IRequestHandler<GetElementSourceCommand, GetElementSourceResponse>
+    GetElementSourceUseCase(IMediator mediator) : IRequestHandler<GetElementSourceCommand, GetElementSourceResponse>
 {
-    private readonly IMediator _mediator;
-
-    public GetElementSourceUseCase(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     public async Task<GetElementSourceResponse> Handle(GetElementSourceCommand request,
         CancellationToken cancellationToken)
     {
-        var learningElementModule = await _mediator.Send(new GetLearningElementCommand
+        var learningElementModule = await mediator.Send(new GetLearningElementCommand
         {
             WebServiceToken = request.WebServiceToken,
             WorldId = request.WorldId,
@@ -37,7 +30,7 @@ public class
                                request.WebServiceToken
                 };
             case "h5pactivity":
-                var data = await _mediator.Send(new GetH5PFilePathCommand
+                var data = await mediator.Send(new GetH5PFilePathCommand
                 {
                     WorldId = request.WorldId,
                     ElementId = request.ElementId,

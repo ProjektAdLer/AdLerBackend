@@ -4,18 +4,11 @@ using MediatR;
 
 namespace AdLerBackend.Application.LMS.GetLMSToken;
 
-public class GetLmsUserTokenUseCase : IRequestHandler<GetLMSTokenCommand, LMSUserTokenResponse>
+public class GetLmsUserTokenUseCase(ILMS ilms) : IRequestHandler<GetLMSTokenCommand, LMSUserTokenResponse>
 {
-    private readonly ILMS _ilms;
-
-    public GetLmsUserTokenUseCase(ILMS ilms)
-    {
-        _ilms = ilms;
-    }
-
     public async Task<LMSUserTokenResponse> Handle(GetLMSTokenCommand request, CancellationToken cancellationToken)
     {
-        var lmsTokenDto = await _ilms.GetLMSUserTokenAsync(request.UserName, request.Password);
+        var lmsTokenDto = await ilms.GetLMSUserTokenAsync(request.UserName, request.Password);
         return lmsTokenDto;
     }
 }

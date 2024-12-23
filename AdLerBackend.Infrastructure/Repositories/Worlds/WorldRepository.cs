@@ -6,13 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AdLerBackend.Infrastructure.Repositories.Worlds;
 
-public class WorldRepository : GenericRepository<WorldEntity, int>, IWorldRepository
+public class WorldRepository(BaseAdLerBackendDbContext dbContext)
+    : GenericRepository<WorldEntity, int>(dbContext), IWorldRepository
 {
-    public WorldRepository(BaseAdLerBackendDbContext dbContext) : base(dbContext)
-    {
-    }
-
-
     public async Task<IList<WorldEntity>> GetAllForAuthor(int authorId)
     {
         var allCoursesForAuthor = await Context.Worlds.Where(x => x.AuthorId == authorId).ToListAsync();

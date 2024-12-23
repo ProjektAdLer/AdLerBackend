@@ -1,8 +1,3 @@
 ﻿namespace AdLerBackend.Application.Common.Exceptions;
 
-public class WorldCreationException : Exception
-{
-    public WorldCreationException(string? message) : base(message)
-    {
-    }
-}
+public class WorldCreationException(string? message) : Exception(message);

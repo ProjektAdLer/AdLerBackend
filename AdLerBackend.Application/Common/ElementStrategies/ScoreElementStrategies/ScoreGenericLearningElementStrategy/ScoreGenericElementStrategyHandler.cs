@@ -5,22 +5,15 @@ using MediatR;
 namespace AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.
     ScoreGenericLearningElementStrategy;
 
-public class ScoreGenericElementStrategyHandler : IRequestHandler<ScoreGenericElementStrategyCommand,
+public class ScoreGenericElementStrategyHandler(ILMS ilms) : IRequestHandler<ScoreGenericElementStrategyCommand,
     ScoreElementResponse>
 {
-    private readonly ILMS _ilms;
-
-    public ScoreGenericElementStrategyHandler(ILMS ilms)
-    {
-        _ilms = ilms;
-    }
-
     public async Task<ScoreElementResponse> Handle(ScoreGenericElementStrategyCommand request,
         CancellationToken cancellationToken)
     {
         return new ScoreElementResponse
         {
-            IsSuccess = await _ilms.ScoreGenericElementViaPlugin(request.WebServiceToken, request.LmsModule.Id)
+            IsSuccess = await ilms.ScoreGenericElementViaPlugin(request.WebServiceToken, request.LmsModule.Id)
         };
     }
 }

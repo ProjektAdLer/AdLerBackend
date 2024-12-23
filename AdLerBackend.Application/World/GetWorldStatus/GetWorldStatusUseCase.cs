@@ -7,21 +7,12 @@ using MediatR;
 namespace AdLerBackend.Application.World.GetWorldStatus;
 
 public class
-    GetWorldStatusUseCase : IRequestHandler<GetWorldStatusCommand, WorldStatusResponse>
+    GetWorldStatusUseCase(IMediator mediator, ILMS ilms) : IRequestHandler<GetWorldStatusCommand, WorldStatusResponse>
 {
-    private readonly ILMS _ilms;
-    private readonly IMediator _mediator;
-
-    public GetWorldStatusUseCase(IMediator mediator, ILMS ilms)
-    {
-        _mediator = mediator;
-        _ilms = ilms;
-    }
-
     public async Task<WorldStatusResponse> Handle(GetWorldStatusCommand request,
         CancellationToken cancellationToken)
     {
-        var courseModules = await _mediator.Send(new GetAllElementsFromLmsCommand
+        var courseModules = await mediator.Send(new GetAllElementsFromLmsCommand
         {
             WorldId = request.WorldId,
             WebServiceToken = request.WebServiceToken
@@ -30,7 +21,7 @@ public class
 
         // Get Course Status from LMS 
         var courseStatus =
-            await _ilms.GetCourseStatusViaPlugin(request.WebServiceToken, courseModules.LmsCourseId);
+            await ilms.GetCourseStatusViaPlugin(request.WebServiceToken, courseModules.LmsCourseId);
 
         var response = new WorldStatusResponse
         {

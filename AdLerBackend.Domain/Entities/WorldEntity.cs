@@ -2,7 +2,14 @@
 
 namespace AdLerBackend.Domain.Entities;
 
-public class WorldEntity : IBaseEntity
+public class WorldEntity(
+    string name,
+    List<H5PLocationEntity> h5PFilesInCourse,
+    int authorId,
+    string atfJson,
+    int lmsWorldId,
+    int? id = null)
+    : IBaseEntity
 {
     /// <summary>
     ///     This Empty Constructor is needed for EntityFramework as well as for AutoMapper.
@@ -10,37 +17,19 @@ public class WorldEntity : IBaseEntity
     ///     (EF Core cannot set navigation properties using a constructor.)
     /// </summary>
     [UsedImplicitly]
-    internal WorldEntity()
+    internal WorldEntity() : this("", new List<H5PLocationEntity>(), 0, "", 0, null)
     {
         // Initialize every property with a default value
-        Id = null;
-        Name = "";
-        H5PFilesInCourse = new List<H5PLocationEntity>();
-        AuthorId = 0;
-        LmsWorldId = 0;
-        AtfJson = "";
     }
 
 
-    public WorldEntity(string name, List<H5PLocationEntity> h5PFilesInCourse, int authorId,
-        string atfJson,
-        int lmsWorldId, int? id = null)
-    {
-        Id = id;
-        Name = name;
-        H5PFilesInCourse = h5PFilesInCourse;
-        AuthorId = authorId;
-        LmsWorldId = lmsWorldId;
-        AtfJson = atfJson;
-    }
+    public string Name { get; set; } = name;
+    public int LmsWorldId { get; set; } = lmsWorldId;
+    public List<H5PLocationEntity> H5PFilesInCourse { get; set; } = h5PFilesInCourse;
 
-    public string Name { get; set; }
-    public int LmsWorldId { get; set; }
-    public List<H5PLocationEntity> H5PFilesInCourse { get; set; }
-
-    public int AuthorId { get; set; }
+    public int AuthorId { get; set; } = authorId;
 
     // This is a very long string
-    public string AtfJson { get; set; }
-    public int? Id { get; set; }
+    public string AtfJson { get; set; } = atfJson;
+    public int? Id { get; set; } = id;
 }

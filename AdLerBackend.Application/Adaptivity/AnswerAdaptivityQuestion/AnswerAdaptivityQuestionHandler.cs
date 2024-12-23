@@ -13,36 +13,27 @@ using MediatR;
 namespace AdLerBackend.Application.Adaptivity.AnswerAdaptivityQuestion;
 
 public class
-    AnswerAdaptivityQuestionHandler : IRequestHandler<AnswerAdaptivityQuestionCommand, AnswerAdaptivityQuestionResponse>
-{
-    private readonly ILMS _lms;
-    private readonly IMediator _mediator;
-    private readonly ISerialization _serialization;
-    private readonly IWorldRepository _worldRepository;
-
-    public AnswerAdaptivityQuestionHandler(ILMS lms, IMediator mediator, IWorldRepository worldRepository,
+    AnswerAdaptivityQuestionHandler(
+        ILMS lms,
+        IMediator mediator,
+        IWorldRepository worldRepository,
         ISerialization serialization)
-    {
-        _lms = lms;
-        _mediator = mediator;
-        _worldRepository = worldRepository;
-        _serialization = serialization;
-    }
-
+    : IRequestHandler<AnswerAdaptivityQuestionCommand, AnswerAdaptivityQuestionResponse>
+{
     public async Task<AnswerAdaptivityQuestionResponse> Handle(AnswerAdaptivityQuestionCommand request,
         CancellationToken cancellationToken)
     {
         // Get LearningElement Activity Id
-        var learningElementModule = await _mediator.Send(new GetLearningElementCommand
+        var learningElementModule = await mediator.Send(new GetLearningElementCommand
         {
             WebServiceToken = request.WebServiceToken,
             WorldId = request.WorldId,
             ElementId = request.ElementId
         }, cancellationToken);
 
-        var learningWorld = await _worldRepository.GetAsync(request.WorldId);
+        var learningWorld = await worldRepository.GetAsync(request.WorldId);
 
-        var atfObject = _serialization.GetObjectFromJsonString<WorldAtfResponse>(learningWorld.AtfJson);
+        var atfObject = serialization.GetObjectFromJsonString<WorldAtfResponse>(learningWorld.AtfJson);
 
         var adaptivityElementInAtf = atfObject.World.Elements.FirstOrDefault(x =>
             x.ElementId == request.ElementId) as AdaptivityElement;
@@ -50,7 +41,7 @@ public class
         var questionUUID = IdExtractor.GetUuidFromQuestionId(request.QuestionId, adaptivityElementInAtf);
 
 
-        var resultFromLMS = await _lms.AnswerAdaptivityQuestionsAsync(request.WebServiceToken,
+        var resultFromLMS = await lms.AnswerAdaptivityQuestionsAsync(request.WebServiceToken,
             learningElementModule.LmsModule.Id,
             new List<AdaptivityAnsweredQuestionTo>
             {

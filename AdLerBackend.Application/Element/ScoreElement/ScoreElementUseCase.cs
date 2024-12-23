@@ -17,26 +17,19 @@ namespace AdLerBackend.Application.Element.ScoreElement;
 ///     the Plugin
 /// </summary>
 [UsedImplicitly]
-public class ScoreElementUseCase : IRequestHandler<ScoreElementCommand, ScoreElementResponse>
+public class ScoreElementUseCase(IMediator mediator) : IRequestHandler<ScoreElementCommand, ScoreElementResponse>
 {
-    private readonly IMediator _mediator;
-
-    public ScoreElementUseCase(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     public async Task<ScoreElementResponse> Handle(ScoreElementCommand request,
         CancellationToken cancellationToken)
     {
-        var learningElementModule = await _mediator.Send(new GetLearningElementCommand
+        var learningElementModule = await mediator.Send(new GetLearningElementCommand
         {
             ElementId = request.ElementId,
             WorldId = request.WorldId,
             WebServiceToken = request.WebServiceToken
         }, cancellationToken);
 
-        var elementScoreResponse = await _mediator.Send(GetStrategy(learningElementModule.AdLerElement.ElementCategory,
+        var elementScoreResponse = await mediator.Send(GetStrategy(learningElementModule.AdLerElement.ElementCategory,
             new GetStrategyParams
             {
                 LearningElementMoule = learningElementModule.LmsModule,

@@ -6,12 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AdLerBackend.API.Controllers;
 
 [ApiController]
-public class BaseApiController : ControllerBase
+public class BaseApiController(IMediator mediator) : ControllerBase
 {
-    protected readonly IMediator Mediator;
-
-    public BaseApiController(IMediator mediator)
-    {
-        Mediator = mediator;
-    }
+    protected readonly IMediator Mediator = mediator;
 }

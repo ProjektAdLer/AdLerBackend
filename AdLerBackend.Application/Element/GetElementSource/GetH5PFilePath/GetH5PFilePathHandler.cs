@@ -5,20 +5,14 @@ using MediatR;
 
 namespace AdLerBackend.Application.Element.GetElementSource.GetH5PFilePath;
 
-public class GetH5PFilePathHandler : IRequestHandler<GetH5PFilePathCommand, GetElementSourceResponse>
+public class GetH5PFilePathHandler(IWorldRepository worldRepository)
+    : IRequestHandler<GetH5PFilePathCommand, GetElementSourceResponse>
 {
-    private readonly IWorldRepository _worldRepository;
-
-    public GetH5PFilePathHandler(IWorldRepository worldRepository)
-    {
-        _worldRepository = worldRepository;
-    }
-
     public async Task<GetElementSourceResponse> Handle(GetH5PFilePathCommand request,
         CancellationToken cancellationToken)
     {
         // No Auth is needed here, because the file is public
-        var course = await _worldRepository.GetAsync(request.WorldId);
+        var course = await worldRepository.GetAsync(request.WorldId);
 
         if (course == null) throw new NotFoundException("Course not Found");
 

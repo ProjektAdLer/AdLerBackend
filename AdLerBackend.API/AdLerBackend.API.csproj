@@ -7,7 +7,7 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NoWarn>$(NoWarn);1591</NoWarn>
-        <LangVersion>11</LangVersion>
+        <LangVersion>12</LangVersion>
         <Exclude>[*microsoft.net.test.sdk*]*</Exclude>
     </PropertyGroup>
 

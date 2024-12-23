@@ -7,7 +7,7 @@
         <ExcludeFromCodeCoverage>true</ExcludeFromCodeCoverage>
         <IsPackable>false</IsPackable>
         <Exclude>[*microsoft.net.test.sdk*]*</Exclude>
-        <LangVersion>11</LangVersion>
+        <LangVersion>12</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>

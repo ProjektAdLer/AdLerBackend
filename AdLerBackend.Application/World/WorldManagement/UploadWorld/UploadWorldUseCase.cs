@@ -11,35 +11,23 @@ using Microsoft.Extensions.Options;
 
 namespace AdLerBackend.Application.World.WorldManagement.UploadWorld;
 
-public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, CreateWorldResponse>
+public class UploadWorldUseCase(
+    ILmsBackupProcessor lmsBackupProcessor,
+    IMediator mediator,
+    IFileAccess fileAccess,
+    IWorldRepository worldRepository,
+    ISerialization serialization,
+    ILMS lms,
+    IOptions<BackendConfig> configuration)
+    : IRequestHandler<UploadWorldCommand, CreateWorldResponse>
 {
-    private readonly BackendConfig _configuration;
-    private readonly IFileAccess _fileAccess;
-    private readonly ILMS _lms;
-    private readonly ILmsBackupProcessor _lmsBackupProcessor;
-    private readonly IMediator _mediator;
-    private readonly ISerialization _serialization;
-    private readonly IWorldRepository _worldRepository;
-
-    public UploadWorldUseCase(ILmsBackupProcessor lmsBackupProcessor, IMediator mediator,
-        IFileAccess fileAccess, IWorldRepository worldRepository, ISerialization serialization, ILMS lms,
-        IOptions<BackendConfig> configuration)
-    {
-        _lmsBackupProcessor = lmsBackupProcessor;
-        _mediator = mediator;
-        _fileAccess = fileAccess;
-        _worldRepository = worldRepository;
-        _serialization = serialization;
-        _lms = lms;
-
-        _configuration = configuration.Value;
-    }
+    private readonly BackendConfig _configuration = configuration.Value;
 
     public async Task<CreateWorldResponse> Handle(UploadWorldCommand request, CancellationToken cancellationToken)
     {
         var userInformation = await GetUserDataFromLms(request, cancellationToken);
 
-        var courseInformation = _lmsBackupProcessor.GetWorldDescriptionFromBackup(request.ATFFileStream);
+        var courseInformation = lmsBackupProcessor.GetWorldDescriptionFromBackup(request.ATFFileStream);
 
 
         var errorList = new List<ValidationResult>();
@@ -54,7 +42,7 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, CreateWorl
 
 
         var lmsCourseCreationResponse =
-            await _lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
+            await lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
 
         var h5PNamesWithPaths = StoreH5PFiles(courseInformation, lmsCourseCreationResponse.CourseLmsId,
             request.BackupFileStream);
@@ -66,7 +54,7 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, CreateWorl
             .ToList();
 
 
-        var courseInformationJsonString = _serialization.ClassToJsonString(courseInformation);
+        var courseInformationJsonString = serialization.ClassToJsonString(courseInformation);
 
         var courseEntity = new WorldEntity(
             lmsCourseCreationResponse.CourseLmsName,
@@ -76,7 +64,7 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, CreateWorl
             lmsCourseCreationResponse.CourseLmsId
         );
 
-        var createdEntity = await _worldRepository.AddAsync(courseEntity);
+        var createdEntity = await worldRepository.AddAsync(courseEntity);
 
         return new CreateWorldResponse
         {
@@ -91,7 +79,7 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, CreateWorl
     private async Task<LMSUserDataResponse> GetUserDataFromLms(UploadWorldCommand request,
         CancellationToken cancellationToken)
     {
-        var userInformation = await _mediator.Send(new GetLMSUserDataCommand
+        var userInformation = await mediator.Send(new GetLMSUserDataCommand
         {
             WebServiceToken = request.WebServiceToken
         }, cancellationToken);
@@ -105,9 +93,9 @@ public class UploadWorldUseCase : IRequestHandler<UploadWorldCommand, CreateWorl
         if (courseInformation.World.Elements.All(x => x.ElementCategory != "h5p"))
             return new Dictionary<string, string>();
 
-        var h5PFilesInBackup = _lmsBackupProcessor.GetH5PFilesFromBackup(backupFile);
+        var h5PFilesInBackup = lmsBackupProcessor.GetH5PFilesFromBackup(backupFile);
 
-        return _fileAccess.StoreH5PFilesForWorld(new WorldStoreH5PDto
+        return fileAccess.StoreH5PFilesForWorld(new WorldStoreH5PDto
         {
             CourseInstanceId = courseLmsId,
             H5PFiles = h5PFilesInBackup

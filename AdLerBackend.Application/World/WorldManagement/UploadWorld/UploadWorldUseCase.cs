@@ -185,7 +185,8 @@ public class UploadWorldUseCase(
     private Dictionary<string, string> StoreH5PFiles(WorldAtfResponse courseInformation, int courseLmsId,
         Stream backupFile)
     {
-        if (courseInformation.World.Elements.All(x => x.ElementCategory != "h5p"))
+        if (courseInformation.World.Elements.All(x =>
+                x.ElementCategory != "h5p" && x.ElementCategory != "primitiveH5P"))
             return new Dictionary<string, string>();
 
         var h5PFilesInBackup = lmsBackupProcessor.GetH5PFilesFromBackup(backupFile);

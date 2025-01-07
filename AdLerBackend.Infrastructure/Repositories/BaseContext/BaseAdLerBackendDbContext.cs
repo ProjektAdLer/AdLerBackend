@@ -9,9 +9,9 @@ namespace AdLerBackend.Infrastructure.Repositories.BaseContext;
 public class BaseAdLerBackendDbContext(DbContextOptions options) : DbContext(options)
 {
     public DbSet<WorldEntity> Worlds { get; set; } = null!;
-
     private DbSet<H5PLocationEntity> H5PLocations { get; set; } = null!;
-    // private DbSet<PlayerData> PlayerData { get; set; } = null!;
+    public DbSet<AvatarEntity> Avatars { get; set; } = null!;
+    public DbSet<PlayerEntity> Players { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -24,5 +24,11 @@ public class BaseAdLerBackendDbContext(DbContextOptions options) : DbContext(opt
 
         modelBuilder.Entity<H5PLocationEntity>()
             .HasKey("Id");
+
+        modelBuilder.Entity<PlayerEntity>()
+            .HasOne(x => x.Avatar)
+            .WithOne(x => x.PlayerEntity)
+            .HasForeignKey<PlayerEntity>(x => x.AvatarId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

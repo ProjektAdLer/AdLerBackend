@@ -16,9 +16,12 @@ public class LmsLoginController(IMediator mediator) : BaseApiController(mediator
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
     public async Task<ActionResult<LMSUserDataResponse>> GetLmsUserData(
-        [FromQuery] GetLMSUserDataCommand command)
+        [FromHeader] string token)
     {
-        return await Mediator.Send(command);
+        return await Mediator.Send(new GetLMSUserDataCommand
+        {
+            WebServiceToken = token
+        });
     }
 
     [HttpGet("Login")]

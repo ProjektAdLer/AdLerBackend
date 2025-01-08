@@ -5,5 +5,4 @@ namespace AdLerBackend.Application.Avatar.GetAvatarForPlayer;
 
 public record GetAvatarForPlayerQuery : CommandWithToken<AvatarApiDto?>
 {
-    public int PlayerId { get; init; }
 }

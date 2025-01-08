@@ -1,5 +1,4 @@
 ﻿using AdLerBackend.Application.Common.DTOs;
-using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.Common.Interfaces;
 using AdLerBackend.Application.LMS.GetUserData;
 using MediatR;
@@ -18,14 +17,11 @@ public class SetPlayerAvatarUseCase(
             WebServiceToken = request.WebServiceToken
         }, cancellationToken);
 
-        if (request.PlayerId != playerData.UserId)
-            throw new ForbiddenAccessException("The Token provides does not belong to the player requested");
-
-        var avatarData = await avatarRepository.GetAvatarForPlayerAsync(request.PlayerId);
+        var avatarData = await avatarRepository.GetAvatarForPlayerAsync(playerData.UserId);
 
         if (avatarData == null)
         {
-            var avatar = AvatarApiDto.ToEntity(request.AvatarData, request.PlayerId);
+            var avatar = AvatarApiDto.ToEntity(request.AvatarData, playerData.UserId);
             await avatarRepository.AddAsync(avatar);
             return AvatarApiDto.FromEntity(avatar);
         }

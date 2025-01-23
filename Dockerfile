@@ -15,5 +15,9 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+# Install curl and clean up
+RUN apt-get update && apt-get install -y curl && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
 COPY --from=build /app/publish .
 CMD ["dotnet", "AdLerBackend.API.dll"]

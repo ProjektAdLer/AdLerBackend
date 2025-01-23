@@ -19,5 +19,7 @@ EXPOSE 443
 RUN apt-get update && apt-get install -y curl && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+HEALTHCHECK --start-period=30s CMD curl -f http://localhost/api/health || exit 1
+
 COPY --from=build /app/publish .
 CMD ["dotnet", "AdLerBackend.API.dll"]

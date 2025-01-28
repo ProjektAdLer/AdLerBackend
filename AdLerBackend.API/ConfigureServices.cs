@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using AdLerBackend.API.Filters;
+using AdLerBackend.API.Middleware;
 using AdLerBackend.Application.Configuration;
 using Microsoft.AspNetCore.Http.Features;
 using UnzipMiddleware;
@@ -21,7 +22,7 @@ public static class ConfigureServices
     public static IServiceCollection AddApiServices(this IServiceCollection services)
     {
         services
-            .AddControllers(options => options.Filters.Add<ApiExceptionFilterAttribute>());
+            .AddControllers(options => { options.Filters.Add<ApiExceptionFilterAttribute>(); });
 
         services.AddHttpContextAccessor();
 
@@ -72,6 +73,7 @@ public static class ConfigureServices
             RootPath = "wwwroot",
             ZipFileExtensions = new[] {".h5p"}
         });
+        app.UseMiddleware<DefaultContentTypeMiddleware>();
         app.UseStaticFiles(new StaticFileOptions
         {
             ServeUnknownFileTypes = true

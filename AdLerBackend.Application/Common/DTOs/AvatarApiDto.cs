@@ -1,35 +1,39 @@
-﻿using AdLerBackend.Domain.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+using AdLerBackend.Domain.Entities;
 
 namespace AdLerBackend.Application.Common.DTOs;
 
+[SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 public class AvatarApiDto
 {
     // Face
-    public string? Eyebrows { get; set; }
-    public string? Eyes { get; set; }
-    public string? Nose { get; set; }
-    public string? Mouth { get; set; }
+    public string? Eyebrows { get; init; }
+    public string? Eyes { get; init; }
+    public string? Nose { get; init; }
+    public string? Mouth { get; init; }
 
     // Hair
-    public string? Hair { get; set; }
-    public string? Beard { get; set; }
-    public int? HairColor { get; set; }
+    public string? Hair { get; init; }
+    public string? Beard { get; init; }
+    public int? HairColor { get; init; }
 
     // Accessories  
-    public string? Headgear { get; set; }
-    public string? Glasses { get; set; }
+    public string? Headgear { get; init; }
+    public string? Glasses { get; init; }
+    public string? Backpack { get; init; }
+    public string? Other { get; init; }
 
     // Clothes
-    public string? Shirt { get; set; }
-    public int? ShirtColor { get; set; }
-    public string? Pants { get; set; }
-    public int? PantsColor { get; set; }
-    public string? Shoes { get; set; }
-    public int? ShoesColor { get; set; }
+    public string? Shirt { get; init; }
+    public int? ShirtColor { get; init; }
+    public string? Pants { get; init; }
+    public int? PantsColor { get; init; }
+    public string? Shoes { get; init; }
+    public int? ShoesColor { get; init; }
 
     // Body
-    public string? SkinColor { get; set; }
-    public float Roundness { get; set; }
+    public int? SkinColor { get; init; }
+    public float Roundness { get; init; }
 
     public static AvatarApiDto FromEntity(AvatarEntity avatar)
     {
@@ -51,7 +55,9 @@ public class AvatarApiDto
             Shoes = avatar.Shoes,
             ShoesColor = avatar.ShoesColor,
             SkinColor = avatar.SkinColor,
-            Roundness = avatar.Roundness
+            Roundness = avatar.Roundness,
+            Backpack = avatar.Backpack,
+            Other = avatar.Other
         };
     }
 
@@ -76,7 +82,9 @@ public class AvatarApiDto
             Shoes = avatar.Shoes,
             ShoesColor = avatar.ShoesColor,
             SkinColor = avatar.SkinColor,
-            Roundness = avatar.Roundness
+            Roundness = avatar.Roundness,
+            Backpack = avatar.Backpack,
+            Other = avatar.Other
         };
     }
 
@@ -99,5 +107,7 @@ public class AvatarApiDto
         avatar.ShoesColor = avatarData.ShoesColor;
         avatar.SkinColor = avatarData.SkinColor;
         avatar.Roundness = avatarData.Roundness;
+        avatar.Backpack = avatarData.Backpack;
+        avatar.Other = avatarData.Other;
     }
 }

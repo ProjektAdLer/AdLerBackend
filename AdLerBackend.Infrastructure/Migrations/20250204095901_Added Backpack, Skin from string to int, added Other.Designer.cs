@@ -4,6 +4,7 @@ using AdLerBackend.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdLerBackend.Infrastructure.Migrations
 {
     [DbContext(typeof(ProductionContext))]
-    partial class ProductionContextModelSnapshot : ModelSnapshot
+    [Migration("20250204095901_Added Backpack, Skin from string to int, added Other")]
+    partial class AddedBackpackSkinfromstringtointaddedOther
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

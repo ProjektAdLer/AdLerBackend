@@ -16,6 +16,8 @@ public class AvatarEntity : IBaseEntity
     // Accessories  
     public string? Headgear { get; set; }
     public string? Glasses { get; set; }
+    public string? Other { get; set; }
+    public string? Backpack { get; set; }
 
     // Clothes
     public string? Shirt { get; set; }
@@ -26,7 +28,7 @@ public class AvatarEntity : IBaseEntity
     public int? ShoesColor { get; set; }
 
     // Body
-    public string? SkinColor { get; set; }
+    public int? SkinColor { get; set; }
     public float Roundness { get; set; }
 
     // Navigational Properties

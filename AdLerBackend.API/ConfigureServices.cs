@@ -3,7 +3,9 @@ using System.Reflection;
 using AdLerBackend.API.Filters;
 using AdLerBackend.API.Middleware;
 using AdLerBackend.Application.Configuration;
+using AdLerBackend.Infrastructure.Repositories.BaseContext;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using UnzipMiddleware;
 
 namespace AdLerBackend.API;
@@ -27,7 +29,11 @@ public static class ConfigureServices
         services.AddHttpContextAccessor();
 
         services.AddEndpointsApiExplorer();
-        services.AddHealthChecks();
+        services.AddHealthChecks()
+            .AddDbContextCheck<BaseAdLerBackendDbContext>(
+                "database",
+                HealthStatus.Unhealthy,
+                new[] {"db", "database"});
         services.AddSwaggerGen(options =>
         {
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

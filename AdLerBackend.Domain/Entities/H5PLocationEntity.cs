@@ -9,7 +9,7 @@ public class H5PLocationEntity(string path, int? elementId = null, int? id = nul
     ///     see https://docs.microsoft.com/en-us/ef/core/modeling/constructors
     /// </summary>
     [UsedImplicitly]
-    private H5PLocationEntity() : this(string.Empty, 0, null)
+    private H5PLocationEntity() : this(string.Empty, 0)
     {
     }
 

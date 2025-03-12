@@ -1,6 +1,5 @@
 using AdLerBackend.Application.Common;
 using AdLerBackend.Application.Common.DTOs;
-using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.MockPrimitiveH5PStrategy;
 using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.ScoreGenericLearningElementStrategy;
 using AdLerBackend.Application.Common.ElementStrategies.ScoreElementStrategies.ScoreH5PStrategy;
 using AdLerBackend.Application.Common.InternalUseCases.GetLearningElement;

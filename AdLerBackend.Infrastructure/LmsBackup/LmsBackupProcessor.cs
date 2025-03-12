@@ -66,7 +66,7 @@ public class LmsBackupProcessor : ILmsBackupProcessor
             file.Position = 0;
             var xmlSerializer = new XmlSerializer(typeof(T));
 
-            var obj = (T)xmlSerializer.Deserialize(file)! ?? throw new LmsBackupProcessorException();
+            var obj = (T) xmlSerializer.Deserialize(file)! ?? throw new LmsBackupProcessorException();
 
             return obj;
         }

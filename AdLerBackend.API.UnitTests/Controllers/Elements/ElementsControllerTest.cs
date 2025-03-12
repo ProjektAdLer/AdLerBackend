@@ -31,7 +31,7 @@ public class ElementsControllerTest
         var paramsObj = new ScoreElementParams
         {
             //any serialized object
-            SerializedXapiEvent = JsonSerializer.Serialize(new { test = "test" })
+            SerializedXapiEvent = JsonSerializer.Serialize(new {test = "test"})
         };
 
         // Act

@@ -32,7 +32,7 @@ public class MoodleWebApiTest
     public void SetUp()
     {
         _mockHttp = new MockHttpMessageHandler();
-        _configuration = Options.Create(new BackendConfig { MoodleUrl = "http://localhost" });
+        _configuration = Options.Create(new BackendConfig {MoodleUrl = "http://localhost"});
 
         // Mock logging with NSubstitute
         var logger = Substitute.For<ILogger<MoodleWebApi>>();
@@ -155,7 +155,7 @@ public class MoodleWebApiTest
             Userissiteadmin = true,
             Username = "testUser"
         };
-        var secondResponse = new[] { new { email = "test" } }.ToList();
+        var secondResponse = new[] {new {email = "test"}}.ToList();
 
         _mockHttp.When("*")
             .With(request => MatchesFormData(request, "core_webservice_get_site_info"))
@@ -344,7 +344,7 @@ public class MoodleWebApiTest
 
         // Act
         var result =
-            await _systemUnderTest.GetLmsElementIdsByUuidsAsync("token", 1, new List<Guid> { uuid1, uuid2 });
+            await _systemUnderTest.GetLmsElementIdsByUuidsAsync("token", 1, new List<Guid> {uuid1, uuid2});
 
         // Assert
         Assert.That(result.Count, Is.EqualTo(2));

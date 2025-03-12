@@ -18,11 +18,10 @@
       "dotnetRunMessages": true,
       "launchBrowser": false,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:3001;http://localhost:3000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production",
         "ASPNETCORE_ADLER_MOODLEURL": "http://localhost:8085",
-        "ASPNETCORE_ADLER_HTTPPORT": 3000,
+        "ASPNETCORE_ADLER_HTTPPORT": 8086,
         "ASPNETCORE_DBPASSWORD": "b",
         "ASPNETCORE_DBUSER": "adler_backend",
         "ASPNETCORE_DBNAME": "adler_backend",

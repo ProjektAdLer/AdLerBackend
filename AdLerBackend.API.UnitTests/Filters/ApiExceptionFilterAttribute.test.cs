@@ -76,10 +76,10 @@ public class ApiExceptionFilterAttributeTest
 
         // Assert
         Assert.That(_context.Result, Is.InstanceOf<ObjectResult>());
-        var result = (ObjectResult)_context.Result!;
+        var result = (ObjectResult) _context.Result!;
 
         Assert.That(result.Value, Is.InstanceOf<ValidationProblemDetails>());
-        var resultValue = (ValidationProblemDetails)result.Value!;
+        var resultValue = (ValidationProblemDetails) result.Value!;
 
         Assert.That(resultValue.Type, Is.EqualTo(ErrorCodes.ValidationError));
     }

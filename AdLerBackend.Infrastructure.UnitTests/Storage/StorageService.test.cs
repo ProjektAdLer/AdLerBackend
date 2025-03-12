@@ -82,7 +82,7 @@ public class StorageServiceTest
 
         _fileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
         {
-            { file, new MockFileData("Testing is meh.") }
+            {file, new MockFileData("Testing is meh.")}
         });
         var storageService = new StorageService(_fileSystem, _mockedLogger);
 

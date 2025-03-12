@@ -17,7 +17,7 @@ public class WorldEntity(
     ///     (EF Core cannot set navigation properties using a constructor.)
     /// </summary>
     [UsedImplicitly]
-    internal WorldEntity() : this("", new List<H5PLocationEntity>(), 0, "", 0, null)
+    internal WorldEntity() : this("", new List<H5PLocationEntity>(), 0, "", 0)
     {
         // Initialize every property with a default value
     }

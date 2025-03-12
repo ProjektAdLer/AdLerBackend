@@ -22,13 +22,13 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         _logger = logger;
         _exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
         {
-            { typeof(ValidationException), HandleValidationException },
-            { typeof(InvalidLmsLoginException), HandleLmsLoginException },
-            { typeof(InvalidTokenException), HandleInvalidTokenException },
-            { typeof(NotFoundException), HandleNotFoundException },
-            { typeof(ForbiddenAccessException), HandleForbiddenAccessException },
-            { typeof(WorldCreationException), HandleWorldCreationException },
-            { typeof(LmsException), HandleGenericLmsException }
+            {typeof(ValidationException), HandleValidationException},
+            {typeof(InvalidLmsLoginException), HandleLmsLoginException},
+            {typeof(InvalidTokenException), HandleInvalidTokenException},
+            {typeof(NotFoundException), HandleNotFoundException},
+            {typeof(ForbiddenAccessException), HandleForbiddenAccessException},
+            {typeof(WorldCreationException), HandleWorldCreationException},
+            {typeof(LmsException), HandleGenericLmsException}
         };
     }
 
@@ -59,7 +59,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
 
     private void HandleGenericLmsException(ExceptionContext context)
     {
-        var exception = (LmsException)context.Exception;
+        var exception = (LmsException) context.Exception;
         var problemDetails = new ProblemDetails
         {
             Detail = exception.Message,
@@ -74,7 +74,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
 
     private void HandleWorldCreationException(ExceptionContext context)
     {
-        var exception = (WorldCreationException)context.Exception;
+        var exception = (WorldCreationException) context.Exception;
 
         var problemDetails = new ProblemDetails
         {
@@ -92,7 +92,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
 
     private void HandleForbiddenAccessException(ExceptionContext context)
     {
-        var exception = (ForbiddenAccessException)context.Exception;
+        var exception = (ForbiddenAccessException) context.Exception;
         var problemDetails = new ProblemDetails
         {
             Detail = exception.Message,
@@ -108,7 +108,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
 
     private void HandleNotFoundException(ExceptionContext context)
     {
-        var exception = (NotFoundException)context.Exception;
+        var exception = (NotFoundException) context.Exception;
         var problemDetails = new ProblemDetails
         {
             Title = "The requested Resource was not found",
@@ -127,7 +127,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         var problemDetails = new ProblemDetails
         {
             Title = "Invalid token",
-            Status = (int)HttpStatusCode.Unauthorized,
+            Status = (int) HttpStatusCode.Unauthorized,
             Type = ErrorCodes.LmsTokenInvalid,
             Detail = "The provided token is invalid"
         };
@@ -154,7 +154,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
 
     private void HandleValidationException(ExceptionContext context)
     {
-        var exception = (ValidationException)context.Exception;
+        var exception = (ValidationException) context.Exception;
 
         var problemDetails = new ValidationProblemDetails(exception.Errors)
         {

@@ -15,18 +15,18 @@ public class BackendConfigExtensionsTests
         _services = new ServiceCollection();
         var configData = new Dictionary<string, string>
         {
-            { "ASPNETCORE_ENVIRONMENT", "Production" },
-            { "ASPNETCORE_ADLER_MOODLEURL", "https://moodle.example.com" },
-            { "ASPNETCORE_ADLER_ADLERENGINEURL", "https://adler-engine.example.com" },
-            { "ASPNETCORE_DBPASSWORD", "strongPassword" },
-            { "ASPNETCORE_DBUSER", "dbUser" },
-            { "ASPNETCORE_DBNAME", "dbName" },
-            { "ASPNETCORE_DBHOST", "dbHost" },
-            { "ASPNETCORE_DBPORT", "1234" },
-            { "ASPNETCORE_ADLER_HTTPPORT", "80" }
+            {"ASPNETCORE_ENVIRONMENT", "Production"},
+            {"ASPNETCORE_ADLER_MOODLEURL", "https://moodle.example.com"},
+            {"ASPNETCORE_ADLER_ADLERENGINEURL", "https://adler-engine.example.com"},
+            {"ASPNETCORE_DBPASSWORD", "strongPassword"},
+            {"ASPNETCORE_DBUSER", "dbUser"},
+            {"ASPNETCORE_DBNAME", "dbName"},
+            {"ASPNETCORE_DBHOST", "dbHost"},
+            {"ASPNETCORE_DBPORT", "1234"},
+            {"ASPNETCORE_ADLER_HTTPPORT", "80"}
         };
 
-        var memoryConfigurationSource = new MemoryConfigurationSource { InitialData = configData };
+        var memoryConfigurationSource = new MemoryConfigurationSource {InitialData = configData};
         _configuration = new ConfigurationBuilder().Add(memoryConfigurationSource).Build();
     }
 
@@ -66,11 +66,11 @@ public class BackendConfigExtensionsTests
         // Arrange
         var invalidConfigData = new Dictionary<string, string>
         {
-            { "ASPNETCORE_ENVIRONMENT", "InvalidEnvironment" },
-            { "ASPNETCORE_ADLER_MOODLEURL", "https://moodle.example.com" }
+            {"ASPNETCORE_ENVIRONMENT", "InvalidEnvironment"},
+            {"ASPNETCORE_ADLER_MOODLEURL", "https://moodle.example.com"}
         };
 
-        var memoryConfigurationSource = new MemoryConfigurationSource { InitialData = invalidConfigData };
+        var memoryConfigurationSource = new MemoryConfigurationSource {InitialData = invalidConfigData};
         var invalidConfiguration = new ConfigurationBuilder().Add(memoryConfigurationSource).Build();
 
         // Act

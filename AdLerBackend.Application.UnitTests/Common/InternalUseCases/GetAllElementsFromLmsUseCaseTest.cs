@@ -112,7 +112,7 @@ public class GetAllElementsFromLmsUseCaseTest
         var systemUnderTest =
             new GetAllElementsFromLmsUseCase(_worldRepository, _serialization, _lms);
 
-        _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity?)null);
+        _worldRepository.GetAsync(Arg.Any<int>()).Returns((WorldEntity?) null);
 
 
         _lms.GetWorldContentAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(new[]

@@ -14,14 +14,14 @@ public class BackendConfigExtentionsTest
         var services = new ServiceCollection();
         var configData = new Dictionary<string, string>
         {
-            { "ASPNETCORE_ADLER_MOODLEURL", "https://moodle.example.com" },
-            { "ASPNETCORE_ENVIRONMENT", "Development" },
-            { "ASPNETCORE_DBPASSWORD", "test_password" },
-            { "ASPNETCORE_DBUSER", "test_user" },
-            { "ASPNETCORE_DBNAME", "test_db_name" },
-            { "ASPNETCORE_DBHOST", "localhost" },
-            { "ASPNETCORE_DBPORT", "5432" },
-            { "ASPNETCORE_ADLER_ADLERENGINEURL", "https://adlerengine.example.com" }
+            {"ASPNETCORE_ADLER_MOODLEURL", "https://moodle.example.com"},
+            {"ASPNETCORE_ENVIRONMENT", "Development"},
+            {"ASPNETCORE_DBPASSWORD", "test_password"},
+            {"ASPNETCORE_DBUSER", "test_user"},
+            {"ASPNETCORE_DBNAME", "test_db_name"},
+            {"ASPNETCORE_DBHOST", "localhost"},
+            {"ASPNETCORE_DBPORT", "5432"},
+            {"ASPNETCORE_ADLER_ADLERENGINEURL", "https://adlerengine.example.com"}
         };
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(configData).Build();
 

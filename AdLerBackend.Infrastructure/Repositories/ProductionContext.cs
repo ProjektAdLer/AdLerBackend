@@ -30,6 +30,7 @@ public sealed class ProductionContext : BaseAdLerBackendDbContext
         var connectionString = $"server={dbhost};port={dbPort};user={username};database={name};password={password}";
 
         options.UseMySql(connectionString,
-            new MariaDbServerVersion(new Version(10, 9, 2)));
+            new MariaDbServerVersion(new Version(10, 11)),
+            mySqlOptions => mySqlOptions.EnableRetryOnFailure());
     }
 }

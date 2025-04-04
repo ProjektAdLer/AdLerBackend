@@ -1,4 +1,5 @@
-﻿using AdLerBackend.Application.Common.Exceptions;
+﻿using AdLerBackend.Application.Avatar.GetAvatarForPlayer;
+using AdLerBackend.Application.Common.Exceptions;
 using AdLerBackend.Application.LMS.GetUserData;
 using MediatR;
 using NSubstitute;
@@ -39,5 +40,21 @@ public class PlayerControllerTests
         // Expect exception to be thrown
         Assert.ThrowsAsync<InvalidLmsLoginException>(() => controller.GetLmsUserData("TestToken"));
         return Task.CompletedTask;
+    }
+    
+    // ANF-ID: [BPG20]
+    [Test]
+    public async Task GetAvatar_ShouldForwardCallToAvatarService()
+    {
+        // Arrange
+        var mediatorMock = Substitute.For<IMediator>();
+        var controller = new API.Controllers.Player.PlayerController(mediatorMock);
+        
+        // Act
+        await controller.GetAvatar("TestToken");
+        
+        // Assert
+        await mediatorMock.Received(1).Send(
+            Arg.Is<GetAvatarForPlayerQuery>(x => x.WebServiceToken == "TestToken"));
     }
 }

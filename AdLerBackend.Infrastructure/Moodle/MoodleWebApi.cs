@@ -166,8 +166,7 @@ public class MoodleWebApi : ILMS
                 {"module_ids[0]", new StringContent(elementId.ToString())}
             });
 
-        // Todo replace with the actual score
-        return response.Data[0].Score > 0;
+        return response.Data[0].Completed;
     }
 
     public async Task<bool> ScoreGenericElementViaPlugin(string token, int elementId)
@@ -180,7 +179,7 @@ public class MoodleWebApi : ILMS
                 {"module_id", new StringContent(elementId.ToString())}
             });
 
-        return response.Data[0].Score > 0;
+        return response.Data[0].Completed;
     }
 
     public async Task<bool> ProcessXApiViaPlugin(string token, string statement)
@@ -196,7 +195,7 @@ public class MoodleWebApi : ILMS
                 {"xapi", new StringContent("[" + statement + "]")}
             });
 
-        return response.Data[0].Score > 0;
+        return response.Data[0].Completed;
     }
 
     public async Task<LmsCourseStatusResponse> GetCourseStatusViaPlugin(string token, int courseId)
@@ -216,7 +215,8 @@ public class MoodleWebApi : ILMS
                 .Select(x => new LmsElementStatus // Map to LMS Element Status
                 {
                     ModuleId = x.Module_id,
-                    HasScored = x.Score > 0
+                    HasScored = x.Completed,
+                    Score = x.Score ?? 0
                 })
                 .ToList()
         };

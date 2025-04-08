@@ -38,27 +38,7 @@ if (!builder.Environment.IsDevelopment())
 }
 
 // Configure the health check endpoint with detailed information
-app.MapHealthChecks("/api/health", new HealthCheckOptions
-{
-    ResponseWriter = async (context, report) =>
-    {
-        var result = new
-        {
-            status = report.Status.ToString(),
-            checks = report.Entries.Select(entry => new
-            {
-                name = entry.Key,
-                status = entry.Value.Status.ToString(),
-                description = entry.Value.Description,
-                exception = entry.Value.Exception?.Message,
-                duration = entry.Value.Duration.ToString()
-            })
-        };
-
-        context.Response.ContentType = MediaTypeNames.Application.Json;
-        await context.Response.WriteAsync(JsonSerializer.Serialize(result));
-    }
-});
+app.MapHealthChecks("/api/health");
 
 var myConfig = app.Services.GetRequiredService<BackendConfig>();
 

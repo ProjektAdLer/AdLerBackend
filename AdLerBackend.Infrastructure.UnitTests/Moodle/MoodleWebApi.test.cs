@@ -193,10 +193,22 @@ public class MoodleWebApiTest
     public async Task ProcessXApi_Valid_ReturnsTrue()
     {
         // Arrange
-        _mockHttp.When("*")
-            .Respond(
-                "application/json", "{\"data\":[{\"module_id\":209,\"score\":17}]}");
+        var webResponse = new ResponseWithDataArray<PluginElementScoreData>
+        {
+            Data = new List<PluginElementScoreData>
+            {
+                new()
+                {
+                    Score = 17,
+                    Module_id = 209,
+                    Completed = true
+                }
+            }
+        };
 
+        _mockHttp.When("*")
+            .Respond("application/json",
+                JsonConvert.SerializeObject(webResponse));
         // Act
         var result = await _systemUnderTest.ProcessXApiViaPlugin("moodleToken", "testXApi");
 
@@ -208,9 +220,21 @@ public class MoodleWebApiTest
     public async Task ProcessXApi_InvalidButParsing_ReturnsFalse()
     {
         // Arrange
+        var webResponse = new ResponseWithDataArray<PluginElementScoreData>
+        {
+            Data = new List<PluginElementScoreData>
+            {
+                new()
+                {
+                    Score = 0,
+                    Module_id = 209,
+                    Completed = false
+                }
+            }
+        };
         _mockHttp.When("*")
-            .Respond(
-                "application/json", "{\"data\":[{\"module_id\":209,\"score\":0}]}");
+            .Respond("application/json",
+                JsonConvert.SerializeObject(webResponse));
 
         // Act
         var result = await _systemUnderTest.ProcessXApiViaPlugin("moodleToken", "testXApi");
@@ -255,7 +279,8 @@ public class MoodleWebApiTest
                 new()
                 {
                     Score = 1,
-                    Module_id = 123
+                    Module_id = 123,
+                    Completed = true
                 }
             }
         };
@@ -280,7 +305,8 @@ public class MoodleWebApiTest
                 new()
                 {
                     Score = 1,
-                    Module_id = 1
+                    Module_id = 1,
+                    Completed = true
                 }
             }
         };

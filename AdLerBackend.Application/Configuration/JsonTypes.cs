@@ -31,4 +31,5 @@ public static class JsonTypes
     public const string AdaptivityContentReferenceActionType = "AdaptivityContentReferenceAction";
     public const string LearningSpaceStoryType = "SimpleSpaceStory";
     public const string SimpleSpaceStoryElement = "SimpleSpaceStoryElement";
+    public const string FrameStoryType = "FrameStory";
 }

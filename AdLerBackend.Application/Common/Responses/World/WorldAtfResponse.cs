@@ -9,14 +9,12 @@ using System.Text.Json.Serialization;
 using AdLerBackend.Application.Configuration;
 
 namespace AdLerBackend.Application.Common.Responses.World;
-// This is the ATF File format (2.1.0)
+// This is the ATF File format (2.2.0)
 
 [JsonDerivedType(typeof(WorldAtfResponse), JsonTypes.AtfType)]
 public class WorldAtfResponse
 {
     [Required] public string FileVersion { get; set; }
-
-
     [Required] public string AmgVersion { get; set; }
     public string? Author { get; set; }
     [Required] public string Language { get; set; }
@@ -51,6 +49,8 @@ public class StoryElement
 {
     [Required] public List<string> StoryTexts { get; set; }
     [Required] public string ElementModel { get; set; }
+    public string? ModelFacialExpression { get; set; }
+    public string? StoryNpcName { get; set; }
 }
 
 [JsonDerivedType(typeof(Topic), JsonTypes.LearningTopicType)]
@@ -61,6 +61,13 @@ public class Topic
     [Required] public List<int> TopicContents { get; set; }
 }
 
+[JsonDerivedType(typeof(FrameStory), JsonTypes.FrameStoryType)]
+public class FrameStory
+{
+    public string? FrameStoryIntro { get; set; }
+    public string? FrameStoryOutro { get; set; }
+}
+
 [JsonDerivedType(typeof(World), JsonTypes.LearningWorldType)]
 public class World
 {
@@ -68,10 +75,13 @@ public class World
     [Required] public string WorldUuid { get; set; }
     public string? WorldDescription { get; set; }
     public List<string>? WorldGoals { get; set; }
+    public string? Theme { get; set; }
+    public FrameStory? FrameStory { get; set; }
     public List<Topic>? Topics { get; set; }
     [Required] public List<Space> Spaces { get; set; }
     [Required] public List<BaseElement> Elements { get; set; }
     public string? EvaluationLink { get; set; }
+    public string? WorldGradingStyle { get; set; }
 }
 
 public class Element : BaseElement

@@ -10,10 +10,6 @@ jobs:
   update-swagger:
     runs-on: ubuntu-latest
 
-    env:
-      dotNetVersion: net8.0
-      dotNetConfiguration: Debug
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -25,94 +21,21 @@ jobs:
         with:
           dotnet-version: "8.x"
 
-      - name: Cache NuGet packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget
-
-      - name: Restore dependencies
-        run: dotnet restore AdLerBackend.sln
-
-      - name: Build project
-        run: dotnet build AdLerBackend.sln --configuration Debug --no-restore
-
-      - name: Start application in background
+      - name: Restore and build
         run: |
-          cd AdLerBackend.API
-          # Use the GitHubAction launch profile instead of hardcoded environment variables
-          dotnet run --configuration Debug --no-build --launch-profile GitHubAction > app.log 2>&1 &
-          echo $! > app.pid
-
-          # Wait for application to start
-          echo "Waiting for application to start..."
-          for i in {1..30}; do
-            if curl -s http://localhost:8086/api/health > /dev/null 2>&1; then
-              echo "Application is ready!"
-              break
-            fi
-            echo "Attempt $i: Application not ready yet, waiting..."
-            sleep 2
-          done
-
-          # Check if app is actually running
-          if ! curl -s http://localhost:8086/api/health > /dev/null 2>&1; then
-            echo "Application failed to start. Logs:"
-            cat app.log
-            exit 1
-          fi
+          dotnet restore AdLerBackend.sln
+          dotnet build AdLerBackend.sln --configuration Release --no-restore
 
       - name: Generate Swagger JSON
         run: |
-          # Wait a bit more to ensure swagger endpoint is ready
-          sleep 5
-
-          # Download the swagger JSON
-          curl -f http://localhost:8086/swagger/v1/swagger.json -o swagger.json
-
-          # Verify the file was created and has content
-          if [ ! -s swagger.json ]; then
-            echo "Failed to download swagger.json or file is empty"
-            # Try to get more info about available endpoints
-            curl -v http://localhost:8086/swagger/
-            exit 1
-          fi
-
-          # Pretty print the JSON for better readability
-          python3 -m json.tool swagger.json > swagger_formatted.json
-          mv swagger_formatted.json swagger.json
-
-      - name: Stop application
-        run: |
-          cd AdLerBackend.API
-          if [ -f app.pid ]; then
-            kill $(cat app.pid) || true
-            rm app.pid
-          fi
-
-      - name: Create Spec directory and move swagger.json
-        run: |
           mkdir -p Spec
-          mv swagger.json Spec/swagger.json
-
-      #   - name: Check for changes
-      #     id: git-check
-      #     run: |
-      #       # Add the file to git index first
-      #       git add Spec/swagger.json
-      #       # Check if there are any staged changes (new file or modifications)
-      #       if git diff --cached --exit-code Spec/swagger.json; then
-      #         echo "No changes detected"
-      #       else
-      #         echo "changes=true" >> $GITHUB_OUTPUT
-      #         echo "Changes detected in swagger.json"
-      #       fi
+          dotnet swagger tofile --output Spec/swagger.json AdLerBackend.API/bin/Release/net8.0/AdLerBackend.API.dll v1
 
       - name: Commit and push changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git commit -m "Update swagger.json documentation [skip ci]"
-          git push
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "docs: update swagger documentation [skip ci]"
+          file_pattern: "Spec/*.json"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          skip_dirty_check: false

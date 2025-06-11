@@ -11,3 +11,4 @@ AdLerBackend.sln.DotSettings.user
 .idea/
 
 *.db
+*.log

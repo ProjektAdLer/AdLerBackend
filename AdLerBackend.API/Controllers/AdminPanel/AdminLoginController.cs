@@ -11,6 +11,9 @@ namespace AdLerBackend.API.Controllers.AdminPanel;
 public class AdminLoginController(IMediator mediator) : BaseApiController(mediator)
 {
     [HttpPost("Login")]
+    /// <summary>
+    ///     This endpoint is used to login to the LMS as an admin user.
+    /// </summary>
     public async Task<LMSUserTokenResponse> Login([FromBody] [Required] GetAdminTokenCommand command)
     {
         return await mediator.Send(command);

@@ -10,7 +10,7 @@
                 "tags": [
                     "AdaptivityElement"
                 ],
-                "summary": "Answer a Question in an Adaptivity Learning Element ",
+                "summary": "Answer a Question in an Adaptivity Learning Element xyz",
                 "parameters": [
                     {
                         "name": "token",

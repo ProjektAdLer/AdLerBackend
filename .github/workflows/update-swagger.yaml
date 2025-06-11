@@ -2,13 +2,17 @@ name: Update Swagger Documentation
 
 on:
   push:
-    branches: [main]
+    branches: [main, devbranch]
   pull_request:
     branches: [main]
 
 jobs:
   update-swagger:
     runs-on: ubuntu-latest
+
+    env:
+      dotNetVersion: net8.0
+      dotNetConfiguration: Debug
 
     steps:
       - name: Checkout repository
@@ -21,21 +25,110 @@ jobs:
         with:
           dotnet-version: "8.x"
 
-      - name: Restore and build
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+
+      - name: Restore dependencies
+        run: dotnet restore AdLerBackend.sln
+
+      - name: Build project
+        run: dotnet build AdLerBackend.sln --configuration Debug --no-restore
+
+      - name: Start application in background
         run: |
-          dotnet restore AdLerBackend.sln
-          dotnet build AdLerBackend.sln --configuration Release --no-restore
+          cd AdLerBackend.API
+          # Use the GitHubAction launch profile instead of hardcoded environment variables
+          dotnet run --configuration Debug --no-build --launch-profile GitHubAction > app.log 2>&1 &
+          echo $! > app.pid
+
+          # Wait for application to start
+          echo "Waiting for application to start..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8086/api/health > /dev/null 2>&1; then
+              echo "Application is ready!"
+              break
+            fi
+            echo "Attempt $i: Application not ready yet, waiting..."
+            sleep 2
+          done
+
+          # Check if app is actually running
+          if ! curl -s http://localhost:8086/api/health > /dev/null 2>&1; then
+            echo "Application failed to start. Logs:"
+            cat app.log
+            exit 1
+          fi
 
       - name: Generate Swagger JSON
         run: |
+          # Wait a bit more to ensure swagger endpoint is ready
+          sleep 5
+
+          # Download the swagger JSON
+          curl -f http://localhost:8086/swagger/v1/swagger.json -o swagger.json
+
+          # Verify the file was created and has content
+          if [ ! -s swagger.json ]; then
+            echo "Failed to download swagger.json or file is empty"
+            # Try to get more info about available endpoints
+            curl -v http://localhost:8086/swagger/
+            exit 1
+          fi
+
+          # Pretty print the JSON for better readability
+          python3 -m json.tool swagger.json > swagger_formatted.json
+          mv swagger_formatted.json swagger.json
+
+      - name: Stop application
+        run: |
+          cd AdLerBackend.API
+          if [ -f app.pid ]; then
+            kill $(cat app.pid) || true
+            rm app.pid
+          fi
+
+      - name: Create Spec directory and move swagger.json
+        run: |
           mkdir -p Spec
-          dotnet swagger tofile --output Spec/swagger.json AdLerBackend.API/bin/Release/net8.0/AdLerBackend.API.dll v1
+          mv swagger.json Spec/swagger.json
+
+      - name: Clean up log files
+        run: |
+          cd AdLerBackend.API
+          rm -f app.log
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          # Check if the file exists in git history
+          if git ls-files --error-unmatch Spec/swagger.json >/dev/null 2>&1; then
+            echo "File exists in git, checking for changes..."
+            # Add the swagger.json file to git index
+            git add Spec/swagger.json
+            # Check if there are any staged changes (modifications)
+            if git diff --cached --exit-code Spec/swagger.json; then
+              echo "No changes detected in existing file"
+              echo "changes=false" >> $GITHUB_OUTPUT
+            else
+              echo "changes=true" >> $GITHUB_OUTPUT
+              echo "Changes detected in existing swagger.json"
+            fi
+          else
+            echo "File doesn't exist in git, adding new file..."
+            git add Spec/swagger.json
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "New swagger.json file added"
+          fi
 
       - name: Commit and push changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "docs: update swagger documentation [skip ci]"
-          file_pattern: "Spec/*.json"
-          commit_user_name: "github-actions[bot]"
-          commit_user_email: "github-actions[bot]@users.noreply.github.com"
-          skip_dirty_check: false
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "Update swagger.json documentation [skip ci]"
+          git push

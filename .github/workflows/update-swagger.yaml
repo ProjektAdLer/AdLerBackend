@@ -92,10 +92,10 @@ jobs:
             rm app.pid
           fi
 
-      #   - name: Create Spec directory and move swagger.json
-      #     run: |
-      #       mkdir -p Spec
-      #       mv swagger.json Spec/swagger.json
+      - name: Create Spec directory and move swagger.json
+        run: |
+          mkdir -p Spec
+          mv swagger.json Spec/swagger.json
 
       #   - name: Check for changes
       #     id: git-check
@@ -114,6 +114,5 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          # File is already staged from the previous step
           git commit -m "Update swagger.json documentation [skip ci]"
           git push

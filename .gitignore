@@ -12,3 +12,6 @@ AdLerBackend.sln.DotSettings.user
 
 *.db
 *.log
+
+*.db-shm
+*.db-wal

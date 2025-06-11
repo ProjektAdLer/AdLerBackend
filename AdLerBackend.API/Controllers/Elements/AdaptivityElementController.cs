@@ -22,7 +22,7 @@ public class AdaptivityElementController : BaseApiController
     }
 
     /// <summary>
-    ///     Answer a Question in an Adaptivity Learning Element xyz
+    ///     Answer a Question in an Adaptivity Learning Element main test
     /// </summary>
     /// <returns></returns>
     [HttpPatch("World/{worldId}/Element/{elementId}/Question/{questionId}")]

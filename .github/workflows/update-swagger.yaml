@@ -97,18 +97,18 @@ jobs:
           mkdir -p Spec
           mv swagger.json Spec/swagger.json
 
-      - name: Check for changes
-        id: git-check
-        run: |
-          # Add the file to git index first
-          git add Spec/swagger.json
-          # Check if there are any staged changes (new file or modifications)
-          if git diff --cached --exit-code Spec/swagger.json; then
-            echo "No changes detected"
-          else
-            echo "changes=true" >> $GITHUB_OUTPUT
-            echo "Changes detected in swagger.json"
-          fi
+      #   - name: Check for changes
+      #     id: git-check
+      #     run: |
+      #       # Add the file to git index first
+      #       git add Spec/swagger.json
+      #       # Check if there are any staged changes (new file or modifications)
+      #       if git diff --cached --exit-code Spec/swagger.json; then
+      #         echo "No changes detected"
+      #       else
+      #         echo "changes=true" >> $GITHUB_OUTPUT
+      #         echo "Changes detected in swagger.json"
+      #       fi
 
       - name: Commit and push changes
         if: steps.git-check.outputs.changes == 'true'

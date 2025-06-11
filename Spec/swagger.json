@@ -205,34 +205,61 @@
                 }
             }
         },
-        "/Users": {
+        "/api/admin/Users": {
             "post": {
                 "tags": [
                     "AdminUser"
                 ],
                 "summary": "Create a List of Users by Csv File",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
-                                "$ref": "#/components/schemas/GetAdminTokenCommand"
-                            }
-                        },
-                        "text/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/GetAdminTokenCommand"
-                            }
-                        },
-                        "application/*+json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/GetAdminTokenCommand"
+                                "type": "object",
+                                "properties": {
+                                    "userFile": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            },
+                            "encoding": {
+                                "userFile": {
+                                    "style": "form"
+                                }
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
                     }
                 }
             }

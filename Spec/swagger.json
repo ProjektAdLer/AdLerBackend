@@ -205,6 +205,38 @@
                 }
             }
         },
+        "/Users": {
+            "post": {
+                "tags": [
+                    "AdminUser"
+                ],
+                "summary": "Create a List of Users by Csv File",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GetAdminTokenCommand"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GetAdminTokenCommand"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GetAdminTokenCommand"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/Elements/World/{worldId}/Element/{elementId}": {
             "patch": {
                 "tags": [

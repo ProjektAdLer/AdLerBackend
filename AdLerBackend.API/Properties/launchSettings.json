@@ -29,6 +29,18 @@
         "ASPNETCORE_DBPORT": "3306",
         "ASPNETCORE_ADLER_ADLERENGINEURL": "http://localhost:26877"
       }
+    },
+    "GitHubAction": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:8086",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_ADLER_MOODLEURL": "http://localhost:26875",
+        "ASPNETCORE_ADLER_ADLERENGINEURL": "http://localhost:26877"
+      }
     }
   }
 }

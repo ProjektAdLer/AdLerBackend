@@ -17,7 +17,7 @@ public class LmsLoginControllerTest
         var controller = new LmsLoginController(mediatorMock);
 
         // Act
-        await controller.GetLmsUserToken(new GetLMSTokenCommand
+        await controller.GetLmsUserToken(new GetLmsTokenCommand
         {
             Password = "TestPassword",
             UserName = "TestUsername"
@@ -25,6 +25,6 @@ public class LmsLoginControllerTest
 
         // Assert
         await mediatorMock.Received(1).Send(
-            Arg.Is<GetLMSTokenCommand>(x => x.Password == "TestPassword" && x.UserName == "TestUsername"));
+            Arg.Is<GetLmsTokenCommand>(x => x.Password == "TestPassword" && x.UserName == "TestUsername"));
     }
 }

@@ -9,8 +9,8 @@
       "applicationUrl": "http://localhost:8086",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_ADLER_MOODLEURL": "http://localhost:8085",
-        "ASPNETCORE_ADLER_ADLERENGINEURL": "http://localhost:8087"
+        "ASPNETCORE_ADLER_MOODLEURL": "http://localhost:26875",
+        "ASPNETCORE_ADLER_ADLERENGINEURL": "http://localhost:26877"
       }
     },
     "AdLerBackendProduction": {

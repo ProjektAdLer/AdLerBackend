@@ -21,6 +21,8 @@ public interface ILMS
     /// <returns>The LMS Token</returns>
     Task<LMSUserTokenResponse> GetLMSUserTokenAsync(string userName, string password);
 
+    Task<LMSUserTokenResponse> GetLMSAdminTokenAsync(string userName, string password);
+
     /// <summary>
     ///     Gets the Contents of a World
     /// </summary>

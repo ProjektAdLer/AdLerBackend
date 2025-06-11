@@ -26,14 +26,14 @@ public class LmsLoginController(IMediator mediator) : BaseApiController(mediator
     [HttpGet("Login")]
     [Obsolete("This method is deprecated and will be removed in future versions. Use the POST method instead.")]
     public async Task<ActionResult<LMSUserTokenResponse>> GetLmsUserTokenWithGet(
-        [FromQuery] GetLMSTokenCommand command)
+        [FromQuery] GetLmsTokenCommand command)
     {
         return await Mediator.Send(command);
     }
 
     [HttpPost("Login")]
     public async Task<ActionResult<LMSUserTokenResponse>> GetLmsUserToken(
-        [FromBody] [Required] GetLMSTokenCommand command)
+        [FromBody] [Required] GetLmsTokenCommand command)
     {
         return await Mediator.Send(command);
     }

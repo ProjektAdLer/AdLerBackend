@@ -2,9 +2,9 @@
 
 namespace AdLerBackend.Application.LMS.GetLMSToken;
 
-public class GetLMSTokenCommandValidator : AbstractValidator<GetLMSTokenCommand>
+public class GetLmsTokenCommandValidator : AbstractValidator<GetLmsTokenCommand>
 {
-    public GetLMSTokenCommandValidator()
+    public GetLmsTokenCommandValidator()
     {
         RuleFor(v => v.UserName)
             .NotEmpty().WithMessage("Username is required");

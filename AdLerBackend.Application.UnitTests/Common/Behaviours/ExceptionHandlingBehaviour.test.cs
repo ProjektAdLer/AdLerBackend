@@ -37,7 +37,7 @@ public class ExceptionHandlingBehaviourTest
 
         // Act
         Assert.ThrowsAsync<InvalidLmsLoginException>(() =>
-            systemUnderTest.Handle(new GetLMSTokenCommand(), new LmsException
+            systemUnderTest.Handle(new GetLmsTokenCommand(), new LmsException
                 {
                     LmsErrorCode = "invalidlogin"
                 },
@@ -54,7 +54,7 @@ public class ExceptionHandlingBehaviourTest
 
         // Act
         Assert.ThrowsAsync<LmsException>(() =>
-            systemUnderTest.Handle(new GetLMSTokenCommand(), new LmsException
+            systemUnderTest.Handle(new GetLmsTokenCommand(), new LmsException
                 {
                     LmsErrorCode = "invalidErrorCode"
                 },

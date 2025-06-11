@@ -7,6 +7,7 @@ internal class PostToMoodleOptions
     internal enum Endpoints
     {
         Webservice,
-        Login
+        Login,
+        AdminLogin
     }
 }

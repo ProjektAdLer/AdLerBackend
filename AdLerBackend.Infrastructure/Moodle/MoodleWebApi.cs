@@ -49,6 +49,24 @@ public class MoodleWebApi : ILMS
         };
     }
 
+    public async Task<LMSUserTokenResponse> GetLMSAdminTokenAsync(string userName, string password)
+    {
+        var resp = await MoodleCallAsync<UserTokenResponse>(new Dictionary<string, HttpContent>
+        {
+            {"wsfunction", new StringContent("local_adler_site_admin_login")},
+            {"wsusername", new StringContent(userName)},
+            {"wspassword", new StringContent(password)}
+        }, new PostToMoodleOptions
+        {
+            Endpoint = PostToMoodleOptions.Endpoints.AdminLogin
+        });
+
+        return new LMSUserTokenResponse
+        {
+            LMSToken = resp.Token
+        };
+    }
+
     public async Task<LMSWorldContentResponse[]> GetWorldContentAsync(string token, int worldId)
     {
         var resp = await MoodleCallAsync<LMSWorldContentResponse[]>(new Dictionary<string, HttpContent>
@@ -405,7 +423,9 @@ public class MoodleWebApi : ILMS
             url = options.Endpoint switch
             {
                 PostToMoodleOptions.Endpoints.Webservice => _configuration.MoodleUrl + "/webservice/rest/server.php",
-                PostToMoodleOptions.Endpoints.Login => _configuration.MoodleUrl + "/login/token.php"
+                PostToMoodleOptions.Endpoints.Login => _configuration.MoodleUrl + "/login/token.php",
+                PostToMoodleOptions.Endpoints.AdminLogin => _configuration.MoodleUrl +
+                                                            "/webservice/rest/simpleserver.php"
             };
 
 

@@ -23,7 +23,7 @@ public class GerMoodleUserTokenHandlerTest
     public async Task Handle_Should_Return_Token()
     {
         // Arrange
-        var request = new GetLMSTokenCommand
+        var request = new GetLmsTokenCommand
         {
             UserName = "username",
             Password = "password"

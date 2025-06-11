@@ -1,10 +1,10 @@
-using AdLerBackend.Application.AdminPanel.GetAdminToken;
+using AdLerBackend.Application.AdminPanel.CreateUsersByCsv;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdLerBackend.API.Controllers.AdminPanel;
 
-[Microsoft.AspNetCore.Components.Route("api/Login")]
+[Route("api/admin")]
 [ApiController]
 public class AdminUserController(IMediator mediator) : BaseApiController(mediator)
 {
@@ -12,8 +12,13 @@ public class AdminUserController(IMediator mediator) : BaseApiController(mediato
     ///     Create a List of Users by Csv File
     /// </summary>
     [HttpPost("Users")]
-    public async Task<IActionResult> Login([FromBody] GetAdminTokenCommand command)
+    public async Task<bool> Login(IFormFile userFile, [FromHeader] string token)
     {
-        throw new NotImplementedException();
+        return await Mediator.Send(
+            new CreateUsersByCsvCommand
+            {
+                UserFileStream = userFile.OpenReadStream(),
+                WebServiceToken = token
+            });
     }
 }

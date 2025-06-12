@@ -70,7 +70,7 @@ public class DeleteWorldUseCaseTest
         Assert.That(result, Is.True);
         // Expect DeleteCourse to be called once
         _fileAccess.Received(1).DeleteWorld(Arg.Any<WorldDeleteDto>());
-        _ilms.Received(1).DeleteCourseAsync(Arg.Any<string>(), Arg.Any<int>());
+        _ilms.Received(1).DeleteCourseViaPluginAsync(Arg.Any<string>(), Arg.Any<int>());
 
         // Assert that DeleteAsync was called
         await _worldRepository.Received(1).DeleteAsync(Arg.Any<int>());

@@ -98,7 +98,7 @@ public class GetAdaptivityQuestionDetailsHandlerTest
             }
         );
 
-        _lmsMock.GetAdaptivityElementDetailsAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(
+        _lmsMock.GetAdaptivityElementDetailsViaPluginAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(
             new List<LMSAdaptivityQuestionStateResponse>
             {
                 new()
@@ -117,7 +117,7 @@ public class GetAdaptivityQuestionDetailsHandlerTest
             }
         );
 
-        _lmsMock.GetAdaptivityTaskDetailsAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(
+        _lmsMock.GetAdaptivityTaskDetailsViaPluginAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(
             new List<LMSAdaptivityTaskStateResponse>
             {
                 new()
@@ -128,7 +128,7 @@ public class GetAdaptivityQuestionDetailsHandlerTest
             }
         );
 
-        _lmsMock.GetElementScoreFromPlugin(Arg.Any<string>(), Arg.Any<int>()).Returns(true);
+        _lmsMock.GetElementScoreViaPluginAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(true);
 
         // Act
         var result = await systemUnderTest.Handle(new GetAdaptivityElementDetailsCommand
@@ -206,11 +206,11 @@ public class GetAdaptivityQuestionDetailsHandlerTest
             }
         );
 
-        _lmsMock.GetAdaptivityElementDetailsAsync(Arg.Any<string>(), Arg.Any<int>())
+        _lmsMock.GetAdaptivityElementDetailsViaPluginAsync(Arg.Any<string>(), Arg.Any<int>())
             .Returns(new List<LMSAdaptivityQuestionStateResponse>());
-        _lmsMock.GetAdaptivityTaskDetailsAsync(Arg.Any<string>(), Arg.Any<int>())
+        _lmsMock.GetAdaptivityTaskDetailsViaPluginAsync(Arg.Any<string>(), Arg.Any<int>())
             .Returns(new List<LMSAdaptivityTaskStateResponse>());
-        _lmsMock.GetElementScoreFromPlugin(Arg.Any<string>(), Arg.Any<int>()).Returns(false);
+        _lmsMock.GetElementScoreViaPluginAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(false);
 
         // Act
         var result = await systemUnderTest.Handle(new GetAdaptivityElementDetailsCommand

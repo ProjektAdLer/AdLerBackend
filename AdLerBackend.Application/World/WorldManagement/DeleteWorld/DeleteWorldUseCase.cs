@@ -31,7 +31,7 @@ public class DeleteWorldUseCase(
             throw new UnauthorizedAccessException("The Course does not belong to the User");
 
         // Delete from Moodle
-        await lms.DeleteCourseAsync(request.WebServiceToken, course.LmsWorldId);
+        await lms.DeleteCourseViaPluginAsync(request.WebServiceToken, course.LmsWorldId);
         //Delete from FileSystem
         fileAccess.DeleteWorld(new WorldDeleteDto
         {

@@ -41,7 +41,7 @@ public class
         var questionUUID = IdExtractor.GetUuidFromQuestionId(request.QuestionId, adaptivityElementInAtf);
 
 
-        var resultFromLMS = await lms.AnswerAdaptivityQuestionsAsync(request.WebServiceToken,
+        var resultFromLMS = await lms.AnswerAdaptivityQuestionsViaPluginAsync(request.WebServiceToken,
             learningElementModule.LmsModule.Id,
             new List<AdaptivityAnsweredQuestionTo>
             {

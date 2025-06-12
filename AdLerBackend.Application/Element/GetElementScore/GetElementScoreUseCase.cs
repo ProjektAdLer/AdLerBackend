@@ -30,7 +30,7 @@ public class
             };
 
         var result =
-            await lms.GetElementScoreFromPlugin(request.WebServiceToken, learningElementModule.LmsModule.Id);
+            await lms.GetElementScoreViaPluginAsync(request.WebServiceToken, learningElementModule.LmsModule.Id);
 
         return new ElementScoreResponse
         {

@@ -59,7 +59,7 @@ public class GetWorldStatusUseCaseTest
                 }
             });
 
-        _ilms.GetCourseStatusViaPlugin(Arg.Any<string>(), Arg.Any<int>()).Returns(
+        _ilms.GetCourseStatusViaPluginAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(
             new LmsCourseStatusResponse
             {
                 ElementScores = new List<LmsElementStatus>

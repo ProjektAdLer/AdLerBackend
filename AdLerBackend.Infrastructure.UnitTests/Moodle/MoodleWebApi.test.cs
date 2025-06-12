@@ -48,7 +48,7 @@ public class MoodleWebApiTest
             "{\"data\":{\"course_id\":1337}}");
 
         // Act
-        var result = await _systemUnderTest.UploadCourseWorldToLMS("token", new MemoryStream());
+        var result = await _systemUnderTest.UploadCourseWorldToLmsViaPluginAsync("token", new MemoryStream());
 
         // Assert
         Assert.That(result.CourseLmsId, Is.EqualTo(1337));
@@ -210,7 +210,7 @@ public class MoodleWebApiTest
             .Respond("application/json",
                 JsonConvert.SerializeObject(webResponse));
         // Act
-        var result = await _systemUnderTest.ProcessXApiViaPlugin("moodleToken", "testXApi");
+        var result = await _systemUnderTest.ProcessXApiViaPluginAsync("moodleToken", "testXApi");
 
         // Assert
         Assert.That(result, Is.EqualTo(true));
@@ -237,7 +237,7 @@ public class MoodleWebApiTest
                 JsonConvert.SerializeObject(webResponse));
 
         // Act
-        var result = await _systemUnderTest.ProcessXApiViaPlugin("moodleToken", "testXApi");
+        var result = await _systemUnderTest.ProcessXApiViaPluginAsync("moodleToken", "testXApi");
 
         // Assert
         Assert.That(result, Is.EqualTo(false));
@@ -263,7 +263,7 @@ public class MoodleWebApiTest
             JsonConvert.SerializeObject(expectedResponse));
 
         // Act
-        var result = await _systemUnderTest.GetElementScoreFromPlugin("token", 123);
+        var result = await _systemUnderTest.GetElementScoreViaPluginAsync("token", 123);
 
         // Assert
         Assert.That(result, Is.False);
@@ -289,7 +289,7 @@ public class MoodleWebApiTest
             JsonConvert.SerializeObject(expectedResponse));
 
         // Act
-        var result = await _systemUnderTest.ScoreGenericElementViaPlugin("token", 123);
+        var result = await _systemUnderTest.ScoreGenericElementViaPluginAsync("token", 123);
 
         // Assert
         Assert.That(result, Is.True);
@@ -315,7 +315,7 @@ public class MoodleWebApiTest
             JsonConvert.SerializeObject(webResponse));
 
         // Act
-        var result = await _systemUnderTest.GetCourseStatusViaPlugin("token", 123);
+        var result = await _systemUnderTest.GetCourseStatusViaPluginAsync("token", 123);
 
         // Assert
         Assert.That(result.ElementScores.Count, Is.EqualTo(1));
@@ -370,7 +370,7 @@ public class MoodleWebApiTest
 
         // Act
         var result =
-            await _systemUnderTest.GetLmsElementIdsByUuidsAsync("token", 1, new List<Guid> {uuid1, uuid2});
+            await _systemUnderTest.GetLmsElementIdsByUuidsViaPluginAsync("token", 1, new List<Guid> {uuid1, uuid2});
 
         // Assert
         Assert.That(result.Count, Is.EqualTo(2));
@@ -388,7 +388,7 @@ public class MoodleWebApiTest
             JsonConvert.SerializeObject(webResponse));
 
         // Act and assert that it does not throw
-        await _systemUnderTest.DeleteCourseAsync("token", 1);
+        await _systemUnderTest.DeleteCourseViaPluginAsync("token", 1);
     }
 
     [Test]
@@ -410,7 +410,7 @@ public class MoodleWebApiTest
             JsonConvert.SerializeObject(webResponse));
 
         // Act and assert that it does not throw
-        Assert.ThrowsAsync<LmsException>(async () => await _systemUnderTest.DeleteCourseAsync("token", 1));
+        Assert.ThrowsAsync<LmsException>(async () => await _systemUnderTest.DeleteCourseViaPluginAsync("token", 1));
     }
 
     [Test]
@@ -423,7 +423,7 @@ public class MoodleWebApiTest
         _mockHttp.When("*").Respond("application/json", webResponse);
 
         // Act
-        var result = await _systemUnderTest.GetAdaptivityTaskDetailsAsync("token", 1);
+        var result = await _systemUnderTest.GetAdaptivityTaskDetailsViaPluginAsync("token", 1);
 
         // Assert
         Assert.Multiple(() =>
@@ -443,7 +443,7 @@ public class MoodleWebApiTest
         _mockHttp.When("*").Respond("application/json", webResponse);
 
         // Act
-        var result = await _systemUnderTest.GetAdaptivityElementDetailsAsync("token", 1);
+        var result = await _systemUnderTest.GetAdaptivityElementDetailsViaPluginAsync("token", 1);
 
         // Assert
         Assert.That(result.Count, Is.EqualTo(2));
@@ -460,7 +460,7 @@ public class MoodleWebApiTest
 
         // Act
 
-        var result = await _systemUnderTest.AnswerAdaptivityQuestionsAsync("token", 1,
+        var result = await _systemUnderTest.AnswerAdaptivityQuestionsViaPluginAsync("token", 1,
             new List<AdaptivityAnsweredQuestionTo>
             {
                 new()

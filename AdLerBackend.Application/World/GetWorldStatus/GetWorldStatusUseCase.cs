@@ -21,7 +21,7 @@ public class
 
         // Get Course Status from LMS 
         var courseStatus =
-            await ilms.GetCourseStatusViaPlugin(request.WebServiceToken, courseModules.LmsCourseId);
+            await ilms.GetCourseStatusViaPluginAsync(request.WebServiceToken, courseModules.LmsCourseId);
 
         var response = new WorldStatusResponse
         {

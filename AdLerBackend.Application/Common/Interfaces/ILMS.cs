@@ -44,7 +44,7 @@ public interface ILMS
      * @param token The LMS Webservice Token
      * @param backupFileStream The Stream of the Backup File
      */
-    Task<LMSCourseCreationResponse> UploadCourseWorldToLMS(string token, Stream backupFileStream);
+    Task<LMSCourseCreationResponse> UploadCourseWorldToLmsViaPluginAsync(string token, Stream backupFileStream);
 
     /// <summary>
     ///     Gets the Score of an Element from the LMS via the Plugin
@@ -52,7 +52,7 @@ public interface ILMS
     /// <param name="token">Webservice Token</param>
     /// <param name="elementId">The LmsModule ID of the Element</param>
     /// <returns></returns>
-    Task<bool> GetElementScoreFromPlugin(string token, int elementId);
+    Task<bool> GetElementScoreViaPluginAsync(string token, int elementId);
 
     /// <summary>
     ///     Scores an Element via the Plugin
@@ -60,7 +60,7 @@ public interface ILMS
     /// <param name="token">Webservice Token</param>
     /// <param name="elementId">The LmsModule ID if the Element</param>
     /// <returns></returns>
-    Task<bool> ScoreGenericElementViaPlugin(string token, int elementId);
+    Task<bool> ScoreGenericElementViaPluginAsync(string token, int elementId);
 
     /// <summary>
     ///     Processes an XAPI Statement via the Plugin
@@ -68,7 +68,7 @@ public interface ILMS
     /// <param name="token">Webservice Token</param>
     /// <param name="statement">The Statement of the XAPI Request</param>
     /// <returns></returns>
-    Task<bool> ProcessXApiViaPlugin(string token, string statement);
+    Task<bool> ProcessXApiViaPluginAsync(string token, string statement);
 
     /// <summary>
     ///     Gets the Course Status via the Plugin
@@ -76,21 +76,21 @@ public interface ILMS
     /// <param name="token"></param>
     /// <param name="courseId"></param>
     /// <returns></returns>
-    Task<LmsCourseStatusResponse> GetCourseStatusViaPlugin(string token, int courseId);
+    Task<LmsCourseStatusResponse> GetCourseStatusViaPluginAsync(string token, int courseId);
 
     /// <summary>
     ///     Gets the LMS IDs for a given list of UUID
     /// </summary>
     /// <param name="uuids">List of UUIDs to be </param>
     /// <returns></returns>
-    Task<IEnumerable<LmsUuidResponse>> GetLmsElementIdsByUuidsAsync(string token, int courseInstanceId,
+    Task<IEnumerable<LmsUuidResponse>> GetLmsElementIdsByUuidsViaPluginAsync(string token, int courseInstanceId,
         IEnumerable<Guid> uuids);
 
     /// <summary>
     ///     Deletes a Course from the LMS
     /// </summary>
     /// <returns></returns>
-    Task DeleteCourseAsync(string token, int worldId);
+    Task DeleteCourseViaPluginAsync(string token, int worldId);
 
     /// <summary>
     ///     Give an Answer for an Adaptivity Question to the LMS
@@ -99,7 +99,7 @@ public interface ILMS
     /// <param name="elementId">The LmsModule ID of the Element</param>
     /// <param name="answeredQuestions"></param>
     /// <returns> A list of the given Answers and there State of correctness</returns>
-    Task<AdaptivityModuleStateResponseAfterAnswer> AnswerAdaptivityQuestionsAsync(string token, int elementId,
+    Task<AdaptivityModuleStateResponseAfterAnswer> AnswerAdaptivityQuestionsViaPluginAsync(string token, int elementId,
         IEnumerable<AdaptivityAnsweredQuestionTo> answeredQuestions);
 
     /// <summary>
@@ -108,7 +108,7 @@ public interface ILMS
     /// <param name="token"></param>
     /// <param name="elementId"></param>
     /// <returns></returns>
-    Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsAsync(string token, int elementId);
+    Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsViaPluginAsync(string token, int elementId);
 
     /// <summary>
     ///     Gets all Tasks in an Adaptivity Element with there State of correctness
@@ -116,5 +116,5 @@ public interface ILMS
     /// <param name="token"></param>
     /// <param name="elementId"></param>
     /// <returns></returns>
-    Task<IEnumerable<LMSAdaptivityTaskStateResponse>> GetAdaptivityTaskDetailsAsync(string token, int elementId);
+    Task<IEnumerable<LMSAdaptivityTaskStateResponse>> GetAdaptivityTaskDetailsViaPluginAsync(string token, int elementId);
 }

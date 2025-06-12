@@ -44,7 +44,7 @@ public class
     private async Task<IEnumerable<LmsUuidResponse>> GetModulesWithUuid(string webServiceToken, int lmsWorldId,
         List<Guid> elementUuids)
     {
-        return await lms.GetLmsElementIdsByUuidsAsync(webServiceToken, lmsWorldId, elementUuids);
+        return await lms.GetLmsElementIdsByUuidsViaPluginAsync(webServiceToken, lmsWorldId, elementUuids);
     }
 
     // Rider Coverage report provides a false positive for this method. So this is excluded in DotSettings

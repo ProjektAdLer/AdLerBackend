@@ -13,7 +13,7 @@ public class ScoreGenericElementStrategyHandler(ILMS ilms) : IRequestHandler<Sco
     {
         return new ScoreElementResponse
         {
-            IsSuccess = await ilms.ScoreGenericElementViaPlugin(request.WebServiceToken, request.LmsModule.Id)
+            IsSuccess = await ilms.ScoreGenericElementViaPluginAsync(request.WebServiceToken, request.LmsModule.Id)
         };
     }
 }

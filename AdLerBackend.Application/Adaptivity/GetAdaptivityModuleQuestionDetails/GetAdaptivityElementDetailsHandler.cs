@@ -38,13 +38,13 @@ public class
             x.ElementId == request.ElementId) as AdaptivityElement;
 
         var adaptivityQuestionDetails =
-            await lms.GetAdaptivityElementDetailsAsync(request.WebServiceToken,
+            await lms.GetAdaptivityElementDetailsViaPluginAsync(request.WebServiceToken,
                 learningElementModule.LmsModule.Id);
 
-        var adaptivityTaskDetails = await lms.GetAdaptivityTaskDetailsAsync(request.WebServiceToken,
+        var adaptivityTaskDetails = await lms.GetAdaptivityTaskDetailsViaPluginAsync(request.WebServiceToken,
             learningElementModule.LmsModule.Id);
 
-        var adaptivityElementScore = await lms.GetElementScoreFromPlugin(request.WebServiceToken,
+        var adaptivityElementScore = await lms.GetElementScoreViaPluginAsync(request.WebServiceToken,
             learningElementModule.LmsModule.Id);
 
 

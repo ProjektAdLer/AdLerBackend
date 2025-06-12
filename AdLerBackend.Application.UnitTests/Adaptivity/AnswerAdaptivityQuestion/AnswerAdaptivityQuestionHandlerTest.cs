@@ -92,7 +92,7 @@ public class AnswerAdaptivityQuestionHandlerTest
                 }
             });
 
-        _lmsMock.AnswerAdaptivityQuestionsAsync(Arg.Any<string>(), Arg.Any<int>(),
+        _lmsMock.AnswerAdaptivityQuestionsViaPluginAsync(Arg.Any<string>(), Arg.Any<int>(),
             Arg.Any<List<AdaptivityAnsweredQuestionTo>>()).Returns(
             new AdaptivityModuleStateResponseAfterAnswer
             {
@@ -114,7 +114,7 @@ public class AnswerAdaptivityQuestionHandlerTest
             }
         );
 
-        _lmsMock.AnswerAdaptivityQuestionsAsync(Arg.Any<string>(), Arg.Any<int>(),
+        _lmsMock.AnswerAdaptivityQuestionsViaPluginAsync(Arg.Any<string>(), Arg.Any<int>(),
             Arg.Any<List<AdaptivityAnsweredQuestionTo>>()).Returns(
             new AdaptivityModuleStateResponseAfterAnswer
             {

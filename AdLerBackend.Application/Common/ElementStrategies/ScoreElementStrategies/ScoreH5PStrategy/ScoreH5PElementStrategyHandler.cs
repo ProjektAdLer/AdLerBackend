@@ -30,8 +30,8 @@ public class ScoreH5PElementStrategyHandler(ISerialization serialization, ILMS l
 
         LogXapiEvent(xapiEvent);
 
-        var elementViewedScore = await _lms.ScoreGenericElementViaPlugin(request.WebServiceToken, request.LmsModule.Id);
-        var isSuccess = await _lms.ProcessXApiViaPlugin(request.WebServiceToken, JsonSerializer.Serialize(xapiEvent));
+        var elementViewedScore = await _lms.ScoreGenericElementViaPluginAsync(request.WebServiceToken, request.LmsModule.Id);
+        var isSuccess = await _lms.ProcessXApiViaPluginAsync(request.WebServiceToken, JsonSerializer.Serialize(xapiEvent));
 
         return new ScoreElementResponse {IsSuccess = isSuccess};
     }

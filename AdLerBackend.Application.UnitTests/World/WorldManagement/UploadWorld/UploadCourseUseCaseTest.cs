@@ -79,7 +79,7 @@ public class UploadWorldUseCaseTest
 
         var testGuid = Guid.NewGuid();
 
-        _ilms.UploadCourseWorldToLMS(Arg.Any<string>(), Arg.Any<Stream>()).Returns(new LMSCourseCreationResponse
+        _ilms.UploadCourseWorldToLmsViaPluginAsync(Arg.Any<string>(), Arg.Any<Stream>()).Returns(new LMSCourseCreationResponse
         {
             CourseLmsId = 1337,
             CourseLmsName = "TESTNAME"
@@ -173,7 +173,7 @@ public class UploadWorldUseCaseTest
 
         var fakedDsl = AutoFaker.Generate<WorldAtfResponse>();
 
-        _ilms.UploadCourseWorldToLMS(Arg.Any<string>(), Arg.Any<Stream>()).Returns(new LMSCourseCreationResponse
+        _ilms.UploadCourseWorldToLmsViaPluginAsync(Arg.Any<string>(), Arg.Any<Stream>()).Returns(new LMSCourseCreationResponse
         {
             CourseLmsId = 1337,
             CourseLmsName = "TESTNAME"
@@ -244,7 +244,7 @@ public class UploadWorldUseCaseTest
         var fakedDsl = AutoFaker.Generate<WorldAtfResponse>();
         _lmsBackupProcessor.GetWorldDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedDsl);
 
-        _ilms.UploadCourseWorldToLMS(Arg.Any<string>(), Arg.Any<Stream>())
+        _ilms.UploadCourseWorldToLmsViaPluginAsync(Arg.Any<string>(), Arg.Any<Stream>())
             .ThrowsAsync(new Exception("Upload failed"));
 
         // Act & Assert
@@ -275,7 +275,7 @@ public class UploadWorldUseCaseTest
         };
         _lmsBackupProcessor.GetWorldDescriptionFromBackup(Arg.Any<Stream>()).Returns(fakedDsl);
 
-        _ilms.UploadCourseWorldToLMS(Arg.Any<string>(), Arg.Any<Stream>())
+        _ilms.UploadCourseWorldToLmsViaPluginAsync(Arg.Any<string>(), Arg.Any<Stream>())
             .Returns(new LMSCourseCreationResponse {CourseLmsId = 1});
 
         _fileAccess.StoreH5PFilesForWorld(Arg.Any<WorldStoreH5PDto>())
@@ -291,7 +291,7 @@ public class UploadWorldUseCaseTest
             }, CancellationToken.None));
 
         // Verify cleanup
-        await _ilms.Received(1).DeleteCourseAsync(Arg.Any<string>(), 1);
+        await _ilms.Received(1).DeleteCourseViaPluginAsync(Arg.Any<string>(), 1);
     }
 
     [Test]
@@ -313,7 +313,7 @@ public class UploadWorldUseCaseTest
                 WebServiceToken = "token"
             }, CancellationToken.None));
 
-        await _ilms.DidNotReceive().DeleteCourseAsync(Arg.Any<string>(), Arg.Any<int>());
+        await _ilms.DidNotReceive().DeleteCourseViaPluginAsync(Arg.Any<string>(), Arg.Any<int>());
         _fileAccess.DidNotReceive().DeleteWorld(Arg.Any<WorldDeleteDto>());
     }
 }

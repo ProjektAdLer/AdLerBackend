@@ -30,7 +30,7 @@ public class GetLearningElementScoreUseCaseTest
     {
         // Arrange
         var systemUnderTest = new GetElementScoreUseCase(_mediator, _lms);
-        _lms.GetElementScoreFromPlugin(Arg.Any<string>(), Arg.Any<int>())
+        _lms.GetElementScoreViaPluginAsync(Arg.Any<string>(), Arg.Any<int>())
             .Returns(
                 success
             );

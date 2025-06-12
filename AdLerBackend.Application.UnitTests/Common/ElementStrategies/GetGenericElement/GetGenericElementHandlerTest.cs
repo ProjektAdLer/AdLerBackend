@@ -22,7 +22,7 @@ public class GetGenericElementHandlerTest
     {
         // Arrange
         var systemUnderTest = new ScoreGenericElementStrategyHandler(_ilms);
-        _ilms.ScoreGenericElementViaPlugin(Arg.Any<string>(), Arg.Any<int>()).Returns(expected);
+        _ilms.ScoreGenericElementViaPluginAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(expected);
 
         // Act
         var result = await systemUnderTest.Handle(new ScoreGenericElementStrategyCommand

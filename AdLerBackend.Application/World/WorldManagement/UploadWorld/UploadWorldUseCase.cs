@@ -41,7 +41,7 @@ public class UploadWorldUseCase(
             ValidateCourseInformation(courseInformation);
 
             lmsCourseCreationResponse =
-                await lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
+                await lms.UploadCourseWorldToLmsViaPluginAsync(request.WebServiceToken, request.BackupFileStream);
 
             h5PNamesWithPaths = StoreH5PFiles(courseInformation, lmsCourseCreationResponse.CourseLmsId,
                 request.BackupFileStream);
@@ -119,7 +119,7 @@ public class UploadWorldUseCase(
                 await worldRepository.DeleteAsync(createdWorldEntityId.Value);
 
 
-            if (lmsWorldId.HasValue) await lms.DeleteCourseAsync(request.WebServiceToken, lmsWorldId.Value);
+            if (lmsWorldId.HasValue) await lms.DeleteCourseViaPluginAsync(request.WebServiceToken, lmsWorldId.Value);
         }
         catch (Exception e)
         {
@@ -133,7 +133,7 @@ public class UploadWorldUseCase(
         try
         {
             lmsCourseCreationResponse =
-                await lms.UploadCourseWorldToLMS(request.WebServiceToken, request.BackupFileStream);
+                await lms.UploadCourseWorldToLmsViaPluginAsync(request.WebServiceToken, request.BackupFileStream);
         }
         catch (Exception e)
         {
@@ -164,7 +164,7 @@ public class UploadWorldUseCase(
                 WorldInstanceId = lmsCourseCreationResponse.CourseLmsId
             });
             logger.LogInformation("Deleting Course from LMS");
-            lms.DeleteCourseAsync(request.WebServiceToken, lmsCourseCreationResponse.CourseLmsId);
+            lms.DeleteCourseViaPluginAsync(request.WebServiceToken, lmsCourseCreationResponse.CourseLmsId);
             throw;
         }
 

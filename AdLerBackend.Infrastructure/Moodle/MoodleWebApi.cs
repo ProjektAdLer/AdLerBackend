@@ -91,7 +91,7 @@ public class MoodleWebApi : ILMS
     }
 
 
-    public async Task DeleteCourseAsync(string token, int courseId)
+    public async Task DeleteCourseViaPluginAsync(string token, int courseId)
     {
         var warnings = await MoodleCallAsync<ResponseWithDataArray<CourseDeletionWarningsResponse>>(
             new Dictionary<string, HttpContent>
@@ -107,7 +107,7 @@ public class MoodleWebApi : ILMS
                                    JsonSerializer.Serialize(warnings.Data));
     }
 
-    public async Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsAsync(string token,
+    public async Task<IEnumerable<LMSAdaptivityQuestionStateResponse>> GetAdaptivityElementDetailsViaPluginAsync(string token,
         int elementId)
     {
         var rawResponse = await MoodleCallAsync<ResponseWithData<PluginAdaptivityQuestionsDetailResponse>>(
@@ -134,7 +134,7 @@ public class MoodleWebApi : ILMS
         return response;
     }
 
-    public async Task<IEnumerable<LMSAdaptivityTaskStateResponse>> GetAdaptivityTaskDetailsAsync(string token,
+    public async Task<IEnumerable<LMSAdaptivityTaskStateResponse>> GetAdaptivityTaskDetailsViaPluginAsync(string token,
         int elementId)
     {
         var rawResponse = await MoodleCallAsync<ResponseWithData<PluginAdaptivityTasksResponse>>(
@@ -154,7 +154,7 @@ public class MoodleWebApi : ILMS
         return response;
     }
 
-    public async Task<LMSCourseCreationResponse> UploadCourseWorldToLMS(string token, Stream backupFileStream)
+    public async Task<LMSCourseCreationResponse> UploadCourseWorldToLmsViaPluginAsync(string token, Stream backupFileStream)
     {
         var fileContent = new StreamContent(backupFileStream);
 
@@ -174,7 +174,7 @@ public class MoodleWebApi : ILMS
         };
     }
 
-    public async Task<bool> GetElementScoreFromPlugin(string token, int elementId)
+    public async Task<bool> GetElementScoreViaPluginAsync(string token, int elementId)
     {
         var response = await MoodleCallAsync<ResponseWithDataArray<PluginElementScoreData>>(
             new Dictionary<string, HttpContent>
@@ -187,7 +187,7 @@ public class MoodleWebApi : ILMS
         return response.Data[0].Completed;
     }
 
-    public async Task<bool> ScoreGenericElementViaPlugin(string token, int elementId)
+    public async Task<bool> ScoreGenericElementViaPluginAsync(string token, int elementId)
     {
         var response = await MoodleCallAsync<ResponseWithDataArray<PluginElementScoreData>>(
             new Dictionary<string, HttpContent>
@@ -200,10 +200,10 @@ public class MoodleWebApi : ILMS
         return response.Data[0].Completed;
     }
 
-    public async Task<bool> ProcessXApiViaPlugin(string token, string statement)
+    public async Task<bool> ProcessXApiViaPluginAsync(string token, string statement)
     {
         // // First trigger the "viewed" event
-        // var score = await ScoreGenericElementViaPlugin(token, 0);
+        // var score = await ScoreGenericElementViaPluginAsync(token, 0);
 
         var response = await MoodleCallAsync<ResponseWithDataArray<PluginElementScoreData>>(
             new Dictionary<string, HttpContent>
@@ -216,7 +216,7 @@ public class MoodleWebApi : ILMS
         return response.Data[0].Completed;
     }
 
-    public async Task<LmsCourseStatusResponse> GetCourseStatusViaPlugin(string token, int courseId)
+    public async Task<LmsCourseStatusResponse> GetCourseStatusViaPluginAsync(string token, int courseId)
     {
         var response = await MoodleCallAsync<ResponseWithDataArray<PluginElementScoreData>>(
             new Dictionary<string, HttpContent>
@@ -269,7 +269,7 @@ public class MoodleWebApi : ILMS
         };
     }
 
-    public async Task<IEnumerable<LmsUuidResponse>> GetLmsElementIdsByUuidsAsync(string token, int courseInstanceId,
+    public async Task<IEnumerable<LmsUuidResponse>> GetLmsElementIdsByUuidsViaPluginAsync(string token, int courseInstanceId,
         IEnumerable<Guid> uuids)
     {
         var wsParams = new Dictionary<string, HttpContent>
@@ -295,7 +295,7 @@ public class MoodleWebApi : ILMS
         });
     }
 
-    public async Task<AdaptivityModuleStateResponseAfterAnswer> AnswerAdaptivityQuestionsAsync(string token,
+    public async Task<AdaptivityModuleStateResponseAfterAnswer> AnswerAdaptivityQuestionsViaPluginAsync(string token,
         int elementId, IEnumerable<AdaptivityAnsweredQuestionTo> answeredQuestions)
     {
         var wsParams = new Dictionary<string, HttpContent>

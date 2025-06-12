@@ -12,13 +12,13 @@ public class AdminUserController(IMediator mediator) : BaseApiController(mediato
     ///     Create a List of Users by Csv File
     /// </summary>
     [HttpPost("Users")]
-    public async Task<bool> Login(IFormFile userFile, [FromHeader] string token)
+    public async Task<bool> CreateUsers(IFormFile userFile, [FromHeader] string token)
     {
-        return await Mediator.Send(
-            new CreateUsersByCsvCommand
-            {
-                UserFileStream = userFile.OpenReadStream(),
-                WebServiceToken = token
-            });
+        await using var stream = userFile.OpenReadStream();
+        return await Mediator.Send(new CreateUsersByCsvCommand
+        {
+            UserFileStream = stream,
+            WebServiceToken = token
+        });
     }
 }

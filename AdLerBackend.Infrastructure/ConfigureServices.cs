@@ -28,6 +28,7 @@ public static class ConfigureServices
         services.AddScoped<IWorldRepository, WorldRepository>();
         services.AddScoped<IPlayerRepository, PlayerRepository>();
         services.AddScoped<IAvatarRepository, AvatarRepository>();
+        services.AddSingleton<ICsvService, CsvService>();
 
         services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
         services.AddTransient<IFileSystem, FileSystem>();

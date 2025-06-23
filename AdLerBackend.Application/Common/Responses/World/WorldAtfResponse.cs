@@ -9,7 +9,7 @@ using System.Text.Json.Serialization;
 using AdLerBackend.Application.Configuration;
 
 namespace AdLerBackend.Application.Common.Responses.World;
-// This is the ATF File format (2.2.0)
+// This is the ATF File format (2.3.0)
 
 [JsonDerivedType(typeof(WorldAtfResponse), JsonTypes.AtfType)]
 public class WorldAtfResponse
@@ -90,6 +90,9 @@ public class Element : BaseElement
     public List<string>? ElementGoals { get; set; }
     [Required] public int ElementMaxScore { get; set; }
     [Required] public string ElementModel { get; set; }
+    public string? ElementDifficulty { get; set; }
+    public string? ElementTemplate { get; set; }
+    public string? ElementEstimatedTimeMinutes { get; set; }
 }
 
 public class AdaptivityElement : Element

@@ -45,7 +45,7 @@ public class LmsBackupProcessor : ILmsBackupProcessor
             if (file.Component == "mod_h5pactivity" && file.Filename != ".")
             {
                 // Moodle Stores the H5P Files twice, so we remove one of them
-                if (h5PFiles.Any(x => x.ContentHash == file.Contenthash)) continue;
+                if (h5PFiles.Any(x => x.Uuid == file.ElementUuid)) continue; 
                 var h5PFile = new H5PFile
                 {
                     Uuid = file.ElementUuid,

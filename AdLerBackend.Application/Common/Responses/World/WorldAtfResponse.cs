@@ -92,7 +92,7 @@ public class Element : BaseElement
     [Required] public string ElementModel { get; set; }
     public string? ElementDifficulty { get; set; }
     public string? ElementTemplate { get; set; }
-    public string? ElementEstimatedTimeMinutes { get; set; }
+    public int? ElementEstimatedTimeMinutes { get; set; }
 }
 
 public class AdaptivityElement : Element

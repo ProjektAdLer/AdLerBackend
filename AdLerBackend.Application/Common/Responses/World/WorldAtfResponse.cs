@@ -90,7 +90,7 @@ public class Element : BaseElement
     public List<string>? ElementGoals { get; set; }
     [Required] public int ElementMaxScore { get; set; }
     [Required] public string ElementModel { get; set; }
-    public string? ElementDifficulty { get; set; }
+    public int? ElementDifficulty { get; set; }
     public string? ElementTemplate { get; set; }
     public int? ElementEstimatedTimeMinutes { get; set; }
 }

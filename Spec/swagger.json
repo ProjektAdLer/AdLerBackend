@@ -1561,6 +1561,10 @@
                     "storyNpcName": {
                         "type": "string",
                         "nullable": true
+                    },
+                    "exitAfterStorySequence": {
+                        "type": "boolean",
+                        "nullable": true
                     }
                 },
                 "additionalProperties": false
@@ -1646,6 +1650,14 @@
                         }
                     },
                     "evaluationLink": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "evaluationLinkName": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "evaluationLinkText": {
                         "type": "string",
                         "nullable": true
                     },

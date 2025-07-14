@@ -9,7 +9,7 @@ using System.Text.Json.Serialization;
 using AdLerBackend.Application.Configuration;
 
 namespace AdLerBackend.Application.Common.Responses.World;
-// This is the ATF File format (2.3.0)
+// This is the ATF File format (2.4.0)
 
 [JsonDerivedType(typeof(WorldAtfResponse), JsonTypes.AtfType)]
 public class WorldAtfResponse
@@ -51,6 +51,7 @@ public class StoryElement
     [Required] public string ElementModel { get; set; }
     public string? ModelFacialExpression { get; set; }
     public string? StoryNpcName { get; set; }
+    public bool? ExitAfterStorySequence { get; set; }
 }
 
 [JsonDerivedType(typeof(Topic), JsonTypes.LearningTopicType)]
@@ -81,6 +82,8 @@ public class World
     [Required] public List<Space> Spaces { get; set; }
     [Required] public List<BaseElement> Elements { get; set; }
     public string? EvaluationLink { get; set; }
+    public string? EvaluationLinkName { get; set; }
+    public string? EvaluationLinkText { get; set; }
     public string? WorldGradingStyle { get; set; }
 }
 

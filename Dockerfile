@@ -16,7 +16,7 @@ EXPOSE 80
 EXPOSE 443
 
 # Install curl and clean up
-RUN apt-get update && apt-get install -y curl && \
+RUN apt-get update && apt-get install -y curl --no-install-recommends && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 HEALTHCHECK --start-period=30s CMD curl -f http://localhost/api/health || exit 1
